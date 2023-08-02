@@ -1,0 +1,97 @@
+.homeGameCards {
+    padding: 6px;
+    gap: 10px;
+}
+
+.gameCardAside {
+    padding: 5px;
+    background: #FFF;
+    border-radius: 6px;
+    gap: 10px;
+}
+
+.gameCardMenu {
+    transition: all ease 500ms;
+    -webkit-transition: all ease 500ms;
+    padding: 15px 0px;
+    cursor: pointer;
+    gap: 5px;
+}
+
+.gameCardMenuActive {
+    background: rgb(255, 200, 0);
+    border-radius: 8px;
+}
+
+.gameCardMenu .textMenuIcon {
+    color: rgb(90, 94, 98);
+    font-size: 34px;
+}
+
+.cardMenuName {
+    color: rgb(90, 94, 98);
+    font-size: 11px;
+    font-weight: 400;
+    padding: 0 2px;
+}
+
+.gameCardMenuActive.gameCardMenu .textMenuIcon, .gameCardMenuActive.gameCardMenu .cardMenuName {
+    color: #111;
+}
+
+.gameCardRowContainer {
+    gap: 6px;
+    width: 100%;
+}
+
+.singleCardRowBox {
+    background-color: #FFF;
+    background-position: right;
+    background-size: cover;
+    height: 125px;
+    border-radius: 6px;
+}
+
+.allGameCardCount {
+    height: 100%;
+    padding: 0px 0px 0px 28px;
+}
+
+.gameCardLabel {
+    font-weight: 700;
+    color: rgb(90, 94, 98);
+    font-size: 19px;
+}
+
+.gameCardCount {
+    color: rgb(27, 31, 35);
+    font-size: 71px;
+    font-weight: 700;
+    line-height: 55px;
+}
+
+.allCategoryGame {
+    background-image: url(../../../assets/images/bet365-sport-all.jpg);
+}
+
+.cricketCategoryGame {
+    background-image: url(../../../assets/images/bet365-sport-cricket.jpg);
+}
+
+.soccerCategoryGame {
+    background-image: url(../../../assets/images/bet365-sport-soccer.jpg);
+}
+
+.tennisCategoryGame {
+    background-image: url(../../../assets/images/bet365-sport-tennis.jpg);
+}
+
+@media only screen and (max-width:568px) {
+    .gameCardCount {
+        font-size: 50px;
+    }
+
+    .gameCardMenu .textMenuIcon {
+        font-size: 24px;
+    }
+}

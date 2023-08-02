@@ -1,0 +1,81 @@
+.balanceAmtBox {
+    background: rgb(38, 44, 50);
+    padding: 17px 17px 9px;
+    border-radius: 17px;
+}
+
+.balanceText {
+    font-size: 18px;
+    font-weight: 700;
+    color: #FFF;
+}
+
+.currencyAlias {
+    background: rgb(255, 200, 0);
+    font-size: 12px;
+    font-weight: 700;
+    color: rgb(38, 44, 50);
+    margin-right: 8px;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+.balanceAmt {
+    font-size: 28px;
+    font-weight: 700;
+    color: #FFF;
+}
+
+.balanceDepositRecord {
+    border-radius: 8px;
+}
+
+.balanceHeaderTime {
+    background: rgb(212, 224, 229);
+    height: 37px;
+    padding: 0 17px;
+}
+
+.balanceInfoBOx {
+    background: #FFF;
+}
+
+.balanceRecord {
+    padding: 10px;
+    width: 50%;
+    border-bottom: 1px solid rgb(212, 224, 229);
+}
+
+.balanceRecord+.balanceRecord {
+    border-left: 1px solid rgb(212, 224, 229);
+}
+
+.balanceInfoTxt {
+    font-size: 12px;
+    color: rgb(30, 30, 30);
+}
+
+.balanceInfoAmt {
+    font-size: 17px;
+    font-weight: 700;
+    color: #000;
+}
+
+.balanceRecordRow {
+    padding: 8px;
+    font-size: 15px;
+    color: rgb(30, 30, 30);
+    gap: 8px;
+    border-bottom: 1px solid rgb(212, 224, 229);
+    min-height: 39px;
+}
+
+.recordTraingle {
+    border-color: transparent transparent transparent #9cb1bd;
+    border-style: solid;
+    border-width: 5px 0 5px 8px;
+}
+
+.balanceInfoBOx .balanceRecordRow:last-child {
+    border-bottom: none;
+}

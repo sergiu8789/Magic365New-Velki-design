@@ -1,0 +1,376 @@
+.myBetsWindowLayer {
+    inset: 0;
+    background: rgba(30, 30, 30, 0.7);
+    max-width: 480px;
+    z-index: 9;
+    transition: all ease 400ms;
+    -webkit-transition: all ease 400ms;
+    transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+}
+
+.myBetsWindowLayer.open {
+    transform: translateY(0%);
+    -webkit-transform: translateY(0%);
+}
+
+.myBetContent {
+    height: calc(100vh - 100px);
+    left: 0;
+    bottom: 0;
+}
+
+.MyBetHeader {
+    background: #000;
+    border-radius: 13px 13px 0px 0px;
+    padding: 0 4px;
+}
+
+.MyBetHeaderRow {
+    min-height: 51px;
+    padding: 5px 0;
+}
+
+.myBetTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #FFF;
+    gap: 10px;
+}
+
+.myBetTitle .teamName, .myBetTitle .eventName {
+    color: #FFF;
+}
+
+.myBetTitle .eventName {
+    font-weight: 400;
+}
+
+.betDetailBack {
+    left: 10px;
+    color: #FFF;
+    display: none;
+}
+
+.myBetLayerClose {
+    font-size: 17px;
+    color: #FFF;
+    right: 10px;
+}
+
+.myBetTabsBox {
+    background: #d4e0e5;
+    border-radius: 13px 13px 0px 0px;
+    height: 51px;
+    gap: 15px;
+}
+
+.myBetTab {
+    font-size: 17px;
+    font-weight: 700;
+    color: #000;
+    gap: 8px;
+    padding: 0 15px;
+}
+
+.myBetCount {
+    font-size: 14px;
+    color: #FFF;
+    font-weight: 700;
+    line-height: 14px;
+    padding: 4px 6px;
+    background: #000;
+    border-radius: 4px;
+}
+
+.activeLine, .activeMatchLine {
+    bottom: 4px;
+    height: 4px;
+    background: #000;
+    border-radius: 4px;
+    left: 10px;
+    -webkit-transition: all ease 200ms;
+    transition: all ease 200ms;
+}
+
+.activeMatchLine {
+    transform: translateX(-50%);
+    left: 50%;
+    width: 130px;
+}
+
+.allBetContainerList {
+    padding: 0 4px;
+    height: calc(100% - 102px);
+}
+
+.allBetsList {
+    background: #FFF;
+    overflow-y: auto;
+    height: 100%;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s;
+}
+
+.singleBetRow {
+    height: 60px;
+    padding: 8px;
+    border-bottom: 1px solid rgb(212, 224, 229);
+    gap: 10px;
+}
+
+.Betcount {
+    background: #ffc800;
+    font-size: 14px;
+    line-height: 12px;
+    color: #000;
+    height: 22px;
+    min-width: 26px;
+    padding: 0 4px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.eventMarketName {
+    gap: 10px;
+}
+
+.teamName {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+}
+
+.triangleArrow {
+    border-color: transparent transparent transparent #d4e0e5;
+    border-style: solid;
+    border-width: 5px 0 5px 8px;
+}
+
+.eventName {
+    color: #1e1e1e;
+    font-size: 16px;
+}
+
+.nextLayer {
+    transform: rotate(180deg) translateY(-50%);
+    -webkit-transform: rotate(180deg) translateY(-50%);
+    right: 10px;
+    top: 0;
+    height: 31px;
+    width: 31px;
+    border-radius: 4px;
+    background: #d4e0e5;
+    font-size: 15px;
+    color: #1e1e1e;
+}
+
+@-webkit-keyframes slideOutRight {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        visibility: hidden;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        visibility: hidden;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+}
+
+.slideOutRight {
+    -webkit-animation-name: slideOutRight;
+    animation-name: slideOutRight;
+}
+
+@-webkit-keyframes slideInRight {
+    from {
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+        visibility: visible;
+    }
+
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+        visibility: visible;
+    }
+
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.slideInRight {
+    -webkit-animation-name: slideInRight;
+    animation-name: slideInRight;
+}
+
+@-webkit-keyframes slideInLeft {
+    from {
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+        visibility: visible;
+    }
+
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+        visibility: visible;
+    }
+
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.slideInLeft {
+    -webkit-animation-name: slideInLeft;
+    animation-name: slideInLeft;
+}
+
+@-webkit-keyframes slideOutLeft {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        visibility: hidden;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        visibility: hidden;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+.slideOutLeft {
+    -webkit-animation-name: slideOutLeft;
+    animation-name: slideOutLeft;
+}
+
+.betHeaderDetail .betDetailBack {
+    display: inline-flex;
+}
+
+.betHeaderDetail.MyBetHeader {
+    padding: 0;
+}
+
+.betHeaderDetail .myBetTabsBox {
+    border-radius: 0;
+}
+
+.betSlipHeader {
+    gap: 10px;
+    padding: 10px;
+    background: #eef6fb;
+    border-bottom: 1px solid rgb(212, 224, 229);
+}
+
+.betTag {
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 30px;
+}
+
+.OddbackTag {
+    background: rgb(161, 210, 244);
+}
+
+.OddLayTag {
+    background: rgb(252, 198, 209);
+}
+
+.betTeamName {
+    font-size: 16px;
+    color: #000;
+    font-weight: 700;
+}
+
+.balanceInfoBOx {
+    background: #FFF;
+}
+
+.balanceRecord {
+    padding: 10px;
+    width: 33.3%;
+    border-bottom: 1px solid rgb(212, 224, 229);
+}
+
+.balanceRecord+.balanceRecord {
+    border-left: 1px solid rgb(212, 224, 229);
+}
+
+.balanceInfoTxt {
+    font-size: 12px;
+    color: rgb(30, 30, 30);
+}
+
+.balanceInfoAmt {
+    font-size: 17px;
+    font-weight: 700;
+    color: #000;
+}
+
+.BetDetailList {
+    padding: 10px;
+}
+
+.betDetail {
+    border: 1px solid rgb(212, 224, 229);
+    border-radius: 5px;
+}
+
+.betRefrIDRow {
+    padding: 6px 8px;
+}
+
+.refIdTxt {
+    font-size: 12px;
+    color: #777;
+}

@@ -1,0 +1,85 @@
+* {
+    font-family: 'Ubuntu';
+}
+
+/* HEADER START */
+.whole-app-background {
+    background-image: url(../images/desktop-bg.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+.center-mobile-mode {
+    max-width: 480px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100vh;
+    background: rgb(238, 246, 251);
+}
+
+/* HEADER ENDS */
+
+/* BANNER PART */
+.banner-contaner .swiper-button-prev:after, .banner-contaner .swiper-button-next:after {
+    color: #FFF;
+    font-size: 20px;
+}
+
+/* HOME GAME CATEGORY */
+.home-game-category-row {
+    background: rgb(27 31 35);
+}
+
+.home-game-category-row .swiper {
+    padding: 10px 10px 30px;
+}
+
+.game-category-box {
+    width: 100%;
+}
+
+.game-name {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 15px;
+    padding-top: 5px;
+}
+
+.category-game-icon [class*="icon-"] {
+    font-size: 55px;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.swiper-slide-active .game-category-box .game-name, .swiper-slide-active .game-category-box [class*="icon-"] {
+    color: #FFC800
+}
+
+.home-game-category-row .swiper-slide {
+    z-index: 5;
+}
+
+.home-game-category-row .swiper .swiper-pagination {
+    bottom: 5px;
+}
+
+.home-game-category-row .swiper .swiper-pagination .swiper-pagination-bullet {
+    background: #FFF;
+    opacity: .5;
+    -webkit-transition: width .2s;
+    transition: width .2s;
+    height: 7px;
+    width: 7px;
+    margin: 0px 4px;
+    border-radius: 5px;
+}
+
+.home-game-category-row .swiper .swiper-pagination .swiper-pagination-bullet-active {
+    background: #FFC800;
+    width: 28px;
+    height: 7px;
+    opacity: 1;
+}

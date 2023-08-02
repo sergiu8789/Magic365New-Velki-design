@@ -1,0 +1,391 @@
+.allTabList {
+    height: 53px;
+    background: rgb(212, 224, 229);
+    overflow-x: auto;
+    padding: 4px 17px;
+    scroll-behavior: smooth;
+}
+
+.allTabList::-webkit-scrollbar {
+    display: none;
+}
+
+.popularTab {
+    padding: 1px 0px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    margin-right: 26px;
+    border-bottom: 4px solid transparent;
+}
+
+.popularTabActive {
+    border-color: transparent;
+}
+
+.popularActiveLine {
+    border-radius: 5px;
+    height: 4px;
+    left: 17px;
+    background: #000;
+    transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
+    -webkit-transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
+    bottom: 8px;
+}
+
+.betStatusBox {
+    background: rgb(30, 30, 30);
+    padding: 10px 8px;
+}
+
+.orderByStatus {
+    gap: 10px;
+}
+
+.BetHistoryDate {
+    border-radius: 4px;
+    padding: 0 17px 0 40px;
+    height: 38px;
+    border: 1px solid #ffc800;
+}
+
+.calendarDateIcon {
+    left: 10px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    top: 50%;
+    color: #ffc800;
+    font-size: 17px;
+}
+
+.closeDateFilter {
+    right: 15px;
+    top: 10px;
+    color: #FFF;
+    font-size: 15px;
+}
+
+.dateDuring {
+    background: #ffc800;
+    border-radius: 6px;
+    padding: 10px 8px;
+    font-size: 17px;
+    color: rgb(30, 30, 30);
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0.04em;
+}
+
+.dateSearchBtn, .datePickerBtn {
+    background: #ffc800;
+    border-radius: 6px;
+    padding: 0px 20px;
+    font-size: 17px;
+    color: rgb(30, 30, 30);
+    font-weight: 700;
+    border: none;
+    box-shadow: none;
+    height: 38px;
+}
+
+.calendarDate {
+    color: #FFF;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.calendarShortArea {
+    max-width: 480px;
+    width: 100%;
+    inset: 0;
+    -webkit-transform: translateY(100%);
+    transform: translateY(100%);
+    visibility: hidden;
+    opacity: 0;
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+}
+
+.previousDateArea {
+    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(30, 30, 30) 0px -3.584px 53.76px 0px;
+    background: #000;
+    border-radius: 13px 13px 0px 0px;
+    padding: 4px 4px 0px;
+    bottom: 0;
+}
+
+.showCalenderArea.calendarShortArea {
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%);
+    visibility: visible;
+    opacity: 1;
+}
+
+.dateFilterArea {
+    padding: 8px 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #FFF;
+}
+
+.previousDateSelections {
+    padding: 8px;
+    gap: 8px;
+    border-radius: 13px 13px 0px 0px;
+    background: #FFF;
+}
+
+.datePickerBtn {
+    height: 50px;
+    width: 33%;
+    padding: 0 8px;
+}
+
+.betStatusDrop {
+    border-radius: 4px;
+    padding: 0 17px;
+    height: 38px;
+    border: 1px solid #ffc800;
+}
+
+.betStatusLbl, .selectedBetStatus {
+    color: #ffc800;
+    font-size: 19px;
+}
+
+.betStatusDrop.betStatusOpen .betStatusArrow {
+    transform: rotate(-180deg);
+    -webkit-transform: rotate(-180deg);
+}
+
+.betStatusArrow {
+    right: 10px;
+    color: #ffc800;
+    font-size: 15px;
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+}
+
+.selectedBetStatus {
+    font-weight: 700;
+    margin-left: 5px;
+}
+
+.betStatusOptions {
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: all ease 100ms;
+    -webkit-transition: all ease 100ms;
+    background: rgb(30, 30, 30);
+    z-index: 5;
+    left: 8px;
+    right: 8px;
+    border-radius: 0px 0px 10px 10px;
+    border: 1px solid #ffc800;
+    border-top: none;
+    top: 100px;
+}
+
+.betStatusOptions.betStatusOpen {
+    height: auto;
+    visibility: visible;
+}
+
+.betStatusItem {
+    height: 45px;
+    padding-left: 20px;
+}
+
+.betStatusText {
+    color: #ffc800;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.profilLossSum {
+    padding: 10px 6px 4px;
+}
+
+.proftStatusDrop {
+    gap: 5px;
+}
+
+.proftStatus {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.proftStatusLoss, .balanceInfoAmt.proftStatusLoss, .betRecordVal.proftStatusLoss {
+    color: #e20000;
+}
+
+.proftStatusSuccess, .balanceInfoAmt.proftStatusSuccess, .betRecordVal.proftStatusSuccess {
+    color: #62b70b;
+}
+
+.allCurrentBetList {
+    padding: 17px;
+    gap: 20px;
+}
+
+.currentBetHeader {
+    background: rgb(212, 224, 229);
+    border-radius: 8px 8px 0px 0px;
+    height: 41px;
+    font-size: 17px;
+    color: #1e1e1e;
+    gap: 6px;
+}
+
+.gameName {
+    font-weight: 700;
+}
+
+.recordTraingle {
+    border-color: transparent transparent transparent #9cb1bd;
+    border-style: solid;
+    border-width: 5px 0 5px 8px;
+}
+
+.betSlipHeader {
+    gap: 10px;
+    padding: 10px;
+    background: #e2eaef;
+    border-bottom: 1px solid rgb(156, 177, 189);
+}
+
+.betTag {
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 30px;
+}
+
+.OddbackTag {
+    background: rgb(161, 210, 244);
+}
+
+.OddLayTag {
+    background: rgb(252, 198, 209);
+}
+
+.betTeamName {
+    font-size: 16px;
+    color: #000;
+    font-weight: 700;
+}
+
+.balanceInfoBOx {
+    background: #FFF;
+}
+
+.balanceRecord {
+    padding: 10px;
+    width: 33.3%;
+    border-bottom: 1px solid rgb(212, 224, 229);
+}
+
+.balanceRecord+.balanceRecord {
+    border-left: 1px solid rgb(212, 224, 229);
+}
+
+.balanceInfoTxt {
+    font-size: 12px;
+    color: rgb(30, 30, 30);
+}
+
+.balanceInfoAmt {
+    font-size: 17px;
+    font-weight: 700;
+    color: #000;
+}
+
+.balanceRecordInfo {
+    background: #FFF;
+    border-bottom: 1px solid rgb(212, 224, 229);
+    min-height: 34px;
+    padding: 8px;
+}
+
+.betRecordLbl, .betRecordVal {
+    font-size: 15px;
+    color: #1e1e1e;
+}
+
+.betRecordVal {
+    color: rgb(90, 94, 98);
+}
+
+.footerRecord {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-duration: .3s;
+    border-radius: 0px 0px 8px 8px;
+    background: #d4e0e5;
+    height: 8px;
+}
+
+.recordMoreDrop {
+    top: 8px;
+    left: 0;
+    right: 0;
+    background: #d4e0e5;
+    border-radius: 0px 0px 8px 8px;
+    height: 17px;
+    width: 115px;
+    font-size: 17px;
+    color: rgb(30, 30, 30);
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+}
+
+.footerRecordOpen.footerRecord, .footerRecordOpen .recordMoreDrop {
+    background: #9cb1bd;
+}
+
+.footerRecordOpen .recordMoreDrop .recordMoreDown {
+    transform: scaleY(-1);
+    -webkit-transform: scaleY(-1);
+    margin-bottom: 5px;
+}
+
+.betMoreInfo .balanceRecordInfo.betTakenInfo {
+    background: #9cb1bd;
+}
+
+.betTakenInfo .betRecordVal {
+    color: rgb(30, 30, 30)
+}
+
+.betMoreInfo .balanceInfoBOx, .betMoreInfo .balanceRecordInfo {
+    background: #e2eaef;
+}
+
+.betMoreInfo .balanceRecord+.balanceRecord {
+    border-left: 1px solid rgb(156, 177, 189);
+}
+
+.betMoreInfo .balanceRecord, .betMoreInfo .balanceRecordInfo {
+    border-bottom: 1px solid rgb(156, 177, 189);
+}
+
+@media only screen and (max-width:568px) {
+    .dateSearchBtn, .datePickerBtn {
+        padding: 0 10px;
+    }
+
+    .calendarDate, .betStatusLbl, .selectedBetStatus, .proftStatus, .currentBetHeader, .datePickerBtn {
+        font-size: 14px;
+    }
+
+    .betRecordLbl, .betRecordVal {
+        font-size: 13px;
+    }
+
+    .popularTab {
+        font-size: 15px;
+        margin-right: 16px;
+    }
+}

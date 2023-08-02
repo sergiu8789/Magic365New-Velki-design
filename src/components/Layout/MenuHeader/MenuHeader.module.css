@@ -1,0 +1,21 @@
+.menuHeaderName {
+    background: #000;
+    height: 53px;
+}
+
+.HeaderName {
+    font-size: 17px;
+    color: #FFF;
+}
+
+.gameOpenArrow {
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+    transform: translateY(-50%) rotate(90deg);
+    -webkit-transform: translateY(-50%) rotate(90deg);
+    top: 50%;
+    left: 15px;
+    color: #FFF;
+    font-size: 20px;
+    padding: 4px;
+}

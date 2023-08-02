@@ -1,0 +1,323 @@
+.matchExchange {
+    height: 43px;
+    padding: 0 10px;
+    background: #1e1e1e;
+}
+
+.exchangeText {
+    font-size: 17px;
+    color: #FFF;
+}
+
+.betMatchText, .matchOddCount {
+    color: #ffc800;
+    font-size: 12px;
+    padding: 0 2px;
+}
+
+.matchOddCount {
+    font-weight: 700;
+}
+
+.marketStatus {
+    padding: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 12px;
+    border-radius: 6px;
+    margin-left: 5px;
+    color: #FFF;
+}
+
+.marketStatusHigh {
+    background: #62b70b;
+}
+
+.marketStatusLow {
+    background: #e20000;
+}
+
+.matchOddTitleRow {
+    background: #ffc800;
+}
+
+.matchOddTitleRow {
+    padding: 4px 10px;
+}
+
+.matchTitleHighlight {
+    border-bottom: 4px solid #000;
+    padding-bottom: 3px;
+    font-size: 20px;
+}
+
+.matchOddTitle {
+    color: #1e1e1e;
+    font-size: 18px;
+    margin-left: 6px;
+}
+
+.backLayText {
+    color: #1e1e1e;
+    font-size: 13px;
+}
+
+.marketOddsBox {
+    padding: 4px 10px;
+    background: #FFF;
+}
+
+.marketOddsBox .allMatchBox:last-child {
+    border-bottom: none;
+    border-radius: 0px 0px 6px 6px;
+}
+
+.allMatchBox {
+    border-bottom: 1px solid #FFF;
+    height: 46px;
+    background: rgb(238, 246, 251);
+}
+
+.gameName {
+    padding: 0 8px;
+    font-size: 17px;
+    color: rgb(30, 30, 30);
+    font-weight: 700;
+}
+
+.oddBetsBox {
+    gap: 2px
+}
+
+.backBetBox, .LayBetBox {
+    padding: 6px 0;
+    border-radius: 6px;
+}
+
+.backBetBox {
+    background: rgb(124, 195, 245);
+}
+
+.LayBetBox {
+    background: rgb(250, 169, 186);
+}
+
+.oddStake {
+    font-size: 19px;
+    font-weight: 700;
+    color: rgb(30, 30, 30);
+    line-height: 19px;
+}
+
+.oddExposure {
+    font-size: 11px;
+    color: rgb(30, 30, 30);
+    line-height: 11px;
+}
+
+.marketDepthBox {
+    background: #000;
+    gap: 5px;
+    border-radius: 5px;
+    height: 30px;
+    padding: 0 12px;
+    color: #FFF;
+}
+
+.marketDepthTxt {
+    font-size: 14px;
+    color: #FFF;
+}
+
+.betMinMaxAmt {
+    gap: 2px;
+    font-size: 17px;
+    color: rgb(126, 145, 158);
+}
+
+.minText {
+    font-size: 14px;
+    color: inherit;
+}
+
+.betMinMax {
+    font-size: 14px;
+    font-weight: 700;
+    color: inherit;
+}
+
+.BookmarkerTitleRow {
+    height: 43px;
+    padding: 8px 40px 8px 8px;
+    border-radius: 13px 13px 0px 0px;
+    background: #ffc800;
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+}
+
+.BookmarkerTitleRow.BookmarkerTitleRound {
+    border-radius: 13px;
+}
+
+.BookmarkerTitleRow.BookmarkerTitleRound .gameOpenArrow {
+    transform: translateY(-50%) rotate(180deg);
+    -webkit-transform: translateY(-50%) rotate(180deg);
+}
+
+.gameOpenArrow {
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    top: 50%;
+    right: 15px;
+    color: #000;
+    font-size: 14px;
+}
+
+.bookMarkerOddContainer {
+    padding: 4px;
+    background: #FFF;
+    display: inline-block;
+    border-radius: 0px 0px 6px 6px;
+}
+
+.bookMarkerOddContainer.hidebookMarkerOdd {
+    display: none;
+}
+
+.bookmarkerOddsBox, .fancyOuterBox {
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+    background: #eef6fb;
+    padding: 6px 10px;
+}
+
+.fancyPremiumTabBox {
+    padding: 8px 8px 0px;
+    border-radius: 8px 8px 0px 0px;
+    background: #000;
+}
+
+.marketTabBox {
+    padding: 6px 20px;
+    min-width: 128px;
+    border-radius: 8px 8px 0px 0px;
+    color: #ffc800;
+    font-size: 17px;
+    background: rgba(255, 200, 0, 0.45);
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+}
+
+.marketTabActive {
+    background: #ffc800;
+    color: #000;
+    z-index: 5;
+}
+
+.marketTabActive.FancyTabBox {
+    margin-right: -10px;
+}
+
+.marketTabActive.PremiumTabBox {
+    margin-left: -10px;
+}
+
+.allTabList {
+    overflow-x: auto;
+    background: #ffc800;
+    padding: 4px 17px;
+}
+
+.allTabList::-webkit-scrollbar {
+    display: none;
+}
+
+.popularTab {
+    padding: 1px 17px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    border-bottom: 4px solid transparent;
+}
+
+.popularTabActive {
+    border-color: transparent;
+}
+
+.popularActiveLine {
+    border-radius: 5px;
+    height: 4px;
+    left: 17px;
+    background: #000;
+    transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
+    -webkit-transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
+    bottom: 4px;
+}
+
+.allPopularBets {
+    padding: 10px;
+    background: #FFF;
+    gap: 4px;
+}
+
+.popularTabTitle {
+    height: 43px;
+    padding: 8px 40px 8px 8px;
+    border-radius: 13px 13px 0px 0px;
+    background: #eef6fb;
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+    color: #000;
+    font-size: 16px;
+    border-bottom: 2px solid #FFF;
+}
+
+.popularOddTitle {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin-left: 6px;
+}
+
+.poplarOddRow {
+    gap: 2px;
+}
+
+.popularExposure {
+    font-weight: 700;
+}
+
+.popularOddsStake {
+    width: calc(50% - 2px);
+    padding: 8px 0;
+    background: #a1d2f4;
+}
+
+.poplarOddRow .popularOddsStake:last-child, .poplarOddRow .popularOddsStake:nth-last-child(2) {
+    border-radius: 0px 0px 13px 13px;
+}
+
+@media only screen and (max-width: 568px) {
+    .gameName, .oddStake, .matchOddTitle, .matchTitleHighlight {
+        font-size: 16px;
+    }
+
+    .popularTab {
+        font-size: 14px;
+        padding: 1px 14px
+    }
+
+    .popularOddTitle {
+        font-size: 14px;
+    }
+
+    .marketTabBox, .exchangeText {
+        font-size: 15px;
+    }
+
+    .oddExposure {
+        font-size: 10px;
+    }
+}

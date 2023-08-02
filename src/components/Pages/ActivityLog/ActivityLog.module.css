@@ -1,0 +1,121 @@
+.betStatusBox {
+    background: rgb(30, 30, 30);
+    padding: 10px 8px;
+}
+
+.betStatusDrop {
+    border-radius: 4px;
+    padding: 0 17px;
+    height: 38px;
+    border: 1px solid #ffc800;
+}
+
+.selectedBetStatus {
+    color: #ffc800;
+    font-size: 19px;
+}
+
+.betStatusDrop.betStatusOpen .betStatusArrow {
+    transform: rotate(-180deg);
+    -webkit-transform: rotate(-180deg);
+}
+
+.betStatusArrow {
+    right: 10px;
+    color: #ffc800;
+    font-size: 15px;
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+}
+
+.selectedBetStatus {
+    font-weight: 700;
+    margin-left: 5px;
+}
+
+.betStatusOptions {
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: all ease 100ms;
+    -webkit-transition: all ease 100ms;
+    background: rgb(30, 30, 30);
+    z-index: 5;
+    left: 8px;
+    right: 8px;
+    border-radius: 0px 0px 10px 10px;
+    border: 1px solid #ffc800;
+    border-top: none;
+    top: 42px;
+}
+
+.betStatusOptions.betStatusOpen {
+    height: auto;
+    visibility: visible;
+}
+
+.betStatusItem {
+    height: 45px;
+    padding-left: 20px;
+}
+
+.betStatusText {
+    color: #ffc800;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.allActivityList {
+    gap: 20px;
+}
+
+.acitivityLogBox {
+    border-radius: 8px;
+    background: #FFF;
+}
+
+.activityheader {
+    background: #d6f2ba;
+    padding: 8px;
+    font-size: 15px;
+    color: #000;
+}
+
+.activeStatusBox {
+    border-bottom: 1px solid #d4e0e5;
+    padding: 8px;
+}
+
+.activeStatusTitle {
+    font-size: 14px;
+    color: #1e1e1e;
+}
+
+.activeStatusValue {
+    font-size: 17px;
+    font-weight: 700;
+    color: #62b70b;
+}
+
+.recordChartRow {
+    border-bottom: 1px solid #d4e0e5;
+    padding: 8px 0;
+}
+
+.recordTitle {
+    font-size: 15px;
+    line-height: 16px;
+    color: #1e1e1e;
+    padding: 0 8px;
+}
+
+.recordValue {
+    font-size: 15px;
+    line-height: 16px;
+    color: #6f8898;
+    padding: 0 8px;
+}
+
+.allActivityList .recordChartRow:last-child {
+    border-bottom: none;
+}

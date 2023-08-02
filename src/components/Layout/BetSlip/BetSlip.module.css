@@ -1,0 +1,222 @@
+.BetSlipLayer {
+    inset: 0;
+    z-index: 20;
+    opacity: 0;
+    max-width: 480px;
+    margin: auto;
+    width: 100%;
+    visibility: hidden;
+    transform: translateY(100%);
+    -webkit-transform: translateY(100%);
+    transition: all ease 400ms;
+    -webkit-transition: all ease 400ms;
+}
+
+.BetSlipLayer.activeSlip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0%);
+    -webkit-transform: translateY(0%);
+}
+
+.BetSlipContainer {
+    border-radius: 8px 8px 0px 0px;
+    background: #FFF;
+    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(30, 30, 30) 0px -3.584px 53.76px 0px;
+    padding: 10px;
+}
+
+.betSlipHeader {
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.betTag {
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 30px;
+}
+
+.OddbackTag {
+    background: rgb(161, 210, 244);
+}
+
+.OddLayTag {
+    background: rgb(252, 198, 209);
+}
+
+.betTeamName {
+    font-size: 23px;
+    color: #000;
+    font-weight: 700;
+}
+
+.BetIconClose {
+    right: 0px;
+    font-family: 18px;
+    color: #000;
+    right: 20px;
+}
+
+.betOddsContainer {
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.betAmountSlip {
+    background: rgb(238, 246, 251);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.betOddTitle {
+    color: rgb(111, 136, 152);
+    font-size: 14px;
+    margin-bottom: 8px;
+    line-height: 16px;
+}
+
+.betAmtPlaceBox {
+    gap: 4px;
+}
+
+.betAmtAction {
+    height: 45px;
+    width: 45px;
+    border-radius: 4px;
+    background: #ffc800;
+    color: rgb(30, 30, 30);
+    font-size: 17px;
+}
+
+.betInputField {
+    width: 100%;
+    height: 45px;
+    border-radius: 4px;
+    border: 1px solid rgb(111, 136, 152);
+    color: rgb(30, 30, 30);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.betInputField.stakeAmt:after {
+    animation: inputBlink 1.2s step-start infinite;
+    content: "|";
+    font-weight: 400;
+}
+
+@keyframes inputBlink {
+    50% {
+        opacity: 0
+    }
+}
+
+@-webkit-keyframes inputBlink {
+    50% {
+        opacity: 0
+    }
+}
+
+.betAmtPlaceBox[disabled] .betAmtAction, .betAmtPlaceBox[disabled] .betInputField {
+    background: #d4e0e5;
+    cursor: not-allowed;
+    border: none;
+}
+
+.betAmtPlaceBox[disabled] .betInputField {
+    color: #6f8898;
+}
+
+.betAmountSelectin {
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.amountBtn {
+    background: #ffc800;
+    border-radius: 4px;
+    color: rgb(30, 30, 30);
+    font-size: 17px;
+    font-weight: 700;
+    height: 38px;
+}
+
+.betAmountsTab {
+    margin-bottom: 10px;
+    gap: 2px;
+}
+
+.betAmountBtnBox {
+    gap: 2px;
+}
+
+.betAmtBtn {
+    box-shadow: none;
+    border: none;
+    background: rgb(238, 246, 251);
+    border-radius: 4px;
+    width: 16.18%;
+    height: 49px;
+}
+
+.betAmtRemove {
+    background: rgb(238, 246, 251);
+    border-radius: 8px;
+    font-size: 20px;
+}
+
+.betMinMaxAmt {
+    gap: 2px;
+    font-size: 17px;
+    color: rgb(126, 145, 158);
+}
+
+.minText {
+    font-size: 14px;
+    color: inherit;
+}
+
+.betMinMax {
+    font-size: 14px;
+    font-weight: 700;
+    color: inherit;
+}
+
+.placeBetBtn {
+    background: #ffc800;
+    box-shadow: none;
+    border: none;
+    height: 51px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #000;
+    border-radius: 8px;
+    margin: 10px 0px;
+}
+
+.placeBetBtn[disabled] {
+    background: #d4e0e5;
+    cursor: not-allowed;
+}
+
+@media only screen and (max-width:568px) {
+    .betAmtAction {
+        height: 40px;
+        width: 40px;
+        font-size: 15px;
+    }
+
+    .betInputField {
+        height: 40px;
+    }
+
+    .betTeamName {
+        font-size: 19px;
+    }
+
+    .betTag {
+        font-size: 14px;
+    }
+}

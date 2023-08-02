@@ -1,0 +1,39 @@
+.acitivityLogBox {
+    background: #FFF;
+    border-radius: 8PX;
+}
+
+.recordChartRow {
+    border-bottom: 1px solid #d4e0e5;
+    padding: 10px 0;
+}
+
+.recordTitle {
+    font-size: 15px;
+    line-height: 16px;
+    color: #1e1e1e;
+    padding: 0 8px;
+}
+
+.recordValue {
+    font-size: 15px;
+    line-height: 16px;
+    color: #6f8898;
+    padding: 0 8px;
+}
+
+.allActivityList .recordChartRow:last-child {
+    border-bottom: none;
+}
+
+.changePassBtn {
+    background: #ffc800;
+    color: rgb(30, 30, 30);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 15px;
+    line-height: 15px;
+    gap: 5px;
+    right: 10px;
+    z-index: 2;
+}

@@ -1,0 +1,274 @@
+.loginLayer {
+    inset: 0;
+    -webkit-animation-duration: .4s;
+    animation-duration: .4s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    visibility: hidden;
+    opacity: 0;
+    background: #FFF;
+    z-index: 9;
+    height: 100%;
+}
+
+@-webkit-keyframes slideInLeft {
+    from {
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+        visibility: visible;
+        opacity: 1;
+    }
+
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+        visibility: visible;
+        opacity: 1;
+    }
+
+    to {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+.loginSlideLeft {
+    -webkit-animation-name: slideInLeft;
+    animation-name: slideInLeft;
+}
+
+@-webkit-keyframes slideOutLeft {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+        opacity: 1;
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+        opacity: 1;
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+}
+
+.loginSlideLeftOut {
+    -webkit-animation-name: slideOutLeft;
+    animation-name: slideOutLeft;
+}
+
+.loginBackIcon {
+    top: 20px;
+    left: 20px;
+    height: 40px;
+    width: 40px;
+    border-radius: 100%;
+    z-index: 5;
+    background: #FFF;
+}
+
+.loginImgBox {
+    flex-grow: 0;
+}
+
+.loginImgBox img {
+    height: 100%;
+    object-position: 0px -170px;
+}
+
+.loginFormContainer {
+    bottom: 0;
+    left: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background: #FFF;
+    padding: 30px 50px;
+}
+
+.loginTitle {
+    font-size: 35px;
+    color: #000;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.loginFormBox {
+    gap: 20px;
+}
+
+.loginFormRow {
+    background: #FFF;
+    border-radius: 8px;
+    padding: 0 2px;
+}
+
+.loginFormField {
+    height: 51px;
+    padding: 0 10px 0 45px;
+    border-radius: 8px;
+    background: transparent;
+    z-index: 5;
+    box-shadow: none;
+    border: 1px solid rgb(111 136 152);
+    transition: all ease .3s;
+    -webkit-transition: all ease .3s;
+}
+
+.loginFormField:focus {
+    background: #FFF;
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+
+.loginFormField::-webkit-input-placeholder {
+    color: transparent;
+    font-size: 0;
+}
+
+.withIconFormLabel {
+    font-size: 15px;
+    color: rgb(111 136 152);
+    top: 50%;
+    left: 50px;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    transition: all ease .2s;
+    -webkit-transition: all ease .2s;
+}
+
+.loginIcon {
+    top: 50%;
+    left: 13px;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    font-size: 23px;
+    z-index: 6;
+}
+
+.focusBorder:before, .focusBorder:after {
+    background-color: #c0a024;
+    content: "";
+    left: 0;
+    position: absolute;
+    top: 0;
+    transition: .3s;
+    width: 0;
+}
+
+.loginFormField:focus~.focusBorder:before, .loginFormField:focus~.focusBorder:after {
+    border-radius: 0.5rem;
+    height: calc(100% + 2px);
+    transition: .3s;
+    width: 100%;
+}
+
+.loginFormField:focus~.focusBorder:after {
+    bottom: 0;
+    left: auto;
+    right: 0;
+    top: auto;
+}
+
+.loginFormField:focus~.withIconFormLabel, .loginFormField:not(:placeholder-shown)~.withIconFormLabel {
+    transform: scale(0.9);
+    -webkit-transform: scale(0.9);
+    top: -12px;
+    background: #FFF;
+    z-index: 5;
+    padding: 0 6px;
+    left: 35px;
+}
+
+.checkRembertext:before {
+    content: '';
+    background-color: #fff4c1;
+    border-color: #8b6b05;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 1px;
+    display: inline-block;
+    height: 16px;
+    margin-right: 6px;
+    width: 16px;
+}
+
+.inputCheckbox:checked~.checkRembertext:before {
+    align-items: center;
+    background-color: #ffc800;
+    color: #1b1f23;
+    content: "";
+    display: flex;
+    font-family: icomoon;
+    font-size: 10px;
+    font-weight: 700;
+    justify-content: center;
+}
+
+.checkRembertext {
+    font-size: 17px;
+    color: rgb(30, 30, 30);
+}
+
+.loginBtn {
+    font-size: 17px;
+    background-color: #ffc800;
+    color: #1b1f23;
+    font-weight: 700;
+    border: none;
+    border-radius: 5px;
+    box-shadow: none;
+    min-width: 190px;
+    height: 51px;
+}
+
+.loginBtn:hover, .loginBtn:active, .loginBtn:visited {
+    border: none;
+    outline: none;
+}
+
+@media only screen and (max-width:568px) {
+    .ChangePoints {
+        font-size: 14px;
+    }
+
+    .loginFormContainer {
+        padding: 20px 5% 25px;
+    }
+
+    .loginTitle {
+        font-size: 30px;
+    }
+
+    .loginFormField, .loginBtn {
+        height: 45px;
+    }
+}

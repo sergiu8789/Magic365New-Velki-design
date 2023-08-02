@@ -1,0 +1,275 @@
+.singleGameContiner {
+    transition-duration: .3s;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    background: linear-gradient(-180deg, #d4e0e5, #eef6fb);
+    padding: 10px;
+}
+
+.allTabTitle {
+    padding: 0px 3px 10px;
+}
+
+.titleGameName:before {
+    content: '';
+    width: 4px;
+    background: #1E1E1E;
+    height: 100%;
+    left: 0px;
+    position: absolute;
+    display: inline-block;
+    border-radius: 5px;
+}
+
+.titleGameName {
+    padding-left: 17px;
+    font-size: 19px;
+    color: #1E1E1E;
+    font-weight: 700;
+    line-height: 20px;
+    align-self: center;
+
+}
+
+.sortFilterBtn {
+    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.06) 0px 2.56px 5.12px 0px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    font-size: 14px;
+    color: #5a5e62;
+    gap: 5px;
+    padding: 6px 12px;
+}
+
+.closeAllGames .filterIcon {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+}
+
+.filterIcon {
+    font-size: 14px;
+    color: #5a5e62;
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.singleCatgTourmentBox {
+    gap: 10px;
+}
+
+.singleGameHeader {
+    padding: 8px 40px 8px 8px;
+    border-radius: 13px 13px 0px 0px;
+    background: #000;
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+}
+
+.singleGameHeader.closeGameHeader {
+    border-radius: 13px;
+}
+
+.gameCountTitle {
+    gap: 8px;
+}
+
+.gameEventCount {
+    background: #ffc800;
+    padding: 0px 5px;
+    min-width: 34px;
+    color: rgb(30, 30, 30);
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 20px;
+}
+
+.gameEventName {
+    color: #ffc800;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.gameArrow {
+    transition: all ease 300ms;
+    -webkit-transition: all ease 300ms;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    top: 50%;
+    right: 15px;
+    color: #ffc800;
+    font-size: 14px;
+}
+
+.gameArrow.gameArrowOpen {
+    transform: translateY(-50%) rotate(180deg);
+    -webkit-transform: translateY(-50%) rotate(180deg);
+}
+
+.gamesCardContainer {
+    background: #FFF;
+    border-radius: 0px 0px 13px 13px;
+    padding-bottom: 6px;
+}
+
+.singleGameCardBox {
+    padding: 4px 10px;
+    border-bottom: 1px solid rgb(238, 246, 251);
+}
+
+.gamesCardContainer .singleGameCardBox:last-child {
+    border-bottom: none;
+}
+
+.gameHeaderRow {
+    padding: 4px 0px;
+}
+
+.gamesTypeName {
+    gap: 5px;
+}
+
+.gameFavorate {
+    padding: 0px 10px 0px 0px;
+    font-size: 20px;
+}
+
+.gameBetType {
+    gap: 4px;
+}
+
+.bgInPlay {
+    background: #52bf04;
+    font-weight: 700;
+    color: #FFF;
+    font-size: 14px;
+    line-height: 17px;
+    padding: 0px 2px;
+}
+
+.currentBetGame {
+    font-size: 16px;
+    color: rgb(30, 30, 30);
+}
+
+.betStatusValBox {
+    gap: 10px;
+}
+
+.betStatusVal {
+    font-size: 20px;
+    color: rgb(198, 151, 0);
+    font-weight: 500;
+    display: inline-block;
+}
+
+.gameOpenArrow {
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
+.gameStatsContainer {
+    border-radius: 6px;
+}
+
+.gameStatsHeader {
+    border-radius: 6px 6px 0px 0px;
+    background: #ffc800;
+    height: 30px;
+    border-bottom: 1px solid #FFF;
+}
+
+.matchOddBetCount {
+    border-right: 1px solid rgb(27, 31, 35);
+}
+
+.matchOdds {
+    color: rgb(139, 107, 5);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px;
+    padding: 0 10px 0 8px;
+}
+
+.betMatchText {
+    color: rgb(139, 107, 5);
+    font-size: 12px;
+    line-height: 13px;
+    padding-right: 5px;
+}
+
+.matchOddCount {
+    color: rgb(139, 107, 5);
+    font-size: 12px;
+    line-height: 13px;
+    font-weight: 700;
+}
+
+.backLayText {
+    font-size: 12px;
+    color: rgb(30, 30, 30);
+}
+
+.gameStatsContainer .allMatchBox:last-child {
+    border-bottom: none;
+}
+
+.allMatchBox {
+    border-bottom: 1px solid #FFF;
+    height: 46px;
+    background: rgb(238, 246, 251);
+}
+
+.gameName {
+    padding: 0 8px;
+    font-size: 17px;
+    color: rgb(30, 30, 30);
+    font-weight: 700;
+}
+
+.oddBetsBox {
+    gap: 2px
+}
+
+.backBetBox, .LayBetBox {
+    padding: 6px 0;
+    border-radius: 6px;
+}
+
+.backBetBox {
+    background: rgb(124, 195, 245);
+}
+
+.LayBetBox {
+    background: rgb(250, 169, 186);
+}
+
+.oddStake {
+    font-size: 19px;
+    font-weight: 700;
+    color: rgb(30, 30, 30);
+    line-height: 19px;
+}
+
+.oddExposure {
+    font-size: 11px;
+    color: rgb(30, 30, 30);
+    line-height: 11px;
+}
+
+@media only screen and (max-width: 568px) {
+    .matchOdds {
+        font-size: 14px;
+        font-weight: 500;
+        padding: 0 8px 0 8px;
+    }
+
+    .gameName, .oddStake {
+        font-size: 16px;
+    }
+
+    .oddExposure {
+        font-size: 10px;
+    }
+}
