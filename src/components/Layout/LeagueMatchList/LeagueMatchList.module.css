@@ -1,0 +1,71 @@
+.allLeaguesgame {
+    padding: 8px 17px;
+}
+
+.leagueDirectory, .allLeaguesgame, .leagueInitialBox, .allGamesList, .leagueMatchContainer {
+    gap: 8px;
+}
+
+.leagueInitialBox:after {
+    content: '';
+    height: 5px;
+    width: 5px;
+    background: rgb(126, 145, 158);
+    display: inline-block;
+    border-radius: 100%;
+}
+
+.leagueInitial {
+    background: rgb(126, 145, 158);
+    color: #FFF;
+    height: 26px;
+    width: 26px;
+    border-radius: 100%;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.allGamesList {
+    flex-grow: 1;
+}
+
+.leagueTitle {
+    font-size: 19px;
+    font-weight: 700;
+    color: #1E1E1E;
+    padding-left: 8px;
+}
+
+.leagueMatchsBox {
+    border-radius: 13px;
+    gap: 1px 0px;
+}
+
+.leagueMatchRow {
+    min-height: 58px;
+    background: #FFF;
+    padding: 4px 16px;
+}
+
+.leagueMatch {
+    font-size: 19px;
+    font-weight: 400;
+    color: #1E1E1E;
+    line-height: 20px;
+}
+
+.MatchArrow {
+    color: #7e919e;
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+}
+
+@media only screen and (max-width:568px) {
+    .leagueMatch {
+        font-size: 15px;
+    }
+
+    .leagueTitle {
+        font-size: 17px;
+    }
+}

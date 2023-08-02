@@ -1,0 +1,171 @@
+.headerBoxRow {
+    background: #ffc800;
+    height: 50px;
+    padding: 10px;
+    position: sticky;
+    top: 0;
+    z-index: 8;
+}
+
+.siteLogoImg {
+    height: 35px;
+}
+
+.headerMenuIcon {
+    font-size: 25px;
+    color: #000;
+    margin-right: 20px;
+}
+
+.loginBtnBox {
+    gap: 10px;
+}
+
+.signupBtn, .loginBtn {
+    font-size: 17px;
+    font-weight: 700;
+    color: #FFF;
+    height: 33px;
+    gap: 5px;
+    border: none;
+    box-shadow: none;
+    border-radius: 5px;
+    padding: 0 13px;
+}
+
+.signupBtn {
+    background: rgb(139, 107, 5);
+}
+
+.loginBtn {
+    background: rgb(226, 0, 0);
+}
+
+.loggedUserBox {
+    gap: 1px;
+}
+
+.loginUserBox, .loggedUserWallet {
+    gap: 10px;
+}
+
+.loggedWalletAmt {
+    gap: 5px;
+}
+
+.loogedUserName {
+    font-size: 14px;
+    color: #1e1e1e;
+    margin: 0;
+}
+
+.loggedAmtLabl {
+    color: #8b6b05;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
+}
+
+.loggedAmtVal, .ExposureAmtVal {
+    color: #1e1e1e;
+    font-size: 14px;
+    line-height: 14px;
+}
+
+.ExposureAmtVal {
+    color: rgb(226, 0, 0);
+}
+
+.walletExpVal {
+    font-size: 25px;
+    color: #1e1e1e;
+}
+
+.loadingBar {
+    inset: 0;
+    z-index: 4;
+    background: #ffc800;
+    gap: 10px;
+}
+
+.animateLoadBar {
+    height: 5px;
+    width: 5px;
+    flex-shrink: 0;
+    background: #000;
+    border-radius: 5px;
+    animation: loadBar .8s ease infinite;
+    -webkit-animation: loadBar .8s ease infinite;
+}
+
+@keyframes loadBar {
+    0% {
+        opacity: .1
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.4)
+    }
+
+    to {
+        opacity: .1
+    }
+}
+
+@-webkit-keyframes loadBar {
+    0% {
+        opacity: .1
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.4)
+    }
+
+    to {
+        opacity: .1
+    }
+}
+
+.animateLoadBar1 {
+    animation-delay: .1s;
+}
+
+.animateLoadBar2 {
+    animation-delay: .2s;
+}
+
+.animateLoadBar3 {
+    animation-delay: .3s;
+}
+
+.animateLoadBar4 {
+    animation-delay: .4s;
+}
+
+.animateLoadBar5 {
+    animation-delay: .5s;
+}
+
+.animateLoadBar6 {
+    animation-delay: .6s;
+}
+
+.animateLoadBar7 {
+    animation-delay: .7s;
+}
+
+.animateLoadBar8 {
+    animation-delay: .8s;
+}
+
+@media only screen and (max-width:568px) {
+    .headerMenuIcon {
+        font-size: 17px;
+    }
+
+    .signupBtn, .loginBtn {
+        font-size: 14px;
+    }
+}

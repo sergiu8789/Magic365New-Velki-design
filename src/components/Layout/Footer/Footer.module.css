@@ -1,0 +1,62 @@
+.siteFooterRow {
+    bottom: 0;
+    z-index: 5;
+    background: #FFF;
+    height: 75px;
+    border-top: 1px solid rgb(212 224 229);
+    padding: 0 20px;
+    gap: 20px;
+    left: 0px;
+    right: 0;
+    max-width: 480px;
+    box-shadow: 0px -6px 20px 0px rgba(0, 0, 0, 0.07);
+}
+
+.homeTabBox {
+    width: 20%;
+    color: rgb(27, 31, 35);
+    padding: 10px 0px;
+    border-radius: 8px;
+    z-index: 2;
+}
+
+.activeTabLink.homeTabBox {
+    color: #000;
+}
+
+.homeTabIcon {
+    font-size: 25px;
+    color: inherit;
+}
+
+.homeTabName {
+    font-size: 14px;
+    color: inherit;
+    line-height: 16px;
+}
+
+.footerTabHighlight {
+    height: 61px;
+    background: #ffc800;
+    border-radius: 8px;
+    width: calc(20% - 24px);
+    z-index: 1;
+    transition: all ease 200ms;
+    -webkit-transition: all ease 200ms;
+    left: 20px;
+}
+
+@media only screen and (max-width:568px) {
+    .siteFooterRow {
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .footerTabHighlight {
+        width: calc(20% - 12px);
+    }
+
+    .homeTabName {
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,176 @@
+.sportsScrollBox {
+    height: calc(100vh - 131px);
+    overflow-y: auto;
+}
+
+.gameFilterDayrow {
+    background: #000;
+    gap: 8px;
+}
+
+.inplayBox {
+    padding: 13px 10px;
+    gap: 8px;
+    background: rgb(27, 31, 35);
+    margin-right: 10px;
+}
+
+.inPlayToggle {
+    background: #6f8898;
+    transition: all .4s ease;
+    -webkit-transition: all .4s ease;
+    cursor: pointer;
+    display: block;
+    outline: 0;
+    position: relative;
+    user-select: none;
+    padding: 1px;
+    border-radius: 16px;
+    width: 32px;
+    height: 16px;
+}
+
+.inPlayToggle:before {
+    background: #fff;
+    border-radius: 16px;
+    transition: left .4s cubic-bezier(.175, .885, .32, 1.275), padding .1s ease, margin .3s ease;
+    left: 0px;
+    content: "";
+    display: block;
+    height: 100%;
+    position: relative;
+    width: 50%;
+}
+
+.inPlayInput:checked~.inPlayToggle {
+    background: #ffc800;
+}
+
+.inPlayInput:checked~.inPlayToggle:before {
+    left: 15px;
+}
+
+.inPlayInput {
+    z-index: 5;
+    width: 32px;
+    height: 16px;
+    opacity: 0;
+}
+
+.inPlayText {
+    transition-duration: .3s;
+    color: rgb(111, 136, 152);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.inPlayInput:checked~.inPlayText {
+    color: #ffc800;
+}
+
+.inPlayTabRow {
+    gap: 10px;
+    width: 100%;
+    padding-right: 10px;
+}
+
+.inPlayTabName {
+    font-size: 19px;
+    font-weight: 500;
+    color: #FFF;
+    opacity: .7;
+    padding-bottom: 5px;
+}
+
+.inPlayTabName.inPlayTabActive {
+    opacity: 1;
+}
+
+.inPlayTabIcon {
+    font-size: 24px;
+    color: #FFF;
+}
+
+.activeLine {
+    border-radius: 5px;
+    height: 4px;
+    background: #FFF;
+    transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
+    -webkit-transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
+    bottom: -1px;
+}
+
+.allSportsTabRow {
+    background: #333333;
+    gap: 5px;
+    padding: 5px 10px;
+}
+
+.sportsCatTab {
+    height: 38px;
+    width: calc(25% - 4px);
+    border-radius: 40px;
+    gap: 5px;
+    color: #FFF;
+    z-index: 1;
+    flex-shrink: 0;
+}
+
+.activeFloatTab {
+    height: 38px;
+    width: calc(25% - 8px);
+    border-radius: 40px;
+    background: #ffc800;
+    transition: all ease 200ms;
+    -webkit-transition: all ease 200ms;
+    left: 10px;
+}
+
+.sportsTabIcon {
+    font-size: 21px;
+    color: inherit;
+}
+
+.sportTabName {
+    font-size: 16px;
+    font-weight: 700;
+    color: inherit;
+}
+
+.activeCatTab.sportsCatTab {
+    color: #000;
+}
+
+@media only screen and (max-width:568px) {
+    .inPlayTabName {
+        font-size: 14px;
+    }
+
+    .inPlayTabIcon {
+        font-size: 16px;
+    }
+
+    .inPlayText {
+        font-size: 13px;
+    }
+
+    .inplayBox {
+        padding: 10px 8px;
+    }
+
+    .activeLine {
+        height: 2px;
+    }
+
+    .sportsTabIcon {
+        font-size: 16px;
+    }
+
+    .sportTabName {
+        font-size: 13px;
+    }
+
+    .activeFloatTab, .sportsCatTab {
+        height: 30px;
+    }
+}

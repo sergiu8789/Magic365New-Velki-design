@@ -1,0 +1,533 @@
+@font-face {
+    font-display: block;
+    font-family: icomoon;
+    font-style: normal;
+    font-weight: 400;
+    src: url(fonts/1.3.4-icomoon.eot);
+    src: url(fonts/1.3.4-icomoon.eot) format("embedded-opentype"), url(fonts/1.3.4-icomoon.ttf) format("truetype"), url(fonts/1.3.4-icomoon.woff) format("woff"), url(fonts/1.3.4-icomoon.svg) format("svg")
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url(fonts/Ubuntu-300.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(fonts/Ubuntu-400.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url(fonts/Ubuntu-500.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(fonts/Ubuntu-700.woff2) format('woff2');
+}
+
+[class*=" icon-"], [class^=icon-] {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: icomoon !important;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1;
+    text-transform: none
+}
+
+.icon-a-z:before {
+    content: ""
+}
+
+.icon-active-log:before {
+    content: ""
+}
+
+.icon-all:before {
+    content: ""
+}
+
+.icon-arrow-double:before {
+    content: ""
+}
+
+.icon-arrow-down:before {
+    content: ""
+}
+
+.icon-arrow-down-sencodary:before {
+    content: ""
+}
+
+.icon-arrow-left:before {
+    content: ""
+}
+
+.icon-backspace:before {
+    content: ""
+}
+
+.icon-bookmaker .path1:before {
+    color: #386abd;
+    content: ""
+}
+
+.icon-bookmaker .path2:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-calendar:before {
+    content: ""
+}
+
+.icon-catalog:before {
+    content: ""
+}
+
+.icon-check:before {
+    content: ""
+}
+
+.icon-check-circle:before {
+    content: ""
+}
+
+.icon-clock:before {
+    content: ""
+}
+
+.icon-clone:before {
+    content: ""
+}
+
+.icon-close:before {
+    content: ""
+}
+
+.icon-cricket:before {
+    content: ""
+}
+
+.icon-del:before {
+    content: ""
+}
+
+.icon-download:before {
+    content: ""
+}
+
+.icon-edit:before {
+    content: ""
+}
+
+.icon-editing:before {
+    content: ""
+}
+
+.icon-email:before {
+    content: ""
+}
+
+.icon-empty:before {
+    content: ""
+}
+
+.icon-exchange:before {
+    content: ""
+}
+
+.icon-expend:before {
+    content: ""
+}
+
+.icon-facebook:before {
+    content: ""
+}
+
+.icon-fancybet .path1:before {
+    color: #f22a96;
+    content: ""
+}
+
+.icon-fancybet .path2:before {
+    color: #4290a3;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-fancybet .path3:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-fancybet .path4:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-fullscreen:before {
+    content: ""
+}
+
+.icon-game-hall-egame:before {
+    content: ""
+}
+
+.icon-game-hall-fishing:before {
+    content: ""
+}
+
+.icon-game-hall-live:before {
+    content: ""
+}
+
+.icon-game-hall-slot:before {
+    content: ""
+}
+
+.icon-game-hall-sports:before {
+    content: ""
+}
+
+.icon-game-hall-table:before {
+    content: ""
+}
+
+.icon-graph:before {
+    content: ""
+}
+
+.icon-history:before {
+    content: ""
+}
+
+.icon-home:before {
+    content: ""
+}
+
+.icon-in-play .path1:before {
+    color: #52bf04;
+    content: ""
+}
+
+.icon-in-play .path2:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-in-play .path3:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-in-play .path4:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-in-play .path5:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-in-play .path6:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-in-play .path7:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-in-play .path8:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-info-circle:before {
+    content: ""
+}
+
+.icon-inplay-b:before {
+    content: ""
+}
+
+.icon-instagram:before {
+    content: ""
+}
+
+.icon-latest:before {
+    content: ""
+}
+
+.icon-list:before {
+    content: ""
+}
+
+.icon-live:before {
+    color: #f23b3b;
+    content: ""
+}
+
+.icon-lock:before {
+    content: ""
+}
+
+.icon-login:before {
+    content: ""
+}
+
+.icon-logout:before {
+    content: ""
+}
+
+.icon-menu:before {
+    content: ""
+}
+
+.icon-mic:before {
+    content: ""
+}
+
+.icon-min-max:before {
+    content: ""
+}
+
+.icon-minus:before {
+    content: ""
+}
+
+.icon-notice:before {
+    content: ""
+}
+
+.icon-parlay:before {
+    content: ""
+}
+
+.icon-parlay-list:before {
+    content: ""
+}
+
+.icon-parlay-up:before {
+    content: ""
+}
+
+.icon-pdf:before {
+    content: ""
+}
+
+.icon-phone:before {
+    content: ""
+}
+
+.icon-phone-outgoing:before {
+    content: ""
+}
+
+.icon-play-film:before {
+    content: ""
+}
+
+.icon-plus:before {
+    content: ""
+}
+
+.icon-poker:before {
+    content: ""
+}
+
+.icon-profile:before {
+    content: ""
+}
+
+.icon-profit-loss:before {
+    content: ""
+}
+
+.icon-refresh:before {
+    content: ""
+}
+
+.icon-search:before {
+    content: ""
+}
+
+.icon-setting:before {
+    content: ""
+}
+
+.icon-shield:before {
+    content: ""
+}
+
+.icon-sign-up:before {
+    content: ""
+}
+
+.icon-skype:before {
+    content: ""
+}
+
+.icon-soccer:before {
+    content: ""
+}
+
+.icon-sphere:before {
+    content: ""
+}
+
+.icon-sport:before {
+    content: ""
+}
+
+.icon-sportsbook .path1:before {
+    color: #d45f2b;
+    content: ""
+}
+
+.icon-sportsbook .path2:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-sportsbook .path3:before {
+    color: #fff;
+    content: "";
+    margin-left: -1em
+}
+
+.icon-star:before {
+    content: ""
+}
+
+.icon-star-disable:before {
+    content: ""
+}
+
+.icon-star-solid:before {
+    content: ""
+}
+
+.icon-telegram:before {
+    content: ""
+}
+
+.icon-tennis:before {
+    content: ""
+}
+
+.icon-today:before {
+    content: ""
+}
+
+.icon-toggle:before {
+    content: ""
+}
+
+.icon-tomorrow:before {
+    content: ""
+}
+
+.icon-transfer:before {
+    content: ""
+}
+
+.icon-transfer-log:before {
+    content: ""
+}
+
+.icon-triangle:before {
+    content: ""
+}
+
+.icon-trophy:before {
+    content: ""
+}
+
+.icon-trophy-disable:before {
+    content: ""
+}
+
+.icon-um:before {
+    content: ""
+}
+
+.icon-user:before {
+    content: ""
+}
+
+.icon-visibility-off:before {
+    content: ""
+}
+
+.icon-visibility-on:before {
+    content: ""
+}
+
+.icon-volume:before {
+    content: ""
+}
+
+.icon-volume-off:before {
+    content: ""
+}
+
+.icon-vs:before {
+    content: ""
+}
+
+.icon-wallet:before {
+    content: ""
+}
+
+.icon-whatsapp:before {
+    content: ""
+}
+
+.icon-whatsapp-line:before {
+    content: ""
+}
+
+.icon-wifi:before {
+    content: ""
+}
+
+.icon-youtube .path1:before {
+    color: #010201;
+    content: ""
+}
+
+.icon-youtube .path2:before {
+    color: #000;
+    content: "";
+    margin-left: -1em
+}

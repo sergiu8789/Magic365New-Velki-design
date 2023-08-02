@@ -1,0 +1,26 @@
+.settingBoxRow {
+    background: #FFF;
+    border-radius: 12px;
+    padding: 5px 5px 5px 15px;
+}
+
+.settingToggleTitle {
+    color: #1E1E1E;
+    font-size: 19px;
+}
+
+.whatsapp {
+    color: #00a14a;
+    font-size: 22px;
+    margin-right: 10px;
+}
+
+.messageOut {
+    background: #ffc800;
+    border-radius: 8px;
+    font-size: 6px;
+    font-size: 22px;
+    color: #1E1E1E;
+    height: 49px;
+    padding: 0 15px;
+}

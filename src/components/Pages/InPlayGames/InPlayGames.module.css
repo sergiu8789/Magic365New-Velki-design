@@ -1,0 +1,5 @@
+.inPlayBetPage {
+    height: calc(100vh - 60px);
+    overflow-y: auto;
+    background: rgb(238, 246, 251);
+}

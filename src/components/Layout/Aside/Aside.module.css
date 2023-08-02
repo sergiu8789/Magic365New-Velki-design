@@ -1,0 +1,107 @@
+.asideContainer {
+    background: rgba(30, 30, 30, 0.3);
+    inset: 0;
+    z-index: 9;
+    transition: all ease .2s;
+    -webkit-transition: all ease .2s;
+}
+
+.asideContainer.asideContainerHide {
+    transform: translateX(-100%);
+    -webkit-transform: translateX(-100%);
+}
+
+.asideContainer.asideContainerShow {
+    transform: translateX(0%);
+    -webkit-transform: translateX(0%);
+}
+
+.asideDrawer {
+    background: rgb(238, 246, 251);
+    padding: 15px 20px;
+    max-width: 360px;
+    width: 80%;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.headerRow {
+    padding: 0px 5px 15px;
+}
+
+.asideTitle {
+    font-size: 20px;
+    color: #000;
+    font-weight: 700;
+}
+
+.asideClose {
+    font-size: 17px;
+}
+
+.categoryMenuBox {
+    border-radius: 10px;
+    background: #FFF;
+    margin-bottom: 16px;
+}
+
+.linkItemRow {
+    padding: 0 17px;
+    gap: 10px;
+    height: 57px;
+    border-bottom: 1px solid rgb(212, 224, 229);
+}
+
+.categoryMenuBox .linkItemRow:last-child {
+    border-bottom: none;
+}
+
+.curentBetCount {
+    font-size: 15px;
+    font-weight: 700;
+    color: rgb(30, 30, 30);
+    padding: 0 6px;
+    height: 23px;
+    background: rgb(255, 200, 0);
+    border-radius: 4px;
+}
+
+.itemLinkName {
+    font-size: 19px;
+    color: rgb(30, 30, 30);
+    line-height: 20px;
+}
+
+.itemArrow {
+    right: 10px;
+    transform: scaleX(-1) translateY(-50%);
+    -webkit-transform: scaleX(-1) translateY(-50%);
+    top: 50%;
+}
+
+.LogoutlinkItemRow {
+    background: rgb(212, 224, 229);
+}
+
+.timeZone {
+    padding: 0px 20px;
+    font-size: 16px;
+    color: rgb(111, 136, 152);
+    gap: 10px;
+}
+
+.timeZoneTime {
+    font-size: 16px;
+    color: rgb(111, 136, 152);
+    margin: 0;
+}
+
+@media only screen and (max-width:568px) {
+    .itemLinkName {
+        font-size: 15px;
+    }
+
+    .timeZoneTime {
+        font-size: 13px;
+    }
+}

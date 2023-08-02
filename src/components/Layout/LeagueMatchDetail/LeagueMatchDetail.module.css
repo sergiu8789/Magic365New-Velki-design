@@ -1,0 +1,47 @@
+.matchDetailHeader {
+    height: 53px;
+    background: #000;
+    padding: 0 13px;
+    font-size: 17px;
+    color: #FFF;
+    gap: 13px;
+}
+
+.matchName {
+    font-size: 17px;
+    color: #FFF;
+}
+
+.allMatchList {
+    padding: 10px 17px;
+}
+
+.matchListBox {
+    border-radius: 13px;
+    gap: 1px 0px;
+}
+
+.singleMatchList {
+    padding: 17px 16px;
+    background: #FFF;
+}
+
+.teamName {
+    font-size: 19px;
+    color: #1E1E1E;
+    margin: 0;
+}
+
+.MatchArrow {
+    color: #7e919e;
+    font-size: 17px;
+    transform: rotate(180deg) translateY(-50%);
+    -webkit-transform: rotate(180deg) translateY(-50%);
+    right: 16px;
+}
+
+@media only screen and (max-width:568px) {
+    .teamName {
+        font-size: 16px;
+    }
+}

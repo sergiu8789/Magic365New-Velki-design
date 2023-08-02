@@ -1,0 +1,12 @@
+.categoryTabIndicator {
+    background-image: linear-gradient(90deg, rgba(168, 177, 202, .2), rgba(245, 246, 250, .2));
+    height: 90px;
+    transform: translateX(0px);
+    -webkit-transform: translateX(0px);
+    transition: all ease .5s;
+    -webkit-transition: all ease .5s;
+    width: 85px;
+    left: 10px;
+    border-radius: 5px;
+    top: 10px;
+}

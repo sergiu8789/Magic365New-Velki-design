@@ -1,0 +1,39 @@
+.allSportsTabRow {
+    background: #333333;
+    gap: 5px;
+    padding: 10px 10px;
+}
+
+.sportsCatTab {
+    height: 38px;
+    width: 25%;
+    border-radius: 40px;
+    gap: 5px;
+    color: #FFF;
+    z-index: 1;
+}
+
+.activeFloatTab {
+    height: 38px;
+    width: 25%;
+    border-radius: 40px;
+    background: #ffc800;
+    transition: all ease 200ms;
+    -webkit-transition: all ease 200ms;
+    left: 10px;
+}
+
+.sportsTabIcon {
+    font-size: 21px;
+    color: inherit;
+}
+
+.sportTabName {
+    font-size: 16px;
+    font-weight: 700;
+    color: inherit;
+}
+
+.activeCatTab.sportsCatTab {
+    color: #000;
+}
