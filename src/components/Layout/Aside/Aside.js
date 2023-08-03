@@ -196,7 +196,6 @@ function Aside({ openAside, setopenAside }) {
           >
             <div 
               className={`${styles.linkItemRow} ${styles.LogoutlinkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={appUserLogout}
             >
               <span className="icon icon-logout"></span>
               <span className={styles.itemLinkName}>Logout</span>
