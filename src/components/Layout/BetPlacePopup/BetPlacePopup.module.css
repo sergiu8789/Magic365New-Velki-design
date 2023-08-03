@@ -60,9 +60,9 @@
 }
 
 .matchName, .matchLoss, .matchOdds {
-    color: rgb(30, 30, 30);
+    color: #1e1e1e;
     font-size: 16px;
-    padding: 0 10px;
+    padding: 0 9px;
 }
 
 .matchLossBox {

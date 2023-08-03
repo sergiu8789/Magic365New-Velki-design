@@ -3,12 +3,15 @@ import styles from "./BetPlacePopup.module.css";
 
 export const BetPlacePopup = () => {
   const [betStatus, setbetStatus] = useState(true);
+  const [betshow, setbetshow] = useState(false);
   const closeMatchBet = () => {};
   return (
     <React.Fragment>
       <div
         className={`${styles.betPlacePopup} ${
           betStatus === true ? styles.betMatchSuccess : styles.betMatchFailed
+        } ${
+          betshow === true && styles.showBetStatus
         } position-fixed m-auto col-12 d-inline-flex flex-column overflow-hidden`}
       >
         <div
