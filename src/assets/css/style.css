@@ -83,3 +83,10 @@
     height: 7px;
     opacity: 1;
 }
+
+/* LOGIN CAPTCHA CSS */
+.captchBox div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
