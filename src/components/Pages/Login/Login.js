@@ -97,7 +97,21 @@ export const Login = () => {
       ApiService.login(payload)
         .then((res) => {
           console.log(res);
-          setloginErrorMesg("");
+          if (res?.data) {
+            if (res.data.token) {
+              setloginErrorMesg("");
+              const user = jwtDecode(res.data.token);
+              navigate("/");
+              auth.setAuth({
+                ...auth.auth,
+                user: user,
+                loggedIn: true,
+                showSucessMessage: true,
+                openLoginPopup: false,
+                successMessage: "LogIn Successfully!",
+              });
+            }
+          }
         })
         .catch((err) => {});
       //}
