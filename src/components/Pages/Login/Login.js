@@ -2,14 +2,31 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import loginImgBanner from "../../../assets/images/login-banner.png";
+import { Form } from "react-bootstrap";
+import ApiService from "../../../services/ApiService";
 
 export const Login = () => {
   const [loginSlide, setloginSlide] = useState("true");
   const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
-    setloginSlide("true");
-  }, [location.state.login]);
+  const [form, setForm] = useState({
+    username: {
+      value: "",
+      error: false,
+      errorMessage: "",
+    },
+    password: {
+      value: "",
+      error: false,
+      errorMessage: "",
+      showPassword: false,
+    },
+    captcha: {
+      value: "",
+      error: false,
+      errorMessage: "",
+    },
+  });  
 
   const gotoHome = () => {
     setloginSlide("false");
@@ -17,8 +34,90 @@ export const Login = () => {
       navigate(-1);
     }, 250);
   };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: {
+        ...form[name],
+        error: false,
+        value,
+      },
+    });
+  };
+
+  /********* Check form field  validations  *********/
+  const checkValidation = () => {
+    console.log(form)
+    if (
+      !form?.captcha?.value ||
+      !form?.username?.value ||
+      !form?.password?.value
+    ) {
+      setForm({
+        ...form,
+        captcha: {
+          ...form["captcha"],
+          errorMessage: !form.captcha.value
+            ? "Please Enter Captcha Code!"
+            : "",
+          error: !form.captcha.value ? true : false,
+        },
+        username: {
+          ...form["username"],
+          errorMessage: !form.username.value
+            ? "Please Enter Username!"
+            : "",
+          error: !form.username.value ? true : false,
+        },
+        password: {
+          ...form["password"],
+          errorMessage: !form.password.value
+            ? "Please Enter Password!"
+            : "",
+          error: !form.password.value ? true : false,
+        },
+      });
+     return false; 
+    }
+    else
+     return true;
+  }
+
+
+  /********** On Submit Login Form ***********/
+  const onLogin = (e) => {  
+    e.preventDefault();
+    console.log(checkValidation())
+    if(checkValidation()){
+      console.log("ssd")
+        //if(validateCaptcha()){
+          const payload = {
+            email: form.username.value,
+            password: form.password.value,
+          };
+          ApiService.login(payload)
+          .then((res) => {
+             console.log(res)
+          })
+          .catch((err) => {
+          });
+       // }
+    }
+  } 
+
+  useEffect(() => {
+     console.log(form)
+  },[form])
+
+  useEffect(() => {
+    setloginSlide("true");
+  }, [location?.state?.login]);
+
   return (
     <React.Fragment>
+      <Form onSubmit={onLogin}>
       <div
         className={`${styles.loginLayer} ${
           loginSlide === "true"
@@ -51,13 +150,14 @@ export const Login = () => {
             <div
               className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
             >
-              <input
+              <Form.Control
                 id="username"
                 name="username"
                 autoComplete="off"
                 type="text"
                 placeholder="Username"
                 className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                onChange={handleChange}
               />
               <label
                 htmlFor="username"
@@ -73,13 +173,14 @@ export const Login = () => {
             <div
               className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
             >
-              <input
+               <Form.Control
                 id="password"
                 name="password"
                 autoComplete="off"
                 type="password"
                 placeholder="Password"
                 className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                onChange={handleChange}
               />
               <label
                 htmlFor="password"
@@ -95,13 +196,14 @@ export const Login = () => {
             <div
               className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
             >
-              <input
+              <Form.Control
                 id="verifyCode"
-                name="verifyCode"
+                name="captcha"
                 autoComplete="off"
                 type="number"
                 placeholder="Validation"
                 className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                onChange={handleChange}
               />
               <label
                 htmlFor="verifyCode"
@@ -142,6 +244,7 @@ export const Login = () => {
           </div>
         </div>
       </div>
+      </Form>
     </React.Fragment>
   );
 };
