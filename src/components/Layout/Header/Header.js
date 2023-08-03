@@ -3,10 +3,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./Header.module.css";
 import logo from "../../../assets/images/logo.png";
 import Aside from "../Aside/Aside";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
+  const auth = useAuth();
+
   const [openAside, setopenAside] = useState("false");
   const [loginCheck, setloginCheck] = useState(false);
   const [walletReload, setwalletReload] = useState(false);
@@ -20,10 +23,6 @@ function Header() {
     setopenAside("true");
   };
 
-  const backGameDetailList = () => {
-    navigate("/sports");
-  };
-
   let walletTime = "";
   const showWalletRefrsh = () => {
     clearTimeout(walletTime);
@@ -32,6 +31,42 @@ function Header() {
       setwalletReload(false);
     }, 2000);
   };
+
+  const LoaderAnimation = () => {
+    return(
+      <div className={`${styles.loadingBar} ${
+                  walletReload ? "d-flex" : "d-none"
+            } align-items-center justify-content-center position-absolute`}
+            onClick={() => auth.setAuth({...auth.auth,fetchWallet:true})}
+       >
+          <span
+            className={`${styles.animateLoadBar} ${styles.animateLoadBar1}`}
+          ></span>
+          <span
+            className={`${styles.animateLoadBar} ${styles.animateLoadBar2}`}
+          ></span>
+          <span
+            className={`${styles.animateLoadBar} ${styles.animateLoadBar3}`}
+          ></span>
+          <span
+            className={`${styles.animateLoadBar} ${styles.animateLoadBar4}`}
+          ></span>
+          <span
+            className={`${styles.animateLoadBar} ${styles.animateLoadBar5}`}
+          ></span>
+          <span
+            className={`${styles.animateLoadBar} ${styles.animateLoadBar6}`}
+          ></span>
+          <span
+            className={`${styles.animateLoadBar} ${styles.animateLoadBar7}`}
+          ></span>
+          <span
+            className={`${styles.animateLoadBar} ${styles.animateLoadBar8}`}
+          ></span>
+      </div>
+    )
+  }
+
   return (
     <React.Fragment>
       <Aside openAside={openAside} setopenAside={setopenAside} />
@@ -42,7 +77,7 @@ function Header() {
           {location.pathname === "/full-market" ? (
             <span
               className={`${styles.headerMenuIcon} d-inline-flex align-items-center`}
-              onClick={() => backGameDetailList()}
+              onClick={() => navigate("/sports")}
             >
               <i className="icon-arrow-left"></i>
             </span>
@@ -56,14 +91,14 @@ function Header() {
           )}
           <img className={styles.siteLogoImg} src={logo} alt="Bet365 Live" />
         </div>
-        {loginCheck ? (
+        {auth.auth.loggedIn ? (
           <div
             className={`${styles.loginUserBox} d-inline-flex align-items-center position-relative`}
           >
             <div
               className={`${styles.loggedUserBox} d-inline-flex flex-column justify-content-center position-relative`}
             >
-              <p className={styles.loogedUserName}>@surjo1694</p>
+              <p className={styles.loogedUserName}>{auth?.auth?.user?.username}</p>
               <div
                 className={`${styles.loggedUserWallet} d-inline-flex align-items-center`}
               >
@@ -74,7 +109,7 @@ function Header() {
                     PBU
                   </span>
                   <span className={`${styles.loggedAmtVal} d-inline-flex`}>
-                    49
+                    {auth.auth.walletBalance}
                   </span>
                 </div>
                 <div
@@ -84,41 +119,12 @@ function Header() {
                     Exp
                   </span>
                   <span className={`${styles.ExposureAmtVal} d-inline-flex`}>
-                    (1)
+                    ( {auth.auth.exposure})
                   </span>
                 </div>
               </div>
               {/* HEADER VALUE REFRESH LOADER */}
-              <div
-                className={`${styles.loadingBar} ${
-                  walletReload ? "d-flex" : "d-none"
-                } align-items-center justify-content-center position-absolute`}
-              >
-                <span
-                  className={`${styles.animateLoadBar} ${styles.animateLoadBar1}`}
-                ></span>
-                <span
-                  className={`${styles.animateLoadBar} ${styles.animateLoadBar2}`}
-                ></span>
-                <span
-                  className={`${styles.animateLoadBar} ${styles.animateLoadBar3}`}
-                ></span>
-                <span
-                  className={`${styles.animateLoadBar} ${styles.animateLoadBar4}`}
-                ></span>
-                <span
-                  className={`${styles.animateLoadBar} ${styles.animateLoadBar5}`}
-                ></span>
-                <span
-                  className={`${styles.animateLoadBar} ${styles.animateLoadBar6}`}
-                ></span>
-                <span
-                  className={`${styles.animateLoadBar} ${styles.animateLoadBar7}`}
-                ></span>
-                <span
-                  className={`${styles.animateLoadBar} ${styles.animateLoadBar8}`}
-                ></span>
-              </div>
+                <LoaderAnimation />
               {/* ENDS HEADER VALUE REFRESH LOADER */}
             </div>
             <i

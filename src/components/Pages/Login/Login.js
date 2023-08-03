@@ -3,17 +3,21 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import { Form } from "react-bootstrap";
+import jwtDecode from "jwt-decode";
 import ApiService from "../../../services/ApiService";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
   validateCaptcha,
 } from "react-simple-captcha";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const Login = () => {
-  const [loginSlide, setloginSlide] = useState("true");
+  const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [loginSlide, setloginSlide] = useState("true");
   const [form, setForm] = useState({
     username: {
       value: "",
@@ -54,7 +58,6 @@ export const Login = () => {
 
   /********* Check form field  validations  *********/
   const checkValidation = () => {
-    console.log(form)
     if (
       !form?.captcha?.value ||
       !form?.username?.value ||
@@ -90,31 +93,55 @@ export const Login = () => {
      return true;
   }
 
+  /******* Validate Capctcha Code *****/
+  const checkCaptchaCode = () => {
+     if(!validateCaptcha(form.captcha.value)){
+      setForm({
+        ...form,
+        captcha: {
+          ...form["captcha"],
+          errorMessage: "Invalid Captcha Code!",
+          error: true,
+        },
+      });
+      return false;
+     }
+     else
+       return true;
+  }  
 
   /********** On Submit Login Form ***********/
   const onLogin = (e) => {  
     e.preventDefault();
-    console.log(checkValidation())
-    if(checkValidation()){
-      console.log("ssd")
-        //if(validateCaptcha()){
+    if(checkValidation()){  // form field validation
+        if(checkCaptchaCode()){  // capctha code validation
           const payload = {
             email: form.username.value,
             password: form.password.value,
           };
           ApiService.login(payload)
           .then((res) => {
-             console.log(res)
+            if (res.status === 200 && res.data.token) { 
+              localStorage.setItem("token", res.data.token);
+              const user = jwtDecode(res.data.token);
+              navigate("/");
+              auth.setAuth({
+                ...auth.auth,
+                user: user,
+                loggedIn: true,
+                fetchWallet : true
+              });
+            }
+            if (res.status === 202) {
+              
+            }
           })
           .catch((err) => {
+
           });
-       // }
+        }
     }
   } 
-
-  useEffect(() => {
-     console.log(form)
-  },[form])
 
   useEffect(() => {
     setloginSlide("true");

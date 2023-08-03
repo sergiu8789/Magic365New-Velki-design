@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Aside.module.css";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 function Aside({ openAside, setopenAside }) {
   const [showAside, setshowAside] = useState("");
+  const auth = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +26,19 @@ function Aside({ openAside, setopenAside }) {
     }
     setopenAside("false");
   };
+
+  const handleLogout = () => {
+    auth.setAuth({
+      ...auth.auth,
+      loggedIn: false,
+      showSucessMessage: true,
+      successMessage: "Logout Successfully!",
+    });
+    localStorage.removeItem("token");
+    navigate("/");
+    setopenAside("false");
+  };
+
   return (
     <React.Fragment>
       <div
@@ -176,10 +191,10 @@ function Aside({ openAside, setopenAside }) {
               ></span>
             </div>
           </div>
-          <div
+          <div onClick={() => handleLogout()}
             className={`${styles.categoryMenuBox} d-inline-block overflow-hidden col-12`}
           >
-            <div
+            <div 
               className={`${styles.linkItemRow} ${styles.LogoutlinkItemRow} d-inline-flex align-items-center col-12 position-relative`}
             >
               <span className="icon icon-logout"></span>
