@@ -222,7 +222,7 @@
 }
 
 .inputCheckbox:checked~.checkRembertext:before {
-    align-items: center;
+    align-items: flex-start;
     background-color: #ffc800;
     color: #1b1f23;
     content: "";
@@ -261,6 +261,12 @@
     -webkit-transform: translateY(-50%);
     right: 10px;
     z-index: 6;
+}
+
+.formError {
+    color: #e20000;
+    font-size: 15px;
+    margin: 0px;
 }
 
 @media only screen and (max-width:568px) {

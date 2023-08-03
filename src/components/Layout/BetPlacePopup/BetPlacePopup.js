@@ -20,7 +20,11 @@ export const BetPlacePopup = () => {
           <div
             className={`${styles.betMatchTitle} d-inline-flex align-items-center`}
           >
-            <i className="icon-check-circle"></i>
+            {betshow === true ? (
+              <i className="icon-check-circle"></i>
+            ) : (
+              <i className="icon-close"></i>
+            )}
             <span className={styles.betStatusName}>Bet Matched</span>
           </div>
           <i

@@ -12,6 +12,7 @@ import {
 
 export const Login = () => {
   const [loginSlide, setloginSlide] = useState("true");
+  const [loginErrorMesg, setloginErrorMesg] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const [form, setForm] = useState({
@@ -85,7 +86,7 @@ export const Login = () => {
   const onLogin = (e) => {
     e.preventDefault();
     if (checkValidation()) {
-      //if(validateCaptcha()){
+      //if (validateCaptcha()) {
       const payload = {
         email: form.username.value,
         password: form.password.value,
@@ -93,14 +94,22 @@ export const Login = () => {
       ApiService.login(payload)
         .then((res) => {
           console.log(res);
+          setloginErrorMesg("");
         })
         .catch((err) => {});
-      // }
+      //}
     }
   };
 
   useEffect(() => {
     console.log(form);
+    if (form.username.errorMessage != "") {
+      setloginErrorMesg(form.username.errorMessage);
+    } else if (form.password.errorMessage != "") {
+      setloginErrorMesg(form.password.errorMessage);
+    } else if (form.captcha.errorMessage != "") {
+      setloginErrorMesg(form.captcha.errorMessage);
+    }
   }, [form]);
 
   useEffect(() => {
@@ -238,6 +247,11 @@ export const Login = () => {
                   Remember me
                 </label>
               </div>
+              {loginErrorMesg != "" && (
+                <div className={`${styles.formError} col-12 d-inline-flex`}>
+                  {loginErrorMesg}
+                </div>
+              )}
               <div
                 className={`d-inline-flex justify-content-center col-12 ${styles.loginBtnBox}`}
               >
