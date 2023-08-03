@@ -4,6 +4,11 @@ import styles from "./Login.module.css";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import { Form } from "react-bootstrap";
 import ApiService from "../../../services/ApiService";
+import {
+  loadCaptchaEnginge,
+  LoadCanvasTemplate,
+  validateCaptcha,
+} from "react-simple-captcha";
 
 export const Login = () => {
   const [loginSlide, setloginSlide] = useState("true");
@@ -113,6 +118,9 @@ export const Login = () => {
 
   useEffect(() => {
     setloginSlide("true");
+    setTimeout(() => {
+      loadCaptchaEnginge(4, "white", "black", "numbers");
+    }, 10);
   }, [location?.state?.login]);
 
   return (
@@ -211,6 +219,16 @@ export const Login = () => {
               >
                 Validation Code
               </label>
+              <div
+                className={`${styles.captchBox} captchBox position-absolute d-inline-flex align-items-center`}
+              >
+                <LoadCanvasTemplate
+                  className={styles.captchCanvas}
+                  reloadText={
+                    '<span className="reload_captcha" style="font-size:24px;font-weight:500;color:black;">&#x21bb;</span>'
+                  }
+                />
+              </div>
               <span
                 className={`${styles.loginIcon} position-absolute icon-shield`}
               ></span>
