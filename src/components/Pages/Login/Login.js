@@ -112,8 +112,13 @@ export const Login = () => {
               });
             }
           }
+          if (res.status === 202) {
+            setloginErrorMesg("Invalid User");
+          }
         })
-        .catch((err) => {});
+        .catch((err) => {
+          setloginErrorMesg(err);
+        });
       //}
     }
   };

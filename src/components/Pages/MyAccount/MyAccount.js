@@ -2,9 +2,11 @@ import React from "react";
 import styles from "./MyAccount.module.css";
 import { useNavigate } from "react-router-dom";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const MyAccount = () => {
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const showChangePass = () => {
     let LoginRand = Math.floor(Math.random() * 100000) + 1;
@@ -26,7 +28,7 @@ export const MyAccount = () => {
               First Name
             </span>
             <span className={`${styles.recordValue} col-8 d-inline-flex`}>
-              Sergiu
+              {auth?.auth?.user?.username}
             </span>
           </div>
           <div
