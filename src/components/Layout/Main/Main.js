@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import { BetPlacePopup } from "../BetPlacePopup/BetPlacePopup";
 import { PublicRoutes } from "../../../routes/publicRoutes";
 import "../../../assets/css/iconmoon.css";
 import "../../../assets/css/style.css";
@@ -27,6 +28,7 @@ function Main() {
           )}
         </div>
       </div>
+      <BetPlacePopup />
     </React.Fragment>
   );
 }

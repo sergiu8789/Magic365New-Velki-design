@@ -29,7 +29,7 @@ function Aside({ openAside, setopenAside }) {
   return (
     <React.Fragment>
       <div
-        className={`position-absolute m-auto col-12 h-100 d-inline-block ${
+        className={`position-fixed m-auto col-12 h-100 d-inline-block ${
           styles.asideContainer
         } ${
           showAside === "true"
