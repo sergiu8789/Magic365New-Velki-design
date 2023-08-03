@@ -3,16 +3,19 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import { Form } from "react-bootstrap";
+import jwtDecode from "jwt-decode";
 import ApiService from "../../../services/ApiService";
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
   validateCaptcha,
 } from "react-simple-captcha";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const Login = () => {
   const [loginSlide, setloginSlide] = useState("true");
   const [loginErrorMesg, setloginErrorMesg] = useState("");
+  const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [form, setForm] = useState({
