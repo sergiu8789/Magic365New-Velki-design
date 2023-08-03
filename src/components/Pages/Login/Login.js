@@ -12,12 +12,6 @@ export const Login = () => {
   const [loginSlide, setloginSlide] = useState("true");
   const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
-    setloginSlide("true");
-    setTimeout(() => {
-      loadCaptchaEnginge(4, "white", "black", "numbers");
-    }, 10);
-  }, [location.state.login]);
 
   const gotoHome = () => {
     setloginSlide("false");
@@ -25,6 +19,16 @@ export const Login = () => {
       navigate(-1);
     }, 250);
   };
+
+  useEffect(() => {
+    setloginSlide("true");
+
+    /* Login Captcha Box*/
+    setTimeout(() => {
+      loadCaptchaEnginge(4, "white", "black", "numbers");
+    }, 10);
+    /* End Login Captcha Box*/
+  }, [location.state.login]);
   return (
     <React.Fragment>
       <div
