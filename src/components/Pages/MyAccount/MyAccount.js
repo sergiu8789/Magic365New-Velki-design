@@ -7,6 +7,7 @@ import { useAuth } from "../../../context/AuthContextProvider";
 export const MyAccount = () => {
   const navigate = useNavigate();
   const auth = useAuth();
+  console.log(auth);
 
   const showChangePass = () => {
     let LoginRand = Math.floor(Math.random() * 100000) + 1;
@@ -28,7 +29,7 @@ export const MyAccount = () => {
               First Name
             </span>
             <span className={`${styles.recordValue} col-8 d-inline-flex`}>
-              {auth?.auth?.user?.username}
+              {auth?.auth?.user?.first_name}
             </span>
           </div>
           <div
@@ -38,7 +39,7 @@ export const MyAccount = () => {
               Last Name
             </span>
             <span className={`${styles.recordValue} col-8 d-inline-flex`}>
-              G
+              {auth?.auth?.user?.last_name}
             </span>
           </div>
           <div
@@ -48,7 +49,7 @@ export const MyAccount = () => {
               Email
             </span>
             <span className={`${styles.recordValue} col-8 d-inline-flex`}>
-              surjo365@gmail.com
+              {auth?.auth?.user?.email}
             </span>
           </div>
           <div
@@ -58,7 +59,7 @@ export const MyAccount = () => {
               Contact Number
             </span>
             <span className={`${styles.recordValue} col-8 d-inline-flex`}>
-              01737010197
+              {auth?.auth?.user?.phone ? auth?.auth?.user?.phone : "-"}
             </span>
           </div>
           <div

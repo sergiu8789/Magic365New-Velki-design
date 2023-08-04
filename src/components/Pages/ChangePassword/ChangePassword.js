@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./ChangePassword.module.css";
 import loginImgBanner from "../../../assets/images/login-banner.png";
+import ApiService from "../../../services/ApiService";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const ChangePassword = () => {
   const [loginSlide, setloginSlide] = useState("true");
@@ -10,9 +12,28 @@ export const ChangePassword = () => {
   const [yourPassword, setyourPassword] = useState("password");
   const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
-    setloginSlide("true");
-  }, [location.state.login]);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const auth = useAuth();
+  const [changePassValues, setChangePassValues] = useState({
+    originPassword: {
+      value: "",
+      error: false,
+      errorMessage: "",
+      showPassword: false,
+    },
+    newPassword: {
+      value: "",
+      error: false,
+      errorMessage: "",
+      showPassword: false,
+    },
+    confirmPassword: {
+      value: "",
+      error: false,
+      errorMessage: "",
+      showPassword: false,
+    },
+  });
 
   const gotoHome = () => {
     setloginSlide("false");
@@ -43,6 +64,78 @@ export const ChangePassword = () => {
     }
   };
 
+  const handleChangePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (
+      !changePassValues.originPassword.value ||
+      !changePassValues.newPassword.value ||
+      !changePassValues.confirmPassword.value ||
+      changePassValues.newPassword.value !==
+        changePassValues.confirmPassword.value
+    ) {
+      setChangePassValues({
+        ...changePassValues,
+        originPassword: {
+          ...changePassValues["originPassword"],
+          errorMessage: !changePassValues.originPassword.value
+            ? "Please Enter New Password!"
+            : "",
+          error: !changePassValues.originPassword.value ? true : false,
+        },
+        newPassword: {
+          ...changePassValues["newPassword"],
+          errorMessage: !changePassValues.newPassword.value
+            ? "Please Enter New Password!"
+            : "",
+          error: !changePassValues.newPassword.value ? true : false,
+        },
+        confirmPassword: {
+          ...changePassValues["confirmPassword"],
+          errorMessage: !changePassValues.confirmPassword.value
+            ? "Please Confirm your Password!"
+            : changePassValues.newPassword.value !==
+              changePassValues.confirmPassword.value
+            ? "Confirm Password not match!"
+            : "",
+          error:
+            !changePassValues.confirmPassword.value ||
+            changePassValues.newPassword.value !==
+              changePassValues.confirmPassword.value
+              ? true
+              : false,
+        },
+      });
+    } else {
+      setLoading(true);
+      const payload = {
+        email: changePassValues.email.value,
+        password: changePassValues.newPassword.value,
+        verify_password: changePassValues.confirmPassword.value,
+        otp: parseInt(changePassValues.otp.value),
+      };
+      ApiService.resetPassword(payload)
+        .then((res) => {
+          setLoading(false);
+          if (res.status === 200 || res.status === 201) {
+            setShowPasswordSection(false);
+            auth.setAuth({
+              ...auth.auth,
+              showSucessMessage: true,
+              successMessage: "Password Updated Successfully!",
+            });
+          } else setShowErrorMessage(true);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setShowErrorMessage(true);
+        });
+    }
+  };
+
+  useEffect(() => {
+    setloginSlide("true");
+  }, [location.state.login]);
+
   return (
     <React.Fragment>
       <div
@@ -71,8 +164,9 @@ export const ChangePassword = () => {
           >
             Change Password
           </h1>
-          <div
+          <form
             className={`${styles.loginFormBox} col-12 d-inline-flex flex-column`}
+            onSubmit={handleChangePasswordSubmit}
           >
             <div
               className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
@@ -165,7 +259,7 @@ export const ChangePassword = () => {
                 Change
               </button>
             </div>
-          </div>
+          </form>
           <div
             className={`${styles.ChangePasswordPoints} col-12 d-inline-block`}
           >
