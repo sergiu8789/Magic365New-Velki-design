@@ -16,7 +16,7 @@ export const Leagues = () => {
   const [matchList, setMatchList] = useState([]);
 
   const activeSportsTab = (event, name) => {
-    let pageOffset = document.querySelector(".center-mobile-mode").offsetLeft;
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
     let inplay = 10;
     pageOffset = pageOffset + inplay;
     let TabPos = event.currentTarget.getBoundingClientRect().left;
@@ -27,8 +27,7 @@ export const Leagues = () => {
 
   useEffect(() => {
     ApiService.getSports().then((res) => {
-      if (res?.data)
-        setTournamentList(res.data);
+      if (res?.data) setTournamentList(res.data);
     });
   }, []);
 
@@ -36,12 +35,12 @@ export const Leagues = () => {
     if (leagueName) {
       setMatchList([]);
       ApiService.tournamentMatchList(tabActive, leagueName).then((res) => {
-         if(res?.data?.data){
+        if (res?.data?.data) {
           setMatchList(res.data.data);
-         }
+        }
       });
     }
-  }, [leagueName])
+  }, [leagueName]);
 
   const sportsCat = [
     {
@@ -71,9 +70,11 @@ export const Leagues = () => {
               return (
                 <React.Fragment key={index}>
                   <div
-                    className={`${styles.sportsCatTab
-                      }  d-inline-flex justify-content-center align-items-center position-relative ${item.name === tabActive && styles.activeCatTab
-                      }`}
+                    className={`${
+                      styles.sportsCatTab
+                    }  d-inline-flex justify-content-center align-items-center position-relative ${
+                      item.name === tabActive && styles.activeCatTab
+                    }`}
                     id={`SportsTab_${item.name}`}
                     onClick={(event) => activeSportsTab(event, item.name)}
                   >

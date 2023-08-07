@@ -7,7 +7,7 @@ import "swiper/css/pagination";
 
 const gameCategoryHover = (event) => {
   let hoverX = event.clientX;
-  let pageOffset = document.querySelector(".center-mobile-mode").offsetLeft;
+  let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
   let navTabPos = hoverX - pageOffset + 20;
   if (navTabPos > 20 && navTabPos < 460) {
     document.getElementById("categoryTabIndicator").style.transform =

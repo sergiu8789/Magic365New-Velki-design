@@ -131,7 +131,6 @@ function Header() {
           >
             <button
               className={`${styles.signupBtn} d-inline-flex justify-content-center align-items-center`}
-              onClick={() => gotoSignup()}
             >
               <i className="icon-sign-up"></i>
               SignUp

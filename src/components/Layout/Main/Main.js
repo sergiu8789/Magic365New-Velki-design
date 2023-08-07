@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import styles from "./Main.module.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { BetPlacePopup } from "../BetPlacePopup/BetPlacePopup";
@@ -53,6 +54,7 @@ function Main() {
             ? styles.wholeAppBackground
             : styles.signupContainer
         } col-12 position-relative`}
+        id="wholeAppBackground"
       >
         <div
           className={`${
@@ -60,6 +62,7 @@ function Main() {
               ? styles.centerMobileMode
               : styles.signupModeBox
           } position-relative m-auto`}
+          id="centerMobileMode"
         >
           {location.pathname !== "/signup" && <Header />}
           <PublicRoutes />
