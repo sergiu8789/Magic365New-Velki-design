@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import ApiService from "../../../services/ApiService";
 import { Loader } from "../../Layout/Loader/Loader";
 import { LeagueMatchList } from "../../Layout/LeagueMatchList/LeagueMatchList";
 import { LeagueMatchDetail } from "../../Layout/LeagueMatchDetail/LeagueMatchDetail";
@@ -7,10 +8,12 @@ import styles from "./Leagues.module.css";
 
 export const Leagues = () => {
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
-  const [tabActive, settabActive] = useState("");
+  const [tabActive, settabActive] = useState("Cricket");
   const [leagueMatch, setleagueMatch] = useState("LeagueList");
   const [leagueName, setleagueName] = useState("");
   const [leagueMatchName, setleagueMatchName] = useState("");
+  const [tournamentList, setTournamentList] = useState([]);
+  const [matchList, setMatchList] = useState([]);
 
   const activeSportsTab = (event, name) => {
     let pageOffset = document.querySelector(".center-mobile-mode").offsetLeft;
@@ -21,6 +24,24 @@ export const Leagues = () => {
     setCatTabPosLeft(TabPos);
     settabActive(name);
   };
+
+  useEffect(() => {
+    ApiService.getSports().then((res) => {
+      if (res?.data)
+        setTournamentList(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (leagueName) {
+      setMatchList([]);
+      ApiService.tournamentMatchList(tabActive, leagueName).then((res) => {
+         if(res?.data?.data){
+          setMatchList(res.data.data);
+         }
+      });
+    }
+  }, [leagueName])
 
   const sportsCat = [
     {
@@ -50,11 +71,9 @@ export const Leagues = () => {
               return (
                 <React.Fragment key={index}>
                   <div
-                    className={`${
-                      styles.sportsCatTab
-                    }  d-inline-flex justify-content-center align-items-center position-relative ${
-                      item.name === tabActive && styles.activeCatTab
-                    }`}
+                    className={`${styles.sportsCatTab
+                      }  d-inline-flex justify-content-center align-items-center position-relative ${item.name === tabActive && styles.activeCatTab
+                      }`}
                     id={`SportsTab_${item.name}`}
                     onClick={(event) => activeSportsTab(event, item.name)}
                   >
@@ -72,14 +91,17 @@ export const Leagues = () => {
             ></div>
           </div>
           <LeagueMatchList
-            setleagueMatch={setleagueMatch}
             setleagueName={setleagueName}
+            tabActive={tabActive}
+            tournamentList={tournamentList}
+            setleagueMatch={setleagueMatch}
           />
         </React.Fragment>
       ) : leagueMatch === "LeagueMatches" ? (
         <React.Fragment>
           {leagueName && (
             <LeagueMatchDetail
+              matchList={matchList}
               setleagueMatch={setleagueMatch}
               setleagueMatchName={setleagueMatchName}
               leagueName={leagueName}

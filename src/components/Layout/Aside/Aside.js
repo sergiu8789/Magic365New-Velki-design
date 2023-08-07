@@ -5,19 +5,8 @@ import { useAuth } from "../../../context/AuthContextProvider";
 import { AsideList } from "../../../data/AsideList";
 
 function Aside({ openAside, setopenAside }) {
-  const [showAside, setshowAside] = useState("");
   const auth = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (openAside) {
-      setshowAside(openAside);
-    }
-  }, [openAside]);
-
-  const CloseAsideMenu = () => {
-    setopenAside("false");
-  };
 
   const OpenCurrentBet = (link) => {
     if (link) {
@@ -25,7 +14,7 @@ function Aside({ openAside, setopenAside }) {
     } else {
       navigate("/");
     }
-    setopenAside("false");
+    setopenAside(false);
   };
 
   const handleLogout = () => {
@@ -37,7 +26,7 @@ function Aside({ openAside, setopenAside }) {
     });
     localStorage.removeItem("bettoken");
     navigate("/");
-    setopenAside("false");
+    setopenAside(false);
   };
 
   return (
@@ -46,7 +35,7 @@ function Aside({ openAside, setopenAside }) {
         className={`position-fixed m-auto col-12 h-100 d-inline-block ${
           styles.asideContainer
         } ${
-          showAside === "true"
+          openAside
             ? styles.asideContainerShow
             : styles.asideContainerHide
         }`}
@@ -60,7 +49,7 @@ function Aside({ openAside, setopenAside }) {
             <span className={styles.asideTitle}>Menu</span>
             <span
               className={`${styles.asideClose} d-inline-flex align-items-center justify-content-center`}
-              onClick={() => CloseAsideMenu()}
+              onClick={() => setopenAside(false)}
             >
               <i className="icon-close"></i>
             </span>

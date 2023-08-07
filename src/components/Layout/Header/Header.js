@@ -10,38 +10,18 @@ function Header() {
   const location = useLocation();
   const auth = useAuth();
 
-  const [openAside, setopenAside] = useState("false");
-  const [loginCheck, setloginCheck] = useState(false);
-  const [walletReload, setwalletReload] = useState(false);
+  const [openAside, setopenAside] = useState(false);
 
   const gotoLogin = () => {
     let LoginRand = Math.floor(Math.random() * 100000) + 1;
     navigate("/login", { state: { login: LoginRand } });
   };
 
-  const gotoSignup = () => {
-    navigate("/signup");
-  };
-
-  const OpenAsideMenu = () => {
-    setopenAside("true");
-  };
-
-  let walletTime = "";
-  const showWalletRefrsh = () => {
-    clearTimeout(walletTime);
-    setwalletReload(true);
-    auth.setAuth({ ...auth.auth, fetchWallet: true });
-    walletTime = setTimeout(function () {
-      setwalletReload(false);
-    }, 2000);
-  };
-
   const LoaderAnimation = () => {
     return (
       <div
         className={`${styles.loadingBar} ${
-          walletReload ? "d-flex" : "d-none"
+          auth.auth.fetchWallet ? "d-flex" : "d-none"
         } align-items-center justify-content-center position-absolute`}
       >
         <span
@@ -89,7 +69,7 @@ function Header() {
           ) : (
             <span
               className={`${styles.headerMenuIcon} d-inline-flex align-items-center`}
-              onClick={() => OpenAsideMenu()}
+              onClick={() => setopenAside(true)}
             >
               <i className="icon-menu"></i>
             </span>
@@ -116,7 +96,9 @@ function Header() {
                     PBU
                   </span>
                   <span className={`${styles.loggedAmtVal} d-inline-flex`}>
-                    {auth.auth.walletBalance}
+                    {auth.auth.walletBalance
+                      ? parseFloat(auth.auth.walletBalance).toFixed(2)
+                      : 0}
                   </span>
                 </div>
                 <div
@@ -126,7 +108,11 @@ function Header() {
                     Exp
                   </span>
                   <span className={`${styles.ExposureAmtVal} d-inline-flex`}>
-                    ( {auth.auth.exposure})
+                    ({" "}
+                    {auth.auth.exposure
+                      ? parseFloat(auth.auth.exposure).toFixed(2)
+                      : 0}
+                    )
                   </span>
                 </div>
               </div>
@@ -136,7 +122,7 @@ function Header() {
             </div>
             <i
               className={`${styles.walletExpVal} icon-refresh`}
-              onClick={showWalletRefrsh}
+              onClick={() => auth.setAuth({ ...auth.auth, fetchWallet: true })}
             ></i>
           </div>
         ) : (

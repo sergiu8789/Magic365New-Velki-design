@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
       ? jwtDecode(localStorage.getItem("bettoken"))
       : {},
     loggedIn: localStorage.getItem("bettoken") ? true : false,
-    fetchWallet : true,
+    fetchWallet : localStorage.getItem("bettoken") ? true : false,
     walletBalance : 0,
     exposure : 0
   };

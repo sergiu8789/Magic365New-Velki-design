@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import styles from "./Main.module.css";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import { BetPlacePopup } from "../BetPlacePopup/BetPlacePopup";
@@ -8,17 +7,11 @@ import ApiService from "../../../services/ApiService";
 import { PublicRoutes } from "../../../routes/publicRoutes";
 import "../../../assets/css/iconmoon.css";
 import "../../../assets/css/style.css";
-import { useIdleTimer } from "react-idle-timer";
 import { useAuth } from "../../../context/AuthContextProvider";
 
 function Main() {
   const location = useLocation();
-  let navigate = useNavigate();
   const auth = useAuth();
-
-  const timeout = 5 * 60 * 1000;
-  const promptBeforeIdle = 30000;
-  const [remaining, setRemaining] = useState(timeout);
 
   const fetchWalletMoney = () => {
     ApiService.wallet()
@@ -49,7 +42,6 @@ function Main() {
   };
 
   useEffect(() => {
-    console.log(auth.auth);
     if (auth.auth.fetchWallet && auth.auth.loggedIn) fetchWalletMoney();
   }, [auth.auth.fetchWallet]);
 
