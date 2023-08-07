@@ -5,10 +5,10 @@ export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const initialValues = {
-    user: localStorage.getItem("token")
-      ? jwtDecode(localStorage.getItem("token"))
+    user: localStorage.getItem("bettoken")
+      ? jwtDecode(localStorage.getItem("bettoken"))
       : {},
-    loggedIn: localStorage.getItem("token") ? true : false,
+    loggedIn: localStorage.getItem("bettoken") ? true : false,
     fetchWallet : true,
     walletBalance : 0,
     exposure : 0

@@ -35,7 +35,7 @@ function Aside({ openAside, setopenAside }) {
       showSucessMessage: true,
       successMessage: "Logout Successfully!",
     });
-    localStorage.removeItem("token");
+    localStorage.removeItem("bettoken");
     navigate("/");
     setopenAside("false");
   };

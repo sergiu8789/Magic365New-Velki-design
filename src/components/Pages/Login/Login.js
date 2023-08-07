@@ -96,7 +96,6 @@ export const Login = () => {
       };
       ApiService.login(payload)
         .then((res) => {
-          console.log(res);
           if (res?.data) {
             if (res.data.token) {
               setloginErrorMesg("");
@@ -106,10 +105,9 @@ export const Login = () => {
                 ...auth.auth,
                 user: user,
                 loggedIn: true,
-                showSucessMessage: true,
-                openLoginPopup: false,
-                successMessage: "LogIn Successfully!",
+                fetchWallet: true
               });
+              localStorage.setItem("bettoken",res.data.token);
             }
           }
           if (res.status === 202) {
@@ -122,17 +120,6 @@ export const Login = () => {
       //}
     }
   };
-
-  useEffect(() => {
-    console.log(form);
-    if (form.username.errorMessage != "") {
-      setloginErrorMesg(form.username.errorMessage);
-    } else if (form.password.errorMessage != "") {
-      setloginErrorMesg(form.password.errorMessage);
-    } else if (form.captcha.errorMessage != "") {
-      setloginErrorMesg(form.captcha.errorMessage);
-    }
-  }, [form]);
 
   useEffect(() => {
     setloginSlide("true");
@@ -196,8 +183,13 @@ export const Login = () => {
                 <span
                   className={`${styles.loginIcon} position-absolute icon-user`}
                 ></span>
-                <span className={styles.focusBorder}></span>
+                <span className={styles.focusBorder}></span> 
               </div>
+              {form.username.error && (
+                <div className={`${styles.formError} col-12 d-inline-flex`}>
+                  {form.username.errorMessage}
+                </div>
+                )}
               <div
                 className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
               >
@@ -221,6 +213,11 @@ export const Login = () => {
                 ></span>
                 <span className={styles.focusBorder}></span>
               </div>
+              {form.password.error && (
+                <div className={`${styles.formError} col-12 d-inline-flex`}>
+                  {form.password.errorMessage}
+                </div>
+                )}
               <div
                 className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
               >
@@ -254,6 +251,11 @@ export const Login = () => {
                 ></span>
                 <span className={styles.focusBorder}></span>
               </div>
+              {form.captcha.error && (
+                <div className={`${styles.formError} col-12 d-inline-flex`}>
+                  {form.captcha.errorMessage}
+                </div>
+                )}
               <div
                 className={` d-inline-flex align-items-center col-12 mb-6 position-relative`}
               >
@@ -269,11 +271,7 @@ export const Login = () => {
                   Remember me
                 </label>
               </div>
-              {loginErrorMesg != "" && (
-                <div className={`${styles.formError} col-12 d-inline-flex`}>
-                  {loginErrorMesg}
-                </div>
-              )}
+             
               <div
                 className={`d-inline-flex justify-content-center col-12 ${styles.loginBtnBox}`}
               >
