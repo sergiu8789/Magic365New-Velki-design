@@ -23,6 +23,7 @@ function Main() {
             parseFloat(res.data.wallet.amount).toFixed(2) -
             Math.abs(parseFloat(res.data.exposure)).toFixed(2),
           exposure: res.data.exposure,
+          fetchWallet: false,
         })
       )
       .catch((err) => {
