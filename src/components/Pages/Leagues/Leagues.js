@@ -11,7 +11,7 @@ export const Leagues = () => {
   const [tabActive, settabActive] = useState("Cricket");
   const [leagueMatch, setleagueMatch] = useState("LeagueList");
   const [leagueName, setleagueName] = useState("");
-  const [leagueMatchName, setleagueMatchName] = useState("");
+  const [selectedMatch, setSelectedMatch] = useState("");
   const [tournamentList, setTournamentList] = useState([]);
   const [matchList, setMatchList] = useState([]);
 
@@ -41,7 +41,7 @@ export const Leagues = () => {
          }
       });
     }
-  }, [leagueName])
+  }, [leagueName]);
 
   const sportsCat = [
     {
@@ -103,16 +103,16 @@ export const Leagues = () => {
             <LeagueMatchDetail
               matchList={matchList}
               setleagueMatch={setleagueMatch}
-              setleagueMatchName={setleagueMatchName}
+              setSelectedMatch={setSelectedMatch}
               leagueName={leagueName}
             />
           )}
         </React.Fragment>
       ) : leagueMatch === "MatcheDetails" ? (
         <React.Fragment>
-          {leagueMatchName && (
+          {selectedMatch && (
             <LeagueMatchBets
-              leagueMatchName={leagueMatchName}
+            selectedMatch={selectedMatch}
               setleagueMatch={setleagueMatch}
             />
           )}
