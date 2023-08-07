@@ -2,11 +2,12 @@ import React from "react";
 import styles from "./LeagueMatchDetail.module.css";
 
 export const LeagueMatchDetail = ({
+  matchList,
   setleagueMatch,
   setleagueMatchName,
   leagueName,
 }) => {
-  console.log(setleagueMatch, setleagueMatchName, leagueName);
+  
   const showLeagueList = () => {
     setleagueMatch("LeagueList");
   };
@@ -28,26 +29,19 @@ export const LeagueMatchDetail = ({
         <div
           className={`${styles.matchListBox} col-12 d-inline-flex flex-column overflow-hidden`}
         >
-          <div
-            className={`${styles.singleMatchList} col-12 d-inline-flex flex-column position-relative`}
-            onClick={() => showMatchBets("B Love Kandy v Dambulla Aura")}
-          >
-            <h4 className={styles.teamName}>B Love Kandy</h4>
-            <h4 className={styles.teamName}>Dambulla Aura</h4>
-            <span
-              className={`${styles.MatchArrow} position-absolute d-inline-flex icon-arrow-left`}
-            ></span>
-          </div>
-          <div
-            className={`${styles.singleMatchList} col-12 d-inline-flex flex-column position-relative`}
-            onClick={() => showMatchBets("B Love Kandy v Dambulla Aura")}
-          >
-            <h4 className={styles.teamName}>B Love Kandy</h4>
-            <h4 className={styles.teamName}>Dambulla Aura</h4>
-            <span
-              className={`${styles.MatchArrow} position-absolute d-inline-flex icon-arrow-left`}
-            ></span>
-          </div>
+          {matchList.map((match,index) => {
+            return(
+              <div key={index} className={`${styles.singleMatchList} col-12 d-inline-flex flex-column position-relative`}
+                onClick={() => showMatchBets("B Love Kandy v Dambulla Aura")}
+              >
+                <h4 className={styles.teamName}>{match.team_one_name}</h4>
+                <h4 className={styles.teamName}>{match.team_two_name}</h4>
+                <span
+                  className={`${styles.MatchArrow} position-absolute d-inline-flex icon-arrow-left`}
+                ></span>
+             </div>
+            )
+          })}
         </div>
       </div>
     </React.Fragment>
