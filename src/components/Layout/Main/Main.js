@@ -48,7 +48,8 @@ function Main() {
   }
 
   useEffect(() => {
-    if(auth.auth.fetchWallet)
+    console.log(auth.auth)
+    if(auth.auth.fetchWallet && auth.auth.loggedIn)
       fetchWalletMoney();
   },[auth.auth.fetchWallet]);
 

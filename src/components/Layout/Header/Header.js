@@ -27,6 +27,7 @@ function Header() {
   const showWalletRefrsh = () => {
     clearTimeout(walletTime);
     setwalletReload(true);
+    auth.setAuth({...auth.auth,fetchWallet:true});
     walletTime = setTimeout(function () {
       setwalletReload(false);
     }, 2000);
@@ -37,7 +38,6 @@ function Header() {
       <div className={`${styles.loadingBar} ${
                   walletReload ? "d-flex" : "d-none"
             } align-items-center justify-content-center position-absolute`}
-            onClick={() => auth.setAuth({...auth.auth,fetchWallet:true})}
        >
           <span
             className={`${styles.animateLoadBar} ${styles.animateLoadBar1}`}
