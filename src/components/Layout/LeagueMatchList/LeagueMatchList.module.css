@@ -1,5 +1,7 @@
 .allLeaguesgame {
     padding: 8px 17px;
+    overflow-y: auto;
+    max-height: calc(100vh - 186px);
 }
 
 .leagueDirectory, .allLeaguesgame, .leagueInitialBox, .allGamesList, .leagueMatchContainer {

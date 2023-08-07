@@ -35,7 +35,7 @@ export const MatchOdds = () => {
   }, []);
 
   const selectPopularTab = (event, name) => {
-    let pageOffset = document.querySelector(".center-mobile-mode").offsetLeft;
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
     let inplay = parseInt(27);
     pageOffset = pageOffset + inplay;
     let TabPos = event.currentTarget.getBoundingClientRect().left;

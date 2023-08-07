@@ -18,38 +18,39 @@ function Header() {
   };
 
   const LoaderAnimation = () => {
-    return(
-      <div className={`${styles.loadingBar} ${
-           auth.auth.fetchWallet ? "d-flex" : "d-none"
-            } align-items-center justify-content-center position-absolute`}
-       >
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar1}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar2}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar3}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar4}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar5}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar6}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar7}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar8}`}
-          ></span>
+    return (
+      <div
+        className={`${styles.loadingBar} ${
+          auth.auth.fetchWallet ? "d-flex" : "d-none"
+        } align-items-center justify-content-center position-absolute`}
+      >
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar1}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar2}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar3}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar4}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar5}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar6}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar7}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar8}`}
+        ></span>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <React.Fragment>
@@ -82,7 +83,9 @@ function Header() {
             <div
               className={`${styles.loggedUserBox} d-inline-flex flex-column justify-content-center position-relative`}
             >
-              <p className={styles.loogedUserName}>{auth?.auth?.user?.username}</p>
+              <p className={styles.loogedUserName}>
+                {auth?.auth?.user?.username}
+              </p>
               <div
                 className={`${styles.loggedUserWallet} d-inline-flex align-items-center`}
               >
@@ -93,7 +96,9 @@ function Header() {
                     PBU
                   </span>
                   <span className={`${styles.loggedAmtVal} d-inline-flex`}>
-                    {auth.auth.walletBalance ? parseFloat(auth.auth.walletBalance).toFixed(2) : 0}
+                    {auth.auth.walletBalance
+                      ? parseFloat(auth.auth.walletBalance).toFixed(2)
+                      : 0}
                   </span>
                 </div>
                 <div
@@ -103,17 +108,21 @@ function Header() {
                     Exp
                   </span>
                   <span className={`${styles.ExposureAmtVal} d-inline-flex`}>
-                    ( {auth.auth.exposure ? parseFloat(auth.auth.exposure).toFixed(2) : 0})
+                    ({" "}
+                    {auth.auth.exposure
+                      ? parseFloat(auth.auth.exposure).toFixed(2)
+                      : 0}
+                    )
                   </span>
                 </div>
               </div>
               {/* HEADER VALUE REFRESH LOADER */}
-                <LoaderAnimation />
+              <LoaderAnimation />
               {/* ENDS HEADER VALUE REFRESH LOADER */}
             </div>
             <i
               className={`${styles.walletExpVal} icon-refresh`}
-              onClick={() => auth.setAuth({...auth.auth,fetchWallet:true})}
+              onClick={() => auth.setAuth({ ...auth.auth, fetchWallet: true })}
             ></i>
           </div>
         ) : (

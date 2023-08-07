@@ -1,0 +1,24 @@
+.wholeAppBackground {
+    background-image: url(../../../assets/images/desktop-bg.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+.centerMobileMode {
+    max-width: 480px;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100vh;
+    background: rgb(238, 246, 251);
+}
+
+.signupContainer {
+    background: #ffd300;
+}
+
+.signupModeBox {
+    max-width: 750px;
+}

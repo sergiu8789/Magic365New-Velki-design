@@ -1,13 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./HomeGameCard.module.css";
+import ApiService from "../../../services/ApiService";
 
 export const HomeGameCard = () => {
   const [gameTab, setGameTab] = useState("In-play");
+  const [value, setValue] = useState("live");
+  const [gameCount, setgameCount] = useState({
+    all: 0,
+    cricket: 0,
+    soccer: 0,
+    tennis: 0,
+  });
   const navigate = useNavigate();
 
   const playCardTab = (tab) => {
+    if (tab === "In-play" || tab === "Today") {
+      setValue("live");
+    } else if (tab === "Tomorrow") {
+      setValue("upcoming");
+    }
     setGameTab(tab);
+  };
+
+  const fetchLiveGameList = (value) => {
+    let gameDataList = [],
+      cricketCount = 0,
+      allSportsCount = 0,
+      soccerCount = 0,
+      tennisCount = 0;
+    ApiService.liveGamesList(value).then((res) => {
+      if (res.data) {
+        gameDataList = res.data;
+        gameDataList.map((item, index) => {
+          if (item.name === "Cricket") {
+            cricketCount++;
+          } else if (item.name === "Soccer") {
+            soccerCount++;
+          } else if (item.name === "Tennis") {
+            tennisCount++;
+          }
+          allSportsCount++;
+          setgameCount({
+            all: allSportsCount,
+            cricket: cricketCount,
+            soccer: soccerCount,
+            tennis: tennisCount,
+          });
+        });
+      }
+    });
   };
 
   const gotoLeagues = () => {
@@ -17,6 +59,10 @@ export const HomeGameCard = () => {
   const gotoSports = (id, cat) => {
     navigate("/sports", { state: { type: id, category: cat } });
   };
+
+  useEffect(() => {
+    fetchLiveGameList(value);
+  }, [value]);
   return (
     <React.Fragment>
       <div
@@ -86,7 +132,7 @@ export const HomeGameCard = () => {
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
             >
               <label className={styles.gameCardLabel}>All</label>
-              <span className={styles.gameCardCount}>40</span>
+              <span className={styles.gameCardCount}>{gameCount.all}</span>
             </div>
           </div>
           <div
@@ -97,7 +143,7 @@ export const HomeGameCard = () => {
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
             >
               <label className={styles.gameCardLabel}>Cricket</label>
-              <span className={styles.gameCardCount}>13</span>
+              <span className={styles.gameCardCount}>{gameCount.cricket}</span>
             </div>
           </div>
           <div
@@ -108,7 +154,7 @@ export const HomeGameCard = () => {
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
             >
               <label className={styles.gameCardLabel}>Soccer</label>
-              <span className={styles.gameCardCount}>8</span>
+              <span className={styles.gameCardCount}>{gameCount.soccer}</span>
             </div>
           </div>
           <div
@@ -119,7 +165,7 @@ export const HomeGameCard = () => {
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
             >
               <label className={styles.gameCardLabel}>Tennis</label>
-              <span className={styles.gameCardCount}>9</span>
+              <span className={styles.gameCardCount}>{gameCount.tennis}</span>
             </div>
           </div>
         </div>

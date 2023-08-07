@@ -68,6 +68,8 @@
     font-size: 71px;
     font-weight: 700;
     line-height: 55px;
+    transition: all ease 400ms;
+    -webkit-transition: all ease 400ms;
 }
 
 .allCategoryGame {

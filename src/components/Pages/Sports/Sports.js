@@ -46,7 +46,7 @@ export const Sports = () => {
   }, []);
 
   const activeGameTab = (event, name) => {
-    let pageOffset = document.querySelector(".center-mobile-mode").offsetLeft;
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
     let inplay =
       parseInt(
         document.querySelector("." + styles.inplayBox).getBoundingClientRect()
@@ -62,7 +62,7 @@ export const Sports = () => {
   };
 
   const activeSportsTab = (event, name) => {
-    let pageOffset = document.querySelector(".center-mobile-mode").offsetLeft;
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
     let inplay = 10;
     pageOffset = pageOffset + inplay;
     let TabPos = event.currentTarget.getBoundingClientRect().left;

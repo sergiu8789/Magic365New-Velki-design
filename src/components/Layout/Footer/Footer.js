@@ -16,7 +16,7 @@ function Footer() {
   }, [location?.pathname]);
 
   const navigatePage = (event, link, type, click) => {
-    let pageOffset = document.querySelector(".center-mobile-mode").offsetLeft;
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
     let inplay = 20;
     pageOffset = pageOffset + inplay;
     let TabPos = event.currentTarget.getBoundingClientRect().left;

@@ -22,7 +22,7 @@ export const MyBets = ({ openMyBets }) => {
   }, [openMyBets]);
 
   const activeBetTab = (event, name) => {
-    let pageOffset = document.querySelector(".center-mobile-mode").offsetLeft;
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
     let inplay = 15;
     pageOffset = pageOffset + inplay;
     let TabPos = event.currentTarget.getBoundingClientRect().left;

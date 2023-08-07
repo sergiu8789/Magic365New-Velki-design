@@ -12,7 +12,7 @@ export const CurrentBets = () => {
   const [moreBetInfo, setmoreBetInfo] = useState("false");
 
   const selectPopularTab = (event, name) => {
-    let pageOffset = document.querySelector(".center-mobile-mode").offsetLeft;
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
     let inplay = parseInt(17);
     pageOffset = pageOffset + inplay;
     let TabPos = event.currentTarget.getBoundingClientRect().left;
