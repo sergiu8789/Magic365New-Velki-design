@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Aside.module.css";
 import { useAuth } from "../../../context/AuthContextProvider";
+import { AsideList } from "../../../data/AsideList";
 
 function Aside({ openAside, setopenAside }) {
   const [showAside, setshowAside] = useState("");
@@ -67,93 +68,26 @@ function Aside({ openAside, setopenAside }) {
           <div
             className={`${styles.categoryMenuBox} d-inline-block overflow-hidden col-12`}
           >
-            <div
-              className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={() => OpenCurrentBet("")}
-            >
-              <span className="icon icon-home"></span>
-              <span className={styles.itemLinkName}>Home</span>
-              <span
-                className={`${styles.itemArrow} position-absolute icon-arrow-left`}
-              ></span>
-            </div>
-            <div
-              className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={() => OpenCurrentBet("menu/upline-whatsapp-number")}
-            >
-              <span className="icon icon-whatsapp-line"></span>
-              <span className={styles.itemLinkName}>
-                Upline WhatsApp Number
-              </span>
-              <span
-                className={`${styles.itemArrow} position-absolute icon-arrow-left`}
-              ></span>
-            </div>
-            <div
-              className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={() => OpenCurrentBet("menu/balance-overview")}
-            >
-              <span className="icon icon-wallet"></span>
-              <span className={styles.itemLinkName}>Balance Overview</span>
-              <span
-                className={`${styles.itemArrow} position-absolute icon-arrow-left`}
-              ></span>
-            </div>
-            <div
-              className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={() => OpenCurrentBet("menu/current-bets")}
-            >
-              <span className="icon icon-list"></span>
-              <span className={styles.itemLinkName}>Current Bets</span>
-              <span
-                className={`${styles.curentBetCount} d-inline-flex align-items-center justify-content-center`}
+            {AsideList.map((item, index) => (
+              <div
+                className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
+                onClick={() => OpenCurrentBet(item.link)}
+                key={index}
               >
-                0
-              </span>
-              <span
-                className={`${styles.itemArrow} position-absolute icon-arrow-left`}
-              ></span>
-            </div>
-            <div
-              className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={() => OpenCurrentBet("menu/bets-history")}
-            >
-              <span className="icon icon-history"></span>
-              <span className={styles.itemLinkName}>Bets History</span>
-              <span
-                className={`${styles.itemArrow} position-absolute icon-arrow-left`}
-              ></span>
-            </div>
-            <div
-              className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={() => OpenCurrentBet("menu/profit-and-loss")}
-            >
-              <span className="icon icon-profit-loss"></span>
-              <span className={styles.itemLinkName}>Profit & Loss</span>
-              <span
-                className={`${styles.itemArrow} position-absolute icon-arrow-left`}
-              ></span>
-            </div>
-            <div
-              className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={() => OpenCurrentBet("menu/active-log")}
-            >
-              <span className="icon icon-active-log"></span>
-              <span className={styles.itemLinkName}>Active Log</span>
-              <span
-                className={`${styles.itemArrow} position-absolute icon-arrow-left`}
-              ></span>
-            </div>
-            <div
-              className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={() => OpenCurrentBet("menu/my-profile")}
-            >
-              <span className="icon icon-profile"></span>
-              <span className={styles.itemLinkName}>My Profile</span>
-              <span
-                className={`${styles.itemArrow} position-absolute icon-arrow-left`}
-              ></span>
-            </div>
+                <span className={`icon ${item.icon}`}></span>
+                <span className={styles.itemLinkName}>{item.name}</span>
+                {item.name === "Current Bets" && (
+                  <span
+                    className={`${styles.curentBetCount} d-inline-flex align-items-center justify-content-center`}
+                  >
+                    0
+                  </span>
+                )}
+                <span
+                  className={`${styles.itemArrow} position-absolute icon-arrow-left`}
+                ></span>
+              </div>
+            ))}
           </div>
           <div
             className={`${styles.categoryMenuBox} d-none overflow-hidden col-12`}
@@ -191,10 +125,11 @@ function Aside({ openAside, setopenAside }) {
               ></span>
             </div>
           </div>
-          <div onClick={() => handleLogout()}
+          <div
+            onClick={() => handleLogout()}
             className={`${styles.categoryMenuBox} d-inline-block overflow-hidden col-12`}
           >
-            <div 
+            <div
               className={`${styles.linkItemRow} ${styles.LogoutlinkItemRow} d-inline-flex align-items-center col-12 position-relative`}
             >
               <span className="icon icon-logout"></span>

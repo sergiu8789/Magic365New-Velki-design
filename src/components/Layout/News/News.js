@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./News.module.css";
+import ApiService from "../../../services/ApiService";
 
 export const News = () => {
+  const [newsContent, setNewsContent] = useState([]);
+  useEffect(() => {
+    ApiService.getNews().then((res) => {
+      if (res?.data?.rows) setNewsContent(res.data.rows);
+    });
+  }, []);
+
   return (
     <React.Fragment>
       <div
@@ -16,17 +24,14 @@ export const News = () => {
           <ul
             className={`list-unstyled ${styles.marqueeList} position-relative d-inline-flex pl-0 align-items-center translate-x-full m-0`}
           >
-            <li className={`flex-shrink-0 ${styles.whitespaceNowrap} mr-5`}>
-              Once player account found with fraudulent ticket, the respective
-              market will be voided and the player account will be locked.
-            </li>
-            <li className={`flex-shrink-0 ${styles.whitespaceNowrap} mr-5`}>
-              WELCOME TO BET365.LIVE ! ENJOY BETTING IN MATCH ODDS, ﻿FANCY &
-              LIVE CASINO
-            </li>
-            <li className={`flex-shrink-0 ${styles.whitespaceNowrap} mr-5`}>
-              অফিসিয়াল এজেন্ট লিষ্ট https://allagentlist.com/ma.php
-            </li>
+            {newsContent.map((item, index) => (
+              <li
+                className={`flex-shrink-0 ${styles.whitespaceNowrap} mr-5`}
+                key={index}
+              >
+                {item.title}
+              </li>
+            ))}
           </ul>
         </div>
       </div>
