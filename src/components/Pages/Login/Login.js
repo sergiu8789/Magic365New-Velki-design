@@ -40,7 +40,8 @@ export const Login = () => {
   const gotoHome = () => {
     setloginSlide("false");
     setTimeout(function () {
-      navigate(-1);
+      if (auth.auth.loggedIn) navigate(-1);
+      else navigate("/");
     }, 250);
   };
 
@@ -105,9 +106,9 @@ export const Login = () => {
                 ...auth.auth,
                 user: user,
                 loggedIn: true,
-                fetchWallet: true
+                fetchWallet: true,
               });
-              localStorage.setItem("bettoken",res.data.token);
+              localStorage.setItem("bettoken", res.data.token);
             }
           }
           if (res.status === 202) {
@@ -183,13 +184,13 @@ export const Login = () => {
                 <span
                   className={`${styles.loginIcon} position-absolute icon-user`}
                 ></span>
-                <span className={styles.focusBorder}></span> 
+                <span className={styles.focusBorder}></span>
               </div>
               {form.username.error && (
                 <div className={`${styles.formError} col-12 d-inline-flex`}>
                   {form.username.errorMessage}
                 </div>
-                )}
+              )}
               <div
                 className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
               >
@@ -217,7 +218,7 @@ export const Login = () => {
                 <div className={`${styles.formError} col-12 d-inline-flex`}>
                   {form.password.errorMessage}
                 </div>
-                )}
+              )}
               <div
                 className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
               >
@@ -255,7 +256,7 @@ export const Login = () => {
                 <div className={`${styles.formError} col-12 d-inline-flex`}>
                   {form.captcha.errorMessage}
                 </div>
-                )}
+              )}
               <div
                 className={` d-inline-flex align-items-center col-12 mb-6 position-relative`}
               >
@@ -271,7 +272,7 @@ export const Login = () => {
                   Remember me
                 </label>
               </div>
-             
+
               <div
                 className={`d-inline-flex justify-content-center col-12 ${styles.loginBtnBox}`}
               >

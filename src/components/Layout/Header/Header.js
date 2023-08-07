@@ -19,6 +19,10 @@ function Header() {
     navigate("/login", { state: { login: LoginRand } });
   };
 
+  const gotoSignup = () => {
+    navigate("/signup");
+  };
+
   const OpenAsideMenu = () => {
     setopenAside("true");
   };
@@ -27,45 +31,46 @@ function Header() {
   const showWalletRefrsh = () => {
     clearTimeout(walletTime);
     setwalletReload(true);
-    auth.setAuth({...auth.auth,fetchWallet:true});
+    auth.setAuth({ ...auth.auth, fetchWallet: true });
     walletTime = setTimeout(function () {
       setwalletReload(false);
     }, 2000);
   };
 
   const LoaderAnimation = () => {
-    return(
-      <div className={`${styles.loadingBar} ${
-                  walletReload ? "d-flex" : "d-none"
-            } align-items-center justify-content-center position-absolute`}
-       >
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar1}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar2}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar3}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar4}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar5}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar6}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar7}`}
-          ></span>
-          <span
-            className={`${styles.animateLoadBar} ${styles.animateLoadBar8}`}
-          ></span>
+    return (
+      <div
+        className={`${styles.loadingBar} ${
+          walletReload ? "d-flex" : "d-none"
+        } align-items-center justify-content-center position-absolute`}
+      >
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar1}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar2}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar3}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar4}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar5}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar6}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar7}`}
+        ></span>
+        <span
+          className={`${styles.animateLoadBar} ${styles.animateLoadBar8}`}
+        ></span>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <React.Fragment>
@@ -98,7 +103,9 @@ function Header() {
             <div
               className={`${styles.loggedUserBox} d-inline-flex flex-column justify-content-center position-relative`}
             >
-              <p className={styles.loogedUserName}>{auth?.auth?.user?.username}</p>
+              <p className={styles.loogedUserName}>
+                {auth?.auth?.user?.username}
+              </p>
               <div
                 className={`${styles.loggedUserWallet} d-inline-flex align-items-center`}
               >
@@ -124,7 +131,7 @@ function Header() {
                 </div>
               </div>
               {/* HEADER VALUE REFRESH LOADER */}
-                <LoaderAnimation />
+              <LoaderAnimation />
               {/* ENDS HEADER VALUE REFRESH LOADER */}
             </div>
             <i
@@ -138,6 +145,7 @@ function Header() {
           >
             <button
               className={`${styles.signupBtn} d-inline-flex justify-content-center align-items-center`}
+              onClick={() => gotoSignup()}
             >
               <i className="icon-sign-up"></i>
               SignUp

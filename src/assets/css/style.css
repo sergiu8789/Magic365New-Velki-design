@@ -2,26 +2,6 @@
     font-family: 'Ubuntu';
 }
 
-/* HEADER START */
-.whole-app-background {
-    background-image: url(../images/desktop-bg.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100vh;
-}
-
-.center-mobile-mode {
-    max-width: 480px;
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    height: 100vh;
-    background: rgb(238, 246, 251);
-}
-
-/* HEADER ENDS */
-
 /* BANNER PART */
 .banner-contaner .swiper-button-prev:after, .banner-contaner .swiper-button-next:after {
     color: #FFF;

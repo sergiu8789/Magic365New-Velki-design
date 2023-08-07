@@ -1,7 +1,10 @@
-import React from "react";
-import { Home } from "../Pages/Home/Home";
+import React, { useContext } from "react";
+import { AuthContext } from "../../context/AuthContextProvider";
+import { Login } from "../Pages/Login/Login";
 
 export const ProtectedRoutes = (props) => {
+  const auth = useContext(AuthContext);
   const { element } = props;
-  return <Home />;
+  if (auth.auth.loggedIn) return element;
+  else return <Login />;
 };
