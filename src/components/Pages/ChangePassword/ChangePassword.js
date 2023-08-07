@@ -1,39 +1,133 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./ChangePassword.module.css";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import ApiService from "../../../services/ApiService";
-import { useAuth } from "../../../context/AuthContextProvider";
+import { AuthContext } from "../../../context/AuthContextProvider";
 
 export const ChangePassword = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [loginSlide, setloginSlide] = useState("true");
   const [newPassword, setnewPassword] = useState("password");
   const [confirmPassword, setconfirmPassword] = useState("password");
   const [yourPassword, setyourPassword] = useState("password");
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
-  const auth = useAuth();
-  const [changePassValues, setChangePassValues] = useState({
-    originPassword: {
+  const [loading, setLoading] = useState(false);
+  const [responseErrorshow, setResponseError] = useState(false);
+  const [reponseErrorMessage, setResponseErrorMessage] = useState("");
+  const auth = useContext(AuthContext);
+  const defaultValues = {
+    old_password: {
       value: "",
       error: false,
       errorMessage: "",
       showPassword: false,
     },
-    newPassword: {
+    new_password: {
       value: "",
       error: false,
       errorMessage: "",
       showPassword: false,
     },
-    confirmPassword: {
+    confirm_password: {
       value: "",
       error: false,
       errorMessage: "",
       showPassword: false,
     },
-  });
+  };
+  const [formValues, setFormValues] = useState(defaultValues);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: {
+        ...formValues[name],
+        error: false,
+        value,
+      },
+    });
+  };
+
+  const handleShowPassword = (name) => {
+    setFormValues({
+      ...formValues,
+      [name]: {
+        ...formValues[name],
+        showPassword: !formValues[name].showPassword,
+      },
+    });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (
+      !formValues.old_password.value ||
+      !formValues.new_password.value ||
+      !formValues.confirm_password.value ||
+      formValues.new_password.value !== formValues.confirm_password.value
+    ) {
+      setFormValues({
+        ...formValues,
+        old_password: {
+          ...formValues["old_password"],
+          errorMessage: !formValues.old_password.value
+            ? "Please Enter Old Password!"
+            : "",
+          error: !formValues.old_password.value ? true : false,
+        },
+        new_password: {
+          ...formValues["new_password"],
+          errorMessage: !formValues.new_password.value
+            ? "Please Enter New Password!"
+            : "",
+          error: !formValues.new_password.value ? true : false,
+        },
+        confirm_password: {
+          ...formValues["confirm_password"],
+          errorMessage: !formValues.confirm_password.value
+            ? "Please confirm your Password!"
+            : formValues.new_password.value !==
+              formValues.confirm_password.value
+            ? "Confirm Password not matched!"
+            : "",
+          error:
+            !formValues.confirm_password.value ||
+            formValues.new_password.value !== formValues.confirm_password.value
+              ? true
+              : false,
+        },
+      });
+    } else {
+      setLoading(true);
+      const payload = {
+        email: auth.auth.user.email,
+        password: formValues.old_password.value,
+        new_password: formValues.new_password.value,
+        confirm_password: formValues.confirm_password.value,
+      };
+      ApiService.changePassword(payload)
+        .then((res) => {
+          setLoading(false);
+          if (res.status === 200 || res.status === 201) {
+            auth.setAuth({
+              ...auth.auth,
+              showSucessMessage: true,
+              successMessage: "Password Updated Successfully!",
+            });
+            setResponseError(false);
+          } else {
+            setResponseError(true);
+            setResponseErrorMessage("Invalid Old Password");
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          setResponseError(true);
+          setResponseErrorMessage(err?.response?.data?.message);
+        });
+    }
+  };
 
   const gotoHome = () => {
     setloginSlide("false");
@@ -61,74 +155,6 @@ export const ChangePassword = () => {
       } else {
         setyourPassword("password");
       }
-    }
-  };
-
-  const handleChangePasswordSubmit = (e) => {
-    e.preventDefault();
-    if (
-      !changePassValues.originPassword.value ||
-      !changePassValues.newPassword.value ||
-      !changePassValues.confirmPassword.value ||
-      changePassValues.newPassword.value !==
-        changePassValues.confirmPassword.value
-    ) {
-      setChangePassValues({
-        ...changePassValues,
-        originPassword: {
-          ...changePassValues["originPassword"],
-          errorMessage: !changePassValues.originPassword.value
-            ? "Please Enter New Password!"
-            : "",
-          error: !changePassValues.originPassword.value ? true : false,
-        },
-        newPassword: {
-          ...changePassValues["newPassword"],
-          errorMessage: !changePassValues.newPassword.value
-            ? "Please Enter New Password!"
-            : "",
-          error: !changePassValues.newPassword.value ? true : false,
-        },
-        confirmPassword: {
-          ...changePassValues["confirmPassword"],
-          errorMessage: !changePassValues.confirmPassword.value
-            ? "Please Confirm your Password!"
-            : changePassValues.newPassword.value !==
-              changePassValues.confirmPassword.value
-            ? "Confirm Password not match!"
-            : "",
-          error:
-            !changePassValues.confirmPassword.value ||
-            changePassValues.newPassword.value !==
-              changePassValues.confirmPassword.value
-              ? true
-              : false,
-        },
-      });
-    } else {
-      setLoading(true);
-      const payload = {
-        email: changePassValues.email.value,
-        password: changePassValues.newPassword.value,
-        verify_password: changePassValues.confirmPassword.value,
-        otp: parseInt(changePassValues.otp.value),
-      };
-      ApiService.resetPassword(payload)
-        .then((res) => {
-          setLoading(false);
-          if (res.status === 200 || res.status === 201) {
-            setShowPasswordSection(false);
-            auth.setAuth({
-              ...auth.auth,
-              showSucessMessage: true,
-              successMessage: "Password Updated Successfully!",
-            });
-          } else setShowErrorMessage(true);
-        })
-        .catch((err) => {
-          setLoading(false);
-          setShowErrorMessage(true);
-        });
     }
   };
 
@@ -166,21 +192,21 @@ export const ChangePassword = () => {
           </h1>
           <form
             className={`${styles.loginFormBox} col-12 d-inline-flex flex-column`}
-            onSubmit={handleChangePasswordSubmit}
+            onSubmit={handleSubmit}
           >
             <div
               className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
             >
               <input
-                id="newPassword"
-                name="newPassword"
+                id="new_password"
+                name="new_password"
                 autoComplete="off"
                 type={newPassword}
                 placeholder="New Password"
                 className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
               />
               <label
-                htmlFor="newPassword"
+                htmlFor="new_password"
                 className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
               >
                 New Password
@@ -199,15 +225,15 @@ export const ChangePassword = () => {
               className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
             >
               <input
-                id="confirm"
-                name="confirm"
+                id="confirm_password"
+                name="confirm_password"
                 autoComplete="off"
                 type={confirmPassword}
                 placeholder="New Password Confirm"
                 className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
               />
               <label
-                htmlFor="confirm"
+                htmlFor="confirm_password"
                 className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
               >
                 New Password Confirm
@@ -226,15 +252,15 @@ export const ChangePassword = () => {
               className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
             >
               <input
-                id="originPassword"
-                name="originPassword"
+                id="old_password"
+                name="old_password"
                 autoComplete="off"
                 type={yourPassword}
                 placeholder="Your Password"
                 className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
               />
               <label
-                htmlFor="originPassword"
+                htmlFor="old_password"
                 className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
               >
                 Your Password
