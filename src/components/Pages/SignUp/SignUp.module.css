@@ -1,0 +1,8 @@
+.signUpHeader {
+    padding: 30px 0;
+}
+
+.signUpHeaderImg {
+    height: 100px;
+    object-fit: contain;
+}
