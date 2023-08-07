@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./ActivityLog.module.css";
+import ApiService from "../../../services/ApiService";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 
 export const ActivityLog = () => {
+  const [activityLogsList, setActivityLogsList] = useState([]);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [betStatusDrop, setbetStatusDrop] = useState("false");
   const [betStatus, setbetStatus] = useState("Active Log");
+
   const openBetStatusDrop = () => {
     if (betStatusDrop === "true") {
       setbetStatusDrop("false");
@@ -17,6 +21,29 @@ export const ActivityLog = () => {
     setbetStatus(val);
     setbetStatusDrop("false");
   };
+
+  useEffect(() => {
+    ApiService.activityLogs(page + 1)
+      .then((res) => {
+        setTotalRecords(res.data.count);
+        setActivityLogsList(res.data.data);
+      })
+      .catch((err) => {
+        if (
+          err?.response?.data?.statusCode === 401 &&
+          err?.response?.data?.message === "Unauthorized"
+        ) {
+          localStorage.removeItem("token");
+          auth.setAuth({
+            ...auth.auth,
+            isloggedIn: false,
+            user: {},
+            showSessionExpire: true,
+          });
+        }
+      });
+  }, [page]);
+
   return (
     <React.Fragment>
       <MenuHeader title={betStatus} />
