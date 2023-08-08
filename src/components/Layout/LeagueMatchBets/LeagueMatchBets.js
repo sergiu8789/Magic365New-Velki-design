@@ -3,9 +3,11 @@ import { useNavigate } from "react-router-dom";
 import styles from "./LeagueMatchBets.module.css";
 import ApiService from "../../../services/ApiService";
 import { firstLetterCapital } from "../../../utils/helper";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const LeagueMatchBets = ({ selectedMatch, setleagueMatch }) => {
   const navigate = useNavigate();
+  const appData = useApp();
   const [otherMarketList,setOtherMarketList] = useState([]);
   const showMatchList = () => {
     setleagueMatch("LeagueMatches");
@@ -18,7 +20,9 @@ export const LeagueMatchBets = ({ selectedMatch, setleagueMatch }) => {
   };
 
   useEffect(() => {
+    appData.setAppData({...appData.appData,listLoading:true});
     ApiService.getMatchOdds(selectedMatch.id).then((res) => {
+      appData.setAppData({...appData.appData,listLoading:false});
       let list = [{type : "match_odds",market_id:selectedMatch.market_id}];
       if (res?.data?.odds?.length) {
         res?.data?.odds[0].map((item) => {
