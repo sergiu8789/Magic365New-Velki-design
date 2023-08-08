@@ -119,3 +119,47 @@
 .allActivityList .recordChartRow:last-child {
     border-bottom: none;
 }
+
+.activePaginate {
+    padding: 20px 0px;
+}
+
+.navigateBtn {
+    height: 40px;
+    border-radius: 8px;
+    font-size: 15px;
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.navigateBtn .arrow {
+    font-size: 15px;
+    color: inherit;
+    font-weight: 100;
+}
+
+.rightnavigateBtn .arrow {
+    right: 15px;
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.leftnavigateBtn .arrow {
+    left: 20px;
+}
+
+.leftnavigateBtn {
+    background: #000;
+    color: #FFF;
+}
+
+.rightnavigateBtn {
+    background: #ffc800;
+    color: #000;
+}
+
+.navigateDisable {
+    opacity: 0.2;
+    pointer-events: none;
+}

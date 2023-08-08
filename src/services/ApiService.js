@@ -87,7 +87,7 @@ ApiService.liveGamesList = function (type) {
   });
 };
 
-ApiService.tournamentMatchList = function (type, trn_slug, page=1) {
+ApiService.tournamentMatchList = function (type, trn_slug, page = 1) {
   let trn = "";
   if (trn_slug) trn = trn_slug;
   else trn = "";
@@ -258,7 +258,6 @@ ApiService.getNews = function () {
 };
 
 ApiService.getCasinoResultsGet = function (data) {
-  console.log(data);
   return fetch({
     url:
       "sports/get-casino-results?market_name=" +

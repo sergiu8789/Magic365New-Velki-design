@@ -65,7 +65,7 @@ export const CurrentBets = () => {
         className={`col-12 d-inline-flex position-relative align-items-center`}
       >
         <div
-          className={`${styles.allTabList} col-12 d-inline-flex align-items-center`}
+          className={`${styles.allTabList} position-relative col-12 d-inline-flex align-items-center`}
         >
           {TabList.map((item, index) => {
             return (
