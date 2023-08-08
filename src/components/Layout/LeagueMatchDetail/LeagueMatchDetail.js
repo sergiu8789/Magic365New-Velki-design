@@ -23,7 +23,6 @@ export const LeagueMatchDetail = ({
         className={`${styles.matchDetailHeader} col-12 d-inline-flex align-items-center`}
       >
         <i className="icon-arrow-left" onClick={showLeagueList}></i>
-        {console.log(leagueName)}
         <span className={styles.matchName}>{leagueName?.replaceAll("_"," ")}</span>
       </div>
       <div className={`${styles.allMatchList} col-12 d-inline-block`}>

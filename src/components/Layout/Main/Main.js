@@ -9,6 +9,7 @@ import { PublicRoutes } from "../../../routes/publicRoutes";
 import "../../../assets/css/iconmoon.css";
 import "../../../assets/css/style.css";
 import { useAuth } from "../../../context/AuthContextProvider";
+import { Loader } from "../Loader/Loader";
 
 function Main() {
   const location = useLocation();
@@ -76,6 +77,7 @@ function Main() {
         </div>
       </div>
       {location.pathname !== "/signup" && <BetPlacePopup />}
+      <Loader />
     </React.Fragment>
   );
 }

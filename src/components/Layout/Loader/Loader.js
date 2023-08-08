@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import styles from "./Loader.module.css";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const Loader = () => {
-  const [loaderStatus, setLoaderStatus] = useState(false);
+  const appData = useApp();
 
   return (
     <React.Fragment>
       <div
         className={`${styles.loaderLayer} ${
-          loaderStatus === true ? "d-inline-flex" : "d-none"
+          appData.appData.listLoading  ? "d-inline-flex" : "d-none"
         } position-fixed m-auto col-12 p-5 h-100 align-items-center justify-content-center`}
       >
         <div

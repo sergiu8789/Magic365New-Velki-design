@@ -50,9 +50,10 @@ export const LeagueMatchBets = ({ selectedMatch, setleagueMatch }) => {
         <div
           className={`${styles.matchBetsBox} col-12 d-inline-flex flex-column overflow-hidden`}
         >
-          {otherMarketList.map((item) => {
+          {otherMarketList.map((item,index) => {
             return(
               <div
+              key={index}
               className={`${styles.singleMatchBets} col-12 d-inline-flex flex-column position-relative`}
               onClick={() => showMatchBetDetail(item)}
             >
