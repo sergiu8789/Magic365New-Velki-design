@@ -65,15 +65,24 @@ useEffect(() => {
       let endDate = '';
       let todayDate = new Date();
       if (inPlayTab !== 'In-Play')
-        timeTab = 'upcoming';
+        timeTab = inPlayTab;
       if(inPlayTab === 'Today'){
         startDate = todayDate.setHours(0,0,0,0);
-        startDate = encrypt(startDate)
+        startDate = encodeURI(encrypt(startDate));
         endDate = todayDate.setHours(23,59,59,99);
-        endDate = encrypt(endDate);
+        endDate = encodeURI(encrypt(endDate));
+      }
+      if(inPlayTab === 'Tomorrow'){
+        todayDate = todayDate.setDate(todayDate.getDate() + 1);
+        todayDate = new Date(todayDate);
+        startDate = todayDate.setHours(0,0,0,0);
+        startDate = encodeURI(encrypt(startDate));
+        endDate = todayDate.setHours(23,59,59,99);
+        endDate = encodeURI(encrypt(endDate));
       }
       if (activeTab)
         activeTab = activeTab.toLowerCase();
+        timeTab = timeTab.toLowerCase();
         ApiService.tournamentMatchList(activeTab, "", timeTab,startDate,endDate).then((res) => {
         if(res?.data){
           let tournaments = {Cricket:{},Soccer:{},Tennis:{}};
@@ -236,7 +245,7 @@ useEffect(() => {
             style={{ transform: "translateX(" + CatTabPosLeft + "px)" }}
           ></div>
         </div>
-        <GameList tournamentList={tournamentList} setTournamentList={setTournamentList} gameType={tabActive}/>
+        <GameList tournamentList={tournamentList} setTournamentList={setTournamentList} inPlay={inPlayTab === 'In-Play' ? true : false} gameType={tabActive}/>
       </div>
       <BetSlip />
     </React.Fragment>

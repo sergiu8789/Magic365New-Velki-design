@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./GameList.module.css";
 
-export const GameList = ({tournamentList,setTournamentList,gameType}) => {
+export const GameList = ({tournamentList,setTournamentList,gameType,inPlay}) => {
   const navigate = useNavigate();
   const [closeAllMatchBox, setcloseAllMatchBox] = useState({
     Cricket :false,
@@ -119,28 +119,31 @@ export const GameList = ({tournamentList,setTournamentList,gameType}) => {
                               className={`${styles.gameBetType} d-inline-flex align-items-center`}
                             >
                               <i className="icon-live"></i>
-                              <div className="icon-fancybet">
+          
+                              {match.has_fancy ? <div className="icon-fancybet">
                                 <span className="icon-fancybet path1"></span>
                                 <span className="icon-fancybet path2"></span>
                                 <span className="icon-fancybet path3"></span>
                                 <span className="icon-fancybet path4"></span>
-                              </div>
+                              </div> : ""}
+                              {match.has_premium ?
                               <div className="icon-sportsbook">
                                 <span className="icon-sportsbook path1"></span>
                                 <span className="icon-sportsbook path2"></span>
                                 <span className="icon-sportsbook path3"></span>
-                              </div>
+                              </div> : "" }
+                              { match.has_bookmaker ?
                               <div className="icon-bookmaker">
                                 <span className="icon-bookmaker path1"></span>
                                 <span className="icon-bookmaker path2"></span>
                                 <span className="icon-bookmaker path3"></span>
                                 <span className="icon-bookmaker path4"></span>
-                              </div>
-                              <div
+                              </div> : "" }
+                              {inPlay &&   <div
                                 className={`${styles.bgInPlay} d-inline-flex align-items-center justify-content-center`}
                               >
                                 In-play
-                              </div>
+                              </div> }
                             </div>
                             <div className={`${styles.currentBetGame} d-inline-flex`}>
                               {match.team_one_name} - {match.team_two_name}
