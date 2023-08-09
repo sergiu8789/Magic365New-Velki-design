@@ -6,7 +6,11 @@ import styles from "./GameList.module.css";
 export const GameList = ({tournamentList,setTournamentList,gameType}) => {
   const navigate = useNavigate();
   const betData = useBet();
-  const [closeMatchBox, setcloseMatchBox] = useState(true);
+  const [closeAllMatchBox, setcloseAllMatchBox] = useState({
+    Cricket :false,
+    Soccer : false,
+    Tennis : false,
+  });
 
   const openBetSlip = () => {
     betData.setBetData({
@@ -19,24 +23,31 @@ export const GameList = ({tournamentList,setTournamentList,gameType}) => {
     navigate("/full-market");
   };
 
-  const openMatchDetail = (item) => {
-    tournamentList[item].open = !tournamentList[item].open;
-    setTournamentList({...tournamentList})
+  const openMatchDetail = (gameType,tournament) => {
+    tournamentList[gameType][tournament].open = !tournamentList[gameType][tournament].open
+     setTournamentList({...tournamentList})
   };
 
-  const closeAllMatch = () => {
-    Object.keys(tournamentList)?.map((item) => {
-       tournamentList[item].open = !tournamentList[item].open;
+  const closeAllMatch = (gameType) => {
+    Object.keys(tournamentList[gameType])?.map((item) => {
+      if(closeAllMatchBox[gameType])
+        tournamentList[gameType][item].open = true;
+      else
+        tournamentList[gameType][item].open = false;
     });
-    setTournamentList({...tournamentList})
-    setcloseMatchBox(!closeMatchBox);
+     closeAllMatchBox[gameType] =  !closeAllMatchBox[gameType];
+     setTournamentList({...tournamentList})
+     setcloseAllMatchBox({...closeAllMatchBox});
   };
 
   return (
     <React.Fragment>
-      {Object.keys(tournamentList)?.map((tour,tourIndex) => {
+      {Object.keys(tournamentList)?.filter((gameTypeFilter) => !gameType || gameType === 'All' || gameType === gameTypeFilter)
+      ?.filter((countFilter) => Object.keys(tournamentList[countFilter])?.length)
+      ?.map((tour,tourIndex) => {
         return(
           <div
+          key={tourIndex}
           className={`${styles.singleGameContiner} position-relative col-12 d-inline-block`}
         >
           <div
@@ -49,9 +60,9 @@ export const GameList = ({tournamentList,setTournamentList,gameType}) => {
             </div>
             <div
               className={`${styles.sortFilterBtn} ${
-                closeMatchBox === false && styles.closeAllGames
+                closeAllMatchBox[tour] && styles.closeAllGames
               } d-inline-flex align-items-center justify-content-center`}
-              onClick={closeAllMatch}
+              onClick={() => closeAllMatch(tour)}
             >
               <span className="d-inline-flex">ALL</span>
               <i
@@ -65,12 +76,11 @@ export const GameList = ({tournamentList,setTournamentList,gameType}) => {
             {Object.keys(tournamentList[tour])?.map((item,index) => {
               return(
                 <div key={index} className="col-12 d-inline-flex flex-column">
-                   {console.log(item,tournamentList[tour])}
                 <div
                   className={`${styles.singleGameHeader} ${
                     !tournamentList[tour][item].open && styles.closeGameHeader
                   } col-12 d-inline-flex align-items-center justify-content-between position-relative`}
-                  onClick={() => openMatchDetail(item)}
+                  onClick={() => openMatchDetail(tour,item)}
                 >
                   <div
                     className={`${styles.gameCountTitle} d-inline-flex align-items-center`}
@@ -276,7 +286,7 @@ export const GameList = ({tournamentList,setTournamentList,gameType}) => {
           </div>
          </div>
         )
-      } )}
+      })}
       
     </React.Fragment>
   );
