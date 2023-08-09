@@ -66,13 +66,15 @@ function Header() {
             >
               <i className="icon-arrow-left"></i>
             </span>
-          ) : (
+          ) : auth.auth.loggedIn ? (
             <span
               className={`${styles.headerMenuIcon} d-inline-flex align-items-center`}
               onClick={() => setopenAside(true)}
             >
               <i className="icon-menu"></i>
             </span>
+          ) : (
+            <></>
           )}
           <img className={styles.siteLogoImg} src={logo} alt="Bet365 Live" />
         </div>

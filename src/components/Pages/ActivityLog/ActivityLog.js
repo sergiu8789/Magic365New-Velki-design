@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styles from "./ActivityLog.module.css";
+import { NoData } from "../../Layout/NoData/NoData";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
@@ -125,67 +126,73 @@ export const ActivityLog = () => {
           betStatus === "Active Log" ? "d-inline-flex" : "d-none"
         } flex-column p-3`}
       >
-        {activityLogsList?.map((item, index) => (
-          <React.Fragment key={index}>
-            <div
-              className={`${styles.acitivityLogBox} col-12 overflow-hidden d-inline-block`}
-            >
-              <label
-                className={`${styles.activityheader} col-12 d-inline-block`}
-              >
-                {changeDateFormat(item.createdAt) +
-                  " " +
-                  formatTime(item.createdAt)}
-              </label>
+        {activityLogsList?.map((item, index) =>
+          item ? (
+            <React.Fragment key={index}>
               <div
-                className={`${styles.activeStatusBox} col-12 d-inline-flex flex-column`}
+                className={`${styles.acitivityLogBox} col-12 overflow-hidden d-inline-block`}
               >
-                <span
-                  className={`${styles.activeStatusTitle} col-12 d-inline-flex`}
+                <label
+                  className={`${styles.activityheader} col-12 d-inline-block`}
                 >
-                  Login Status
-                </span>
-                <span
-                  className={`${styles.activeStatusValue} col-12 d-inline-flex`}
+                  {changeDateFormat(item.createdAt) +
+                    " " +
+                    formatTime(item.createdAt)}
+                </label>
+                <div
+                  className={`${styles.activeStatusBox} col-12 d-inline-flex flex-column`}
                 >
-                  Login Success
-                </span>
+                  <span
+                    className={`${styles.activeStatusTitle} col-12 d-inline-flex`}
+                  >
+                    Login Status
+                  </span>
+                  <span
+                    className={`${styles.activeStatusValue} col-12 d-inline-flex`}
+                  >
+                    Login Success
+                  </span>
+                </div>
+                <div
+                  className={`${styles.recordChartRow} col-12 d-inline-flex align-items-center`}
+                >
+                  <span className={`${styles.recordTitle} col-4 d-inline-flex`}>
+                    IP Address
+                  </span>
+                  <span className={`${styles.recordValue} col-8 d-inline-flex`}>
+                    {filterIpAddress(item.ip)}
+                  </span>
+                </div>
+                <div
+                  className={`${styles.recordChartRow} col-12 d-inline-flex align-items-center`}
+                >
+                  <span className={`${styles.recordTitle} col-4 d-inline-flex`}>
+                    ISP
+                  </span>
+                  <span className={`${styles.recordValue} col-8 d-inline-flex`}>
+                    {item.isp}
+                  </span>
+                </div>
+                <div
+                  className={`${styles.recordChartRow} col-12 d-inline-flex align-items-center`}
+                >
+                  <span className={`${styles.recordTitle} col-4 d-inline-flex`}>
+                    City / State / Country
+                  </span>
+                  <span className={`${styles.recordValue} col-8 d-inline-flex`}>
+                    {item.location}
+                  </span>
+                </div>
               </div>
-              <div
-                className={`${styles.recordChartRow} col-12 d-inline-flex align-items-center`}
-              >
-                <span className={`${styles.recordTitle} col-4 d-inline-flex`}>
-                  IP Address
-                </span>
-                <span className={`${styles.recordValue} col-8 d-inline-flex`}>
-                  {filterIpAddress(item.ip)}
-                </span>
-              </div>
-              <div
-                className={`${styles.recordChartRow} col-12 d-inline-flex align-items-center`}
-              >
-                <span className={`${styles.recordTitle} col-4 d-inline-flex`}>
-                  ISP
-                </span>
-                <span className={`${styles.recordValue} col-8 d-inline-flex`}>
-                  {item.isp}
-                </span>
-              </div>
-              <div
-                className={`${styles.recordChartRow} col-12 d-inline-flex align-items-center`}
-              >
-                <span className={`${styles.recordTitle} col-4 d-inline-flex`}>
-                  City / State / Country
-                </span>
-                <span className={`${styles.recordValue} col-8 d-inline-flex`}>
-                  {item.location}
-                </span>
-              </div>
-            </div>
-          </React.Fragment>
-        ))}
+            </React.Fragment>
+          ) : (
+            <NoData />
+          )
+        )}
         <div
-          className={`${styles.activePaginate} col-12 d-inline-flex align-items-center justify-content-between`}
+          className={`${styles.activePaginate} col-12 ${
+            totalRecords > 1 ? "d-inline-flex" : "d-none"
+          } align-items-center justify-content-between`}
         >
           <div className="col-6 px-3">
             <button

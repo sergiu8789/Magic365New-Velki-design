@@ -1,23 +1,49 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import DateRangePicker from "react-bootstrap-daterangepicker";
+import "bootstrap-daterangepicker/daterangepicker.css";
 import styles from "./ProfitLoss.module.css";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
+import ApiService from "../../../services/ApiService";
+import { AuthContext } from "../../../context/AuthContextProvider";
+import {
+  changeDateFormat,
+  formatTime,
+  formatDate,
+} from "../../../utils/helper";
 
 export const ProfitLoss = () => {
-  const TabList = ["Exchange", "Bookmaker", "Fancybet", "Sportsbook", "Parlay"];
-  const [popularTabActive, setpopularTabActive] = useState("Exchange");
+  const TabList = [
+    "All",
+    "Exchange",
+    "Bookmaker",
+    "Fancybet",
+    "Sportsbook",
+    "Parlay",
+  ];
+  const [popularTabActive, setpopularTabActive] = useState("All");
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [dateStatus, setdateStatus] = useState("false");
   const [betStatusDrop, setbetStatusDrop] = useState("false");
   const [betStatus, setbetStatus] = useState("All");
   const [moreBetInfo, setmoreBetInfo] = useState("false");
+  const auth = useContext(AuthContext);
+  const [page, setPage] = useState(1);
+  const [period, setPeriod] = useState("all");
+  const [bettingHistoryList, setBettingHistoryList] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [selectedTab, setSelectedTab] = useState("");
 
   const selectPopularTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
+    let scrollPos = document.getElementById("allTabList").scrollLeft;
     let inplay = parseInt(17);
     pageOffset = pageOffset + inplay;
     let TabPos = event.currentTarget.getBoundingClientRect().left;
     TabPos = TabPos - pageOffset;
+    TabPos = TabPos + scrollPos;
     let widthTab = event.currentTarget.getBoundingClientRect().width;
     setTabLineWidth(widthTab);
     setTabPosLeft(TabPos);
@@ -73,7 +99,8 @@ export const ProfitLoss = () => {
         className={`col-12 d-inline-flex position-relative align-items-center`}
       >
         <div
-          className={`${styles.allTabList} col-12 d-inline-flex align-items-center`}
+          className={`${styles.allTabList} position-relative col-12 d-inline-flex align-items-center`}
+          id="allTabList"
         >
           {TabList.map((item, index) => {
             return (
@@ -110,7 +137,12 @@ export const ProfitLoss = () => {
             <div
               className={`${styles.calendarDateIcon} icon-calendar position-absolute`}
             ></div>
-            <span className={styles.calendarDate}>29/07/2023 - 30/07/2023</span>
+            <DateRangePicker className={styles.calendarDate}>
+              <input
+                type="text"
+                className={`${styles.calenderForm} form-control`}
+              />
+            </DateRangePicker>
           </div>
           <span
             className={`${styles.dateDuring} flex-shrink-0 d-inline-flex align-items-center`}

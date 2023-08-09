@@ -82,6 +82,7 @@
     border: 1px solid #ffc800;
     border-top: none;
     top: 42px;
+    padding-top: 8px;
 }
 
 .betStatusOptions.betStatusOpen {
@@ -150,10 +151,22 @@
     height: 38px;
 }
 
-.calendarDate {
+.calenderForm {
+    background: transparent;
+    border: none;
+    box-shadow: none;
     color: #FFF;
     font-size: 18px;
     font-weight: 500;
+    padding: 0;
+}
+
+.calenderForm:focus {
+    border: none;
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+    color: #FFF;
 }
 
 .calendarShortArea {
@@ -166,6 +179,7 @@
     opacity: 0;
     transition: all ease 300ms;
     -webkit-transition: all ease 300ms;
+    z-index: 1;
 }
 
 .previousDateArea {
@@ -211,10 +225,11 @@
 .currentBetHeader {
     background: rgb(212, 224, 229);
     border-radius: 8px 8px 0px 0px;
-    height: 41px;
+    min-height: 41px;
     font-size: 17px;
     color: #1e1e1e;
     gap: 6px;
+    padding: 6px;
 }
 
 .gameName {
@@ -293,8 +308,14 @@
     color: #1e1e1e;
 }
 
-.betRecordVal {
-    color: rgb(90, 94, 98);
+.betRecordVal.betProfit {
+    color: #62b70b;
+    font-weight: 500;
+}
+
+.betRecordVal.betLoss {
+    color: #e20000;
+    font-weight: 500;
 }
 
 .footerRecord {
@@ -350,6 +371,50 @@
     border-bottom: 1px solid rgb(156, 177, 189);
 }
 
+.activePaginate {
+    padding: 20px 0px;
+}
+
+.navigateBtn {
+    height: 40px;
+    border-radius: 8px;
+    font-size: 15px;
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.navigateBtn .arrow {
+    font-size: 15px;
+    color: inherit;
+    font-weight: 100;
+}
+
+.rightnavigateBtn .arrow {
+    right: 15px;
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.leftnavigateBtn .arrow {
+    left: 20px;
+}
+
+.leftnavigateBtn {
+    background: #000;
+    color: #FFF;
+}
+
+.rightnavigateBtn {
+    background: #ffc800;
+    color: #000;
+}
+
+.navigateDisable {
+    opacity: 0.2;
+    pointer-events: none;
+}
+
 @media only screen and (max-width:568px) {
     .dateSearchBtn, .datePickerBtn {
         padding: 0 10px;
@@ -366,5 +431,17 @@
     .popularTab {
         font-size: 15px;
         margin-right: 16px;
+    }
+
+    .calenderForm, .dateSearchBtn, .datePickerBtn {
+        font-size: 14px;
+    }
+
+    .allTabList {
+        height: 48px;
+    }
+
+    .popularActiveLine {
+        bottom: 6px;
     }
 }

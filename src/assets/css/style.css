@@ -70,3 +70,36 @@
     align-items: center;
     gap: 20px;
 }
+
+/* DATE PICKER BOX */
+.daterangepicker.show-calendar.opensright {
+    left: 0 !important;
+    right: 0 !important;
+    max-width: 450px;
+    width: 95%;
+    margin: auto;
+    box-shadow: 0px 0px 13px 2px rgba(0, 0, 0, 0.50);
+}
+
+.daterangepicker.show-calendar .drp-calendar {
+    max-width: 100%;
+    width: 100%;
+}
+
+.daterangepicker.show-calendar .calendar-table th, .daterangepicker.show-calendar .calendar-table td {
+    height: 32px;
+    font-size: 15px;
+}
+
+.daterangepicker.show-calendar .drp-selected {
+    font-size: 16px;
+    width: 100%;
+    line-height: 40px;
+    text-align: left;
+    padding-left: 15px;
+}
+
+.daterangepicker.show-calendar .drp-buttons .btn {
+    font-size: 15px;
+    padding: 5px 20px;
+}

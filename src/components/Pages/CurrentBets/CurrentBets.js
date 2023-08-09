@@ -1,22 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styles from "./CurrentBets.module.css";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
+import { NoData } from "../../Layout/NoData/NoData";
+import ApiService from "../../../services/ApiService";
+import { AuthContext } from "../../../context/AuthContextProvider";
+import { changeDateFormat, formatTime } from "../../../utils/helper";
 
 export const CurrentBets = () => {
-  const TabList = ["Exchange", "Bookmaker", "Fancybet", "Sportsbook", "Parlay"];
-  const [popularTabActive, setpopularTabActive] = useState("Exchange");
+  const auth = useContext(AuthContext);
+  const [page, setPage] = useState(1);
+  const TabList = [
+    "All",
+    "Exchange",
+    "Bookmaker",
+    "Fancybet",
+    "Sportsbook",
+    "Parlay",
+  ];
+  const [popularTabActive, setpopularTabActive] = useState("All");
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [betStatusDrop, setbetStatusDrop] = useState("false");
   const [betStatus, setbetStatus] = useState("All");
-  const [moreBetInfo, setmoreBetInfo] = useState("false");
+  const [currentBetsList, SetCurrentBetsList] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
 
   const selectPopularTab = (event, name) => {
-    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
+    let pageOffset = document.getElementById("centerMobileMode").offsetLeft;
+    let scrollPos = document.getElementById("allTabList").scrollLeft;
     let inplay = parseInt(17);
     pageOffset = pageOffset + inplay;
     let TabPos = event.currentTarget.getBoundingClientRect().left;
     TabPos = TabPos - pageOffset;
+    TabPos = TabPos + scrollPos;
     let widthTab = event.currentTarget.getBoundingClientRect().width;
     setTabLineWidth(widthTab);
     setTabPosLeft(TabPos);
@@ -36,13 +53,91 @@ export const CurrentBets = () => {
     setbetStatusDrop("false");
   };
 
-  const showBetInfo = () => {
-    if (moreBetInfo === "true") {
-      setmoreBetInfo("false");
+  const showBetInfo = (id) => {
+    if (
+      document
+        .getElementById("footerRecord_" + id)
+        .classList.contains(styles.footerRecordOpen) === true
+    ) {
+      document
+        .getElementById("footerRecord_" + id)
+        .classList.remove(styles.footerRecordOpen);
+      document
+        .getElementById("moreBetInfo_" + id)
+        .classList.remove("d-inlone-block");
+      document.getElementById("moreBetInfo_" + id).classList.add("d-none");
     } else {
-      setmoreBetInfo("true");
+      document
+        .getElementById("footerRecord_" + id)
+        .classList.add(styles.footerRecordOpen);
+      document.getElementById("moreBetInfo_" + id).classList.remove("d-none");
+      document
+        .getElementById("moreBetInfo_" + id)
+        .classList.add("d-inline-block");
     }
   };
+
+  const handlePage = (state) => {
+    if (state === "next") {
+      let newPage = page + 1;
+      setPage(newPage);
+    } else {
+      if (page > 1) {
+        let newPage = page - 1;
+        setPage(newPage);
+      }
+    }
+    document.getElementById("centerMobileMode").scrollTop = 0;
+  };
+
+  const fetchCurrentBets = () => {
+    SetCurrentBetsList([]);
+    let betStatusVal = "";
+    if (betStatus === "All") {
+      betStatusVal = "";
+    } else if (betStatus === "Matched") {
+      betStatusVal = 1;
+    } else if (betStatus === "UnMatched") {
+      betStatusVal = 2;
+    }
+    let selectedTab = "";
+    if (popularTabActive === "All") {
+      selectedTab = "";
+    } else {
+      selectedTab = popularTabActive;
+    }
+    ApiService.currentBets(page, betStatusVal, selectedTab)
+      .then((res) => {
+        let totalPage = res.data.count / 10;
+        totalPage = Math.ceil(totalPage);
+        setTotalRecords(totalPage);
+        setTotalCount(res.data.count);
+        SetCurrentBetsList(res.data.data);
+      })
+      .catch((err) => {
+        if (
+          err?.response?.data?.statusCode === 401 &&
+          err?.response?.data?.message === "Unauthorized"
+        ) {
+          localStorage.removeItem("token");
+          auth.setAuth({
+            ...auth.auth,
+            isloggedIn: false,
+            user: {},
+            showSessionExpire: true,
+          });
+        }
+      });
+  };
+
+  useEffect(() => {
+    fetchCurrentBets();
+  }, [page]);
+
+  useEffect(() => {
+    setPage(1);
+    fetchCurrentBets();
+  }, [betStatus, popularTabActive]);
 
   useEffect(() => {
     if (
@@ -66,6 +161,7 @@ export const CurrentBets = () => {
       >
         <div
           className={`${styles.allTabList} position-relative col-12 d-inline-flex align-items-center`}
+          id="allTabList"
         >
           {TabList.map((item, index) => {
             return (
@@ -193,157 +289,226 @@ export const CurrentBets = () => {
       <div
         className={`${styles.allCurrentBetList} col-12 d-inline-flex flex-column`}
       >
-        <div
-          className={`${styles.singleCurrentBet} position-relative col-12 mb-3 d-inline-flex flex-column`}
-        >
-          <div
-            className={`${styles.currentBetHeader} col-12 d-inline-flex justify-content-center align-items-center`}
-          >
-            <span>Cricket</span>
-            <span
-              className={`${styles.recordTraingle} icon-triangle-black-400`}
-            ></span>
-            <span className={styles.gameName}>Sri Lanka v Pakistan</span>
-            <span
-              className={`${styles.recordTraingle} icon-triangle-black-400`}
-            ></span>
-            <span>Match Odds</span>
-          </div>
-          <div
-            className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
-          >
-            <span
-              className={`${styles.betTag} ${styles.OddbackTag} position-relative d-inline-flex align-items-center`}
-            >
-              Back
-            </span>
-            <span className={`${styles.betTeamName} d-inline-block`}>
-              England
-            </span>
-          </div>
-          <div className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}>
+        {totalCount === 0 && <NoData title={"No Data"} />}
+        {currentBetsList.map((item, index) =>
+          item ? (
             <div
-              className={`${styles.balanceRecord} d-inline-flex flex-column`}
+              className={`${styles.singleCurrentBet} position-relative col-12 mb-3 d-inline-flex flex-column`}
+              key={index}
             >
-              <label className={styles.balanceInfoTxt}>Odds req.</label>
-              <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                6.00
-              </div>
-            </div>
-            <div
-              className={`${styles.balanceRecord} d-inline-flex flex-column`}
-            >
-              <label className={styles.balanceInfoTxt}>Avg. Odds</label>
-              <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                6.00
-              </div>
-            </div>
-            <div
-              className={`${styles.balanceRecord} d-inline-flex flex-column`}
-            >
-              <label className={styles.balanceInfoTxt}>Matched (PBU)</label>
-              <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                1.00
-              </div>
-            </div>
-          </div>
-          <div
-            className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
-          >
-            <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
-              Bet ID
-            </span>
-            <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-              118203097
-            </span>
-          </div>
-          <div
-            className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
-          >
-            <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
-              Bet Placed
-            </span>
-            <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-              2023-07-28 19:23:58
-            </span>
-          </div>
-          <div
-            className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
-          >
-            <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
-              Matched Date
-            </span>
-            <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-              2023-07-28 19:23:58
-            </span>
-          </div>
-          <div
-            className={`${styles.betMoreInfo} col-12 ${
-              moreBetInfo === "true" ? "d-inline-block" : "d-none"
-            }`}
-          >
-            <div
-              className={`${styles.balanceRecordInfo} ${styles.betTakenInfo} d-inline-flex align-items-center col-12`}
-            >
-              <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
-                Bet Taken
-              </span>
-              <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-                2023-07-28 19:23:58
-              </span>
-            </div>
-            <div className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}>
               <div
-                className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                className={`${styles.currentBetHeader} col-12 d-inline-flex justify-content-center align-items-center`}
               >
-                <label className={styles.balanceInfoTxt}>Odds req.</label>
-                <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                  6.00
-                </div>
-              </div>
-              <div
-                className={`${styles.balanceRecord} d-inline-flex flex-column`}
-              >
-                <label className={styles.balanceInfoTxt}>Avg. Odds</label>
-                <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                  6.00
-                </div>
-              </div>
-              <div
-                className={`${styles.balanceRecord} d-inline-flex flex-column`}
-              >
-                <label className={styles.balanceInfoTxt}>Matched (PBU)</label>
-                <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                  1.00
-                </div>
-              </div>
-            </div>
+                {item.game_name && (
+                  <React.Fragment>
+                    <span>{item.game_name}</span>
+                    <span
+                      className={`${styles.recordTraingle} icon-triangle-black-400`}
+                    ></span>
+                  </React.Fragment>
+                )}
+                {item.game_name && (
+                  <React.Fragment>
+                    <span className={styles.gameName}>
+                      {item.team_one} {item?.team_two && "v " + item.team_two}
+                    </span>
+                    <span
+                      className={`${styles.recordTraingle} icon-triangle-black-400`}
+                    ></span>
+                  </React.Fragment>
+                )}
 
-            <div
-              className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
-            >
-              <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
-                Liability (PBU)
-              </span>
-              <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-                --
-              </span>
+                <span>Match Odds</span>
+              </div>
+              <div
+                className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
+              >
+                <span
+                  className={`${styles.betTag} ${
+                    item.bet_type === 1 ? styles.OddbackTag : styles.OddLayTag
+                  } position-relative d-inline-flex align-items-center`}
+                >
+                  {item.bet_type === 1 ? "Back" : "Lay"}
+                </span>
+                <span className={`${styles.betTeamName} d-inline-block`}>
+                  {item.selection}
+                </span>
+              </div>
+              <div className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}>
+                <div
+                  className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                >
+                  <label className={styles.balanceInfoTxt}>Odds req.</label>
+                  <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                    {item.odds}
+                  </div>
+                </div>
+                <div
+                  className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                >
+                  <label className={styles.balanceInfoTxt}>Avg. Odds</label>
+                  <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                    {item.odds}
+                  </div>
+                </div>
+                <div
+                  className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                >
+                  <label className={styles.balanceInfoTxt}>Matched (PBU)</label>
+                  <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                    {item.amount}
+                  </div>
+                </div>
+              </div>
+              <div
+                className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
+              >
+                <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
+                  Bet ID
+                </span>
+                <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
+                  {item.game_id}
+                </span>
+              </div>
+              <div
+                className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
+              >
+                <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
+                  Bet Placed
+                </span>
+                <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
+                  {changeDateFormat(item.createdAt) +
+                    " " +
+                    formatTime(item.createdAt)}
+                </span>
+              </div>
+              <div
+                className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
+              >
+                <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
+                  Matched Date
+                </span>
+                <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
+                  {changeDateFormat(item.createdAt) +
+                    " " +
+                    formatTime(item.createdAt)}
+                </span>
+              </div>
+              <div
+                className={`${styles.betMoreInfo} col-12 d-none`}
+                id={`moreBetInfo_${item.game_id}`}
+              >
+                <div
+                  className={`${styles.balanceRecordInfo} ${styles.betTakenInfo} d-inline-flex align-items-center col-12`}
+                >
+                  <span
+                    className={`${styles.betRecordLbl} d-inline-flex col-4`}
+                  >
+                    Bet Taken
+                  </span>
+                  <span
+                    className={`${styles.betRecordVal} d-inline-flex col-8`}
+                  >
+                    {changeDateFormat(item.createdAt) +
+                      " " +
+                      formatTime(item.createdAt)}
+                  </span>
+                </div>
+                <div
+                  className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}
+                >
+                  <div
+                    className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                  >
+                    <label className={styles.balanceInfoTxt}>Odds req.</label>
+                    <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                      {item.odds}
+                    </div>
+                  </div>
+                  <div
+                    className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                  >
+                    <label className={styles.balanceInfoTxt}>Avg. Odds</label>
+                    <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                      {item.odds}
+                    </div>
+                  </div>
+                  <div
+                    className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                  >
+                    <label className={styles.balanceInfoTxt}>
+                      Matched (PBU)
+                    </label>
+                    <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                      {item.amount}
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
+                >
+                  <span
+                    className={`${styles.betRecordLbl} d-inline-flex col-4`}
+                  >
+                    Liability (PBU)
+                  </span>
+                  <span
+                    className={`${styles.betRecordVal} d-inline-flex col-8`}
+                  >
+                    --
+                  </span>
+                </div>
+              </div>
+              <div
+                className={`${styles.footerRecord} col-12 d-inline-block position-relative`}
+                id={`footerRecord_${item.game_id}`}
+                onClick={() => showBetInfo(item.game_id)}
+              >
+                <div
+                  className={`${styles.recordMoreDrop} position-absolute m-auto d-inline-flex align-items-center justify-content-center`}
+                >
+                  <i
+                    className={`${styles.recordMoreDown} icon-arrow-down-sencodary`}
+                  ></i>
+                </div>
+              </div>
             </div>
-          </div>
-          <div
-            className={`${styles.footerRecord} ${
-              moreBetInfo === "true" && styles.footerRecordOpen
-            } col-12 d-inline-block position-relative`}
-            onClick={showBetInfo}
+          ) : (
+            <NoData />
+          )
+        )}
+      </div>
+      <div
+        className={`${styles.activePaginate} col-12 ${
+          totalRecords > 1 ? "d-inline-flex" : "d-none"
+        } align-items-center justify-content-between`}
+      >
+        <div className="col-6 px-3">
+          <button
+            className={`${styles.navigateBtn} ${styles.leftnavigateBtn}  ${
+              page === 1 && styles.navigateDisable
+            } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
+            onClick={() => handlePage("previous")}
           >
-            <div
-              className={`${styles.recordMoreDrop} position-absolute m-auto d-inline-flex align-items-center justify-content-center`}
-            >
-              <i
-                className={`${styles.recordMoreDown} icon-arrow-down-sencodary`}
-              ></i>
-            </div>
-          </div>
+            <i
+              className={`${styles.arrow} icon-arrow-left position-absolute d-inline-flex`}
+            ></i>
+            Previous
+          </button>
+        </div>
+        <div className="col-6 px-3">
+          <button
+            className={`${styles.navigateBtn}  ${styles.rightnavigateBtn} ${
+              totalRecords === page && styles.navigateDisable
+            } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
+            onClick={() => handlePage("next")}
+          >
+            Next
+            <i
+              className={`${styles.arrow} icon-arrow-left position-absolute d-inline-flex`}
+            ></i>
+          </button>
         </div>
       </div>
     </React.Fragment>
