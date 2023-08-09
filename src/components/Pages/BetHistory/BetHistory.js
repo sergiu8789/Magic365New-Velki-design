@@ -10,6 +10,7 @@ import {
   changeDateFormat,
   formatTime,
   formatDate,
+  getCasinoMarketName,
 } from "../../../utils/helper";
 
 export const BetHistory = () => {
@@ -22,7 +23,7 @@ export const BetHistory = () => {
     "Sportsbook",
     "Parlay",
   ];
-  const [popularTabActive, setpopularTabActive] = useState("All");
+  const [popularTabActive, setpopularTabActive] = useState("");
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [betStatusDrop, setbetStatusDrop] = useState("false");
@@ -34,7 +35,6 @@ export const BetHistory = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [selectedTab, setSelectedTab] = useState("");
   const [totalCount, setTotalCount] = useState(0);
 
   const selectPopularTab = (event, name) => {
@@ -48,6 +48,9 @@ export const BetHistory = () => {
     let widthTab = event.currentTarget.getBoundingClientRect().width;
     setTabLineWidth(widthTab);
     setTabPosLeft(TabPos);
+    if (name === "All") {
+      name = "";
+    }
     setpopularTabActive(name);
   };
 
@@ -97,11 +100,16 @@ export const BetHistory = () => {
   };
 
   const checkProfitLoss = (checkVal) => {
-    if (checkVal > 0) {
+    if (checkVal >= 0) {
       return true;
     } else {
       return false;
     }
+  };
+
+  const selectDateFilter = (date) => {
+    setPeriod(date);
+    closeCalenderFilter();
   };
 
   const handlePage = (state) => {
@@ -132,18 +140,12 @@ export const BetHistory = () => {
       betStatusVal = 4;
     }
 
-    let selectedTab = "";
-    if (popularTabActive === "All") {
-      selectedTab = "";
-    } else {
-      selectedTab = popularTabActive;
-    }
     ApiService.getBettingHistory(
       page,
       fromDate,
       toDate,
       betStatusVal,
-      selectedTab
+      popularTabActive
     )
       .then((res) => {
         let totalPage = res.data.count / 10;
@@ -179,25 +181,25 @@ export const BetHistory = () => {
   useEffect(() => {
     setPage(1);
     fetchHistoryData();
-  }, [betStatus, selectedTab]);
+  }, [betStatus, popularTabActive]);
 
   useEffect(() => {
     setPage(1);
     const date = new Date();
     let result = "";
-    if (period === "today") {
+    if (period === "Today") {
       result = formatDate(date);
       setFromDate(result + "T00:00");
       setToDate(result + "T23:59");
     }
-    if (period === "yesterday") {
+    if (period === "Yesterday") {
       result = formatDate(date);
       setToDate(result + "T23:59");
       date.setDate(date.getDate() - 1);
       result = formatDate(date);
       setFromDate(result + "T00:00");
     }
-    if (period === "all") {
+    if (period === "All") {
       setToDate("");
       setFromDate("");
     }
@@ -232,7 +234,8 @@ export const BetHistory = () => {
               <React.Fragment key={index}>
                 <div
                   className={`${styles.popularTab} ${
-                    popularTabActive === item && styles.popularTabActive
+                    popularTabActive === item ||
+                    (popularTabActive === "" && styles.popularTabActive)
                   } d-inline-flex align-items-center justify-content-center flex-shrink-0`}
                   onClick={(event) => selectPopularTab(event, item)}
                 >
@@ -385,18 +388,21 @@ export const BetHistory = () => {
           >
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
+              onClick={() => selectDateFilter("Today")}
             >
               Today
             </button>
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
+              onClick={() => selectDateFilter("Yesterday")}
             >
-              From Yesterday
+              Yesterday
             </button>
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
+              onClick={() => selectDateFilter("All")}
             >
-              Last 7 Days
+              All
             </button>
           </div>
         </div>
@@ -432,7 +438,14 @@ export const BetHistory = () => {
                     ></span>
                   </React.Fragment>
                 )}
-                <span className="text-capitalize">Match Odds</span>
+                <span className="text-capitalize">
+                  {item.market_type?.replace("_", " ")}
+                  {item.market_name ? (
+                    <>{getCasinoMarketName(item.market_name)}</>
+                  ) : (
+                    <></>
+                  )}
+                </span>
               </div>
               <div
                 className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
@@ -507,7 +520,7 @@ export const BetHistory = () => {
                     checkProfitLoss(item.pl_amount)
                       ? styles.betProfit
                       : styles.betLoss
-                  }  d-inline-flex col-8`}
+                  } d-inline-flex col-8`}
                 >
                   ({item.pl_amount})
                 </span>

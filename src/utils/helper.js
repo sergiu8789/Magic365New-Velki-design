@@ -304,3 +304,28 @@ export const makeFancyBookOdd = (odd, type, matchId) => {
   ];
   return result;
 };
+
+export const getCasinoMarketName = (name) => {
+  let updatedName = name;
+  switch (name) {
+    case "teen20":
+      updatedName = "Teen Patti 2020";
+      break;
+    case "teen":
+      updatedName = "One Day";
+      break;
+    case "lucky7":
+      updatedName = "Lucky 7-A";
+      break;
+    case "lucky7eu":
+      updatedName = "Lucky 7-B";
+      break;
+    case "card32":
+      updatedName = "Card 32-A";
+      break;
+    case "card32eu":
+      updatedName = "Card 32-B";
+      break;
+  }
+  return updatedName;
+};

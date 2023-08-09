@@ -9,7 +9,6 @@ import { useApp } from "../../../context/AppContextProvider";
 
 export const Leagues = () => {
   const appData = useApp();
-
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
   const [tabActive, settabActive] = useState("Cricket");
   const [leagueMatch, setleagueMatch] = useState("LeagueList");
@@ -17,7 +16,6 @@ export const Leagues = () => {
   const [selectedMatch, setSelectedMatch] = useState("");
   const [tournamentList, setTournamentList] = useState([]);
   const [matchList, setMatchList] = useState([]);
-
 
   const activeSportsTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -30,19 +28,19 @@ export const Leagues = () => {
   };
 
   useEffect(() => {
-    appData.setAppData({...appData.appData,listLoading:true});
+    appData.setAppData({ ...appData.appData, listLoading: true });
     ApiService.getSports().then((res) => {
-      appData.setAppData({...appData.appData,listLoading:false});
+      appData.setAppData({ ...appData.appData, listLoading: false });
       if (res?.data) setTournamentList(res.data);
     });
   }, []);
 
   useEffect(() => {
     if (leagueName) {
-      appData.setAppData({...appData.appData,listLoading:true});
+      appData.setAppData({ ...appData.appData, listLoading: true });
       setMatchList([]);
       ApiService.tournamentMatchList(tabActive, leagueName).then((res) => {
-        appData.setAppData({...appData.appData,listLoading:false});
+        appData.setAppData({ ...appData.appData, listLoading: false });
         if (res?.data?.data) {
           setMatchList(res.data.data);
         }
@@ -121,7 +119,7 @@ export const Leagues = () => {
         <React.Fragment>
           {selectedMatch && (
             <LeagueMatchBets
-            selectedMatch={selectedMatch}
+              selectedMatch={selectedMatch}
               setleagueMatch={setleagueMatch}
             />
           )}
