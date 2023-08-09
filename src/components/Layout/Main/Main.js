@@ -10,6 +10,7 @@ import "../../../assets/css/iconmoon.css";
 import "../../../assets/css/style.css";
 import { useAuth } from "../../../context/AuthContextProvider";
 import { Loader } from "../Loader/Loader";
+import { socket } from "../../../services/socket";
 
 function Main() {
   const location = useLocation();
@@ -47,6 +48,13 @@ function Main() {
   useEffect(() => {
     if (auth.auth.fetchWallet && auth.auth.loggedIn) fetchWalletMoney();
   }, [auth.auth.fetchWallet]);
+
+  useEffect(() => {
+    socket.connect();
+    return () => {
+      socket.disconnect();
+    };
+  },[]);
 
   return (
     <React.Fragment>

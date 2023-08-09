@@ -2,3 +2,8 @@
     height: 180px;
     background: #000;
 }
+
+.liveScoreFrame{
+    width: 100%;
+    height: 270px;
+}

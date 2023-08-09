@@ -81,7 +81,7 @@ export const GameList = ({tournamentList,setTournamentList,gameType}) => {
                     <span
                       className={`${styles.gameEventCount} d-inline-flex align-items-center justify-content-center`}
                     >
-                      1
+                      {tournamentList[tour][item]?.matches?.length}
                     </span>
                     <span className={`${styles.gameEventName} d-inline-flex`}>
                      {item}

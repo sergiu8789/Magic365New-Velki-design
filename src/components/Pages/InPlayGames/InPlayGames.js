@@ -7,14 +7,13 @@ import { useLocation } from "react-router-dom";
 
 export const InPlayGames = () => {
   const location = useLocation();
-  console.log(location);
   return (
     <React.Fragment>
       <div
         className={`${styles.inPlayBetPage} col-12 d-inline-flex flex-column`}
       >
-        <MatchScoreCard />
-        <MatchOdds />
+        <MatchScoreCard matchId={location?.state?.match_id}/>
+        <MatchOdds matchId={location?.state?.match_id} marketId={location?.state?.market_id} marketType={location?.state?.type}/>
         <HomeFooter />
       </div>
     </React.Fragment>

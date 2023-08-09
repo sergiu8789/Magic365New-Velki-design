@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import styles from "./MatchOdds.module.css";
+import ApiService from "../../../services/ApiService";
+import { socket } from "../../../services/socket";
 
-export const MatchOdds = () => {
+export const MatchOdds = ({matchId,marketId,marketType}) => {
   const [hideBookMarker, sethideBookMarker] = useState("false");
   const [fancyTabActive, setfancyTabActive] = useState("Fancybet");
   const [popularTabActive, setpopularTabActive] = useState("All");
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
+  const [selectedMarket,setSelectedMarket] = useState({market_id:marketType,market:marketType});
+  const [fooEvents, setFooEvents] = useState([]);
+  const [selectedRunner,setSelectedRunner] = useState("");
 
   const hideBookMarkerOdd = () => {
     if (hideBookMarker === "true") {
@@ -21,6 +26,25 @@ export const MatchOdds = () => {
   };
 
   useEffect(() => {
+    function onBroadCast(value) {
+       if(value?.length){
+        value?.map((item) => {
+          if(item.MarketId === marketId)
+            setSelectedRunner(item);
+        })
+       }
+    }
+    socket.on('broadcast', onBroadCast);
+    return () => {
+      socket.off('broadcast', onBroadCast);
+    };
+  }, [fooEvents]);
+
+  useEffect(() => {
+         console.log(selectedRunner)
+  },[selectedRunner]);
+
+  useEffect(() => {
     if (
       document.querySelector(
         "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
@@ -32,6 +56,9 @@ export const MatchOdds = () => {
         )
         .click();
     }
+    ApiService.getMatchOdds(matchId).then((res) => {
+      console.log(res)
+    });
   }, []);
 
   const selectPopularTab = (event, name) => {
@@ -67,17 +94,20 @@ export const MatchOdds = () => {
           </span>
         </div>
       </div>
-      <div
-        className={`${styles.matchOddTitleRow} d-inline-flex align-items-center col-12`}
-      >
-        <div
-          className={`${styles.matchTitleHighlight} d-inline-flex align-items-center`}
-        >
-          <i className="icon-star"></i>
-          <label className={styles.matchOddTitle}>Match Odds</label>
-        </div>
-      </div>
+     
       {/* Match Odds Container */}
+      {marketId &&
+       <div>
+        <div
+          className={`${styles.matchOddTitleRow} d-inline-flex align-items-center col-12`}
+        >
+          <div
+            className={`${styles.matchTitleHighlight} d-inline-flex align-items-center`}
+          >
+            <i className="icon-star"></i>
+            <label className={styles.matchOddTitle + " text-capitalize"}>{selectedMarket?.market ? selectedMarket.market?.replace("_"," ") : "" }</label>
+          </div>
+        </div>
       <div
         className={`${styles.marketOddsBox} overflow-hidden col-12 d-inline-block`}
       >
@@ -96,81 +126,36 @@ export const MatchOdds = () => {
           </div>
         </div>
         <div className="position-relative col-12 d-inline-flex flex-wrap">
-          <div
-            className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
-          >
-            <div
-              className={`${styles.gameName} d-inline-flex align-items-center col-8`}
-            >
-              Sri Lanka
-            </div>
-            <div
-              className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
+          {selectedRunner?.Runners?.map((item,index) => {
+            return(
+              <div  key={index}
+              className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
             >
               <div
-                className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
+                className={`${styles.gameName} d-inline-flex align-items-center col-8`}
               >
-                <span className={`${styles.oddStake}`}>5.6</span>
-                <span className={`${styles.oddExposure}`}>123</span>
+                {item.runnerName}
               </div>
               <div
-                className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
+                className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
               >
-                <span className={`${styles.oddStake}`}>8.9</span>
-                <span className={`${styles.oddExposure}`}>450</span>
+                <div
+                  className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
+                >
+                  <span className={`${styles.oddStake}`}>{item?.ExchangePrices?.AvailableToBack[0].price}</span>
+                  <span className={`${styles.oddExposure}`}>{item?.ExchangePrices?.AvailableToBack[0].size}</span>
+                </div>
+                <div
+                  className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
+                >
+                  <span className={`${styles.oddStake}`}>{item?.ExchangePrices?.AvailableToLay[0].price}</span>
+                  <span className={`${styles.oddExposure}`}>{item?.ExchangePrices?.AvailableToLay[0].price}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div
-            className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
-          >
-            <div
-              className={`${styles.gameName} d-inline-flex align-items-center col-8`}
-            >
-              Pakistan
-            </div>
-            <div
-              className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
-            >
-              <div
-                className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-              >
-                <span className={`${styles.oddStake}`}>5.6</span>
-                <span className={`${styles.oddExposure}`}>123</span>
-              </div>
-              <div
-                className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-              >
-                <span className={`${styles.oddStake}`}>8.9</span>
-                <span className={`${styles.oddExposure}`}>450</span>
-              </div>
-            </div>
-          </div>
-          <div
-            className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
-          >
-            <div
-              className={`${styles.gameName} d-inline-flex align-items-center col-8`}
-            >
-              The Draw
-            </div>
-            <div
-              className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
-            >
-              <div
-                className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-              >
-                <span className={`${styles.oddStake}`}>5.6</span>
-                <span className={`${styles.oddExposure}`}>123</span>
-              </div>
-              <div
-                className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-              >
-                <span className={`${styles.oddStake}`}>8.9</span>
-                <span className={`${styles.oddExposure}`}>450</span>
-              </div>
-            </div>
-          </div>
+            )
+          })}
+          
         </div>
         <div className="col-12 d-inline-flex align-items-center justify-content-between mt-2">
           <div
@@ -191,6 +176,8 @@ export const MatchOdds = () => {
           </div>
         </div>
       </div>
+      </div>
+     }
       {/* BookMarker container */}
       <div
         className={`${styles.bookmarkerOddsBox} overflow-hidden col-12 d-inline-block`}

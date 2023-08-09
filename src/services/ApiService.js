@@ -87,7 +87,7 @@ ApiService.liveGamesList = function (type) {
   });
 };
 
-ApiService.tournamentMatchList = function (type, trn_slug,time_type) {
+ApiService.tournamentMatchList = function (type, trn_slug,time_type,startDate="",endDate="") {
   let trn = "";
   if (trn_slug) trn = trn_slug;
   else trn = "";
@@ -98,7 +98,11 @@ ApiService.tournamentMatchList = function (type, trn_slug,time_type) {
       "&trn_slug=" +
       trn +
       "&type="+
-      time_type,
+      time_type +
+      "&s="+
+      startDate + 
+      "&e="+
+      endDate,
   });
 };
 
@@ -267,4 +271,11 @@ ApiService.getCasinoResultsGet = function (data) {
     method: "get",
   });
 };
+
+ApiService.getScoreCard = function (id) {
+  return fetch({
+    url:"sports/fetch-match-score-urls?match_id="+id,
+    method: "get"
+  });
+}
 export default ApiService;

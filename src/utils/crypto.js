@@ -3,6 +3,7 @@ const password = 'd6F3Efeq';
 
 export const encrypt = (text) => {
   if(text){
+    text = text.toString();
   const result = AES.encrypt(text, password);
   return result.toString();
   }

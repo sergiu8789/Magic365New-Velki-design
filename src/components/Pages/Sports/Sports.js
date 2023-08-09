@@ -5,6 +5,8 @@ import { News } from "../../Layout/News/News";
 import { GameList } from "../../Layout/GameList/GameList";
 import { BetSlip } from "../../Layout/BetSlip/BetSlip";
 import ApiService from "../../../services/ApiService";
+import { encrypt } from "../../../utils/crypto";
+import { socket } from "../../../services/socket";
 
 export const Sports = () => {
   const location = useLocation();
@@ -14,6 +16,14 @@ export const Sports = () => {
   const [tabActive, settabActive] = useState("");
   const [inPlayTab, setinPlayTab] = useState("");
   const [tournamentList,setTournamentList] = useState({});
+  const [matchIds,setMatchIds] = useState([]);
+
+
+useEffect(() => {
+  if(matchIds?.length){
+    socket.emit("subscription",matchIds);
+  }
+},[matchIds]);
 
   useEffect(() => {
     if (
@@ -51,29 +61,43 @@ export const Sports = () => {
     if (inPlayTab) {
       let timeTab = 'live';
       let activeTab = tabActive;
+      let startDate = '';
+      let endDate = '';
+      let todayDate = new Date();
       if (inPlayTab !== 'In-Play')
         timeTab = 'upcoming';
+      if(inPlayTab === 'Today'){
+        startDate = todayDate.setHours(0,0,0,0);
+        startDate = encrypt(startDate)
+        endDate = todayDate.setHours(23,59,59,99);
+        endDate = encrypt(endDate);
+      }
       if (activeTab)
         activeTab = activeTab.toLowerCase();
-      ApiService.tournamentMatchList(activeTab, "", timeTab).then((res) => {
+        ApiService.tournamentMatchList(activeTab, "", timeTab,startDate,endDate).then((res) => {
         if(res?.data){
           let tournaments = {Cricket:{},Soccer:{},Tennis:{}};
+          let matchIdList = [];
           res?.data?.map((item,index) => {
+            matchIdList.push(item.id);
               Object.keys(tournaments)?.map((tour) => {
                 if(item.name === tour){
-                  if(tournaments[tour][item.trn_name]?.matches)
+                  if(tournaments[tour][item.trn_name]?.matches){
                      tournaments[tour][item.trn_name].matches.push(item);
-                  else
+                  }
+                  else{
                    tournaments[tour][item.trn_name] = {matches:[],open:true}; 
                    tournaments[tour][item.trn_name]?.matches.push(item);
+                  }
                 }
               });
-          });    
+          });  
+          setMatchIds(matchIdList);
           setTournamentList(tournaments);     
         }
       });
     }
-  }, [inPlayTab, tabActive])
+  }, [inPlayTab])
 
   const activeGameTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
