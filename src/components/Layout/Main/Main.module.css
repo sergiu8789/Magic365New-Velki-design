@@ -13,6 +13,7 @@
     overflow-y: auto;
     height: 100vh;
     background: rgb(238, 246, 251);
+    scroll-behavior: smooth;
 }
 
 .signupContainer {

@@ -1,8 +1,10 @@
 import React from "react";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import styles from "./BalanceOverview.module.css";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const BalanceOverview = () => {
+  const auth = useAuth();
   return (
     <React.Fragment>
       <MenuHeader title="Balance Overview" />
@@ -17,7 +19,11 @@ export const BalanceOverview = () => {
             >
               PBU
             </span>
-            <span className={`${styles.balanceAmt} d-inline-flex`}>50</span>
+            <span className={`${styles.balanceAmt} d-inline-flex`}>
+              {auth.auth.walletBalance
+                ? parseFloat(auth.auth.walletBalance).toFixed(2)
+                : 0}
+            </span>
           </div>
         </div>
         <div
@@ -37,7 +43,9 @@ export const BalanceOverview = () => {
               >
                 <label className={styles.balanceInfoTxt}>Deposit</label>
                 <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                  50.00
+                  {auth.auth.walletBalance
+                    ? parseFloat(auth.auth.walletBalance).toFixed(2)
+                    : 0}
                 </div>
               </div>
               <div
@@ -45,7 +53,9 @@ export const BalanceOverview = () => {
               >
                 <label className={styles.balanceInfoTxt}>Balance</label>
                 <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                  50.00
+                  {auth.auth.walletBalance
+                    ? parseFloat(auth.auth.walletBalance).toFixed(2)
+                    : 0}
                 </div>
               </div>
             </div>
@@ -56,7 +66,7 @@ export const BalanceOverview = () => {
               <span
                 className={`${styles.recordTraingle} icon-triangle-black-400`}
               ></span>
-              <span>surjo1694</span>
+              <span>{auth?.auth?.user?.username}</span>
             </div>
             <div
               className={`${styles.balanceRecordRow} col-12 d-inline-flex align-items-center`}

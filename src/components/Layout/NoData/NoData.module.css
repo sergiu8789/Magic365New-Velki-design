@@ -1,0 +1,18 @@
+.noDataBox {
+    padding: 160px 0;
+}
+
+.noDataContainer {
+    border-radius: 13px;
+    background: #FFF;
+    padding: 26px 0;
+    width: 110px;
+    gap: 12px;
+    font-size: 51px;
+    color: #d4e0e5;
+}
+
+.noDataText {
+    color: #5a5e62;
+    font-size: 17px;
+}

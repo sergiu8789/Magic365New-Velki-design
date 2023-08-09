@@ -258,7 +258,6 @@ ApiService.getNews = function () {
 };
 
 ApiService.getCasinoResultsGet = function (data) {
-  console.log(data);
   return fetch({
     url:
       "sports/get-casino-results?market_name=" +
