@@ -20,8 +20,8 @@ export const BetHistory = () => {
     "Exchange",
     "Bookmaker",
     "Fancybet",
-    "Sportsbook",
-    "Parlay",
+    "Casino",
+    "Premium",
   ];
   const [popularTabActive, setpopularTabActive] = useState("");
   const [TabLineWidth, setTabLineWidth] = useState("");
@@ -67,6 +67,13 @@ export const BetHistory = () => {
     setbetStatusDrop("false");
   };
 
+  const setDateChoose = () => {
+    let dateValue = document.getElementById("calendarDate").value;
+    dateValue = dateValue.split("-");
+    setFromDate(dateValue[0].trim());
+    setToDate(dateValue[1].trim());
+  };
+
   const showCalenderFilter = () => {
     setdateStatus("true");
   };
@@ -86,7 +93,7 @@ export const BetHistory = () => {
         .classList.remove(styles.footerRecordOpen);
       document
         .getElementById("moreBetInfo_" + id)
-        .classList.remove("d-inlone-block");
+        .classList.remove("d-inline-block");
       document.getElementById("moreBetInfo_" + id).classList.add("d-none");
     } else {
       document
@@ -352,6 +359,7 @@ export const BetHistory = () => {
               <input
                 type="text"
                 className={`${styles.calenderForm} form-control`}
+                id="calendarDate"
               />
             </DateRangePicker>
           </div>
@@ -363,6 +371,7 @@ export const BetHistory = () => {
           </span>
           <button
             className={`${styles.dateSearchBtn} flex-shrink-0 d-inline-flex align-items-center`}
+            onClick={setDateChoose}
           >
             Submit
           </button>

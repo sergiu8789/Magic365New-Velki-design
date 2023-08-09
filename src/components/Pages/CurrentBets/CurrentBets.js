@@ -18,8 +18,8 @@ export const CurrentBets = () => {
     "Exchange",
     "Bookmaker",
     "Fancybet",
-    "Sportsbook",
-    "Parlay",
+    "Casino",
+    "Premium",
   ];
   const [popularTabActive, setpopularTabActive] = useState("All");
   const [TabLineWidth, setTabLineWidth] = useState("");
@@ -68,7 +68,7 @@ export const CurrentBets = () => {
         .classList.remove(styles.footerRecordOpen);
       document
         .getElementById("moreBetInfo_" + id)
-        .classList.remove("d-inlone-block");
+        .classList.remove("d-inline-block");
       document.getElementById("moreBetInfo_" + id).classList.add("d-none");
     } else {
       document

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./ChangePassword.module.css";
+import { BetPlacePopup } from "../../Layout/BetPlacePopup/BetPlacePopup";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
@@ -16,6 +17,7 @@ export const ChangePassword = () => {
   const [yourPassword, setyourPassword] = useState("password");
   const [responseErrorshow, setResponseError] = useState(false);
   const [reponseErrorMessage, setResponseErrorMessage] = useState("");
+  const [passChange, setPassChange] = useState(false);
   const auth = useContext(AuthContext);
   const defaultValues = {
     old_password: {
@@ -62,7 +64,6 @@ export const ChangePassword = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("event ");
     appData.setAppData({ ...appData.appData, listLoading: true });
     if (
       !formValues.old_password.value ||
@@ -103,10 +104,6 @@ export const ChangePassword = () => {
       });
     } else {
       appData.setAppData({ ...appData.appData, listLoading: true });
-      console.log(auth.auth.user.email);
-      console.log(formValues.old_password.value);
-      console.log(formValues.new_password.value);
-      console.log(formValues.confirm_password.value);
       const payload = {
         email: auth.auth.user.email,
         password: formValues.old_password.value,
@@ -124,6 +121,7 @@ export const ChangePassword = () => {
               showSucessMessage: true,
               successMessage: "Password Updated Successfully!",
             });
+            setPassChange(true);
             setResponseError(false);
           } else {
             setResponseError(true);
@@ -325,6 +323,15 @@ export const ChangePassword = () => {
           </div>
         </div>
       </div>
+      {passChange && (
+        <BetPlacePopup
+          status={true}
+          betbox={true}
+          title="Password Changed"
+          message="Your Password has been changed successfully."
+          type="1"
+        />
+      )}
     </React.Fragment>
   );
 };
