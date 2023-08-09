@@ -3,8 +3,11 @@ import styles from "./InPlayGames.module.css";
 import { MatchScoreCard } from "../../Layout/MatchScoreCard/MatchScoreCard";
 import { MatchOdds } from "../../Layout/MatchOdds/MatchOdds";
 import { HomeFooter } from "../../Layout/HomeFooter/HomeFooter";
+import { useLocation } from "react-router-dom";
 
 export const InPlayGames = () => {
+  const location = useLocation();
+  console.log(location);
   return (
     <React.Fragment>
       <div

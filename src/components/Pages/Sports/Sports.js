@@ -67,8 +67,7 @@ export const Sports = () => {
                    tournaments[tour][item.trn_name] = {matches:[],open:true}; 
                    tournaments[tour][item.trn_name]?.matches.push(item);
                 }
-              })
-           
+              });
           });    
           setTournamentList(tournaments);     
         }

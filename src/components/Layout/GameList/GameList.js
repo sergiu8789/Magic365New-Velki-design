@@ -1,26 +1,19 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useBet } from "../../../context/BetContextProvider";
 import styles from "./GameList.module.css";
 
 export const GameList = ({tournamentList,setTournamentList,gameType}) => {
   const navigate = useNavigate();
-  const betData = useBet();
   const [closeAllMatchBox, setcloseAllMatchBox] = useState({
     Cricket :false,
     Soccer : false,
     Tennis : false,
   });
 
-  const openBetSlip = () => {
-    betData.setBetData({
-      ...betData.betData,
-      betSlipStatus: "true",
+  const openGameDetail = (match) => {
+    navigate("/full-market",{
+      state:{match_id : match.id,market_id:match.market_id,type:"match_odds"}
     });
-  };
-
-  const openGameDetail = () => {
-    navigate("/full-market");
   };
 
   const openMatchDetail = (gameType,tournament) => {
@@ -113,7 +106,7 @@ export const GameList = ({tournamentList,setTournamentList,gameType}) => {
                         <div
                         key={matchIndex}
                         className={`${styles.gameHeaderRow} col-12 d-inline-flex align-items-center justify-content-between`}
-                        onClick={openGameDetail}
+                        onClick={() => openGameDetail(match)}
                       >
                         <div
                           className={`${styles.gamesTypeName} d-inline-flex align-items-center`}
