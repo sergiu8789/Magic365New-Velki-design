@@ -4,15 +4,16 @@ import styles from "./ChangePassword.module.css";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const ChangePassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [loginSlide, setloginSlide] = useState("true");
+  const appData = useApp();
+  const [loginSlide, setloginSlide] = useState(true);
   const [newPassword, setnewPassword] = useState("password");
   const [confirmPassword, setconfirmPassword] = useState("password");
   const [yourPassword, setyourPassword] = useState("password");
-  const [loading, setLoading] = useState(false);
   const [responseErrorshow, setResponseError] = useState(false);
   const [reponseErrorMessage, setResponseErrorMessage] = useState("");
   const auth = useContext(AuthContext);
@@ -61,6 +62,8 @@ export const ChangePassword = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log("event ");
+    appData.setAppData({ ...appData.appData, listLoading: true });
     if (
       !formValues.old_password.value ||
       !formValues.new_password.value ||
@@ -99,16 +102,22 @@ export const ChangePassword = () => {
         },
       });
     } else {
-      setLoading(true);
+      appData.setAppData({ ...appData.appData, listLoading: true });
+      console.log(auth.auth.user.email);
+      console.log(formValues.old_password.value);
+      console.log(formValues.new_password.value);
+      console.log(formValues.confirm_password.value);
       const payload = {
         email: auth.auth.user.email,
         password: formValues.old_password.value,
         new_password: formValues.new_password.value,
         confirm_password: formValues.confirm_password.value,
       };
+      console.log("appData ", payload);
       ApiService.changePassword(payload)
         .then((res) => {
-          setLoading(false);
+          console.log(res);
+          appData.setAppData({ ...appData.appData, listLoading: false });
           if (res.status === 200 || res.status === 201) {
             auth.setAuth({
               ...auth.auth,
@@ -122,7 +131,7 @@ export const ChangePassword = () => {
           }
         })
         .catch((err) => {
-          setLoading(false);
+          appData.setAppData({ ...appData.appData, listLoading: false });
           setResponseError(true);
           setResponseErrorMessage(err?.response?.data?.message);
         });
@@ -130,9 +139,9 @@ export const ChangePassword = () => {
   };
 
   const gotoHome = () => {
-    setloginSlide("false");
+    setloginSlide(false);
     setTimeout(function () {
-      navigate(-1);
+      navigate("/my-profile");
     }, 250);
   };
 
@@ -159,16 +168,14 @@ export const ChangePassword = () => {
   };
 
   useEffect(() => {
-    setloginSlide("true");
-  }, [location.state.login]);
+    setloginSlide(true);
+  }, [location?.state?.login]);
 
   return (
     <React.Fragment>
       <div
         className={`${styles.loginLayer} ${
-          loginSlide === "true"
-            ? styles.loginSlideLeft
-            : styles.loginSlideLeftOut
+          loginSlide ? styles.loginSlideLeft : styles.loginSlideLeftOut
         } position-absolute h-100 d-inline-block col-12 d-inline-flex flex-column`}
       >
         <div
@@ -204,6 +211,9 @@ export const ChangePassword = () => {
                 type={newPassword}
                 placeholder="New Password"
                 className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                maxLength={15}
+                onChange={handleInputChange}
+                value={formValues.new_password.value}
               />
               <label
                 htmlFor="new_password"
@@ -231,6 +241,9 @@ export const ChangePassword = () => {
                 type={confirmPassword}
                 placeholder="New Password Confirm"
                 className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                maxLength={15}
+                onChange={handleInputChange}
+                value={formValues.confirm_password.value}
               />
               <label
                 htmlFor="confirm_password"
@@ -258,6 +271,9 @@ export const ChangePassword = () => {
                 type={yourPassword}
                 placeholder="Your Password"
                 className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                maxLength={15}
+                onChange={handleInputChange}
+                value={formValues.old_password.value}
               />
               <label
                 htmlFor="old_password"

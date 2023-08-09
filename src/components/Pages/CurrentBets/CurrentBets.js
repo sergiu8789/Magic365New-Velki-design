@@ -4,7 +4,11 @@ import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import { NoData } from "../../Layout/NoData/NoData";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
-import { changeDateFormat, formatTime } from "../../../utils/helper";
+import {
+  changeDateFormat,
+  formatTime,
+  getCasinoMarketName,
+} from "../../../utils/helper";
 
 export const CurrentBets = () => {
   const auth = useContext(AuthContext);
@@ -317,8 +321,14 @@ export const CurrentBets = () => {
                     ></span>
                   </React.Fragment>
                 )}
-
-                <span>Match Odds</span>
+                <span className="text-capitalize">
+                  {item.market_type?.replace("_", " ")}
+                  {item.market_name ? (
+                    <>{getCasinoMarketName(item.market_name)}</>
+                  ) : (
+                    <></>
+                  )}
+                </span>
               </div>
               <div
                 className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
