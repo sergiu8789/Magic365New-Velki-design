@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { News } from "../../Layout/News/News";
 import { GameList } from "../../Layout/GameList/GameList";
 import { BetSlip } from "../../Layout/BetSlip/BetSlip";
+import ApiService from "../../../services/ApiService";
 
 export const Sports = () => {
   const location = useLocation();
@@ -12,24 +13,25 @@ export const Sports = () => {
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
   const [tabActive, settabActive] = useState("");
   const [inPlayTab, setinPlayTab] = useState("");
+  const [tournamentList,setTournamentList] = useState({});
 
   useEffect(() => {
     if (
       document.querySelector(
         "." +
-          styles.inPlayTabRow +
-          " ." +
-          styles.inPlayTabName +
-          ":nth-child(1)"
+        styles.inPlayTabRow +
+        " ." +
+        styles.inPlayTabName +
+        ":nth-child(1)"
       )
     ) {
       document
         .querySelector(
           "." +
-            styles.inPlayTabRow +
-            " ." +
-            styles.inPlayTabName +
-            ":nth-child(1)"
+          styles.inPlayTabRow +
+          " ." +
+          styles.inPlayTabName +
+          ":nth-child(1)"
         )
         .click();
     }
@@ -44,6 +46,35 @@ export const Sports = () => {
       document.getElementById("SportsTab_" + catId).click();
     }
   }, []);
+
+  useEffect(() => {
+    if (inPlayTab) {
+      let timeTab = 'live';
+      let activeTab = tabActive;
+      if (inPlayTab !== 'In-Play')
+        timeTab = 'upcoming';
+      if (activeTab)
+        activeTab = activeTab.toLowerCase();
+      ApiService.tournamentMatchList(activeTab, "", timeTab).then((res) => {
+        if(res?.data){
+          let tournaments = {Cricket:{},Soccer:{},Tennis:{}};
+          res?.data?.map((item,index) => {
+              Object.keys(tournaments)?.map((tour) => {
+                if(item.name === tour){
+                  if(tournaments[tour][item.trn_name]?.matches)
+                     tournaments[tour][item.trn_name].matches.push(item);
+                  else
+                   tournaments[tour][item.trn_name] = {matches:[],open:true}; 
+                   tournaments[tour][item.trn_name]?.matches.push(item);
+                }
+              })
+           
+          });    
+          setTournamentList(tournaments);     
+        }
+      });
+    }
+  }, [inPlayTab, tabActive])
 
   const activeGameTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -131,9 +162,8 @@ export const Sports = () => {
               return (
                 <React.Fragment key={index}>
                   <span
-                    className={`${styles.inPlayTabName} d-inline-flex ${
-                      item.name === inPlayTab && styles.inPlayTabActive
-                    }`}
+                    className={`${styles.inPlayTabName} d-inline-flex ${item.name === inPlayTab && styles.inPlayTabActive
+                      }`}
                     onClick={(event) => activeGameTab(event, item.name)}
                     id={`inPlayTab_${item.name}`}
                   >
@@ -164,11 +194,9 @@ export const Sports = () => {
             return (
               <React.Fragment key={index}>
                 <div
-                  className={`${
-                    styles.sportsCatTab
-                  }  d-inline-flex justify-content-center align-items-center position-relative ${
-                    item.name === tabActive && styles.activeCatTab
-                  }`}
+                  className={`${styles.sportsCatTab
+                    }  d-inline-flex justify-content-center align-items-center position-relative ${item.name === tabActive && styles.activeCatTab
+                    }`}
                   id={`SportsTab_${item.name}`}
                   onClick={(event) => activeSportsTab(event, item.name)}
                 >
@@ -185,7 +213,7 @@ export const Sports = () => {
             style={{ transform: "translateX(" + CatTabPosLeft + "px)" }}
           ></div>
         </div>
-        <GameList />
+        <GameList tournamentList={tournamentList} setTournamentList={setTournamentList} gameType={tabActive}/>
       </div>
       <BetSlip />
     </React.Fragment>

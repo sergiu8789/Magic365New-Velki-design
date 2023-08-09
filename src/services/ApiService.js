@@ -87,7 +87,7 @@ ApiService.liveGamesList = function (type) {
   });
 };
 
-ApiService.tournamentMatchList = function (type, trn_slug, page=1) {
+ApiService.tournamentMatchList = function (type, trn_slug,time_type) {
   let trn = "";
   if (trn_slug) trn = trn_slug;
   else trn = "";
@@ -97,8 +97,8 @@ ApiService.tournamentMatchList = function (type, trn_slug, page=1) {
       type +
       "&trn_slug=" +
       trn +
-      "&page_no=" +
-      page,
+      "&type="+
+      time_type,
   });
 };
 
