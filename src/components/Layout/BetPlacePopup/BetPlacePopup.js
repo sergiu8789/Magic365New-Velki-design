@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
 import styles from "./BetPlacePopup.module.css";
 
-export const BetPlacePopup = ({ status, betbox, title, message, type }) => {
+export const BetPlacePopup = ({
+  status,
+  betbox,
+  title,
+  message,
+  type,
+  setPassChange,
+}) => {
   const [betStatus, setbetStatus] = useState(true);
   const [betshow, setbetshow] = useState(false);
 
   const closeMatchBet = () => {
     setbetshow(false);
     setbetStatus(true);
-    status = "";
+    setPassChange(false);
   };
 
   useEffect(() => {
     setbetStatus(status);
     setbetshow(betbox);
+    setTimeout(function () {
+      closeMatchBet();
+    }, 6000);
   }, status);
 
   return (
@@ -31,10 +41,10 @@ export const BetPlacePopup = ({ status, betbox, title, message, type }) => {
           <div
             className={`${styles.betMatchTitle} d-inline-flex align-items-center`}
           >
-            {betshow === true ? (
+            {betStatus === true ? (
               <i className="icon-check-circle"></i>
             ) : (
-              <i className="icon-close"></i>
+              <i className="icon-info-circle"></i>
             )}
             <span className={styles.betStatusName}>{title}</span>
           </div>

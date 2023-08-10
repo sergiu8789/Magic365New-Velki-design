@@ -18,6 +18,9 @@ export const ChangePassword = () => {
   const [responseErrorshow, setResponseError] = useState(false);
   const [reponseErrorMessage, setResponseErrorMessage] = useState("");
   const [passChange, setPassChange] = useState(false);
+  const [passChangeTitle, setpassChangeTitle] = useState(false);
+  const [passChangeMsg, setpassChangeMsg] = useState(false);
+  const [passStatus, setpassStatus] = useState(false);
   const auth = useContext(AuthContext);
   const defaultValues = {
     old_password: {
@@ -71,6 +74,7 @@ export const ChangePassword = () => {
       !formValues.confirm_password.value ||
       formValues.new_password.value !== formValues.confirm_password.value
     ) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
       setFormValues({
         ...formValues,
         old_password: {
@@ -122,9 +126,19 @@ export const ChangePassword = () => {
               successMessage: "Password Updated Successfully!",
             });
             setPassChange(true);
+            setpassChangeTitle("Password Changed");
+            setpassChangeMsg("Your password has been changed successfully.");
+            setpassStatus(true);
             setResponseError(false);
+            setTimeout(function () {
+              navigate("/");
+            }, 6000);
           } else {
             setResponseError(true);
+            setPassChange(true);
+            setpassChangeTitle("Password Invalid");
+            setpassChangeMsg("Provided password is invalid. Please try again.");
+            setpassStatus(false);
             setResponseErrorMessage("Invalid Old Password");
           }
         })
@@ -132,6 +146,10 @@ export const ChangePassword = () => {
           appData.setAppData({ ...appData.appData, listLoading: false });
           setResponseError(true);
           setResponseErrorMessage(err?.response?.data?.message);
+          setPassChange(true);
+          setpassChangeTitle("Password Update Error");
+          setpassChangeMsg(err?.response?.data?.message);
+          setpassStatus(false);
         });
     }
   };
@@ -139,7 +157,7 @@ export const ChangePassword = () => {
   const gotoHome = () => {
     setloginSlide(false);
     setTimeout(function () {
-      navigate("/my-profile");
+      navigate(-1);
     }, 250);
   };
 
@@ -325,11 +343,12 @@ export const ChangePassword = () => {
       </div>
       {passChange && (
         <BetPlacePopup
-          status={true}
+          status={passStatus}
           betbox={true}
-          title="Password Changed"
-          message="Your Password has been changed successfully."
+          title={passChangeTitle}
+          message={passChangeMsg}
           type="1"
+          setPassChange={setPassChange}
         />
       )}
     </React.Fragment>
