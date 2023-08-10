@@ -9,18 +9,6 @@ export const MyBets = ({ openMyBets }) => {
   const [lastActive, setlastActive] = useState("Exchange");
   const tabRef = useRef();
 
-  useEffect(() => {
-    document
-      .querySelector("." + styles.myBetsWindowLayer)
-      .classList.add(styles.open);
-    document.getElementById("betHeaderTitle").innerHTML = "My Bets";
-    setbetWindow("Exchange");
-    setheaderBet("false");
-    if (tabRef && tabRef.current) {
-      tabRef.current.click();
-    }
-  }, [openMyBets]);
-
   const activeBetTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
     let inplay = 15;
@@ -65,6 +53,18 @@ export const MyBets = ({ openMyBets }) => {
       tabRef.current.click();
     }
   }, []);
+
+  useEffect(() => {
+    document
+      .querySelector("." + styles.myBetsWindowLayer)
+      .classList.add(styles.open);
+    document.getElementById("betHeaderTitle").innerHTML = "My Bets";
+    setbetWindow("Exchange");
+    setheaderBet("false");
+    if (tabRef && tabRef.current) {
+      tabRef.current.click();
+    }
+  }, [openMyBets]);
 
   return (
     <React.Fragment>

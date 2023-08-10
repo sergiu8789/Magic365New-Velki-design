@@ -3,6 +3,7 @@ import styles from "./MyAccount.module.css";
 import { useNavigate } from "react-router-dom";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import { useAuth } from "../../../context/AuthContextProvider";
+import { MarketDepth } from "../../MarketDepth/MarketDepth";
 
 export const MyAccount = () => {
   const navigate = useNavigate();

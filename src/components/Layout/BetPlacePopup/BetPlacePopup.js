@@ -19,9 +19,11 @@ export const BetPlacePopup = ({
   };
 
   useEffect(() => {
+    let clearTime = "";
     setbetStatus(status);
     setbetshow(betbox);
-    setTimeout(function () {
+    clearTimeout(clearTime);
+    clearTime = setTimeout(function () {
       closeMatchBet();
     }, 6000);
   }, status);
