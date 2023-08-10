@@ -242,7 +242,8 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
         </div>
       )}
       {/* BookMarker container */}
-       <BookmakerOdds oddsList={bookmakerOddsList}/>
+      {bookmakerOddsList && 
+       <BookmakerOdds oddsList={bookmakerOddsList}/> }
 
       {/* Fancy Premium container */}
       <div className={`${styles.fancyOuterBox} col-12 d-inline-block`}>
