@@ -15,14 +15,7 @@ import { NoData } from "../../Layout/NoData/NoData";
 
 export const ProfitLoss = () => {
   const auth = useContext(AuthContext);
-  const TabList = [
-    "All",
-    "Exchange",
-    "Bookmaker",
-    "Fancybet",
-    "Sportsbook",
-    "Parlay",
-  ];
+  const TabList = ["All", "Exchange", "Bookmaker", "Fancybet", "Premium"];
   const [popularTabActive, setpopularTabActive] = useState("");
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
@@ -71,6 +64,13 @@ export const ProfitLoss = () => {
     } else {
       setbetStatusDrop("true");
     }
+  };
+
+  const setDateChoose = () => {
+    let dateValue = document.getElementById("calendarDate").value;
+    dateValue = dateValue.split("-");
+    setFromDate(dateValue[0].trim());
+    setToDate(dateValue[1].trim());
   };
 
   const setBetStatusVal = (name, val) => {
@@ -132,7 +132,6 @@ export const ProfitLoss = () => {
   const fetchBetsPLData = () => {
     ApiService.getBetsPL(page, fromDate, toDate, popularTabActive)
       .then((res) => {
-        console.log(res.data.data);
         let totalPage = res.data.count / 10;
         totalPage = Math.ceil(totalPage);
         setTotalRecords(totalPage);
@@ -156,11 +155,6 @@ export const ProfitLoss = () => {
   };
 
   const openMatchBets = (index, item, id) => {
-    console.log(
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.contains(styles.footerRecordOpen)
-    );
     if (
       document
         .getElementById("footerRecord_" + id)
@@ -174,7 +168,6 @@ export const ProfitLoss = () => {
         .classList.remove("d-inline-block");
       document.getElementById("moreBetInfo_" + id).classList.add("d-none");
     } else {
-      console.log("none ", document.getElementById("moreBetInfo_" + id));
       document
         .getElementById("footerRecord_" + id)
         .classList.add(styles.footerRecordOpen);
@@ -201,8 +194,10 @@ export const ProfitLoss = () => {
           res.data.data.map(
             (item) => (initialValue = initialValue + parseFloat(item.pl_amount))
           );
-          setTotalPl(initialValue);
-          settotalBetCount(initialValue);
+          if (betStatus === "All") {
+            setTotalPl(initialValue);
+            settotalBetCount(initialValue);
+          }
           setGamesProfitList(res.data.data);
         }
       })
@@ -360,6 +355,7 @@ export const ProfitLoss = () => {
               <input
                 type="text"
                 className={`${styles.calenderForm} form-control`}
+                id="calendarDate"
               />
             </DateRangePicker>
           </div>
@@ -371,6 +367,7 @@ export const ProfitLoss = () => {
           </span>
           <button
             className={`${styles.dateSearchBtn} flex-shrink-0 d-inline-flex align-items-center`}
+            onClick={setDateChoose}
           >
             Submit
           </button>
@@ -393,7 +390,7 @@ export const ProfitLoss = () => {
                   : styles.proftStatusLoss
               }`}
             >
-              ({totalBetCount})
+              ({parseFloat(totalBetCount).toFixed(2)})
             </span>
           </div>
           <i
@@ -425,6 +422,7 @@ export const ProfitLoss = () => {
               } align-items-center col-12 m-0`}
               value={item.pl_amount}
               onClick={() => setBetStatusVal(item.game_name, item.pl_amount)}
+              key={index}
             >
               <span
                 className={`${styles.betStatusText} d-flex position-relative`}
@@ -445,7 +443,7 @@ export const ProfitLoss = () => {
                 : styles.proftStatusLoss
             }`}
           >
-            ({totalPL})
+            ({parseFloat(totalPL).toFixed(2)})
           </span>
         </div>
       </div>
@@ -492,272 +490,283 @@ export const ProfitLoss = () => {
         className={`${styles.allCurrentBetList} col-12 d-inline-flex flex-column`}
       >
         {totalCount === 0 && <NoData title={"No Data"} />}
-        {matchesList.map((item, index) =>
-          item ? (
-            <div
-              className={`${styles.singleCurrentBet} position-relative col-12 mb-3 d-inline-flex flex-column`}
-              key={index}
-            >
+        {matchesList
+          .filter(function (item) {
+            if (betStatus != "All") return item.game_type === betStatus;
+            else return item;
+          })
+          .map((item, index) =>
+            item ? (
               <div
-                className={`${styles.currentBetHeader} col-12 d-inline-flex justify-content-center align-items-center`}
+                className={`${styles.singleCurrentBet} position-relative col-12 mb-3 d-inline-flex flex-column`}
+                key={index}
               >
-                {item.game_type && (
-                  <React.Fragment>
-                    <span>{item.game_type}</span>
+                <div
+                  className={`${styles.currentBetHeader} col-12 d-inline-flex justify-content-center align-items-center`}
+                >
+                  {item.game_type && (
+                    <React.Fragment>
+                      <span>{item.game_type}</span>
+                      <span
+                        className={`${styles.recordTraingle} icon-triangle-black-400`}
+                      ></span>
+                    </React.Fragment>
+                  )}
+                  {item.team_one && (
+                    <React.Fragment>
+                      <span className={styles.gameName}>
+                        {item.team_one} {item?.team_two && "v " + item.team_two}
+                      </span>
+                      <span
+                        className={`${styles.recordTraingle} icon-triangle-black-400`}
+                      ></span>
+                    </React.Fragment>
+                  )}
+                  <span className="text-capitalize">
+                    {item.market_type?.replace("_", " ")}
+                    {item.market_name ? (
+                      <>{getCasinoMarketName(item.market_name)}</>
+                    ) : (
+                      <></>
+                    )}
+                  </span>
+                </div>
+                <div
+                  className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}
+                >
+                  <div
+                    className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                  >
+                    <label className={styles.balanceInfoTxt}>Start Time</label>
+                    <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                      {changeDateFormat(item.createdAt) +
+                        " " +
+                        formatTime(item.createdAt)}
+                    </div>
+                  </div>
+                  <div
+                    className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                  >
+                    <label className={styles.balanceInfoTxt}>
+                      Settled date
+                    </label>
+                    <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                      {changeDateFormat(item.setteled_on) +
+                        " " +
+                        formatTime(item.setteled_on)}
+                    </div>
+                  </div>
+                  <div
+                    className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                  >
+                    <label className={styles.balanceInfoTxt}>
+                      Profit/Loss (PBU)
+                    </label>
+                    <div
+                      className={`${styles.balanceInfoAmt} ${
+                        checkProfitLoss(item.pl_amount)
+                          ? styles.proftStatusSuccess
+                          : styles.proftStatusLoss
+                      } d-inline-flex`}
+                    >
+                      {parseFloat(item.pl_amount).toFixed(2)}
+                    </div>
+                  </div>
+                </div>
+                <div
+                  className={`${styles.betMoreInfo} col-12 d-none`}
+                  id={`moreBetInfo_${item.game_id}${index}`}
+                >
+                  {item.betList?.map((row, index) => {
+                    return (
+                      <React.Fragment key={index}>
+                        <div
+                          className={`${styles.balanceRecordInfo} ${styles.betTakenInfo} d-inline-flex align-items-center col-12 justify-content-between flex-wrap`}
+                          key={index}
+                        >
+                          <span
+                            className={`${styles.betRecordLbl} d-inline-flex`}
+                          >
+                            {row.bet_id}
+                          </span>
+                          <span
+                            className={`${styles.betRecordVal} d-inline-flex ms-auto`}
+                          >
+                            Bet Placed{" "}
+                            {changeDateFormat(row.createdAt) +
+                              " " +
+                              formatTime(row.createdAt)}
+                          </span>
+                        </div>
+                        <div
+                          className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
+                        >
+                          <span
+                            className={`${styles.betTag} ${
+                              row.type === 1
+                                ? styles.OddbackTag
+                                : styles.OddLayTag
+                            } ${
+                              styles.OddbackTag
+                            } position-relative d-inline-flex align-items-center`}
+                          >
+                            {row.type === 1 ? "Back" : "Lay"}
+                          </span>
+                          <span
+                            className={`${styles.betTeamName} d-inline-block`}
+                          >
+                            {row.selection}
+                          </span>
+                        </div>
+                        <div
+                          className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}
+                        >
+                          <div
+                            className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                          >
+                            <label className={styles.balanceInfoTxt}>
+                              Odds req.
+                            </label>
+                            <div
+                              className={`${styles.balanceInfoAmt} d-inline-flex`}
+                            >
+                              {row.odds}
+                            </div>
+                          </div>
+                          <div
+                            className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                          >
+                            <label className={styles.balanceInfoTxt}>
+                              Stake (PBU)
+                            </label>
+                            <div
+                              className={`${styles.balanceInfoAmt} d-inline-flex`}
+                            >
+                              {row.amount}
+                            </div>
+                          </div>
+                          <div
+                            className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                          >
+                            <label className={styles.balanceInfoTxt}>
+                              Profit/Loss (PBU)
+                            </label>
+                            <div
+                              className={`${styles.balanceInfoAmt} ${
+                                checkProfitLoss(row.pl_amount)
+                                  ? styles.proftStatusSuccess
+                                  : styles.proftStatusLoss
+                              } d-inline-flex`}
+                            >
+                              {parseFloat(row.pl_amount).toFixed(2)}
+                            </div>
+                          </div>
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
+                  {item.betList?.length && (
+                    <div
+                      className={`${styles.balanceRecordInfo} d-inline-flex flex-column align-items-center col-12`}
+                    >
+                      <div className="col-12 d-inline-block">
+                        <span
+                          className={`${styles.betRecordLbl} d-inline-flex col-4`}
+                        >
+                          Back subtotal
+                        </span>
+                        <span
+                          className={`${styles.betRecordVal}  ${
+                            checkProfitLoss(item.backTotal)
+                              ? styles.proftStatusSuccess
+                              : styles.proftStatusLoss
+                          } d-inline-flex col-8`}
+                        >
+                          ({parseFloat(item.backTotal).toFixed(2)})
+                        </span>
+                      </div>
+                      <div className="col-12 d-inline-block">
+                        <span
+                          className={`${styles.betRecordLbl} d-inline-flex col-4`}
+                        >
+                          Lay subtotal
+                        </span>
+                        <span
+                          className={`${styles.betRecordVal} d-inline-flex col-8`}
+                        >
+                          {parseFloat(item.layTotal).toFixed(2)}
+                        </span>
+                      </div>
+                      <div className="col-12 d-inline-block">
+                        <span
+                          className={`${styles.betRecordLbl} d-inline-flex col-4`}
+                        >
+                          Market subtotal
+                        </span>
+                        <span
+                          className={`${styles.betRecordVal}  ${
+                            checkProfitLoss(item.marketTotal)
+                              ? styles.proftStatusSuccess
+                              : styles.proftStatusLoss
+                          } d-inline-flex col-8`}
+                        >
+                          ({parseFloat(item.marketTotal).toFixed(2)})
+                        </span>
+                      </div>
+                      <div className="col-12 d-inline-block">
+                        <span
+                          className={`${styles.betRecordLbl} d-inline-flex col-4`}
+                        >
+                          Commission
+                        </span>
+                        <span
+                          className={`${styles.betRecordVal} d-inline-flex col-8`}
+                        >
+                          {item.commission}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                  <div
+                    className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
+                  >
                     <span
-                      className={`${styles.recordTraingle} icon-triangle-black-400`}
-                    ></span>
-                  </React.Fragment>
-                )}
-                {item.team_one && (
-                  <React.Fragment>
-                    <span className={styles.gameName}>
-                      {item.team_one} {item?.team_two && "v " + item.team_two}
+                      className={`${styles.betRecordLbl} d-inline-flex col-4`}
+                    >
+                      Net Market Total
                     </span>
                     <span
-                      className={`${styles.recordTraingle} icon-triangle-black-400`}
-                    ></span>
-                  </React.Fragment>
-                )}
-                <span className="text-capitalize">
-                  {item.market_type?.replace("_", " ")}
-                  {item.market_name ? (
-                    <>{getCasinoMarketName(item.market_name)}</>
-                  ) : (
-                    <></>
-                  )}
-                </span>
-              </div>
-              <div className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}>
-                <div
-                  className={`${styles.balanceRecord} d-inline-flex flex-column`}
-                >
-                  <label className={styles.balanceInfoTxt}>Start Time</label>
-                  <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                    {changeDateFormat(item.createdAt) +
-                      " " +
-                      formatTime(item.createdAt)}
+                      className={`${styles.betRecordVal}  ${
+                        checkProfitLoss(item.netTotal)
+                          ? styles.proftStatusSuccess
+                          : styles.proftStatusLoss
+                      } d-inline-flex col-8`}
+                    >
+                      ({parseFloat(item.netTotal).toFixed(2)})
+                    </span>
                   </div>
                 </div>
                 <div
-                  className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                  className={`${styles.footerRecord} col-12 d-inline-block position-relative`}
+                  id={`footerRecord_${item.game_id}${index}`}
+                  onClick={() =>
+                    openMatchBets(index, item, item.game_id + index)
+                  }
                 >
-                  <label className={styles.balanceInfoTxt}>Settled date</label>
-                  <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                    {changeDateFormat(item.setteled_on) +
-                      " " +
-                      formatTime(item.setteled_on)}
-                  </div>
-                </div>
-                <div
-                  className={`${styles.balanceRecord} d-inline-flex flex-column`}
-                >
-                  <label className={styles.balanceInfoTxt}>
-                    Profit/Loss (PBU)
-                  </label>
                   <div
-                    className={`${styles.balanceInfoAmt} ${
-                      checkProfitLoss(item.pl_amount)
-                        ? styles.proftStatusSuccess
-                        : styles.proftStatusLoss
-                    } d-inline-flex`}
+                    className={`${styles.recordMoreDrop} position-absolute m-auto d-inline-flex align-items-center justify-content-center`}
                   >
-                    {item.pl_amount}
+                    <i
+                      className={`${styles.recordMoreDown} icon-arrow-down-sencodary`}
+                    ></i>
                   </div>
                 </div>
               </div>
-              <div
-                className={`${styles.betMoreInfo} col-12 d-none`}
-                id={`moreBetInfo_${item.game_id}${index}`}
-              >
-                {item.betList?.map((row, index) => {
-                  return (
-                    <React.Fragment>
-                      <div
-                        className={`${styles.balanceRecordInfo} ${styles.betTakenInfo} d-inline-flex align-items-center col-12 justify-content-between flex-wrap`}
-                        key={index}
-                      >
-                        <span
-                          className={`${styles.betRecordLbl} d-inline-flex`}
-                        >
-                          {row.bet_id}
-                        </span>
-                        <span
-                          className={`${styles.betRecordVal} d-inline-flex ms-auto`}
-                        >
-                          Bet Placed{" "}
-                          {changeDateFormat(row.createdAt) +
-                            " " +
-                            formatTime(row.createdAt)}
-                        </span>
-                      </div>
-                      <div
-                        className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
-                      >
-                        <span
-                          className={`${styles.betTag} ${
-                            row.type === 1
-                              ? styles.OddbackTag
-                              : styles.OddLayTag
-                          } ${
-                            styles.OddbackTag
-                          } position-relative d-inline-flex align-items-center`}
-                        >
-                          {row.type === 1 ? "Back" : "Lay"}
-                        </span>
-                        <span
-                          className={`${styles.betTeamName} d-inline-block`}
-                        >
-                          {row.selection}
-                        </span>
-                      </div>
-                      <div
-                        className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}
-                      >
-                        <div
-                          className={`${styles.balanceRecord} d-inline-flex flex-column`}
-                        >
-                          <label className={styles.balanceInfoTxt}>
-                            Odds req.
-                          </label>
-                          <div
-                            className={`${styles.balanceInfoAmt} d-inline-flex`}
-                          >
-                            {row.odds}
-                          </div>
-                        </div>
-                        <div
-                          className={`${styles.balanceRecord} d-inline-flex flex-column`}
-                        >
-                          <label className={styles.balanceInfoTxt}>
-                            Stake (PBU)
-                          </label>
-                          <div
-                            className={`${styles.balanceInfoAmt} d-inline-flex`}
-                          >
-                            {row.amount}
-                          </div>
-                        </div>
-                        <div
-                          className={`${styles.balanceRecord} d-inline-flex flex-column`}
-                        >
-                          <label className={styles.balanceInfoTxt}>
-                            Profit/Loss (PBU)
-                          </label>
-                          <div
-                            className={`${styles.balanceInfoAmt} ${
-                              checkProfitLoss(row.pl_amount)
-                                ? styles.proftStatusSuccess
-                                : styles.proftStatusLoss
-                            } d-inline-flex`}
-                          >
-                            {parseFloat(row.pl_amount).toFixed(2)}
-                          </div>
-                        </div>
-                      </div>
-                    </React.Fragment>
-                  );
-                })}
-                {item.betList?.length && (
-                  <div
-                    className={`${styles.balanceRecordInfo} d-inline-flex flex-column align-items-center col-12`}
-                  >
-                    <div className="col-12 d-inline-block">
-                      <span
-                        className={`${styles.betRecordLbl} d-inline-flex col-4`}
-                      >
-                        Back subtotal
-                      </span>
-                      <span
-                        className={`${styles.betRecordVal}  ${
-                          checkProfitLoss(item.backTotal)
-                            ? styles.proftStatusSuccess
-                            : styles.proftStatusLoss
-                        } d-inline-flex col-8`}
-                      >
-                        ({item.backTotal.toFixed(2)})
-                      </span>
-                    </div>
-                    <div className="col-12 d-inline-block">
-                      <span
-                        className={`${styles.betRecordLbl} d-inline-flex col-4`}
-                      >
-                        Lay subtotal
-                      </span>
-                      <span
-                        className={`${styles.betRecordVal} d-inline-flex col-8`}
-                      >
-                        {item.layTotal.toFixed(2)}
-                      </span>
-                    </div>
-                    <div className="col-12 d-inline-block">
-                      <span
-                        className={`${styles.betRecordLbl} d-inline-flex col-4`}
-                      >
-                        Market subtotal
-                      </span>
-                      <span
-                        className={`${styles.betRecordVal}  ${
-                          checkProfitLoss(item.marketTotal)
-                            ? styles.proftStatusSuccess
-                            : styles.proftStatusLoss
-                        } d-inline-flex col-8`}
-                      >
-                        ({item.marketTotal.toFixed(2)})
-                      </span>
-                    </div>
-                    <div className="col-12 d-inline-block">
-                      <span
-                        className={`${styles.betRecordLbl} d-inline-flex col-4`}
-                      >
-                        Commission
-                      </span>
-                      <span
-                        className={`${styles.betRecordVal} d-inline-flex col-8`}
-                      >
-                        {item.commission}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                <div
-                  className={`${styles.balanceRecordInfo} d-inline-flex align-items-center col-12`}
-                >
-                  <span
-                    className={`${styles.betRecordLbl} d-inline-flex col-4`}
-                  >
-                    Net Market Total
-                  </span>
-                  <span
-                    className={`${styles.betRecordVal}  ${
-                      checkProfitLoss(item.netTotal)
-                        ? styles.proftStatusSuccess
-                        : styles.proftStatusLoss
-                    } d-inline-flex col-8`}
-                  >
-                    ({item.netTotal})
-                  </span>
-                </div>
-              </div>
-              <div
-                className={`${styles.footerRecord} col-12 d-inline-block position-relative`}
-                id={`footerRecord_${item.game_id}${index}`}
-                onClick={() => openMatchBets(index, item, item.game_id + index)}
-              >
-                <div
-                  className={`${styles.recordMoreDrop} position-absolute m-auto d-inline-flex align-items-center justify-content-center`}
-                >
-                  <i
-                    className={`${styles.recordMoreDown} icon-arrow-down-sencodary`}
-                  ></i>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <NoData />
-          )
-        )}
+            ) : (
+              <NoData />
+            )
+          )}
       </div>
       {/* Paginate */}
       <div

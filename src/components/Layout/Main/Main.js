@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import styles from "./Main.module.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
-import { BetPlacePopup } from "../BetPlacePopup/BetPlacePopup";
 import ApiService from "../../../services/ApiService";
 import { PublicRoutes } from "../../../routes/publicRoutes";
 import "../../../assets/css/iconmoon.css";
@@ -84,7 +83,6 @@ function Main() {
           )}
         </div>
       </div>
-      {location.pathname !== "/signup" && <BetPlacePopup />}
       <Loader />
     </React.Fragment>
   );

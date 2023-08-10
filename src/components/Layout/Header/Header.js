@@ -17,6 +17,10 @@ function Header() {
     navigate("/login", { state: { login: LoginRand } });
   };
 
+  const gotoHome = () => {
+    navigate("/");
+  };
+
   const LoaderAnimation = () => {
     return (
       <div
@@ -76,7 +80,12 @@ function Header() {
           ) : (
             <></>
           )}
-          <img className={styles.siteLogoImg} src={logo} alt="Bet365 Live" />
+          <img
+            className={styles.siteLogoImg}
+            src={logo}
+            alt="Bet365 Live"
+            onClick={gotoHome}
+          />
         </div>
         {auth.auth.loggedIn ? (
           <div
