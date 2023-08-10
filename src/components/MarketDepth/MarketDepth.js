@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./MarketDepth.module.css";
 
-export const MarketDepth = ({ matchDepth }) => {
+export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
   const [matchInfo, setMathInfo] = useState(false);
   const [betStatusDrop, setbetStatusDrop] = useState(false);
   const [betStatus, setbetStatus] = useState("All");
@@ -21,25 +21,24 @@ export const MarketDepth = ({ matchDepth }) => {
 
   const hideBetLayer = () => {
     setMathInfo(false);
+    sethideMarketDepth(false);
   };
 
   const scrollToNavigate = (direction) => {
     let scrollVal = 0;
     let scrollElem = document.getElementById("navigateButtons");
     let scrollElemVal = document.getElementById("navigateButtons").scrollLeft;
-    console.log(scrollElemVal);
     if (direction === "left") {
       scrollVal = parseInt(scrollElemVal) - parseInt(120);
     } else if (direction === "right") {
       scrollVal = parseInt(scrollElemVal) + parseInt(120);
     }
-    console.log(scrollVal);
     scrollElem.scrollLeft = scrollVal;
   };
 
   useEffect(() => {
     setMathInfo(true);
-  }, [matchDepth]);
+  }, [hideMarketDepth]);
 
   return (
     <React.Fragment>
