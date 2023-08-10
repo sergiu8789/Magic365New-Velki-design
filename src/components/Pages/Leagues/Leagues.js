@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { socket } from "../../../services/socket";
 import ApiService from "../../../services/ApiService";
 import { Loader } from "../../Layout/Loader/Loader";
 import { LeagueMatchList } from "../../Layout/LeagueMatchList/LeagueMatchList";
@@ -16,6 +17,7 @@ export const Leagues = () => {
   const [selectedMatch, setSelectedMatch] = useState("");
   const [tournamentList, setTournamentList] = useState([]);
   const [matchList, setMatchList] = useState([]);
+  const [matchIds,setMatchIds] = useState([]);
 
   const activeSportsTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -42,11 +44,21 @@ export const Leagues = () => {
       ApiService.tournamentMatchList(tabActive, leagueName).then((res) => {
         appData.setAppData({ ...appData.appData, listLoading: false });
         if (res?.data?.data) {
+          let marketId = [];
           setMatchList(res.data.data);
+          res?.data?.data?.forEach((item) => {
+            marketId.push(item.market_id);
+          });
+          setMatchIds(marketId)
         }
       });
     }
   }, [leagueName]);
+
+  useEffect(() => {
+    if(matchIds.length)
+      socket.emit("subscription",matchIds);
+  },[matchIds]);
 
   const sportsCat = [
     {
