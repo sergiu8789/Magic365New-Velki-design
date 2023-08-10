@@ -235,7 +235,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
               >
                 <i className="icon-min-max"></i>
                 <span className={styles.minText}>min/max</span>
-                <span className={styles.betMinMax}>1/2,500</span>
+                <span className={styles.betMinMax}>1/500</span>
               </div>
             </div>
           </div>
@@ -308,7 +308,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
       </div>
       {hideMarketDepth && (
         <MarketDepth
-          selectedRunner ={selectedRunner}
+          selectedRunner={selectedRunner}
           hideMarketDepth={hideMarketDepth}
           sethideMarketDepth={sethideMarketDepth}
         />
