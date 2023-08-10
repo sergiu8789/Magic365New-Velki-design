@@ -2,7 +2,7 @@ import React from 'react';
 import styles from "./FancyOdds.module.css";
 
 export const FancyOdds = ({oddsList}) => {
-console.log(oddsList)
+
   return (
     <React.Fragment>
          <div className="col-12 d-inline-flex justify-content-end">

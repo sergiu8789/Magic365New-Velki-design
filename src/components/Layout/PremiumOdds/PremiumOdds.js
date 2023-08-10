@@ -2,7 +2,6 @@ import React from 'react';
 import styles from "../MatchOdds/MatchOdds.module.css";
 
 export const PremiumOdds = ({oddsList}) => {
-    console.log(oddsList)
   return (
     <React.Fragment>
         {oddsList?.map((item,index) => {
