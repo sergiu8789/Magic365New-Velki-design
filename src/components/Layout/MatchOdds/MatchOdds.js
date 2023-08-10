@@ -19,22 +19,19 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     market: marketType,
   });
   const [fooEvents, setFooEvents] = useState([]);
-  const [selectedRunner,setSelectedRunner] = useState("");
-  const [fancyOddsList,setFancyOddsList] = useState([]);
-  const [bookmakerOddsList,setBookmakerOddsList] = useState("");
-  const [premiumOddsList,setPremiumOddsList] = useState([]);
-
+  const [selectedRunner, setSelectedRunner] = useState("");
+  const [fancyOddsList, setFancyOddsList] = useState([]);
+  const [bookmakerOddsList, setBookmakerOddsList] = useState("");
+  const [premiumOddsList, setPremiumOddsList] = useState([]);
 
   const selectFancyTab = (tab) => {
     setfancyTabActive(tab);
   };
-  
- /****** method to fetch other market list from API  ********/ 
-  const getMatchOdds = () => {
-    ApiService.getMatchOdds(matchId).then((res) => {
-    });
-  }
 
+  /****** method to fetch other market list from API  ********/
+  const getMatchOdds = () => {
+    ApiService.getMatchOdds(matchId).then((res) => {});
+  };
 
   const openMarketDepth = () => {
     sethideMarketDepth(true);
@@ -58,53 +55,48 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     function onBroadCast(value) {
       if (value?.length) {
         value?.map((item) => {
-          if(item.MarketId === marketId)  // match marketId with socket response
+          if (item.MarketId === marketId)
+            // match marketId with socket response
             setSelectedRunner(item);
-        })
-       }
-    }
-
-     /******** Fancy and Bookmaker odds brodacasting  *****/
-    function onFancyBookBroadCast(value) {
-      if(value.matchId === matchId){
-        if(value.fancy)
-           setFancyOddsList(value.fancy);
-        if(value.bookmaker)
-        setBookmakerOddsList(value.bookmaker);
-  
+        });
       }
     }
 
-     /******* Premium odds brodacasting  *****/
-     function onPremiumBroadCast(value) {
+    /******** Fancy and Bookmaker odds brodacasting  *****/
+    function onFancyBookBroadCast(value) {
+      if (value.matchId === matchId) {
+        if (value.fancy) setFancyOddsList(value.fancy);
+        if (value.bookmaker) setBookmakerOddsList(value.bookmaker);
+      }
+    }
+
+    /******* Premium odds brodacasting  *****/
+    function onPremiumBroadCast(value) {
       if (value?.length) {
-        if (value[0]?.betfairEventId == matchId){
+        if (value[0]?.betfairEventId == matchId) {
           setPremiumOddsList(value);
         }
       }
-     }
+    }
 
-    socket.on('broadcast', onBroadCast); // exchange odds broadcast method
+    socket.on("broadcast", onBroadCast); // exchange odds broadcast method
     socket.on("broadcastFancy", onFancyBookBroadCast); // fancy and boomaker odds broadcast method
-    socket.on("broadcastPremium", onPremiumBroadCast);  // premium odds broadcast method
+    socket.on("broadcastPremium", onPremiumBroadCast); // premium odds broadcast method
 
     return () => {
-      socket.off('broadcast', onBroadCast);
-      socket.off('broadcastFancy', onFancyBookBroadCast);
+      socket.off("broadcast", onBroadCast);
+      socket.off("broadcastFancy", onFancyBookBroadCast);
       socket.off("broadcastPremium", onPremiumBroadCast);
     };
   }, [fooEvents]);
-  
-
 
   useEffect(() => {
     socket.emit("fancySubscription", [matchId]); // socket emit event for Fancy and Boomaker markets
     socket.emit("premiumSubscription", [matchId]); // socket emit event for premium markets
-    socket.emit("subscription",[matchId]); // socket emit event for exchange odd market
+    socket.emit("subscription", [matchId]); // socket emit event for exchange odd market
     getMatchOdds(); // method to fetch other market data
-  },[matchId]);
+  }, [matchId]);
 
-  
   useEffect(() => {
     if (
       document.querySelector(
@@ -117,7 +109,6 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
         )
         .click();
     }
- 
   }, []);
 
   const TabList = ["All", "Popular", "Match", "Over", "Innings", "Players"];
@@ -214,6 +205,15 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
                           {item?.ExchangePrices?.AvailableToLay[0].price}
                         </span>
                       </div>
+                      {/* SUSPEND BOX */}
+                      {item.Status !== "ACTIVE" && (
+                        <div
+                          className={`${styles.oddsDisabled} text-captalize position-absolute d-inline-flex justify-content-center align-items-center col-12 h-100`}
+                        >
+                          {item.Status}
+                        </div>
+                      )}
+                      {/* END SUSPEND BOX */}
                     </div>
                   </div>
                 );
@@ -242,7 +242,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
         </div>
       )}
       {/* BookMarker container */}
-       <BookmakerOdds oddsList={bookmakerOddsList}/>
+      <BookmakerOdds oddsList={bookmakerOddsList} />
 
       {/* Fancy Premium container */}
       <div className={`${styles.fancyOuterBox} col-12 d-inline-block`}>
@@ -264,7 +264,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
             PremiumBet
           </div>
         </div>
-        
+
         <div
           className={`col-12 d-inline-flex position-relative align-items-center`}
         >
@@ -294,16 +294,17 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
             ></div>
           </div>
         </div>
-        
+
         <div
           className={`${styles.allPopularBets} col-12 d-inline-flex flex-column`}
         >
           {/***** premium and Fancy odds list ********/}
-         {fancyTabActive === 'PremiumBet' ?
-             <PremiumOdds oddsList={premiumOddsList}/> 
-          :  <FancyOdds oddsList={fancyOddsList}/>
-         }
-       </div>
+          {fancyTabActive === "PremiumBet" ? (
+            <PremiumOdds oddsList={premiumOddsList} />
+          ) : (
+            <FancyOdds oddsList={fancyOddsList} />
+          )}
+        </div>
       </div>
       {hideMarketDepth && (
         <MarketDepth

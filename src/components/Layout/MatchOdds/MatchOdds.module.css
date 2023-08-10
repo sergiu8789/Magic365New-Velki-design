@@ -81,6 +81,13 @@
     border-radius: 0px 0px 6px 6px;
 }
 
+.oddsDisabled {
+    background: rgba(111, 136, 152, 0.80);
+    border-radius: 6px;
+    color: #FFF;
+    font-size: 16px;
+}
+
 .allMatchBox {
     border-bottom: 1px solid #FFF;
     height: 46px;
