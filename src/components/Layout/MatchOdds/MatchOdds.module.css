@@ -39,21 +39,30 @@
 
 .matchOddTitleRow {
     background: #ffc800;
-}
-
-.matchOddTitleRow {
-    padding: 4px 10px;
+    padding: 6px 10px;
+    gap: 15px;
 }
 
 .matchTitleHighlight {
-    border-bottom: 4px solid #000;
-    padding-bottom: 3px;
+    padding-bottom: 5px;
     font-size: 20px;
+}
+
+.oddsActiveLine {
+    left: 4px;
+    border-radius: 4px;
+    background: #000;
+    height: 4px;
+    transition: all ease 400ms;
+    -webkit-transition: all ease 400ms;
+    bottom: 4px;
+    width: 130px;
 }
 
 .matchOddTitle {
     color: #1e1e1e;
     font-size: 18px;
+    line-height: 26px;
     margin-left: 6px;
 }
 
