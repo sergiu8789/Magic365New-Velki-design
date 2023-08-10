@@ -51,9 +51,9 @@ function Main() {
 
   useEffect(() => {
     socket.connect();
-    return () => {
-      socket.disconnect();
-    };
+    // return () => {
+    //   socket.disconnect();
+    // };
   },[]);
 
   return (

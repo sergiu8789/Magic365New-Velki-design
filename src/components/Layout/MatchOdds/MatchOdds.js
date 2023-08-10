@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import styles from "./MatchOdds.module.css";
 import ApiService from "../../../services/ApiService";
 import { socket } from "../../../services/socket";
+import { FancyOdds } from "../FancyOdds/FancyOdds";
+import { PremiumOdds } from "../PremiumOdds/PremiumOdds";
+import { BookmakerOdds } from "../BookmakerOdds/BookmakerOdds";
 
 export const MatchOdds = ({matchId,marketId,marketType}) => {
-  const [hideBookMarker, sethideBookMarker] = useState("false");
   const [fancyTabActive, setfancyTabActive] = useState("Fancybet");
   const [popularTabActive, setpopularTabActive] = useState("All");
   const [TabLineWidth, setTabLineWidth] = useState("");
@@ -12,38 +14,74 @@ export const MatchOdds = ({matchId,marketId,marketType}) => {
   const [selectedMarket,setSelectedMarket] = useState({market_id:marketType,market:marketType});
   const [fooEvents, setFooEvents] = useState([]);
   const [selectedRunner,setSelectedRunner] = useState("");
+  const [fancyOddsList,setFancyOddsList] = useState([]);
+  const [bookmakerOddsList,setBookmakerOddsList] = useState("");
+  const [premiumOddsList,setPremiumOddsList] = useState([]);
 
-  const hideBookMarkerOdd = () => {
-    if (hideBookMarker === "true") {
-      sethideBookMarker("false");
-    } else {
-      sethideBookMarker("true");
-    }
-  };
 
   const selectFancyTab = (tab) => {
     setfancyTabActive(tab);
   };
+  
+ /****** method to fetch other market list from API  ********/ 
+  const getMatchOdds = () => {
+    ApiService.getMatchOdds(matchId).then((res) => {
+    });
+  }
 
+  /******* Sockets events *********/
   useEffect(() => {
+    /******** Exchange odds brodacasting  *****/
     function onBroadCast(value) {
        if(value?.length){
         value?.map((item) => {
-          if(item.MarketId === marketId)
+          if(item.MarketId === marketId)  // match marketId with socket response
             setSelectedRunner(item);
         })
        }
     }
-    socket.on('broadcast', onBroadCast);
+
+     /******** Fancy and Bookmaker odds brodacasting  *****/
+    function onFancyBookBroadCast(value) {
+      if(value.matchId === matchId){
+        if(value.fancy)
+           setFancyOddsList(value.fancy);
+        if(value.bookmaker)
+        setBookmakerOddsList(value.bookmaker);
+  
+      }
+    }
+
+     /******* Premium odds brodacasting  *****/
+     function onPremiumBroadCast(value) {
+      if (value?.length) {
+        if (value[0]?.betfairEventId == matchId){
+          setPremiumOddsList(value);
+        }
+      }
+     }
+
+    socket.on('broadcast', onBroadCast); // exchange odds broadcast method
+    socket.on("broadcastFancy", onFancyBookBroadCast); // fancy and boomaker odds broadcast method
+    socket.on("broadcastPremium", onPremiumBroadCast);  // premium odds broadcast method
+
     return () => {
       socket.off('broadcast', onBroadCast);
+      socket.off('broadcastFancy', onFancyBookBroadCast);
+      socket.off("broadcastPremium", onPremiumBroadCast);
     };
   }, [fooEvents]);
+  
+
 
   useEffect(() => {
-         console.log(selectedRunner)
-  },[selectedRunner]);
+    socket.emit("fancySubscription", [matchId]); // socket emit event for Fancy and Boomaker markets
+    socket.emit("premiumSubscription", [matchId]); // socket emit event for premium markets
+    socket.emit("subscription",[matchId]); // socket emit event for exchange odd market
+    getMatchOdds(); // method to fetch other market data
+  },[matchId]);
 
+  
   useEffect(() => {
     if (
       document.querySelector(
@@ -56,9 +94,7 @@ export const MatchOdds = ({matchId,marketId,marketType}) => {
         )
         .click();
     }
-    ApiService.getMatchOdds(matchId).then((res) => {
-      console.log(res)
-    });
+ 
   }, []);
 
   const selectPopularTab = (event, name) => {
@@ -96,7 +132,7 @@ export const MatchOdds = ({matchId,marketId,marketType}) => {
       </div>
      
       {/* Match Odds Container */}
-      {marketId &&
+      {marketId && selectedRunner &&
        <div>
         <div
           className={`${styles.matchOddTitleRow} d-inline-flex align-items-center col-12`}
@@ -176,133 +212,12 @@ export const MatchOdds = ({matchId,marketId,marketType}) => {
           </div>
         </div>
       </div>
-      </div>
-     }
+       </div>
+      }
+
       {/* BookMarker container */}
-      <div
-        className={`${styles.bookmarkerOddsBox} overflow-hidden col-12 d-inline-block`}
-      >
-        <div
-          className={`${styles.BookmarkerTitleRow} ${
-            hideBookMarker === "true" && styles.BookmarkerTitleRound
-          } d-inline-flex align-items-center position-relative col-12`}
-        >
-          <div className={`d-inline-flex align-items-center`}>
-            <i className="icon-star"></i>
-            <label className={styles.matchOddTitle}>Bookmaker</label>
-          </div>
-          <i
-            className={`${styles.gameOpenArrow} position-absolute icon-arrow-down`}
-            onClick={hideBookMarkerOdd}
-          ></i>
-        </div>
-        <div
-          className={`${styles.bookMarkerOddContainer} ${
-            hideBookMarker === "true" && styles.hidebookMarkerOdd
-          } col-12`}
-        >
-          <div className="col-12 d-inline-flex justify-content-end">
-            <div className="col-4 d-inline-flex align-items-center">
-              <span
-                className={`${styles.backLayText} d-inline-flex justify-content-center col-6`}
-              >
-                Back
-              </span>
-              <span
-                className={`${styles.backLayText} d-inline-flex justify-content-center col-6`}
-              >
-                Lay
-              </span>
-            </div>
-          </div>
-          <div className="position-relative col-12 d-inline-flex flex-wrap">
-            <div
-              className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
-            >
-              <div
-                className={`${styles.gameName} d-inline-flex align-items-center col-8`}
-              >
-                Sri Lanka
-              </div>
-              <div
-                className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
-              >
-                <div
-                  className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-                >
-                  <span className={`${styles.oddStake}`}>5.6</span>
-                  <span className={`${styles.oddExposure}`}>123</span>
-                </div>
-                <div
-                  className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-                >
-                  <span className={`${styles.oddStake}`}>8.9</span>
-                  <span className={`${styles.oddExposure}`}>450</span>
-                </div>
-              </div>
-            </div>
-            <div
-              className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
-            >
-              <div
-                className={`${styles.gameName} d-inline-flex align-items-center col-8`}
-              >
-                Pakistan
-              </div>
-              <div
-                className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
-              >
-                <div
-                  className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-                >
-                  <span className={`${styles.oddStake}`}>5.6</span>
-                  <span className={`${styles.oddExposure}`}>123</span>
-                </div>
-                <div
-                  className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-                >
-                  <span className={`${styles.oddStake}`}>8.9</span>
-                  <span className={`${styles.oddExposure}`}>450</span>
-                </div>
-              </div>
-            </div>
-            <div
-              className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
-            >
-              <div
-                className={`${styles.gameName} d-inline-flex align-items-center col-8`}
-              >
-                The Draw
-              </div>
-              <div
-                className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
-              >
-                <div
-                  className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-                >
-                  <span className={`${styles.oddStake}`}>5.6</span>
-                  <span className={`${styles.oddExposure}`}>123</span>
-                </div>
-                <div
-                  className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
-                >
-                  <span className={`${styles.oddStake}`}>8.9</span>
-                  <span className={`${styles.oddExposure}`}>450</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-12 d-inline-flex align-items-center justify-content-between mt-2">
-            <div
-              className={`${styles.betMinMaxAmt} ms-auto d-inline-flex justify-content-end align-items-center`}
-            >
-              <i className="icon-min-max"></i>
-              <span className={styles.minText}>min/max</span>
-              <span className={styles.betMinMax}>1/2,500</span>
-            </div>
-          </div>
-        </div>
-      </div>
+       <BookmakerOdds oddsList={bookmakerOddsList}/>
+
       {/* Fancy Premium container */}
       <div className={`${styles.fancyOuterBox} col-12 d-inline-block`}>
         <div className={`${styles.fancyPremiumTabBox} col-12 d-inline-flex`}>
@@ -323,6 +238,7 @@ export const MatchOdds = ({matchId,marketId,marketType}) => {
             PremiumBet
           </div>
         </div>
+        
         <div
           className={`col-12 d-inline-flex position-relative align-items-center`}
         >
@@ -352,113 +268,18 @@ export const MatchOdds = ({matchId,marketId,marketType}) => {
             ></div>
           </div>
         </div>
+        
         <div
           className={`${styles.allPopularBets} col-12 d-inline-flex flex-column`}
         >
-          <div
-            className={`${styles.singlePopularBet} col-12 d-inline-flex flex-column position-relative`}
-          >
-            <div
-              className={`${styles.popularTabTitle} col-12 d-inline-flex position-relative align-items-center`}
-            >
-              <div className={`d-inline-flex align-items-center`}>
-                <i className="icon-star"></i>
-                <label className={styles.popularOddTitle}>
-                  1st innings - Sri Lanka total
-                </label>
-              </div>
-              <i
-                className={`${styles.gameOpenArrow} position-absolute icon-arrow-down`}
-              ></i>
-            </div>
-            <div
-              className={`${styles.poplarOddRow} col-12 d-inline-flex justify-content-end flex-wrap`}
-            >
-              <div
-                className={`${styles.popularOddsStake} d-inline-flex flex-column align-items-center justify-content-center me-auto`}
-              >
-                <span
-                  className={`${styles.popularExposure} ${styles.oddExposure}`}
-                >
-                  450
-                </span>
-                <span className={`${styles.oddStake}`}>8.9</span>
-              </div>
-              <div
-                className={`${styles.popularOddsStake} d-inline-flex flex-column align-items-center justify-content-center me-auto`}
-              >
-                <span
-                  className={`${styles.popularExposure} ${styles.oddExposure}`}
-                >
-                  450
-                </span>
-                <span className={`${styles.oddStake}`}>8.9</span>
-              </div>
-              <div
-                className={`${styles.popularOddsStake} d-inline-flex flex-column align-items-center justify-content-center me-auto`}
-              >
-                <span
-                  className={`${styles.popularExposure} ${styles.oddExposure}`}
-                >
-                  450
-                </span>
-                <span className={`${styles.oddStake}`}>8.9</span>
-              </div>
-            </div>
-          </div>
-          <div
-            className={`${styles.singlePopularBet} col-12 d-inline-flex flex-column position-relative`}
-          >
-            <div
-              className={`${styles.popularTabTitle} col-12 d-inline-flex position-relative align-items-center`}
-            >
-              <div className={`d-inline-flex align-items-center`}>
-                <i className="icon-star"></i>
-                <label className={styles.popularOddTitle}>
-                  1st innings - Pakistan total
-                </label>
-              </div>
-              <i
-                className={`${styles.gameOpenArrow} position-absolute icon-arrow-down`}
-              ></i>
-            </div>
-            <div
-              className={`${styles.poplarOddRow} col-12 d-inline-flex justify-content-end flex-wrap`}
-            >
-              <div
-                className={`${styles.popularOddsStake} d-inline-flex flex-column align-items-center justify-content-center me-auto`}
-              >
-                <span
-                  className={`${styles.popularExposure} ${styles.oddExposure}`}
-                >
-                  450
-                </span>
-                <span className={`${styles.oddStake}`}>8.9</span>
-              </div>
-              <div
-                className={`${styles.popularOddsStake} d-inline-flex flex-column align-items-center justify-content-center me-auto`}
-              >
-                <span
-                  className={`${styles.popularExposure} ${styles.oddExposure}`}
-                >
-                  450
-                </span>
-                <span className={`${styles.oddStake}`}>8.9</span>
-              </div>
-              <div
-                className={`${styles.popularOddsStake} d-inline-flex flex-column align-items-center justify-content-center me-auto`}
-              >
-                <span
-                  className={`${styles.popularExposure} ${styles.oddExposure}`}
-                >
-                  450
-                </span>
-                <span className={`${styles.oddStake}`}>8.9</span>
-              </div>
-            </div>
-          </div>
-        </div>
+          {/***** premium and Fancy odds list ********/}
+         {fancyTabActive === 'PremiumBet' ?
+             <PremiumOdds oddsList={premiumOddsList}/> 
+          :  <FancyOdds oddsList={fancyOddsList}/>
+         }
+       </div>
       </div>
+
     </React.Fragment>
   );
 };

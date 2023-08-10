@@ -68,17 +68,17 @@ useEffect(() => {
         timeTab = inPlayTab;
       if(inPlayTab === 'Today'){
         startDate = todayDate.setHours(0,0,0,0);
-        startDate = encodeURI(encrypt(startDate));
+        startDate = encodeURIComponent(encrypt(startDate));
         endDate = todayDate.setHours(23,59,59,99);
-        endDate = encodeURI(encrypt(endDate));
+        endDate = encodeURIComponent(encrypt(endDate));
       }
       if(inPlayTab === 'Tomorrow'){
         todayDate = todayDate.setDate(todayDate.getDate() + 1);
         todayDate = new Date(todayDate);
         startDate = todayDate.setHours(0,0,0,0);
-        startDate = encodeURI(encrypt(startDate));
+        startDate = encodeURIComponent(encrypt(startDate));
         endDate = todayDate.setHours(23,59,59,99);
-        endDate = encodeURI(encrypt(endDate));
+        endDate = encodeURIComponent(encrypt(endDate));
       }
       if (activeTab)
         activeTab = activeTab.toLowerCase();
