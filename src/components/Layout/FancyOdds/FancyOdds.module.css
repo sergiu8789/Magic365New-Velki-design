@@ -53,6 +53,23 @@
     font-size: 16px;
 }
 
+.betMinMaxAmt {
+    gap: 2px;
+    font-size: 15px;
+    color: rgb(126, 145, 158);
+}
+
+.minText {
+    font-size: 13px;
+    color: inherit;
+}
+
+.betMinMax {
+    font-size: 13px;
+    font-weight: 700;
+    color: inherit;
+}
+
 @media only screen and (max-width: 568px) {
     .gameName, .oddStake, .matchOddTitle, .matchTitleHighlight {
         font-size: 16px;
