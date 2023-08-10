@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./ChangePassword.module.css";
+import { BetPlacePopup } from "../../Layout/BetPlacePopup/BetPlacePopup";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
@@ -16,6 +17,10 @@ export const ChangePassword = () => {
   const [yourPassword, setyourPassword] = useState("password");
   const [responseErrorshow, setResponseError] = useState(false);
   const [reponseErrorMessage, setResponseErrorMessage] = useState("");
+  const [passChange, setPassChange] = useState(false);
+  const [passChangeTitle, setpassChangeTitle] = useState(false);
+  const [passChangeMsg, setpassChangeMsg] = useState(false);
+  const [passStatus, setpassStatus] = useState(false);
   const auth = useContext(AuthContext);
   const defaultValues = {
     old_password: {
@@ -62,7 +67,6 @@ export const ChangePassword = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("event ");
     appData.setAppData({ ...appData.appData, listLoading: true });
     if (
       !formValues.old_password.value ||
@@ -70,6 +74,7 @@ export const ChangePassword = () => {
       !formValues.confirm_password.value ||
       formValues.new_password.value !== formValues.confirm_password.value
     ) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
       setFormValues({
         ...formValues,
         old_password: {
@@ -103,10 +108,6 @@ export const ChangePassword = () => {
       });
     } else {
       appData.setAppData({ ...appData.appData, listLoading: true });
-      console.log(auth.auth.user.email);
-      console.log(formValues.old_password.value);
-      console.log(formValues.new_password.value);
-      console.log(formValues.confirm_password.value);
       const payload = {
         email: auth.auth.user.email,
         password: formValues.old_password.value,
@@ -124,9 +125,20 @@ export const ChangePassword = () => {
               showSucessMessage: true,
               successMessage: "Password Updated Successfully!",
             });
+            setPassChange(true);
+            setpassChangeTitle("Password Changed");
+            setpassChangeMsg("Your password has been changed successfully.");
+            setpassStatus(true);
             setResponseError(false);
+            setTimeout(function () {
+              navigate("/");
+            }, 6000);
           } else {
             setResponseError(true);
+            setPassChange(true);
+            setpassChangeTitle("Password Invalid");
+            setpassChangeMsg("Provided password is invalid. Please try again.");
+            setpassStatus(false);
             setResponseErrorMessage("Invalid Old Password");
           }
         })
@@ -134,6 +146,10 @@ export const ChangePassword = () => {
           appData.setAppData({ ...appData.appData, listLoading: false });
           setResponseError(true);
           setResponseErrorMessage(err?.response?.data?.message);
+          setPassChange(true);
+          setpassChangeTitle("Password Update Error");
+          setpassChangeMsg(err?.response?.data?.message);
+          setpassStatus(false);
         });
     }
   };
@@ -141,7 +157,7 @@ export const ChangePassword = () => {
   const gotoHome = () => {
     setloginSlide(false);
     setTimeout(function () {
-      navigate("/my-profile");
+      navigate(-1);
     }, 250);
   };
 
@@ -325,6 +341,16 @@ export const ChangePassword = () => {
           </div>
         </div>
       </div>
+      {passChange && (
+        <BetPlacePopup
+          status={passStatus}
+          betbox={true}
+          title={passChangeTitle}
+          message={passChangeMsg}
+          type="1"
+          setPassChange={setPassChange}
+        />
+      )}
     </React.Fragment>
   );
 };

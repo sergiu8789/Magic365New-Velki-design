@@ -5,16 +5,11 @@ import loginImgBanner from "../../../assets/images/login-banner.png";
 import { Form } from "react-bootstrap";
 import jwtDecode from "jwt-decode";
 import ApiService from "../../../services/ApiService";
-import {
-  loadCaptchaEnginge,
-  LoadCanvasTemplate,
-  validateCaptcha,
-} from "react-simple-captcha";
+import { loadCaptchaEnginge, LoadCanvasTemplate } from "react-simple-captcha";
 import { useAuth } from "../../../context/AuthContextProvider";
 
 export const Login = () => {
   const [loginSlide, setloginSlide] = useState("true");
-  const [loginErrorMesg, setloginErrorMesg] = useState("");
   const auth = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -90,7 +85,6 @@ export const Login = () => {
   const onLogin = (e) => {
     e.preventDefault();
     if (checkValidation()) {
-      //if (validateCaptcha()) {
       const payload = {
         email: form.username.value,
         password: form.password.value,
@@ -99,7 +93,6 @@ export const Login = () => {
         .then((res) => {
           if (res?.data) {
             if (res.data.token) {
-              setloginErrorMesg("");
               const user = jwtDecode(res.data.token);
               navigate("/");
               auth.setAuth({
@@ -112,13 +105,9 @@ export const Login = () => {
             }
           }
           if (res.status === 202) {
-            setloginErrorMesg("Invalid User");
           }
         })
-        .catch((err) => {
-          setloginErrorMesg(err);
-        });
-      //}
+        .catch((err) => {});
     }
   };
 
@@ -163,100 +152,106 @@ export const Login = () => {
             <div
               className={`${styles.loginFormBox} col-12 d-inline-flex flex-column`}
             >
-              <div
-                className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
-              >
-                <Form.Control
-                  id="username"
-                  name="username"
-                  autoComplete="off"
-                  type="text"
-                  placeholder="Username"
-                  className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
-                  onChange={handleChange}
-                />
-                <label
-                  htmlFor="username"
-                  className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
-                >
-                  Username
-                </label>
-                <span
-                  className={`${styles.loginIcon} position-absolute icon-user`}
-                ></span>
-                <span className={styles.focusBorder}></span>
-              </div>
-              {form.username.error && (
-                <div className={`${styles.formError} col-12 d-inline-flex`}>
-                  {form.username.errorMessage}
-                </div>
-              )}
-              <div
-                className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
-              >
-                <Form.Control
-                  id="password"
-                  name="password"
-                  autoComplete="off"
-                  type="password"
-                  placeholder="Password"
-                  className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
-                  onChange={handleChange}
-                />
-                <label
-                  htmlFor="password"
-                  className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
-                >
-                  Password
-                </label>
-                <span
-                  className={`${styles.loginIcon} position-absolute icon-lock`}
-                ></span>
-                <span className={styles.focusBorder}></span>
-              </div>
-              {form.password.error && (
-                <div className={`${styles.formError} col-12 d-inline-flex`}>
-                  {form.password.errorMessage}
-                </div>
-              )}
-              <div
-                className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
-              >
-                <Form.Control
-                  id="verifyCode"
-                  name="captcha"
-                  autoComplete="off"
-                  type="number"
-                  placeholder="Validation"
-                  className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
-                  onChange={handleChange}
-                />
-                <label
-                  htmlFor="verifyCode"
-                  className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
-                >
-                  Validation Code
-                </label>
+              <div className="col-12 d-inline-block">
                 <div
-                  className={`${styles.captchBox} captchBox position-absolute d-inline-flex align-items-center`}
+                  className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
                 >
-                  <LoadCanvasTemplate
-                    className={styles.captchCanvas}
-                    reloadText={
-                      '<span className="reload_captcha" style="font-size:24px;font-weight:500;color:black;">&#x21bb;</span>'
-                    }
+                  <Form.Control
+                    id="username"
+                    name="username"
+                    autoComplete="off"
+                    type="text"
+                    placeholder="Username"
+                    className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                    onChange={handleChange}
                   />
+                  <label
+                    htmlFor="username"
+                    className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
+                  >
+                    Username
+                  </label>
+                  <span
+                    className={`${styles.loginIcon} position-absolute icon-user`}
+                  ></span>
+                  <span className={styles.focusBorder}></span>
                 </div>
-                <span
-                  className={`${styles.loginIcon} position-absolute icon-shield`}
-                ></span>
-                <span className={styles.focusBorder}></span>
+                {form.username.error && (
+                  <div className={`${styles.formError} col-12 d-inline-flex`}>
+                    {form.username.errorMessage}
+                  </div>
+                )}
               </div>
-              {form.captcha.error && (
-                <div className={`${styles.formError} col-12 d-inline-flex`}>
-                  {form.captcha.errorMessage}
+              <div className="col-12 d-inline-block">
+                <div
+                  className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
+                >
+                  <Form.Control
+                    id="password"
+                    name="password"
+                    autoComplete="off"
+                    type="password"
+                    placeholder="Password"
+                    className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                    onChange={handleChange}
+                  />
+                  <label
+                    htmlFor="password"
+                    className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
+                  >
+                    Password
+                  </label>
+                  <span
+                    className={`${styles.loginIcon} position-absolute icon-lock`}
+                  ></span>
+                  <span className={styles.focusBorder}></span>
                 </div>
-              )}
+                {form.password.error && (
+                  <div className={`${styles.formError} col-12 d-inline-flex`}>
+                    {form.password.errorMessage}
+                  </div>
+                )}
+              </div>
+              <div className="col-12 d-inline-block">
+                <div
+                  className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
+                >
+                  <Form.Control
+                    id="verifyCode"
+                    name="captcha"
+                    autoComplete="off"
+                    type="number"
+                    placeholder="Validation"
+                    className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                    onChange={handleChange}
+                  />
+                  <label
+                    htmlFor="verifyCode"
+                    className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
+                  >
+                    Validation Code
+                  </label>
+                  <div
+                    className={`${styles.captchBox} captchBox position-absolute d-inline-flex align-items-center`}
+                  >
+                    <LoadCanvasTemplate
+                      className={styles.captchCanvas}
+                      reloadText={
+                        '<span className="reload_captcha" style="font-size:24px;font-weight:500;color:black;">&#x21bb;</span>'
+                      }
+                    />
+                  </div>
+                  <span
+                    className={`${styles.loginIcon} position-absolute icon-shield`}
+                  ></span>
+                  <span className={styles.focusBorder}></span>
+                </div>
+                {form.captcha.error && (
+                  <div className={`${styles.formError} col-12 d-inline-flex`}>
+                    {form.captcha.errorMessage}
+                  </div>
+                )}
+              </div>
               <div
                 className={` d-inline-flex align-items-center col-12 mb-6 position-relative`}
               >
@@ -272,7 +267,6 @@ export const Login = () => {
                   Remember me
                 </label>
               </div>
-
               <div
                 className={`d-inline-flex justify-content-center col-12 ${styles.loginBtnBox}`}
               >
