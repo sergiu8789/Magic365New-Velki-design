@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styles from "./MarketDepth.module.css";
 
-export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
+export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth,selectedRunner }) => {
   const [matchInfo, setMathInfo] = useState(false);
   const [betStatusDrop, setbetStatusDrop] = useState(false);
-  const [betStatus, setbetStatus] = useState("All");
+  const [selectedOption,setSelectedOption] = useState({});
 
   const openBetStatusDrop = () => {
     if (betStatusDrop === true) {
@@ -12,11 +12,6 @@ export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
     } else {
       setbetStatusDrop(true);
     }
-  };
-
-  const setBetStatusVal = (val) => {
-    setbetStatus(val);
-    setbetStatusDrop(false);
   };
 
   const hideBetLayer = () => {
@@ -38,6 +33,7 @@ export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
 
   useEffect(() => {
     setMathInfo(true);
+    setSelectedOption(selectedRunner?.Runners[0]);
   }, [hideMarketDepth]);
 
   return (
@@ -70,11 +66,11 @@ export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
             <div
               className={`${styles.gameNameHeader} col-12 d-inline-flex align-items-center justify-content-center`}
             >
-              <span className={styles.teamName}>England v Australia</span>
+              <span className={styles.teamName}>{selectedRunner?.Runners[0]?.runnerName} v {selectedRunner?.Runners[1]?.runnerName}</span>
               <div
                 className={`${styles.triangleArrow} icon-triangle-black-300 d-inline-block align-baseline`}
               ></div>
-              <span className={styles.eventName}>Match Odds</span>
+              <span className={styles.eventName}>{selectedRunner.marketName}</span>
             </div>
             <div
               className={`${styles.betStatusBox} col-12 p-2 d-inline-block position-relative`}
@@ -85,7 +81,7 @@ export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
                 } col-12 d-inline-flex align-items-center position-relative`}
                 onClick={openBetStatusDrop}
               >
-                <span className={styles.selectedBetStatus}>{betStatus}</span>
+                <span className={styles.selectedBetStatus}>{selectedOption.runnerName}</span>
                 <i
                   className={`${styles.betStatusArrow} position-absolute icon-arrow-down`}
                 ></i>
@@ -95,45 +91,23 @@ export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
                   betStatusDrop && styles.betStatusOpen
                 } position-absolute`}
               >
-                <p
-                  className={`${styles.betStatusItem} ${
-                    betStatus === "All" ? "d-none" : "d-flex"
-                  } align-items-center col-12 m-0`}
-                  value="1"
-                  onClick={() => setBetStatusVal("All")}
-                >
-                  <span
-                    className={`${styles.betStatusText} d-flex position-relative`}
-                  >
-                    All
-                  </span>
-                </p>
-                <p
-                  className={`${styles.betStatusItem} ${
-                    betStatus === "Matched" ? "d-none" : "d-flex"
-                  } d-flex align-items-center col-12 m-0`}
-                  value="2"
-                  onClick={() => setBetStatusVal("Matched")}
-                >
-                  <span
-                    className={`${styles.betStatusText} d-flex position-relative`}
-                  >
-                    Matched
-                  </span>
-                </p>
-                <p
-                  className={`${styles.betStatusItem} ${
-                    betStatus === "Cancelled" ? "d-none" : "d-flex"
-                  } d-flex align-items-center col-12 m-0`}
-                  value="3"
-                  onClick={() => setBetStatusVal("Cancelled")}
-                >
-                  <span
-                    className={`${styles.betStatusText} d-flex position-relative`}
-                  >
-                    Cancelled
-                  </span>
-                </p>
+                {selectedRunner?.Runners?.map((item,index) => {
+                  return(
+                    <p key={index}
+                    className={`${styles.betStatusItem} ${
+                      selectedOption.runnerName === item.runnerName ? "d-none" : "d-flex"
+                    } align-items-center col-12 m-0`}
+                    value={selectedOption.runnerName}
+                    onClick={() => {setSelectedOption(item); setbetStatusDrop(false);}}
+                   >
+                    <span
+                      className={`${styles.betStatusText} d-flex position-relative`}
+                    >
+                      {item.runnerName}
+                    </span>
+                   </p>
+                  )
+                })}
               </div>
             </div>
             <div
@@ -150,7 +124,7 @@ export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
                 <span
                   className={`${styles.betStatusValue} d-inline-flex col-12`}
                 >
-                  5062.76
+                  {selectedRunner.TotalMatched}
                 </span>
               </div>
               <div
@@ -164,7 +138,7 @@ export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
                 <span
                   className={`${styles.betStatusValue} d-inline-flex col-12`}
                 >
-                  4194.42
+                  {selectedOption.TotalMatched ? parseFloat(selectedOption.TotalMatched).toFixed(2) : 0}
                 </span>
               </div>
               <div
@@ -178,7 +152,7 @@ export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
                 <span
                   className={`${styles.betStatusValue} d-inline-flex col-12`}
                 >
-                  1.01
+                  {selectedOption.LastPriceTraded}
                 </span>
               </div>
             </div>
@@ -209,84 +183,42 @@ export const MarketDepth = ({ hideMarketDepth, sethideMarketDepth }) => {
               className={`${styles.betBoxScroll} col-12 d-inline-flex`}
               id="navigateButtons"
             >
-              <div
-                className={`${styles.betAvailBox} d-inline-flex flex-column`}
-              >
-                <div
-                  className={`${styles.betOddValue} ${styles.betAvailBack}  col-12 d-inline-flex flex-column align-items-center`}
+              {selectedOption?.ExchangePrices?.AvailableToBack?.map((item,index)=> {
+                return(
+                  <div key={index}
+                  className={`${styles.betAvailBox} d-inline-flex flex-column`}
                 >
-                  <span className={styles.oddsValueAmt}>1.01</span>
-                  <span className={styles.oddsValueStat}>67.76</span>
+                  <div
+                    className={`${styles.betOddValue} ${styles.betAvailBack}  col-12 d-inline-flex flex-column align-items-center`}
+                  >
+                    <span className={styles.oddsValueAmt}>{item.price}</span>
+                    <span className={styles.oddsValueStat}>{item.size}</span>
+                  </div>
+                  <span className={`${styles.oddsValueCount} text-center col-12`}>
+                    {}
+                  </span>
                 </div>
-                <span className={`${styles.oddsValueCount} text-center col-12`}>
-                  939.22
-                </span>
-              </div>
-              <div
-                className={`${styles.betAvailBox} d-inline-flex flex-column`}
-              >
-                <div
-                  className={`${styles.betOddValue} ${styles.betAvailBack}  col-12 d-inline-flex flex-column align-items-center`}
+                )
+              })}
+
+             {selectedOption?.ExchangePrices?.AvailableToLay?.map((item,index)=> {
+                return(
+                  <div key={index}
+                  className={`${styles.betAvailBox} d-inline-flex flex-column`}
                 >
-                  <span className={styles.oddsValueAmt}>1.01</span>
-                  <span className={styles.oddsValueStat}>67.76</span>
+                  <div
+                    className={`${styles.betOddValue} ${styles.betAvailLay}  col-12 d-inline-flex flex-column align-items-center`}
+                  >
+                    <span className={styles.oddsValueAmt}>{item.price}</span>
+                    <span className={styles.oddsValueStat}>{item.size}</span>
+                  </div>
+                  <span className={`${styles.oddsValueCount} text-center col-12`}>
+                    {}
+                  </span>
                 </div>
-                <span className={`${styles.oddsValueCount} text-center col-12`}>
-                  939.22
-                </span>
-              </div>
-              <div
-                className={`${styles.betAvailBox} d-inline-flex flex-column`}
-              >
-                <div
-                  className={`${styles.betOddValue} ${styles.betAvailBack}  col-12 d-inline-flex flex-column align-items-center`}
-                >
-                  <span className={styles.oddsValueAmt}>1.01</span>
-                  <span className={styles.oddsValueStat}>67.76</span>
-                </div>
-                <span className={`${styles.oddsValueCount} text-center col-12`}>
-                  939.22
-                </span>
-              </div>
-              <div
-                className={`${styles.betAvailBox} d-inline-flex flex-column`}
-              >
-                <div
-                  className={`${styles.betOddValue} ${styles.betAvailBack}  col-12 d-inline-flex flex-column align-items-center`}
-                >
-                  <span className={styles.oddsValueAmt}>1.01</span>
-                  <span className={styles.oddsValueStat}>67.76</span>
-                </div>
-                <span className={`${styles.oddsValueCount} text-center col-12`}>
-                  939.22
-                </span>
-              </div>
-              <div
-                className={`${styles.betAvailBox} d-inline-flex flex-column`}
-              >
-                <div
-                  className={`${styles.betOddValue} ${styles.betAvailLay}  col-12 d-inline-flex flex-column align-items-center`}
-                >
-                  <span className={styles.oddsValueAmt}>1.01</span>
-                  <span className={styles.oddsValueStat}>67.76</span>
-                </div>
-                <span className={`${styles.oddsValueCount} text-center col-12`}>
-                  939.22
-                </span>
-              </div>
-              <div
-                className={`${styles.betAvailBox} d-inline-flex flex-column`}
-              >
-                <div
-                  className={`${styles.betOddValue} ${styles.betAvailBack}  col-12 d-inline-flex flex-column align-items-center`}
-                >
-                  <span className={styles.oddsValueAmt}>1.01</span>
-                  <span className={styles.oddsValueStat}>67.76</span>
-                </div>
-                <span className={`${styles.oddsValueCount} text-center col-12`}>
-                  939.22
-                </span>
-              </div>
+                )
+              })}
+             
             </div>
             <p
               className={`${styles.aboutMarketInfo} m-0 col-12 d-inline-block`}

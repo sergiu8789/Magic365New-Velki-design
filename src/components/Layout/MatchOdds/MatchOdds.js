@@ -308,6 +308,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
       </div>
       {hideMarketDepth && (
         <MarketDepth
+          selectedRunner ={selectedRunner}
           hideMarketDepth={hideMarketDepth}
           sethideMarketDepth={sethideMarketDepth}
         />
