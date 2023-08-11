@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./MyBets.module.css";
+import { NoData } from "../NoData/NoData";
 import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
 import { useBet } from "../../../context/BetContextProvider";
@@ -22,6 +23,7 @@ export const MyBets = ({ openMyBets }) => {
   const appData = useApp();
   const [betsList, setBetList] = useState([]);
   const [matchList, setMatchList] = useState([]);
+  const [matchListCount, setMatchListCount] = useState(0);
   const [selectedMatch, setSelectedMatch] = useState("");
 
   const activeBetTab = (event, name) => {
@@ -116,15 +118,34 @@ export const MyBets = ({ openMyBets }) => {
 
   useEffect(() => {
     if (auth.auth.loggedIn) {
-      ApiService.getUserBetMatches().then((res) => {
-        if (res?.data?.rows) {
-          setMatchList(res.data.rows);
-          betData.setBetData({
-            ...betData.betData,
-            userMatchBets: res.data.rows,
-          });
-        }
-      });
+      ApiService.getUserBetMatches()
+        .then((res) => {
+          if (res?.data?.rows) {
+            setMatchListCount(res.data.count);
+            setMatchList(res.data.rows);
+            betData.setBetData({
+              ...betData.betData,
+              userMatchBets: res.data.rows,
+            });
+          } else {
+            setMatchListCount(0);
+          }
+        })
+        .catch((err) => {
+          setMatchListCount(0);
+          if (
+            err?.response?.data?.statusCode === 401 &&
+            err?.response?.data?.message === "Unauthorized"
+          ) {
+            localStorage.removeItem("token");
+            auth.setAuth({
+              ...auth.auth,
+              isloggedIn: false,
+              user: {},
+              showSessionExpire: true,
+            });
+          }
+        });
     }
   }, [betData.betData.betsLoading, auth.auth.loggedIn]);
 
@@ -306,6 +327,7 @@ export const MyBets = ({ openMyBets }) => {
               } col-12 d-inline-block`}
               id="BetDetailList"
             >
+              {matchListCount === 0 && <NoData title="No Bets" />}
               {betsList.map((item, index) => (
                 <div
                   className={`${styles.betDetail} overflow-hidden col-12 d-inline-block`}
