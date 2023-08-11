@@ -139,6 +139,8 @@ export const ProfitLoss = () => {
         setMatchesList(res.data.data);
       })
       .catch((err) => {
+        setTotalRecords(0);
+        setTotalCount(0);
         if (
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"

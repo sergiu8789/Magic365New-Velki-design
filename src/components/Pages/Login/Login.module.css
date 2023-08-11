@@ -165,13 +165,18 @@
     -webkit-transition: all ease .2s;
 }
 
-.loginIcon {
+.loginIcon, .passwordIcon {
     top: 50%;
     left: 13px;
     transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
     font-size: 23px;
     z-index: 6;
+}
+
+.passwordIcon {
+    left: unset;
+    right: 13px;
 }
 
 .focusBorder:before, .focusBorder:after {

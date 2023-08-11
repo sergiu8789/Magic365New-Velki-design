@@ -9,10 +9,12 @@ import { loadCaptchaEnginge, LoadCanvasTemplate } from "react-simple-captcha";
 import { useAuth } from "../../../context/AuthContextProvider";
 
 export const Login = () => {
-  const [loginSlide, setloginSlide] = useState("true");
   const auth = useAuth();
+  const [loginSlide, setloginSlide] = useState("true");
+  const [yourPassword, setyourPassword] = useState("password");
   const navigate = useNavigate();
   const location = useLocation();
+
   const [form, setForm] = useState({
     username: {
       value: "",
@@ -50,6 +52,14 @@ export const Login = () => {
         value,
       },
     });
+  };
+
+  const showPasswordText = () => {
+    if (yourPassword === "password") {
+      setyourPassword("text");
+    } else {
+      setyourPassword("password");
+    }
   };
 
   /********* Check form field  validations  *********/
@@ -190,7 +200,7 @@ export const Login = () => {
                     id="password"
                     name="password"
                     autoComplete="off"
-                    type="password"
+                    type={yourPassword}
                     placeholder="Password"
                     className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
                     onChange={handleChange}
@@ -203,6 +213,14 @@ export const Login = () => {
                   </label>
                   <span
                     className={`${styles.loginIcon} position-absolute icon-lock`}
+                  ></span>
+                  <span
+                    className={`${styles.passwordIcon} ${
+                      yourPassword === "password"
+                        ? "icon-visibility-off"
+                        : "icon-visibility-on"
+                    } position-absolute`}
+                    onClick={showPasswordText}
                   ></span>
                   <span className={styles.focusBorder}></span>
                 </div>

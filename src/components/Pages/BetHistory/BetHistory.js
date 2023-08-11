@@ -155,6 +155,7 @@ export const BetHistory = () => {
       popularTabActive
     )
       .then((res) => {
+        console.log(res);
         let totalPage = res.data.count / 10;
         totalPage = Math.ceil(totalPage);
         setTotalRecords(totalPage);
@@ -162,6 +163,8 @@ export const BetHistory = () => {
         setBettingHistoryList(res.data.data);
       })
       .catch((err) => {
+        setTotalRecords(0);
+        setTotalCount(0);
         if (
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"
