@@ -6,6 +6,7 @@ import { MatchOdds } from "../../Layout/MatchOdds/MatchOdds";
 import { HomeFooter } from "../../Layout/HomeFooter/HomeFooter";
 import { useLocation } from "react-router-dom";
 import ApiService from "../../../services/ApiService";
+import { BetSlip } from "../../Layout/BetSlip/BetSlip";
 
 
 export const InPlayGames = () => {
@@ -34,6 +35,7 @@ export const InPlayGames = () => {
           marketId={location?.state?.market_id}
           marketType={location?.state?.type}
         />
+        <BetSlip />
         <HomeFooter />
       </div>
     </React.Fragment>
