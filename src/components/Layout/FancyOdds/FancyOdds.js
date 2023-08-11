@@ -19,7 +19,6 @@ export const FancyOdds = ({ oddsList }) => {
         </div>
       </div>
       {oddsList?.map((item, index) => {
-        console.log(item);
         return (
           <React.Fragment>
             <div

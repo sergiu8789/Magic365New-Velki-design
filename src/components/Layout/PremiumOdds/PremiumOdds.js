@@ -5,9 +5,6 @@ export const PremiumOdds = ({ oddsList }) => {
   return (
     <React.Fragment>
       {oddsList?.map((item, index) => {
-        {
-          console.log(item);
-        }
         return (
           <div
             key={index}
