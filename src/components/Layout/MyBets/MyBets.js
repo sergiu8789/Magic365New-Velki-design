@@ -1,13 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./MyBets.module.css";
+import ApiService from "../../../services/ApiService";
+import { useAuth } from "../../../context/AuthContextProvider";
+import { useBet } from "../../../context/BetContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
+import {
+  matchDate,
+  formatTime,
+  getCasinoMarketName,
+} from "../../../utils/helper";
 
 export const MyBets = ({ openMyBets }) => {
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [betWindow, setbetWindow] = useState("Exchange");
-  const [headerBet, setheaderBet] = useState("false");
+  const [headerBet, setheaderBet] = useState(false);
   const [lastActive, setlastActive] = useState("Exchange");
   const tabRef = useRef();
+  const auth = useAuth();
+  const betData = useBet();
+  const appData = useApp();
+  const [betsList, setBetList] = useState([]);
+  const [matchList, setMatchList] = useState([]);
+  const [selectedMatch, setSelectedMatch] = useState("");
 
   const activeBetTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -30,23 +45,92 @@ export const MyBets = ({ openMyBets }) => {
       .classList.remove(styles.open);
   };
 
-  const showBetDetail = () => {
-    let betName = document.querySelector(
-      "#betDetailRow_one ." + styles.eventMarketName
-    ).innerHTML;
-    document.getElementById("betHeaderTitle").innerHTML = betName;
-    setheaderBet("true");
+  const showBetDetail = (
+    item,
+    team_one,
+    team_two,
+    market_type,
+    market_name
+  ) => {
+    let Title_type = "",
+      title_market = "",
+      TitleName = "";
+    TitleName = team_one;
+    if (team_two) {
+      TitleName = TitleName + " v " + team_two;
+    }
+    if (market_type) {
+      Title_type =
+        '<div class="' +
+        styles.triangleArrow +
+        ' icon-triangle-black-300 d-inline-block align-baseline"></div><span class="' +
+        styles.eventName +
+        ' text-capitalize">' +
+        market_type +
+        "</span>";
+    }
+    if (market_name) {
+      title_market =
+        '<div class="' +
+        styles.triangleArrow +
+        ' icon-triangle-black-300 d-inline-block align-baseline"></div><span class="' +
+        styles.eventName +
+        ' text-capitalize">' +
+        market_name +
+        "</span>";
+    }
+    let createElem =
+      '<div class="' +
+      styles.eventMarketName +
+      ' d-flex align-items-center"><span class="' +
+      styles.teamName +
+      '">' +
+      TitleName +
+      "</span>" +
+      Title_type +
+      title_market +
+      "</div>";
+
+    document.getElementById("betHeaderTitle").innerHTML = createElem;
+    setheaderBet(true);
     setbetWindow("betDetail");
+    setBetList([]);
+    ApiService.fetchAllBets(
+      item.match_id ? item.match_id : "casino",
+      item.market_id,
+      item.market_type,
+      item.market_name ? item.market_name : null
+    ).then((res) => {
+      if (res?.data?.rows) setBetList(res.data.rows);
+    });
   };
 
   const betDetailList = () => {
-    setheaderBet("false");
+    setheaderBet(false);
     document.getElementById("betHeaderTitle").innerHTML = "My Bets";
     setbetWindow(lastActive);
     if (tabRef && tabRef.current) {
       tabRef.current.click();
     }
   };
+
+  useEffect(() => {
+    if (auth.auth.loggedIn) {
+      ApiService.getUserBetMatches().then((res) => {
+        if (res?.data?.rows) {
+          setMatchList(res.data.rows);
+          betData.setBetData({
+            ...betData.betData,
+            userMatchBets: res.data.rows,
+          });
+        }
+      });
+    }
+  }, [betData.betData.betsLoading, auth.auth.loggedIn]);
+
+  useEffect(() => {
+    if (betData.betData.betsList?.length) setBetList(betData.betData.betsList);
+  }, [betData.betData.betsList]);
 
   useEffect(() => {
     if (tabRef && tabRef.current) {
@@ -60,7 +144,7 @@ export const MyBets = ({ openMyBets }) => {
       .classList.add(styles.open);
     document.getElementById("betHeaderTitle").innerHTML = "My Bets";
     setbetWindow("Exchange");
-    setheaderBet("false");
+    setheaderBet(false);
     if (tabRef && tabRef.current) {
       tabRef.current.click();
     }
@@ -76,7 +160,7 @@ export const MyBets = ({ openMyBets }) => {
         >
           <div
             className={`${styles.MyBetHeader} ${
-              headerBet === "true" && styles.betHeaderDetail
+              headerBet && styles.betHeaderDetail
             } col-12 d-inline-block position-relative`}
           >
             <div
@@ -100,7 +184,7 @@ export const MyBets = ({ openMyBets }) => {
             <div
               className={`${styles.myBetTabsBox} position-relative col-12 d-inline-flex align-items-center justify-content-center`}
             >
-              {headerBet === "false" ? (
+              {headerBet === false ? (
                 <React.Fragment>
                   <div
                     ref={tabRef}
@@ -130,7 +214,7 @@ export const MyBets = ({ openMyBets }) => {
                   </div>
                 </React.Fragment>
               )}
-              {headerBet === "false" && (
+              {headerBet === false && (
                 <div
                   className={`${styles.activeLine} position-absolute d-inline-block`}
                   style={{
@@ -152,29 +236,59 @@ export const MyBets = ({ openMyBets }) => {
               } col-12`}
               id="ExchangeBetsList"
             >
-              <div
-                className={`${styles.singleBetRow} col-12 d-flex align-items-center position-relative`}
-                id="betDetailRow_one"
-                onClick={showBetDetail}
-              >
+              {matchList.map((item, index) => (
                 <div
-                  className={`${styles.Betcount} flex-shrink-0 d-flex align-items-center justify-content-center`}
+                  className={`${styles.singleBetRow} col-12 d-flex align-items-center position-relative`}
+                  onClick={() => {
+                    showBetDetail(
+                      item,
+                      item?.team_one,
+                      item?.team_two,
+                      item?.market_type?.replace("_", " "),
+                      item?.market_name
+                    );
+                    setSelectedMatch(item);
+                  }}
+                  key={index}
                 >
-                  1
-                </div>
-                <div
-                  className={`${styles.eventMarketName} d-flex align-items-center`}
-                >
-                  <span className={styles.teamName}>England v Australia</span>
+                  {/* <div
+                    className={`${styles.Betcount} flex-shrink-0 d-flex align-items-center justify-content-center`}
+                  >
+                    1
+                  </div> */}
                   <div
-                    className={`${styles.triangleArrow} icon-triangle-black-300 d-inline-block align-baseline`}
+                    className={`${styles.eventMarketName} d-flex align-items-center`}
+                  >
+                    <span className={styles.teamName}>
+                      {item?.team_one}{" "}
+                      {item?.team_two ? " v " + item.team_two : ""}
+                    </span>
+                    {item?.market_type && (
+                      <React.Fragment>
+                        <div
+                          className={`${styles.triangleArrow} icon-triangle-black-300 d-inline-block align-baseline`}
+                        ></div>
+                        <span className={`${styles.eventName} text-capitalize`}>
+                          {item?.market_type?.replace("_", " ")}
+                        </span>
+                      </React.Fragment>
+                    )}
+                    {item?.market_name && (
+                      <React.Fragment>
+                        <div
+                          className={`${styles.triangleArrow} icon-triangle-black-300 d-inline-block align-baseline`}
+                        ></div>
+                        <span className={`${styles.eventName} text-capitalize`}>
+                          {getCasinoMarketName(item?.market_name)}
+                        </span>
+                      </React.Fragment>
+                    )}
+                  </div>
+                  <div
+                    className={`${styles.nextLayer} icon-arrow-left position-absolute d-flex align-items-center justify-content-center`}
                   ></div>
-                  <span className={styles.eventName}>Match Odds</span>
                 </div>
-                <div
-                  className={`${styles.nextLayer} icon-arrow-left position-absolute d-flex align-items-center justify-content-center`}
-                ></div>
-              </div>
+              ))}
             </div>
             <div
               className={`${styles.allBetsList} ${
@@ -192,58 +306,120 @@ export const MyBets = ({ openMyBets }) => {
               } col-12 d-inline-block`}
               id="BetDetailList"
             >
-              <div
-                className={`${styles.betDetail} overflow-hidden col-12 d-inline-block`}
-              >
+              {betsList.map((item, index) => (
                 <div
-                  className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
-                >
-                  <span
-                    className={`${styles.betTag} ${styles.OddbackTag} position-relative d-inline-flex align-items-center`}
-                  >
-                    Back
-                  </span>
-                  <span className={`${styles.betTeamName} d-inline-block`}>
-                    England
-                  </span>
-                </div>
-                <div
-                  className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}
+                  className={`${styles.betDetail} overflow-hidden col-12 d-inline-block`}
+                  key={index}
                 >
                   <div
-                    className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                    className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
                   >
-                    <label className={styles.balanceInfoTxt}>Odds req.</label>
-                    <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                      6.00
+                    <span
+                      className={`${styles.betTag} ${
+                        item.type === 1
+                          ? styles.OddbackTag
+                          : item.type === 2
+                          ? styles.OddlayTag
+                          : ""
+                      } position-relative d-inline-flex align-items-center`}
+                    >
+                      {item.type === 1 ? "Back" : item.type === 2 ? "Lay" : ""}
+                    </span>
+                    <span className={`${styles.betTeamName} d-inline-block`}>
+                      {item.selection_name}{" "}
+                      {item.market_type === "fancy"
+                        ? " - (" + item.size + ")"
+                        : ""}
+                    </span>
+                  </div>
+                  <div
+                    className={`${styles.balanceInfoBOx} col-12 d-inline-flex`}
+                  >
+                    <div
+                      className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                    >
+                      <label className={styles.balanceInfoTxt}>
+                        {item.type === 1
+                          ? selectedMatch?.market_type === "fancy"
+                            ? "Runs/Odds"
+                            : "Odds"
+                          : item.type === 2
+                          ? "Odds"
+                          : ""}
+                      </label>
+                      <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                        {item.type === 1
+                          ? item.market_type !== "fancy" &&
+                            item.market_type !== "bookmaker" &&
+                            item.market_name !== "teen"
+                            ? parseFloat(item.odds).toFixed(2)
+                            : item.market_type === "fancy"
+                            ? `${item.size}/${parseFloat(item.odds)}`
+                            : parseFloat(item.odds / 100 + 1)?.toFixed(2)
+                          : item.type === 2
+                          ? item.market_type !== "fancy" &&
+                            item.market_type !== "bookmaker" &&
+                            item.market_name !== "teen"
+                            ? parseFloat(item.odds).toFixed(2)
+                            : parseFloat(item.odds / 100 + 1).toFixed(2)
+                          : ""}
+                      </div>
+                    </div>
+                    <div
+                      className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                    >
+                      <label className={styles.balanceInfoTxt}>Stake</label>
+                      <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                        {item.amount}
+                      </div>
+                    </div>
+                    <div
+                      className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                    >
+                      <label className={styles.balanceInfoTxt}>
+                        {item.type === 1
+                          ? "Matched (PBU)"
+                          : item.type === 2
+                          ? "Liability"
+                          : ""}
+                      </label>
+                      <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
+                        {item.type === 1
+                          ? item.market_type !== "fancy" &&
+                            item.market_type !== "bookmaker" &&
+                            item.market_name !== "teen"
+                            ? parseFloat(
+                                item.odds * item.amount - item.amount
+                              ).toFixed(2)
+                            : parseFloat(
+                                (item.odds / 100 + 1) * item.amount -
+                                  item.amount
+                              ).toFixed(2)
+                          : item.type === 2
+                          ? item.market_type !== "fancy" &&
+                            item.market_type !== "bookmaker" &&
+                            item.market_name !== "teen"
+                            ? parseFloat(
+                                item.odds * item.amount - item.amount
+                              ).toFixed(2)
+                            : parseFloat(
+                                (item.odds / 100 + 1) * item.amount -
+                                  item.amount
+                              ).toFixed(2)
+                          : ""}
+                      </div>
                     </div>
                   </div>
                   <div
-                    className={`${styles.balanceRecord} d-inline-flex flex-column`}
+                    className={`${styles.betRefrIDRow} col-12 d-inline-flex align-items-center justify-content-between`}
                   >
-                    <label className={styles.balanceInfoTxt}>Avg. Odds</label>
-                    <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                      6.00
-                    </div>
-                  </div>
-                  <div
-                    className={`${styles.balanceRecord} d-inline-flex flex-column`}
-                  >
-                    <label className={styles.balanceInfoTxt}>
-                      Matched (PBU)
-                    </label>
-                    <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                      1.00
-                    </div>
+                    <span className={styles.refIdTxt}>Ref: {item.bet_id}</span>
+                    <span className={styles.refIdTxt}>
+                      {matchDate(item.createdAt)} {formatTime(item.createdAt)}
+                    </span>
                   </div>
                 </div>
-                <div
-                  className={`${styles.betRefrIDRow} col-12 d-inline-flex align-items-center justify-content-between`}
-                >
-                  <span className={styles.refIdTxt}>Ref: 1118955402</span>
-                  <span className={styles.refIdTxt}>01-08-2023 14:45</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

@@ -79,30 +79,6 @@ export const ProfitLoss = () => {
     setbetStatusDrop("false");
   };
 
-  const showBetInfo = (id) => {
-    if (
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.contains(styles.footerRecordOpen) === true
-    ) {
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.remove(styles.footerRecordOpen);
-      document
-        .getElementById("moreBetInfo_" + id)
-        .classList.remove("d-inline-block");
-      document.getElementById("moreBetInfo_" + id).classList.add("d-none");
-    } else {
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.add(styles.footerRecordOpen);
-      document.getElementById("moreBetInfo_" + id).classList.remove("d-none");
-      document
-        .getElementById("moreBetInfo_" + id)
-        .classList.add("d-inline-block");
-    }
-  };
-
   const checkProfitLoss = (checkVal) => {
     if (checkVal >= 0) {
       return true;
