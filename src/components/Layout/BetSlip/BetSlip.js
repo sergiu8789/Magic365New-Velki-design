@@ -12,12 +12,12 @@ export const BetSlip = () => {
   const closeBetSlip = () => {
     betData.setBetData({
       ...betData.betData,
-      betSlipStatus: "false",
+      betSlipStatus: false,
     });
   };
 
   useEffect(() => {
-    setBetSlip(betData.betData.betSlipStatus);
+     setBetSlip(betData.betData.betSlipStatus);
   }, [betData.betData.betSlipStatus]);
 
   const betAmount = [
@@ -101,7 +101,7 @@ export const BetSlip = () => {
     <React.Fragment>
       <div
         className={`${styles.BetSlipLayer} ${
-          betSlip === "true" && styles.activeSlip
+          betSlip  && styles.activeSlip
         } position-fixed h-100 d-inline-flex align-items-end`}
       >
         <div
@@ -111,12 +111,12 @@ export const BetSlip = () => {
             className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
           >
             <span
-              className={`${styles.betTag} ${styles.OddbackTag} position-relative d-inline-flex align-items-center`}
+              className={`${styles.betTag} ${betData?.betData?.betSelection?.type === 1 ? styles.OddbackTag : styles.OddLayTag} position-relative d-inline-flex align-items-center`}
             >
-              Back
+              {betData?.betData?.betSelection?.type === 1 ? "Back" : "Lay"}
             </span>
             <span className={`${styles.betTeamName} d-inline-block`}>
-              England
+              {betData?.betData?.betSelection?.runnerName}
             </span>
             <span
               className={`${styles.BetIconClose} icon-close position-absolute d-flex justify-content-center align-items-center cursor-pointer`}
@@ -145,7 +145,7 @@ export const BetSlip = () => {
                     className={`${styles.betInputField} d-inline-flex align-items-center justify-content-center`}
                     value="2"
                   >
-                    2
+                    {betData?.betData?.betSelection?.odds}
                   </span>
                   <input type="hidden" name="odds" value={2} />
                   <span
@@ -173,11 +173,11 @@ export const BetSlip = () => {
                   <span
                     name="stake"
                     className={`${styles.betInputField} ${styles.stakeAmt} position-relative d-inline-flex align-items-center justify-content-center`}
-                    value={betStakeAmt}
+                    value={betData?.betData?.betSelection?.amount}
                   >
-                    {betStakeAmt}
+                    {betData?.betData?.betSelection?.amount}
                   </span>
-                  <input type="hidden" name="stake" value={betStakeAmt} />
+                  <input type="hidden" name="stake" value={betData?.betData?.betSelection?.amount} />
                   <span
                     className={`${styles.betAmtAction} flex-shrink-0 d-inline-flex align-items-center justify-content-center`}
                     onClick={() => betSkateAmt("plus")}

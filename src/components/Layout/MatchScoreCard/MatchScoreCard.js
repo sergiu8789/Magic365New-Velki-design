@@ -1,15 +1,7 @@
-import React, { useEffect,useState } from "react";
+import React from "react";
 import styles from "./MatchScoreCard.module.css";
-import ApiService from "../../../services/ApiService";
 
-export const MatchScoreCard = ({matchId}) => {
-  const [scoreUrl,setScoreUrl] = useState("");
-  useEffect(() => {
-     ApiService.getScoreCard(matchId).then((res) => {
-      if(res?.scoreUrl)
-        setScoreUrl(res.scoreUrl);
-     })
-  },[]);
+export const MatchScoreCard = ({scoreUrl}) => {
   return (
     <React.Fragment>
       {scoreUrl &&

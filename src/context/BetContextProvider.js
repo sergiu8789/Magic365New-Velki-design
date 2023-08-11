@@ -5,12 +5,13 @@ export const BetContext = createContext(null);
 export const BetProvider = ({ children }) => {
   //let route = window.location.pathname?.replace("/", "");
   const initialValues = {
-    betSlipStatus: "",
+    betSlipStatus: false,
     betsLoading: true,
     userMatchBets: [],
     betsList: [],
     selectedMatch: {},
     matchBetList: [],
+    betSelection : {}
   };
   const [betData, setBetData] = useState(initialValues);
   return (
