@@ -13,7 +13,7 @@ export const MatchLiveCard = ({ streamUrl }) => {
   }, []);
   return (
     <React.Fragment>
-      {streamUrl && (
+      {streamUrl && ipAddress &&(
         <div
           className={`${styles.matchScoreGraph} col-12 d-inline-flex align-items-center position-sticky`}
         >

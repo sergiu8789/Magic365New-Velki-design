@@ -20,10 +20,9 @@ export const FancyOdds = ({ oddsList }) => {
       </div>
       {oddsList?.map((item, index) => {
         return (
-          <React.Fragment>
+          <React.Fragment key={index}>
             <div
               className="position-relative col-12 d-inline-flex flex-wrap"
-              key={index}
             >
               <div
                 className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}

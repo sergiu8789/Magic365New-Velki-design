@@ -15,7 +15,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [selectedMarket, setSelectedMarket] = useState({
-    market_id: marketType,
+    market_id: marketId,
     market: marketType,
   });
   const [fooEvents, setFooEvents] = useState([]);
@@ -23,6 +23,8 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const [fancyOddsList, setFancyOddsList] = useState([]);
   const [bookmakerOddsList, setBookmakerOddsList] = useState("");
   const [premiumOddsList, setPremiumOddsList] = useState([]);
+  const [exchangeTabList,setExchangeTabList] = useState([]);
+  const [marketIdList,setMarketList] = useState([]);
 
   const selectFancyTab = (tab) => {
     setfancyTabActive(tab);
@@ -30,7 +32,26 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
 
   /****** method to fetch other market list from API  ********/
   const getMatchOdds = () => {
-    ApiService.getMatchOdds(matchId).then((res) => {});
+    ApiService.getMatchOdds(matchId).then((res) => {
+      if(res?.data?.odds?.length){
+        let marketTypes = [];
+        let marketIds = [];
+        res?.data?.odds[0]?.forEach(item => {
+             if( item.market_type !== "fancy" &&
+             item.market_type !== "bookmaker"){
+              if(!marketTypes?.filter((type) => type.market_id === item.market_id )?.length)
+                marketTypes.push({market_id:item.market_id,market : item.market_type});
+                marketIds.push(item.market_id);
+             }
+        });
+    
+        if(!marketTypes?.length)
+          marketTypes.push(selectedMarket);
+
+        setMarketList(marketIds);
+        setExchangeTabList(marketTypes);
+      }
+    });
   };
 
   const openMarketDepth = () => {
@@ -55,7 +76,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     function onBroadCast(value) {
       if (value?.length) {
         value?.map((item) => {
-          if (item.MarketId === marketId)
+          if (item.MarketId === selectedMarket.market_id)
             // match marketId with socket response
             setSelectedRunner(item);
         });
@@ -66,7 +87,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     function onFancyBookBroadCast(value) {
       if (value.matchId === matchId) {
         if (value.fancy) setFancyOddsList(value.fancy);
-        if (value.bookmaker) setBookmakerOddsList(value.bookmaker);
+        if (value.bookmaker?.bm1) setBookmakerOddsList(value.bookmaker);
       }
     }
 
@@ -88,14 +109,20 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
       socket.off("broadcastFancy", onFancyBookBroadCast);
       socket.off("broadcastPremium", onPremiumBroadCast);
     };
-  }, [fooEvents]);
+  }, [fooEvents,selectedMarket.market_id]);
 
   useEffect(() => {
     socket.emit("fancySubscription", [matchId]); // socket emit event for Fancy and Boomaker markets
     socket.emit("premiumSubscription", [matchId]); // socket emit event for premium markets
-    socket.emit("subscription", [matchId]); // socket emit event for exchange odd market
+    socket.emit("subscription", [marketId]); // socket emit event for exchange odd market
     getMatchOdds(); // method to fetch other market data
   }, [matchId]);
+
+
+  useEffect(() => {
+    if(marketIdList?.length)
+      socket.emit("subscription", marketIdList); // socket emit event for other exchange odd market
+  },[marketIdList]);
 
   useEffect(() => {
     if (
@@ -123,7 +150,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
         <div className={`d-inline-flex align-items-center justify-content-end`}>
           <div className={`d-inline-flex align-items-center`}>
             <span className={styles.betMatchText}>Matched</span>
-            <span className={styles.matchOddCount}>PTE 24,298,446</span>
+            <span className={styles.matchOddCount}>PTE {selectedRunner?.TotalMatched}</span>
           </div>
           <span
             className={`${styles.marketStatus} ${styles.marketStatusLow} d-inline-flex align-items-center`}
@@ -139,16 +166,21 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
           <div
             className={`${styles.matchOddTitleRow} position-relative d-inline-flex align-items-center col-12`}
           >
-            <div
-              className={`${styles.matchTitleHighlight} d-inline-flex align-items-center`}
-            >
-              <i className="icon-star"></i>
-              <label className={styles.matchOddTitle + " text-capitalize"}>
-                {selectedMarket?.market
-                  ? selectedMarket.market?.replace("_", " ")
-                  : ""}
-              </label>
-            </div>
+            {exchangeTabList?.map((item) => {
+              return(
+                <div onClick={() => setSelectedMarket(item)}
+                   className={`${styles.matchTitleHighlight} d-inline-flex align-items-center`}
+                 >
+                  <i className="icon-star"></i>
+                  <label className={styles.matchOddTitle + " text-capitalize"}>
+                   {item?.market
+                    ? item.market?.replace("_", " ")
+                    : ""}
+                  </label>
+                </div>
+               )
+            })
+           }
             <div
               className={`${styles.oddsActiveLine} d-inline-block position-absolute`}
             ></div>
@@ -241,6 +273,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
           </div>
         </div>
       )}
+
       {/* BookMarker container */}
       {bookmakerOddsList && 
        <BookmakerOdds oddsList={bookmakerOddsList}/> }
