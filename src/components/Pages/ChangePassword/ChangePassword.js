@@ -217,95 +217,116 @@ export const ChangePassword = () => {
             className={`${styles.loginFormBox} col-12 d-inline-flex flex-column`}
             onSubmit={handleSubmit}
           >
-            <div
-              className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
-            >
-              <input
-                id="new_password"
-                name="new_password"
-                autoComplete="off"
-                type={newPassword}
-                placeholder="New Password"
-                className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
-                maxLength={15}
-                onChange={handleInputChange}
-                value={formValues.new_password.value}
-              />
-              <label
-                htmlFor="new_password"
-                className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
+            <div className="col-12 d-inline-block">
+              <div
+                className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
               >
-                New Password
-              </label>
-              <span
-                className={`${styles.loginIcon} ${
-                  newPassword === "password"
-                    ? "icon-visibility-off"
-                    : "icon-visibility-on"
-                } position-absolute`}
-                onClick={() => showPasswordText("newPassword")}
-              ></span>
-              <span className={styles.focusBorder}></span>
+                <input
+                  id="new_password"
+                  name="new_password"
+                  autoComplete="off"
+                  type={newPassword}
+                  placeholder="New Password"
+                  className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                  maxLength={15}
+                  onChange={handleInputChange}
+                  value={formValues.new_password.value}
+                />
+                <label
+                  htmlFor="new_password"
+                  className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
+                >
+                  New Password
+                </label>
+                <span
+                  className={`${styles.loginIcon} ${
+                    newPassword === "password"
+                      ? "icon-visibility-off"
+                      : "icon-visibility-on"
+                  } position-absolute`}
+                  onClick={() => showPasswordText("newPassword")}
+                ></span>
+                <span className={styles.focusBorder}></span>
+              </div>
+              {formValues.new_password.error && (
+                <div className={`${styles.formError} col-12 d-inline-flex`}>
+                  {formValues.new_password.errorMessage}
+                </div>
+              )}
             </div>
-            <div
-              className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
-            >
-              <input
-                id="confirm_password"
-                name="confirm_password"
-                autoComplete="off"
-                type={confirmPassword}
-                placeholder="New Password Confirm"
-                className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
-                maxLength={15}
-                onChange={handleInputChange}
-                value={formValues.confirm_password.value}
-              />
-              <label
-                htmlFor="confirm_password"
-                className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
+            <div className="col-12 d-inline-block">
+              <div
+                className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
               >
-                New Password Confirm
-              </label>
-              <span
-                className={`${styles.loginIcon} ${
-                  confirmPassword === "password"
-                    ? "icon-visibility-off"
-                    : "icon-visibility-on"
-                } position-absolute`}
-                onClick={() => showPasswordText("confirmPassword")}
-              ></span>
-              <span className={styles.focusBorder}></span>
+                <input
+                  id="confirm_password"
+                  name="confirm_password"
+                  autoComplete="off"
+                  type={confirmPassword}
+                  placeholder="New Password Confirm"
+                  className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                  maxLength={15}
+                  onChange={handleInputChange}
+                  value={formValues.confirm_password.value}
+                />
+                <label
+                  htmlFor="confirm_password"
+                  className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
+                >
+                  New Password Confirm
+                </label>
+                <span
+                  className={`${styles.loginIcon} ${
+                    confirmPassword === "password"
+                      ? "icon-visibility-off"
+                      : "icon-visibility-on"
+                  } position-absolute`}
+                  onClick={() => showPasswordText("confirmPassword")}
+                ></span>
+                <span className={styles.focusBorder}></span>
+              </div>
+              {formValues.confirm_password.error && (
+                <div className={`${styles.formError} col-12 d-inline-flex`}>
+                  {formValues.confirm_password.errorMessage}
+                </div>
+              )}
             </div>
-            <div
-              className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
-            >
-              <input
-                id="old_password"
-                name="old_password"
-                autoComplete="off"
-                type={yourPassword}
-                placeholder="Your Password"
-                className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
-                maxLength={15}
-                onChange={handleInputChange}
-                value={formValues.old_password.value}
-              />
-              <label
-                htmlFor="old_password"
-                className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
+            <div className="col-12 d-inline-block">
+              <div
+                className={`${styles.loginFormRow} col-12 d-inline-block position-relative`}
               >
-                Your Password
-              </label>
-              <span
-                className={`${styles.loginIcon} ${
-                  yourPassword === "password"
-                    ? "icon-visibility-off"
-                    : "icon-visibility-on"
-                } position-absolute`}
-                onClick={() => showPasswordText("originPassword")}
-              ></span>
-              <span className={styles.focusBorder}></span>
+                <input
+                  id="old_password"
+                  name="old_password"
+                  autoComplete="off"
+                  type={yourPassword}
+                  placeholder="Your Password"
+                  className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
+                  maxLength={15}
+                  onChange={handleInputChange}
+                  value={formValues.old_password.value}
+                />
+                <label
+                  htmlFor="old_password"
+                  className={`cursor-text outline-none position-absolute ${styles.withIconFormLabel}`}
+                >
+                  Your Password
+                </label>
+                <span
+                  className={`${styles.loginIcon} ${
+                    yourPassword === "password"
+                      ? "icon-visibility-off"
+                      : "icon-visibility-on"
+                  } position-absolute`}
+                  onClick={() => showPasswordText("originPassword")}
+                ></span>
+                <span className={styles.focusBorder}></span>
+              </div>
+              {formValues.old_password.error && (
+                <div className={`${styles.formError} col-12 d-inline-flex`}>
+                  {formValues.old_password.errorMessage}
+                </div>
+              )}
             </div>
             <div
               className={`d-inline-flex justify-content-center col-12 ${styles.loginBtnBox}`}
