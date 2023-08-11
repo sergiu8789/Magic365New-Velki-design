@@ -22,7 +22,7 @@ export const MatchLiveCard = ({ matchId }) => {
     <React.Fragment>
       {liveUrl && (
         <div
-          className={`${styles.matchScoreGraph} col-12 d-inline-flex align-items-center position-sticky`}
+          className={`${styles.matchScoreGraph} col-12 overflow-hidden d-inline-flex align-items-center position-sticky`}
         >
           <iframe
             title="live-score"

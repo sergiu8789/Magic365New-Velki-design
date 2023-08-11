@@ -5,12 +5,12 @@
 
 .allMatchBox {
     border-bottom: 1px solid #FFF;
-    height: 46px;
+    min-height: 46px;
     background: rgb(238, 246, 251);
 }
 
 .gameName {
-    padding: 0 8px;
+    padding: 8px;
     font-size: 17px;
     color: rgb(30, 30, 30);
     font-weight: 700;

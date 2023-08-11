@@ -54,6 +54,7 @@ export const MyBets = ({ openMyBets }) => {
     market_type,
     market_name
   ) => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     let Title_type = "",
       title_market = "",
       TitleName = "";
@@ -103,7 +104,12 @@ export const MyBets = ({ openMyBets }) => {
       item.market_type,
       item.market_name ? item.market_name : null
     ).then((res) => {
-      if (res?.data?.rows) setBetList(res.data.rows);
+      if (res?.data?.rows) {
+        setBetList(res.data.rows);
+        appData.setAppData({ ...appData.appData, listLoading: false });
+      } else {
+        appData.setAppData({ ...appData.appData, listLoading: false });
+      }
     });
   };
 
@@ -120,6 +126,7 @@ export const MyBets = ({ openMyBets }) => {
     if (auth.auth.loggedIn) {
       ApiService.getUserBetMatches()
         .then((res) => {
+          appData.setAppData({ ...appData.appData, listLoading: false });
           if (res?.data?.rows) {
             setMatchListCount(res.data.count);
             setMatchList(res.data.rows);
@@ -132,6 +139,7 @@ export const MyBets = ({ openMyBets }) => {
           }
         })
         .catch((err) => {
+          appData.setAppData({ ...appData.appData, listLoading: false });
           setMatchListCount(0);
           if (
             err?.response?.data?.statusCode === 401 &&
@@ -169,6 +177,7 @@ export const MyBets = ({ openMyBets }) => {
     if (tabRef && tabRef.current) {
       tabRef.current.click();
     }
+    appData.setAppData({ ...appData.appData, listLoading: true });
   }, [openMyBets]);
 
   return (
@@ -257,6 +266,7 @@ export const MyBets = ({ openMyBets }) => {
               } col-12`}
               id="ExchangeBetsList"
             >
+              {matchListCount === 0 && <NoData title="No Bets" />}
               {matchList.map((item, index) => (
                 <div
                   className={`${styles.singleBetRow} col-12 d-flex align-items-center position-relative`}
@@ -318,7 +328,9 @@ export const MyBets = ({ openMyBets }) => {
                   : `${styles.slideOutRight} d-none`
               } col-12 d-inline-block`}
               id="ParalayBetsList"
-            ></div>
+            >
+              <NoData title="No Bets" />
+            </div>
             <div
               className={`${styles.allBetsList} ${styles.BetDetailList} ${
                 betWindow === "betDetail"
@@ -327,7 +339,6 @@ export const MyBets = ({ openMyBets }) => {
               } col-12 d-inline-block`}
               id="BetDetailList"
             >
-              {matchListCount === 0 && <NoData title="No Bets" />}
               {betsList.map((item, index) => (
                 <div
                   className={`${styles.betDetail} overflow-hidden col-12 d-inline-block`}

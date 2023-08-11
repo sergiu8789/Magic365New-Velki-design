@@ -2,10 +2,15 @@
     padding: 8px 17px;
     overflow-y: auto;
     max-height: calc(100vh - 186px);
+    scroll-behavior: smooth;
 }
 
 .leagueDirectory, .allLeaguesgame, .leagueInitialBox, .allGamesList, .leagueMatchContainer {
     gap: 8px;
+}
+
+.leagueDirectory {
+    top: 0px;
 }
 
 .leagueInitialBox:after {

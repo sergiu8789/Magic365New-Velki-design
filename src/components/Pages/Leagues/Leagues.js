@@ -17,7 +17,7 @@ export const Leagues = () => {
   const [selectedMatch, setSelectedMatch] = useState("");
   const [tournamentList, setTournamentList] = useState([]);
   const [matchList, setMatchList] = useState([]);
-  const [matchIds,setMatchIds] = useState([]);
+  const [matchIds, setMatchIds] = useState([]);
 
   const activeSportsTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -49,16 +49,15 @@ export const Leagues = () => {
           res?.data?.data?.forEach((item) => {
             marketId.push(item.market_id);
           });
-          setMatchIds(marketId)
+          setMatchIds(marketId);
         }
       });
     }
   }, [leagueName]);
 
   useEffect(() => {
-    if(matchIds.length)
-      socket.emit("subscription",matchIds);
-  },[matchIds]);
+    if (matchIds.length) socket.emit("subscription", matchIds);
+  }, [matchIds]);
 
   const sportsCat = [
     {
