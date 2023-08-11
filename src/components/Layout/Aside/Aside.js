@@ -34,11 +34,7 @@ function Aside({ openAside, setopenAside }) {
       <div
         className={`position-fixed m-auto col-12 h-100 d-inline-block ${
           styles.asideContainer
-        } ${
-          openAside
-            ? styles.asideContainerShow
-            : styles.asideContainerHide
-        }`}
+        } ${openAside ? styles.asideContainerShow : styles.asideContainerHide}`}
       >
         <div
           className={`${styles.asideDrawer} position-relative h-100 d-inline-block`}
@@ -105,7 +101,7 @@ function Aside({ openAside, setopenAside }) {
           >
             <div
               className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
-              onClick={() => OpenCurrentBet("menu/setting")}
+              onClick={() => OpenCurrentBet("setting")}
             >
               <span className="icon icon-setting"></span>
               <span className={styles.itemLinkName}>Setting</span>
@@ -129,11 +125,11 @@ function Aside({ openAside, setopenAside }) {
             </div>
           </div>
           <div
-            className={`${styles.timeZone} d-flex justify-content-center align-items-center`}
+            className={`${styles.timeZone} d-flex justify-content-center align-items-start`}
           >
-            <i className="icon-sphere w-5 text-16"></i>
+            <i className="icon-sphere mt-1"></i>
             <p className={`${styles.timeZoneTime} d-inline-flex`}>
-              Time Zone：GMT+6:00
+              Time Zone：{new Date().toTimeString().slice(9)}
             </p>
           </div>
         </div>

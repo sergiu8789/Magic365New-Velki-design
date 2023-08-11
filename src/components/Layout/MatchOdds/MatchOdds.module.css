@@ -41,11 +41,12 @@
     background: #ffc800;
     padding: 6px 10px;
     gap: 15px;
+    overflow-x: auto;
 }
 
 .matchTitleHighlight {
-    padding-bottom: 5px;
     font-size: 20px;
+    padding: 0 6px 5px;
 }
 
 .oddsActiveLine {
@@ -53,10 +54,9 @@
     border-radius: 4px;
     background: #000;
     height: 4px;
-    transition: all ease 400ms;
-    -webkit-transition: all ease 400ms;
+    transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
+    -webkit-transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
     bottom: 4px;
-    width: 130px;
 }
 
 .matchOddTitle {
