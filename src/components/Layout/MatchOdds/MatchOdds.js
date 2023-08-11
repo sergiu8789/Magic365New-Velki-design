@@ -32,9 +32,10 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
 
   /****** method to fetch other market list from API  ********/
   const getMatchOdds = () => {
+    let marketTypes = [selectedMarket];
+    setExchangeTabList(marketTypes);
     ApiService.getMatchOdds(matchId).then((res) => {
-      if(res?.data?.odds?.length){
-        let marketTypes = [];
+      if(res?.data?.odds?.length){ 
         let marketIds = [];
         res?.data?.odds[0]?.forEach(item => {
              if( item.market_type !== "fancy" &&
@@ -44,10 +45,6 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
                 marketIds.push(item.market_id);
              }
         });
-    
-        if(!marketTypes?.length)
-          marketTypes.push(selectedMarket);
-
         setMarketList(marketIds);
         setExchangeTabList(marketTypes);
       }
@@ -166,9 +163,9 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
           <div
             className={`${styles.matchOddTitleRow} position-relative d-inline-flex align-items-center col-12`}
           >
-            {exchangeTabList?.map((item) => {
+            {exchangeTabList?.map((item,index) => {
               return(
-                <div onClick={() => setSelectedMarket(item)}
+                <div key={index} onClick={() => setSelectedMarket(item)}
                    className={`${styles.matchTitleHighlight} d-inline-flex align-items-center`}
                  >
                   <i className="icon-star"></i>
@@ -295,7 +292,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
             } d-inline-flex align-items-center justify-content-center position-relative`}
             onClick={() => selectFancyTab("PremiumBet")}
           >
-            PremiumBet
+            Sportsbook
           </div>
         </div>
 
