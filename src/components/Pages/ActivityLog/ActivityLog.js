@@ -5,9 +5,11 @@ import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import { changeDateFormat, formatTime } from "../../../utils/helper";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const ActivityLog = () => {
   const auth = useContext(AuthContext);
+  const appData = useApp();
   const [activityLogsList, setActivityLogsList] = useState([]);
   const [page, setPage] = useState(1);
   const [betStatusDrop, setbetStatusDrop] = useState(false);
@@ -23,6 +25,7 @@ export const ActivityLog = () => {
   };
 
   const setBetStatusVal = (val) => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     setbetStatus(val);
     setbetStatusDrop(false);
   };
@@ -33,6 +36,7 @@ export const ActivityLog = () => {
   };
 
   const handlePage = (state) => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     if (state === "next") {
       let newPage = page + 1;
       setPage(newPage);
@@ -46,14 +50,17 @@ export const ActivityLog = () => {
   };
 
   useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     ApiService.activityLogs(page)
       .then((res) => {
         let totalPage = res.data.count / 10;
         totalPage = Math.ceil(totalPage);
         setTotalRecords(totalPage);
         setActivityLogsList(res.data.data);
+        appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
+        appData.setAppData({ ...appData.appData, listLoading: false });
         if (
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"

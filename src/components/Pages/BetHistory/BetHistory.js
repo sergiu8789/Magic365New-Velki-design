@@ -6,6 +6,7 @@ import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import { NoData } from "../../Layout/NoData/NoData";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 import {
   changeDateFormat,
   formatTime,
@@ -15,6 +16,7 @@ import {
 
 export const BetHistory = () => {
   const auth = useContext(AuthContext);
+  const appData = useApp();
   const TabList = [
     "All",
     "Exchange",
@@ -68,8 +70,12 @@ export const BetHistory = () => {
   };
 
   const setDateChoose = () => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     let dateValue = document.getElementById("calendarDate").value;
     dateValue = dateValue.split("-");
+    if (fromDate === dateValue[0].trim() && toDate === dateValue[1].trim()) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
+    }
     setFromDate(dateValue[0].trim());
     setToDate(dateValue[1].trim());
   };
@@ -115,11 +121,16 @@ export const BetHistory = () => {
   };
 
   const selectDateFilter = (date) => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
+    if (date === period) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
+    }
     setPeriod(date);
     closeCalenderFilter();
   };
 
   const handlePage = (state) => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     if (state === "next") {
       let newPage = page + 1;
       setPage(newPage);
@@ -155,16 +166,17 @@ export const BetHistory = () => {
       popularTabActive
     )
       .then((res) => {
-        console.log(res);
         let totalPage = res.data.count / 10;
         totalPage = Math.ceil(totalPage);
         setTotalRecords(totalPage);
         setTotalCount(res.data.count);
         setBettingHistoryList(res.data.data);
+        appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
         setTotalRecords(0);
         setTotalCount(0);
+        appData.setAppData({ ...appData.appData, listLoading: false });
         if (
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"
@@ -181,14 +193,17 @@ export const BetHistory = () => {
   };
 
   useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     if (period !== "custom") fetchHistoryData();
   }, [fromDate, toDate]);
 
   useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     fetchHistoryData();
   }, [page]);
 
   useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     setPage(1);
     fetchHistoryData();
   }, [betStatus, popularTabActive]);
@@ -213,7 +228,7 @@ export const BetHistory = () => {
       setToDate("");
       setFromDate("");
     }
-  }, [period]);
+  }, [period, popularTabActive]);
 
   useEffect(() => {
     if (

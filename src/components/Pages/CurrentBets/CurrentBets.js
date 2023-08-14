@@ -4,6 +4,7 @@ import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import { NoData } from "../../Layout/NoData/NoData";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 import {
   changeDateFormat,
   formatTime,
@@ -13,6 +14,7 @@ import {
 export const CurrentBets = () => {
   const auth = useContext(AuthContext);
   const [page, setPage] = useState(1);
+  const appData = useApp();
   const TabList = [
     "All",
     "Exchange",
@@ -117,10 +119,12 @@ export const CurrentBets = () => {
         setTotalRecords(totalPage);
         setTotalCount(res.data.count);
         SetCurrentBetsList(res.data.data);
+        appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
         setTotalRecords(0);
         setTotalCount(0);
+        appData.setAppData({ ...appData.appData, listLoading: false });
         if (
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"
@@ -137,10 +141,12 @@ export const CurrentBets = () => {
   };
 
   useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     fetchCurrentBets();
   }, [page]);
 
   useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     setPage(1);
     fetchCurrentBets();
   }, [betStatus, popularTabActive]);

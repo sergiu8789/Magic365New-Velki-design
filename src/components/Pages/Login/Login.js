@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
+import { BetPlacePopup } from "../../Layout/BetPlacePopup/BetPlacePopup";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import { Form } from "react-bootstrap";
 import jwtDecode from "jwt-decode";
@@ -12,6 +13,10 @@ export const Login = () => {
   const auth = useAuth();
   const [loginSlide, setloginSlide] = useState("true");
   const [yourPassword, setyourPassword] = useState("password");
+  const [passChange, setPassChange] = useState(false);
+  const [passChangeTitle, setpassChangeTitle] = useState(false);
+  const [passChangeMsg, setpassChangeMsg] = useState(false);
+  const [passStatus, setpassStatus] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -103,6 +108,10 @@ export const Login = () => {
         .then((res) => {
           if (res?.data) {
             if (res.data.token) {
+              setPassChange(true);
+              setpassChangeTitle("Login Success");
+              setpassChangeMsg("You have been LoggedIn successfully.");
+              setpassStatus(true);
               const user = jwtDecode(res.data.token);
               navigate("/");
               auth.setAuth({
@@ -115,9 +124,25 @@ export const Login = () => {
             }
           }
           if (res.status === 202) {
+            setPassChange(true);
+            setpassChangeTitle("Failed to Login");
+            setpassChangeMsg("Your credentails are Inccorrect.");
+            setpassStatus(false);
           }
         })
-        .catch((err) => {});
+        .catch((err) => {
+          if (err.response.status === 401) {
+            setPassChange(true);
+            setpassChangeTitle("Failed to Login");
+            setpassChangeMsg("Your credentails are Inccorrect.");
+            setpassStatus(false);
+          } else {
+            setPassChange(true);
+            setpassChangeTitle("Failed to Login");
+            setpassChangeMsg("Network error.");
+            setpassStatus(false);
+          }
+        });
     }
   };
 
@@ -299,6 +324,16 @@ export const Login = () => {
           </div>
         </div>
       </Form>
+      {passChange && (
+        <BetPlacePopup
+          status={passStatus}
+          betbox={true}
+          title={passChangeTitle}
+          message={passChangeMsg}
+          type="1"
+          setPassChange={setPassChange}
+        />
+      )}
     </React.Fragment>
   );
 };

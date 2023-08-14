@@ -5,6 +5,7 @@ import styles from "./ProfitLoss.module.css";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 import {
   changeDateFormat,
   formatTime,
@@ -15,6 +16,7 @@ import { NoData } from "../../Layout/NoData/NoData";
 
 export const ProfitLoss = () => {
   const auth = useContext(AuthContext);
+  const appData = useApp();
   const TabList = ["All", "Exchange", "Bookmaker", "Fancybet", "Premium"];
   const [popularTabActive, setpopularTabActive] = useState("");
   const [TabLineWidth, setTabLineWidth] = useState("");
@@ -23,7 +25,7 @@ export const ProfitLoss = () => {
   const [betStatusDrop, setbetStatusDrop] = useState("false");
   const [betStatus, setbetStatus] = useState("All");
   const [page, setPage] = useState(1);
-  const [period, setPeriod] = useState("all");
+  const [period, setPeriod] = useState("All");
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalPL, setTotalPl] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
@@ -67,13 +69,18 @@ export const ProfitLoss = () => {
   };
 
   const setDateChoose = () => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     let dateValue = document.getElementById("calendarDate").value;
     dateValue = dateValue.split("-");
+    if (fromDate === dateValue[0].trim() && toDate === dateValue[1].trim()) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
+    }
     setFromDate(dateValue[0].trim());
     setToDate(dateValue[1].trim());
   };
 
   const setBetStatusVal = (name, val) => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     settotalBetCount(val);
     setbetStatus(name);
     setbetStatusDrop("false");
@@ -88,11 +95,16 @@ export const ProfitLoss = () => {
   };
 
   const selectDateFilter = (date) => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
+    if (date === period) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
+    }
     setPeriod(date);
     closeCalenderFilter();
   };
 
   const handlePage = (state) => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     if (state === "next") {
       let newPage = page + 1;
       setPage(newPage);
@@ -113,8 +125,10 @@ export const ProfitLoss = () => {
         setTotalRecords(totalPage);
         setTotalCount(res.data.count);
         setMatchesList(res.data.data);
+        appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
+        appData.setAppData({ ...appData.appData, listLoading: false });
         setTotalRecords(0);
         setTotalCount(0);
         if (
@@ -146,6 +160,7 @@ export const ProfitLoss = () => {
         .classList.remove("d-inline-block");
       document.getElementById("moreBetInfo_" + id).classList.add("d-none");
     } else {
+      appData.setAppData({ ...appData.appData, listLoading: true });
       document
         .getElementById("footerRecord_" + id)
         .classList.add(styles.footerRecordOpen);
@@ -177,9 +192,11 @@ export const ProfitLoss = () => {
             settotalBetCount(initialValue);
           }
           setGamesProfitList(res.data.data);
+          appData.setAppData({ ...appData.appData, listLoading: false });
         }
       })
       .catch((err) => {
+        appData.setAppData({ ...appData.appData, listLoading: false });
         if (
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"
@@ -218,8 +235,10 @@ export const ProfitLoss = () => {
         matchesList[index].marketTotal = marketTotal;
         matchesList[index].netTotal = marketTotal - commission;
         setMatchesList([...matchesList]);
+        appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
+        appData.setAppData({ ...appData.appData, listLoading: false });
         if (
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"
@@ -237,17 +256,20 @@ export const ProfitLoss = () => {
 
   useEffect(() => {
     if (period !== "custom") {
+      appData.setAppData({ ...appData.appData, listLoading: true });
       fetchBetsPLData();
       fetchGamesPL();
     }
   }, [fromDate, toDate]);
 
   useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     fetchBetsPLData();
     fetchGamesPL();
   }, [page, popularTabActive]);
 
   useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     setPage(1);
     const date = new Date();
     let result = "";
