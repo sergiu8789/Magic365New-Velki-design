@@ -1,25 +1,33 @@
 import React, { useState } from "react";
 import styles from "./Settings.module.css";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const Settings = () => {
+  const appData = useApp();
   const [highlightOdds, sethighlightOdds] = useState(true);
   const [fullMarket, setfullMarket] = useState(true);
+
   const changeFullMarket = () => {
     if (fullMarket) {
       setfullMarket(false);
+      appData.setAppData({ ...appData.appData, fullMarket: false });
     } else {
       setfullMarket(true);
+      appData.setAppData({ ...appData.appData, fullMarket: true });
     }
   };
 
   const changeMarketOdds = () => {
     if (highlightOdds) {
       sethighlightOdds(false);
+      appData.setAppData({ ...appData.appData, highlightOdds: true });
     } else {
       sethighlightOdds(true);
+      appData.setAppData({ ...appData.appData, highlightOdds: false });
     }
   };
+
   return (
     <React.Fragment>
       <MenuHeader title="Settings" />
@@ -39,7 +47,7 @@ export const Settings = () => {
               className={`${styles.btntoggle} position-absolute`}
               type="checkbox"
               checked={highlightOdds}
-              onClick={changeMarketOdds}
+              onChange={() => changeMarketOdds()}
             />
             <label
               className={styles.btntoggleLabel}
@@ -62,7 +70,7 @@ export const Settings = () => {
               className={`${styles.btntoggle} position-absolute`}
               type="checkbox"
               checked={fullMarket}
-              onClick={changeFullMarket}
+              onChange={() => changeFullMarket()}
             />
             <label
               className={styles.btntoggleLabel}

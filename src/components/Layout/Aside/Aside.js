@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Aside.module.css";
+import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
 import { AsideList } from "../../../data/AsideList";
 
 function Aside({ openAside, setopenAside }) {
+  const [totalCount, setTotalCount] = useState(0);
   const auth = useAuth();
   const navigate = useNavigate();
 
@@ -28,6 +30,30 @@ function Aside({ openAside, setopenAside }) {
     navigate("/");
     setopenAside(false);
   };
+
+  useEffect(() => {
+    if (auth.loggedIn) {
+      ApiService.currentBets(1, "", "")
+        .then((res) => {
+          setTotalCount(res.data.count);
+        })
+        .catch((err) => {
+          setTotalCount(0);
+          if (
+            err?.response?.data?.statusCode === 401 &&
+            err?.response?.data?.message === "Unauthorized"
+          ) {
+            localStorage.removeItem("token");
+            auth.setAuth({
+              ...auth.auth,
+              isloggedIn: false,
+              user: {},
+              showSessionExpire: true,
+            });
+          }
+        });
+    }
+  });
 
   return (
     <React.Fragment>
@@ -65,7 +91,7 @@ function Aside({ openAside, setopenAside }) {
                   <span
                     className={`${styles.curentBetCount} d-inline-flex align-items-center justify-content-center`}
                   >
-                    0
+                    {totalCount}
                   </span>
                 )}
                 <span

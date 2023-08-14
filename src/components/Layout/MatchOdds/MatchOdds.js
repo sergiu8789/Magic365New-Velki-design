@@ -7,11 +7,12 @@ import { FancyOdds } from "../FancyOdds/FancyOdds";
 import { PremiumOdds } from "../PremiumOdds/PremiumOdds";
 import { BookmakerOdds } from "../BookmakerOdds/BookmakerOdds";
 import { useBet } from "../../../context/BetContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 import { encrypt } from "../../../utils/crypto";
 
 export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const betData = useBet();
-
+  const appData = useApp();
   const [hideMarketDepth, sethideMarketDepth] = useState(false);
   const [fancyTabActive, setfancyTabActive] = useState("Fancybet");
   const [popularTabActive, setpopularTabActive] = useState("All");

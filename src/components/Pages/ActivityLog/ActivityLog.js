@@ -133,6 +133,7 @@ export const ActivityLog = () => {
           betStatus === "Active Log" ? "d-inline-flex" : "d-none"
         } flex-column p-3`}
       >
+        {totalRecords === 0 && <NoData title="No Logs" />}
         {activityLogsList?.map((item, index) =>
           item ? (
             <React.Fragment key={index}>

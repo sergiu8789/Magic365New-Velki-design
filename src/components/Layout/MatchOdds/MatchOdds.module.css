@@ -129,6 +129,7 @@
     font-size: 11px;
     color: rgb(30, 30, 30);
     line-height: 11px;
+    padding: 0 5px;
 }
 
 .marketDepthBox {
@@ -279,7 +280,7 @@
 }
 
 .popularTabTitle {
-    height: 43px;
+    min-height: 43px;
     padding: 8px 40px 8px 8px;
     border-radius: 13px 13px 0px 0px;
     background: #eef6fb;
