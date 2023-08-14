@@ -554,7 +554,7 @@ export const BetHistory = () => {
               </div>
               <div
                 className={`${styles.betMoreInfo} col-12 d-none`}
-                id={`moreBetInfo_${item.game_id}`}
+                id={`moreBetInfo_${item.game_id}${index}`}
               >
                 <div
                   className={`${styles.balanceRecordInfo} ${styles.betTakenInfo} d-inline-flex align-items-center col-12`}
@@ -635,8 +635,8 @@ export const BetHistory = () => {
               </div>
               <div
                 className={`${styles.footerRecord} col-12 d-inline-block position-relative`}
-                id={`footerRecord_${item.game_id}`}
-                onClick={() => showBetInfo(item.game_id)}
+                id={`footerRecord_${item.game_id}${index}`}
+                onClick={() => showBetInfo(item.game_id + index)}
               >
                 <div
                   className={`${styles.recordMoreDrop} position-absolute m-auto d-inline-flex align-items-center justify-content-center`}
