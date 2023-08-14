@@ -98,11 +98,13 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
           ? item?.ExchangePrices?.AvailableToBack[0]?.price
           : item?.ExchangePrices?.AvailableToLay[0]?.price,
       selection: item.runnerName,
-      runnerName: item.runnerName,
+      runner_name: item.runnerName,
       selection_id: item.SelectionId,
       market_id: market.MarketId,
       match_id: market.eventId,
-      market_name: selectedMarket.market,
+      market_name: "",
+      status : item.Status,
+      market_type : selectedMarket.market,
     };
     betData.setBetData({
       ...betData.betData,
