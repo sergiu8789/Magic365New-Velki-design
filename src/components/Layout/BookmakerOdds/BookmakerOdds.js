@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styles from "../MatchOdds/MatchOdds.module.css";
+import { useBet } from "../../../context/BetContextProvider";
 
-export const BookmakerOdds = ({ oddsList }) => {
+export const BookmakerOdds = ({ oddsList,matchId }) => {
+  const betData = useBet();
   const [hideBookMarker, sethideBookMarker] = useState("false");
 
   const hideBookMarkerOdd = () => {
@@ -11,6 +13,34 @@ export const BookmakerOdds = ({ oddsList }) => {
       sethideBookMarker("true");
     }
   };
+
+  const placeBet = (item,type) => {
+    const betSelection = {
+      amount: "",
+      type: type,
+      size:
+        type === 1
+          ? item?.bs1
+          : item?.ls1,
+      odds:
+        type === 1
+          ? item?.b1
+          : item?.l1,
+      selection: item.nat,
+      runner_name: item.nat,
+      selection_id: item.sid,
+      market_id: item.mid,
+      match_id: matchId,
+      market_name: "",
+      status : item.s,
+      market_type : 'bookmaker',
+    };
+    betData.setBetData({
+      ...betData.betData,
+      betSlipStatus: true,
+      betSelection: betSelection,
+    });
+  }
 
   return (
     <div
@@ -61,16 +91,16 @@ export const BookmakerOdds = ({ oddsList }) => {
                 >
                   {item.nat}
                 </div>
-                <div
+                <div 
                   className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
                 >
-                  <div
+                  <div onClick={() => placeBet(item,1)}
                     className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
                   >
                     <span className={`${styles.oddStake}`}>{item.b1}</span>
                     <span className={`${styles.oddExposure}`}>{item.bs1}</span>
                   </div>
-                  <div
+                  <div onClick={() => placeBet(item,2)}
                     className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
                   >
                     <span className={`${styles.oddStake}`}>{item.l1}</span>

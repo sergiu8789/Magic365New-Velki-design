@@ -143,7 +143,6 @@ export const BetSlip = () => {
 
   useEffect(() => {
     if (betPlacing) {
-      
       let betSelection = betData?.betData?.betSelection;
       if (betSelection.status === 'ACTIVE' ) {
         const data = {
@@ -171,7 +170,7 @@ export const BetSlip = () => {
             setBetSuccess(true);
             betData.setBetData({
               ...betData.betData,
-              betSlipStatus: false
+              betSlipStatus: false,
             });
             if (res.status === 200 || res.status === 201) {
              // setBetList(res.data.bets);

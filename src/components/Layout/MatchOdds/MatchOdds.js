@@ -345,7 +345,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
       )}
 
       {/* BookMarker container */}
-      {bookmakerOddsList && <BookmakerOdds oddsList={bookmakerOddsList} />}
+      {bookmakerOddsList && <BookmakerOdds oddsList={bookmakerOddsList} matchId={matchId}/>}
 
       {/* Fancy Premium container */}
       <div className={`${styles.fancyOuterBox} col-12 d-inline-block`}>
@@ -405,7 +405,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
           {fancyTabActive === "PremiumBet" ? (
             <PremiumOdds oddsList={premiumOddsList} />
           ) : (
-            <FancyOdds oddsList={fancyOddsList} />
+            <FancyOdds oddsList={fancyOddsList} matchId={matchId} />
           )}
         </div>
       </div>
