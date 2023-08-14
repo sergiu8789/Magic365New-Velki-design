@@ -3,38 +3,28 @@ import styles from "./BetPlacePopup.module.css";
 
 export const BetPlacePopup = ({
   status,
-  betbox,
+  show,
+  setShow,
   title,
-  message,
-  type,
-  setPassChange,
+  betDetails
+ // setPassChange = false,
 }) => {
-  const [betStatus, setbetStatus] = useState(true);
-  const [betshow, setbetshow] = useState(false);
-
-  const closeMatchBet = () => {
-    setbetshow(false);
-    setbetStatus(true);
-    setPassChange(false);
-  };
 
   useEffect(() => {
-    let clearTime = "";
-    setbetStatus(status);
-    setbetshow(betbox);
-    clearTimeout(clearTime);
-    clearTime = setTimeout(function () {
-      closeMatchBet();
-    }, 6000);
-  }, status);
+    if(show){
+      setTimeout(function () {
+        setShow(false);
+       }, 6000);
+    }
+  }, [show]);
 
   return (
     <React.Fragment>
       <div
         className={`${styles.betPlacePopup} ${
-          betStatus === true ? styles.betMatchSuccess : styles.betMatchFailed
+          status ? styles.betMatchSuccess : styles.betMatchFailed
         } ${
-          betshow && styles.showBetStatus
+          show && styles.showBetStatus
         } position-fixed m-auto col-12 d-inline-flex flex-column overflow-hidden`}
       >
         <div
@@ -43,7 +33,7 @@ export const BetPlacePopup = ({
           <div
             className={`${styles.betMatchTitle} d-inline-flex align-items-center`}
           >
-            {betStatus === true ? (
+            {status ? (
               <i className="icon-check-circle"></i>
             ) : (
               <i className="icon-info-circle"></i>
@@ -52,37 +42,34 @@ export const BetPlacePopup = ({
           </div>
           <i
             className={`${styles.closeMatchClose} icon-close position-absolute d-inline-flex align-items-center justify-content-center`}
-            onClick={closeMatchBet}
+            onClick={() => setShow(false)}
           ></i>
         </div>
         <div
           className={`${styles.matchBetDetail} col-12 d-inline-flex align-items-stretch`}
         >
-          {type === "0" ? (
+          
             <React.Fragment>
+            <span
+              className={`${styles.betTag} ${betDetails.type === 1 ? styles.OddbackTag : styles.OddLayTag} position-relative d-inline-flex align-items-center`}
+            >
+              {betDetails.type === 1 ? "Back" : "Lay"}
+            </span>
               <span className={`${styles.matchName} flex-grow-1 d-inline-flex`}>
-                Borussia Monchengladbach SRL
+                {betDetails.runner_name}
               </span>
               <span
                 className={`${styles.matchLoss} ${styles.matchLossBox} flex-shrink-0 d-inline-flex`}
               >
-                PBU 1
+                PBU {betDetails.amount}
               </span>
               <span
                 className={`${styles.matchOdds} flex-shrink-0 d-inline-flex`}
               >
-                1.68
+              {betDetails.odds}
               </span>
             </React.Fragment>
-          ) : type === "1" ? (
-            <span
-              className={`${styles.matchName} flex-grow-1 justify-content-center col-12 d-inline-flex`}
-            >
-              {message}
-            </span>
-          ) : (
-            <></>
-          )}
+          
         </div>
       </div>
     </React.Fragment>
