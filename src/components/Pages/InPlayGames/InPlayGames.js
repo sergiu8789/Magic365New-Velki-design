@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./InPlayGames.module.css";
 import { MatchLiveCard } from "../../Layout/MatchLiveCard/MatchLiveCard";
 import { MatchScoreCard } from "../../Layout/MatchScoreCard/MatchScoreCard";
@@ -8,20 +8,19 @@ import { useLocation } from "react-router-dom";
 import ApiService from "../../../services/ApiService";
 import { BetSlip } from "../../Layout/BetSlip/BetSlip";
 
-
 export const InPlayGames = () => {
   const location = useLocation();
-  const [streamUrl,setStreamUrl] = useState("");
-  const [scorecardUrl,setScoreCardUrl] = useState("");
+  const [streamUrl, setStreamUrl] = useState("");
+  const [scorecardUrl, setScoreCardUrl] = useState("");
 
   useEffect(() => {
-    if(location?.state?.match_id){
+    if (location?.state?.match_id) {
       ApiService.getScoreCard(location?.state?.match_id).then((res) => {
         if (res?.streamingUrl) setStreamUrl(res.streamingUrl);
-        if(res?.scoreUrl) setScoreCardUrl(res.scoreUrl);
+        if (res?.scoreUrl) setScoreCardUrl(res.scoreUrl);
       });
     }
-  },[location?.state?.match_id])
+  }, [location?.state?.match_id]);
 
   return (
     <React.Fragment>
