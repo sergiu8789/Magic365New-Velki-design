@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./MatchOdds.module.css";
-import { MarketDepth } from "../../MarketDepth/MarketDepth";
+import { MarketDepth } from "../MarketDepth/MarketDepth";
 import ApiService from "../../../services/ApiService";
 import { socket } from "../../../services/socket";
 import { FancyOdds } from "../FancyOdds/FancyOdds";
