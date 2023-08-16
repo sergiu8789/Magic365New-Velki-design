@@ -9,6 +9,7 @@ import { BookmakerOdds } from "../BookmakerOdds/BookmakerOdds";
 import { useBet } from "../../../context/BetContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
 import { encrypt } from "../../../utils/crypto";
+import { formatFancyTime } from "../../../utils/helper";
 
 export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const betData = useBet();
@@ -31,6 +32,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const [premiumOddsList, setPremiumOddsList] = useState([]);
   const [exchangeTabList, setExchangeTabList] = useState([]);
   const [marketIdList, setMarketList] = useState([]);
+  const [fancyBookUpdated,setFancyBookUpdated] = useState("");
   const [matchOddsRunner, setMatchOddsRunner] = useState("");
   const prevCountRef = useRef(matchOddsRunner);
 
@@ -155,6 +157,8 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
       if (value.matchId === matchId) {
         if (value.fancy) setFancyOddsList(value.fancy);
         if (value.bookmaker?.bm1) setBookmakerOddsList(value.bookmaker);
+        if(value?.servertime)
+         setFancyBookUpdated(formatFancyTime(value.servertime ))
       }
     }
 
@@ -461,7 +465,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
           {fancyTabActive === "PremiumBet" ? (
             <PremiumOdds oddsList={premiumOddsList} />
           ) : (
-            <FancyOdds oddsList={fancyOddsList} matchId={matchId} />
+            <FancyOdds oddsList={fancyOddsList} matchId={matchId} time={fancyBookUpdated}/>
           )}
         </div>
       </div>

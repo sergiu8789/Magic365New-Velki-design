@@ -14,9 +14,11 @@ export const BetSlip = () => {
   const [betSlip, setBetSlip] = useState("");
   const [betButton, setbetButton] = useState(true);
   const [betStakeType, setbetStakeType] = useState("");
-  const [betPlacing, setBetPlacing] = useState(false);
-  const [betSuccess, setBetSuccess] = useState(true);
-  const [betSuccessShow, setBetSuccessShow] = useState(false);
+  const [betPlacing,setBetPlacing] = useState(false);
+  const [betSuccess,setBetSuccess] = useState(true);
+  const [betSuccessShow,setBetSuccessShow] = useState(false);
+  const [betSuccessTitle,setBetTitleMessage] = useState("");
+  const [betFailedMessage,setBetFailMessage] = useState("");
 
   const closeBetSlip = () => {
     betData.setBetData({
@@ -147,7 +149,7 @@ export const BetSlip = () => {
   useEffect(() => {
     if (betPlacing) {
       let betSelection = betData?.betData?.betSelection;
-      if (betSelection.status === "ACTIVE") {
+      if (betSelection.status === 'ACTIVE' || (betSelection.market_type === 'fancy' && betSelection.status === '') ) {
         const data = {
           amount: parseFloat(betSelection.amount),
           market_id: betSelection.market_id,
@@ -175,10 +177,12 @@ export const BetSlip = () => {
             setBetPlacing(false);
             setBetSuccessShow(true);
             setBetSuccess(true);
+            setBetTitleMessage("Bet Matched");
             betData.setBetData({
               ...betData.betData,
               betSlipStatus: false,
             });
+            auth.setAuth({...auth.auth,fetchWallet:true});
             if (res.status === 200 || res.status === 201) {
               // setBetList(res.data.bets);
               // setSucees(true);
@@ -230,19 +234,23 @@ export const BetSlip = () => {
         // setProgress(20);
         // setProgressStatus("");
         let message = "Odds are Suspended";
-        if (betSelection.status === "SUSPENDED") {
+        if (betSelection.status === "SUSPENDED") 
           message = "Odds are Suspended";
-        }
-        if (betSelection.status === "CLOSED") {
+        
+        if (betSelection.status === "CLOSED") 
           message = "Market are Closed";
-        }
-        // messageData.setMessageData({
-        //   ...messageData.messageData,
-        //   betConfimationData: {
-        //     type: "failed",
-        //     message: message,
-        //   },
-        // });
+        
+        if (betSelection.status === "Expired") 
+          message = "Market are Closed";
+        setBetSuccess(false);
+        setBetSuccessShow(true);  
+        setBetTitleMessage("Bet Expired");
+        setBetFailMessage(message);
+        betData.setBetData({
+          ...betData.betData,
+          betSlipStatus: false,
+        });
+        appData.setAppData({...appData.appData,listLoading:false});
       }
     }
   }, [betPlacing]);
@@ -418,13 +426,8 @@ export const BetSlip = () => {
           </div>
         </div>
       </div>
-      <BetPlacePopup
-        status={betSuccess}
-        show={betSuccessShow}
-        setShow={setBetSuccessShow}
-        title={"Bet Matched"}
-        betDetails={betData?.betData?.betSelection}
-      />
+      <BetPlacePopup status={betSuccess} show={betSuccessShow} setShow={setBetSuccessShow}
+       title={betSuccessTitle} betDetails={betSuccess ? betData?.betData?.betSelection : {message : betFailedMessage}}/>
     </React.Fragment>
   );
 };
