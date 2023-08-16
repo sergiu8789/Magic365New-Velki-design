@@ -221,7 +221,7 @@ export const MyBets = ({ openMyBets }) => {
                     className={`${styles.myBetTab} position-relative d-inline-flex align-items-center`}
                     onClick={(event) => activeBetTab(event, "Exchange")}
                   >
-                    Exchange <span className={`${styles.myBetCount}`}>0</span>
+                    Exchange <span className={`${styles.myBetCount}`}>{matchList?.length}</span>
                   </div>
                   <div
                     className={`${styles.myBetTab} position-relative d-inline-flex align-items-center`}
@@ -352,7 +352,7 @@ export const MyBets = ({ openMyBets }) => {
                         item.type === 1
                           ? styles.OddbackTag
                           : item.type === 2
-                          ? styles.OddlayTag
+                          ? styles.OddLayTag
                           : ""
                       } position-relative d-inline-flex align-items-center`}
                     >
