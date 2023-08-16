@@ -34,6 +34,7 @@ export const BetHistory = () => {
   const [page, setPage] = useState(1);
   const [period, setPeriod] = useState("all");
   const [bettingHistoryList, setBettingHistoryList] = useState([]);
+  const [openBetList, setopenBetList] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -89,26 +90,14 @@ export const BetHistory = () => {
   };
 
   const showBetInfo = (id) => {
-    if (
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.contains(styles.footerRecordOpen) === true
-    ) {
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.remove(styles.footerRecordOpen);
-      document
-        .getElementById("moreBetInfo_" + id)
-        .classList.remove("d-inline-block");
-      document.getElementById("moreBetInfo_" + id).classList.add("d-none");
+    let newBetArray = [];
+    newBetArray = [...openBetList];
+    if (newBetArray.indexOf(id) < 0) {
+      setopenBetList((prevopenBetList) => [...prevopenBetList, id]);
     } else {
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.add(styles.footerRecordOpen);
-      document.getElementById("moreBetInfo_" + id).classList.remove("d-none");
-      document
-        .getElementById("moreBetInfo_" + id)
-        .classList.add("d-inline-block");
+      let betIndex = newBetArray.indexOf(id);
+      newBetArray.splice(betIndex, 1);
+      setopenBetList(openBetList.filter((x) => x !== id));
     }
   };
 
@@ -553,7 +542,11 @@ export const BetHistory = () => {
                 </span>
               </div>
               <div
-                className={`${styles.betMoreInfo} col-12 d-none`}
+                className={`${styles.betMoreInfo} col-12 ${
+                  openBetList.includes(item.game_id + index)
+                    ? "d-inline-block"
+                    : "d-none"
+                }`}
                 id={`moreBetInfo_${item.game_id}${index}`}
               >
                 <div
@@ -634,7 +627,12 @@ export const BetHistory = () => {
                 </div>
               </div>
               <div
-                className={`${styles.footerRecord} col-12 d-inline-block position-relative`}
+                className={`${
+                  styles.footerRecord
+                } col-12 d-inline-block position-relative ${
+                  openBetList.includes(item.game_id + index) &&
+                  styles.footerRecordOpen
+                }`}
                 id={`footerRecord_${item.game_id}${index}`}
                 onClick={() => showBetInfo(item.game_id + index)}
               >

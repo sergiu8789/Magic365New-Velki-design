@@ -31,6 +31,7 @@ export const ProfitLoss = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [totalBetCount, settotalBetCount] = useState(0);
   const [matchesList, setMatchesList] = useState([]);
+  const [openBetList, setopenBetList] = useState([]);
   const [gamesProfitList, setGamesProfitList] = useState([]);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -147,35 +148,22 @@ export const ProfitLoss = () => {
   };
 
   const openMatchBets = (index, item, id) => {
-    if (
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.contains(styles.footerRecordOpen) === true
-    ) {
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.remove(styles.footerRecordOpen);
-      document
-        .getElementById("moreBetInfo_" + id)
-        .classList.remove("d-inline-block");
-      document.getElementById("moreBetInfo_" + id).classList.add("d-none");
+    let newBetArray = [];
+    newBetArray = [...openBetList];
+    setMatchesList([...matchesList]);
+    getMatchBets(
+      index,
+      item.market_type === "casino" ? "casino" : item.game_id,
+      item.market_type,
+      item?.market_name,
+      id
+    );
+    if (newBetArray.indexOf(id) < 0) {
+      setopenBetList((prevopenBetList) => [...prevopenBetList, id]);
     } else {
-      appData.setAppData({ ...appData.appData, listLoading: true });
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.add(styles.footerRecordOpen);
-      document.getElementById("moreBetInfo_" + id).classList.remove("d-none");
-      document
-        .getElementById("moreBetInfo_" + id)
-        .classList.add("d-inline-block");
-
-      setMatchesList([...matchesList]);
-      getMatchBets(
-        index,
-        item.market_type === "casino" ? "casino" : item.game_id,
-        item.market_type,
-        item?.market_name
-      );
+      let betIndex = newBetArray.indexOf(id);
+      newBetArray.splice(betIndex, 1);
+      setopenBetList(openBetList.filter((x) => x !== id));
     }
   };
 
@@ -212,11 +200,12 @@ export const ProfitLoss = () => {
       });
   };
 
-  const getMatchBets = (index, match_id, market_type, market_name) => {
+  const getMatchBets = (index, match_id, market_type, market_name, id) => {
     let backTotal = 0;
     let layTotal = 0;
     let commission = 0;
     let marketTotal = 0;
+
     ApiService.getMatchPL(match_id, market_type, market_name)
       .then((res) => {
         matchesList[index].betList = res.data.data;
@@ -574,7 +563,11 @@ export const ProfitLoss = () => {
                   </div>
                 </div>
                 <div
-                  className={`${styles.betMoreInfo} col-12 d-none`}
+                  className={`${styles.betMoreInfo} col-12 ${
+                    openBetList.includes(item.game_id + index)
+                      ? "d-inline-block"
+                      : "d-none"
+                  }`}
                   id={`moreBetInfo_${item.game_id}${index}`}
                 >
                   {item.betList?.map((row, index) => {
@@ -748,7 +741,12 @@ export const ProfitLoss = () => {
                   </div>
                 </div>
                 <div
-                  className={`${styles.footerRecord} col-12 d-inline-block position-relative`}
+                  className={`${
+                    styles.footerRecord
+                  } col-12 d-inline-block position-relative ${
+                    openBetList.includes(item.game_id + index) &&
+                    styles.footerRecordOpen
+                  }`}
                   id={`footerRecord_${item.game_id}${index}`}
                   onClick={() =>
                     openMatchBets(index, item, item.game_id + index)
