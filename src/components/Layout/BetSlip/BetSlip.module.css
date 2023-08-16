@@ -51,13 +51,14 @@
     font-size: 23px;
     color: #000;
     font-weight: 700;
+    padding-right: 50px;
 }
 
 .BetIconClose {
-    right: 0px;
-    font-family: 18px;
+    font-size: 18px;
     color: #000;
     right: 20px;
+    padding: 10px 5px;
 }
 
 .betOddsContainer {

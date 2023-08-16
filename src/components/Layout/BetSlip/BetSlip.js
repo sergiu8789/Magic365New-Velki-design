@@ -14,9 +14,9 @@ export const BetSlip = () => {
   const [betSlip, setBetSlip] = useState("");
   const [betButton, setbetButton] = useState(true);
   const [betStakeType, setbetStakeType] = useState("");
-  const [betPlacing,setBetPlacing] = useState(false);
-  const [betSuccess,setBetSuccess] = useState(true);
-  const [betSuccessShow,setBetSuccessShow] = useState(false);
+  const [betPlacing, setBetPlacing] = useState(false);
+  const [betSuccess, setBetSuccess] = useState(true);
+  const [betSuccessShow, setBetSuccessShow] = useState(false);
 
   const closeBetSlip = () => {
     betData.setBetData({
@@ -26,7 +26,7 @@ export const BetSlip = () => {
   };
 
   useEffect(() => {
-     setBetSlip(betData.betData.betSlipStatus);
+    setBetSlip(betData.betData.betSlipStatus);
   }, [betData.betData.betSlipStatus]);
 
   const betAmount = [
@@ -47,7 +47,7 @@ export const BetSlip = () => {
   const placeBet = () => {
     //setProgressStatus("placing");
     let betSelection = betData?.betData?.betSelection;
-    appData.setAppData({...appData.appData,listLoading:true});
+    appData.setAppData({ ...appData.appData, listLoading: true });
     let timeout = 4000;
     if (betSelection.market_type === "casino") {
       timeout = 0;
@@ -55,32 +55,34 @@ export const BetSlip = () => {
     setTimeout(() => {
       setBetPlacing(true);
     }, timeout);
-  }
-
+  };
 
   const setBetAmount = (amt) => {
     let betSelection = betData?.betData?.betSelection;
     if (betStakeType === "default" || betStakeType === "") {
       if (amt !== ".") {
-       // setbetStakeAmt(amt);
-       betSelection.amount = amt;
-        betData.setBetData({...betData.betData,betSelection : betSelection});
+        // setbetStakeAmt(amt);
+        betSelection.amount = amt;
+        betData.setBetData({ ...betData.betData, betSelection: betSelection });
         setbetButton(false);
       }
     } else {
       if (amt !== ".") {
         if (betData.betData.betSelection.amount === 0) {
           betSelection.amount = amt;
-          betData.setBetData({...betData.betData,betSelection : betSelection});
+          betData.setBetData({
+            ...betData.betData,
+            betSelection: betSelection,
+          });
         } else {
-          if(parseInt(betSelection.amount)===0)
-           betSelection.amount =  amt;
-          else
-            betSelection.amount = betSelection.amount + amt;
-            
-          if(parseFloat(betSelection.amount) > 500)
-           betSelection.amount = 500;
-          betData.setBetData({...betData.betData,betSelection : betSelection});
+          if (parseInt(betSelection.amount) === 0) betSelection.amount = amt;
+          else betSelection.amount = betSelection.amount + amt;
+
+          if (parseFloat(betSelection.amount) > 500) betSelection.amount = 500;
+          betData.setBetData({
+            ...betData.betData,
+            betSelection: betSelection,
+          });
         }
         setbetButton(false);
       }
@@ -92,12 +94,11 @@ export const BetSlip = () => {
     let betSelection = betData?.betData?.betSelection;
     if (betStakeType === "manual" || betStakeType === "") {
       betSelection.amount = amt;
-      betData.setBetData({...betData.betData,betSelection : betSelection});
+      betData.setBetData({ ...betData.betData, betSelection: betSelection });
     } else {
       betSelection.amount = parseFloat(betSelection.amount) + parseFloat(amt);
-      if(parseFloat(betSelection.amount) > 500)
-      betSelection.amount = 500;
-      betData.setBetData({...betData.betData,betSelection : betSelection});
+      if (parseFloat(betSelection.amount) > 500) betSelection.amount = 500;
+      betData.setBetData({ ...betData.betData, betSelection: betSelection });
     }
     setbetStakeType("default");
   };
@@ -108,14 +109,16 @@ export const BetSlip = () => {
       if (betSelection.amount > 0) {
         betSelection.amount = parseFloat(betSelection.amount) - parseFloat(1);
         if (betSelection.amount !== 0) {
-          betData.setBetData({...betData.betData,betSelection : betSelection});
+          betData.setBetData({
+            ...betData.betData,
+            betSelection: betSelection,
+          });
         }
       }
     } else if (betTyp === "plus") {
       betSelection.amount = parseFloat(betSelection.amount) + parseFloat(1);
-      if(parseFloat(betSelection.amount) > 500)
-      betSelection.amount = 500;
-      betData.setBetData({...betData.betData,betSelection : betSelection});
+      if (parseFloat(betSelection.amount) > 500) betSelection.amount = 500;
+      betData.setBetData({ ...betData.betData, betSelection: betSelection });
     }
     setbetButton(false);
   };
@@ -125,17 +128,17 @@ export const BetSlip = () => {
     let str = betSelection?.amount?.toString();
     str = str.slice(0, -1);
     if (str === "") {
-      betSelection.amount = '0';
-      betData.setBetData({...betData.betData,betSelection : betSelection});
+      betSelection.amount = "0";
+      betData.setBetData({ ...betData.betData, betSelection: betSelection });
       setbetButton(true);
     } else {
       if (str === "0") {
-        betSelection.amount = '0';
-        betData.setBetData({...betData.betData,betSelection : betSelection});
+        betSelection.amount = "0";
+        betData.setBetData({ ...betData.betData, betSelection: betSelection });
         setbetButton(true);
       } else {
         betSelection.amount = str;
-        betData.setBetData({...betData.betData,betSelection : betSelection});
+        betData.setBetData({ ...betData.betData, betSelection: betSelection });
         setbetButton(false);
       }
     }
@@ -144,11 +147,13 @@ export const BetSlip = () => {
   useEffect(() => {
     if (betPlacing) {
       let betSelection = betData?.betData?.betSelection;
-      if (betSelection.status === 'ACTIVE' ) {
+      if (betSelection.status === "ACTIVE") {
         const data = {
           amount: parseFloat(betSelection.amount),
           market_id: betSelection.market_id,
-          selection_id: betSelection.selection_id ? betSelection.selection_id.toString() : "",
+          selection_id: betSelection.selection_id
+            ? betSelection.selection_id.toString()
+            : "",
           type: betSelection.type,
           size: betSelection.size ? encrypt(betSelection.size) : "",
           market_type: betSelection.market_type,
@@ -156,17 +161,17 @@ export const BetSlip = () => {
           match_id: betSelection.match_id,
           runner_name: betSelection.runner_name,
           market_name: betSelection.market_name,
-          top: encrypt(Math.floor((new Date()).getTime() / 1000)),
-          tou: encrypt(Math.floor((new Date()).getTime() / 1000)),
+          top: encrypt(Math.floor(new Date().getTime() / 1000)),
+          tou: encrypt(Math.floor(new Date().getTime() / 1000)),
         };
-        if(betSelection.market_type === 'premium')
-          data['pmo'] = betSelection.pmo;
-        if(betSelection.market_type === 'casino')
-          data['market_name'] = betSelection.market_name;  
-        
+        if (betSelection.market_type === "premium")
+          data["pmo"] = betSelection.pmo;
+        if (betSelection.market_type === "casino")
+          data["market_name"] = betSelection.market_name;
+
         ApiService.placeBet(data)
           .then((res) => {
-            appData.setAppData({...appData.appData,listLoading:false});
+            appData.setAppData({ ...appData.appData, listLoading: false });
             setBetPlacing(false);
             setBetSuccessShow(true);
             setBetSuccess(true);
@@ -175,15 +180,15 @@ export const BetSlip = () => {
               betSlipStatus: false,
             });
             if (res.status === 200 || res.status === 201) {
-             // setBetList(res.data.bets);
-             // setSucees(true);
+              // setBetList(res.data.bets);
+              // setSucees(true);
               if (res?.data?.wallet) {
-               // setWalletDetails(res.data.wallet);
+                // setWalletDetails(res.data.wallet);
               }
             }
             if (res.status === 202) {
-             // setSucees(false);
-             // setFailedMessage(res.message);
+              // setSucees(false);
+              // setFailedMessage(res.message);
             }
           })
           .catch((err) => {
@@ -206,24 +211,24 @@ export const BetSlip = () => {
               //setFailedMessage(err?.response?.data?.message[0]);
             }
           });
-     // }
-      // else{
-      //   setBetPlacing(false);
-      //   setProgress(20);
-      //   setProgressStatus("");
-      //   let message = "Odds are Suspended";
-      //   messageData.setMessageData({
-      //     ...messageData.messageData,
-      //     betConfimationData: {
-      //       type: "failed",
-      //       message: message,
-      //     },
-      //   });
-      // }
+        // }
+        // else{
+        //   setBetPlacing(false);
+        //   setProgress(20);
+        //   setProgressStatus("");
+        //   let message = "Odds are Suspended";
+        //   messageData.setMessageData({
+        //     ...messageData.messageData,
+        //     betConfimationData: {
+        //       type: "failed",
+        //       message: message,
+        //     },
+        //   });
+        // }
       } else {
         setBetPlacing(false);
         // setProgress(20);
-       // setProgressStatus("");
+        // setProgressStatus("");
         let message = "Odds are Suspended";
         if (betSelection.status === "SUSPENDED") {
           message = "Odds are Suspended";
@@ -240,23 +245,27 @@ export const BetSlip = () => {
         // });
       }
     }
-  },[betPlacing]);
+  }, [betPlacing]);
 
   return (
     <React.Fragment>
       <div
         className={`${styles.BetSlipLayer} ${
-          betSlip  && styles.activeSlip
+          betSlip && styles.activeSlip
         } position-fixed h-100 d-inline-flex align-items-end`}
       >
         <div
           className={`${styles.BetSlipContainer} col-12 position-relative d-inline-block`}
         >
           <div
-            className={`${styles.betSlipHeader} col-12 d-flex align-items-center`}
+            className={`${styles.betSlipHeader} col-12 d-flex align-items-start`}
           >
             <span
-              className={`${styles.betTag} ${betData?.betData?.betSelection?.type === 1 ? styles.OddbackTag : styles.OddLayTag} position-relative d-inline-flex align-items-center`}
+              className={`${styles.betTag} ${
+                betData?.betData?.betSelection?.type === 1
+                  ? styles.OddbackTag
+                  : styles.OddLayTag
+              } position-relative d-inline-flex align-items-center`}
             >
               {betData?.betData?.betSelection?.type === 1 ? "Back" : "Lay"}
             </span>
@@ -322,7 +331,11 @@ export const BetSlip = () => {
                   >
                     {betData?.betData?.betSelection?.amount}
                   </span>
-                  <input type="hidden" name="stake" value={betData?.betData?.betSelection?.amount} />
+                  <input
+                    type="hidden"
+                    name="stake"
+                    value={betData?.betData?.betSelection?.amount}
+                  />
                   <span
                     className={`${styles.betAmtAction} flex-shrink-0 d-inline-flex align-items-center justify-content-center`}
                     onClick={() => betSkateAmt("plus")}
@@ -405,8 +418,13 @@ export const BetSlip = () => {
           </div>
         </div>
       </div>
-      <BetPlacePopup status={betSuccess} show={betSuccessShow} setShow={setBetSuccessShow}
-       title={"Bet Matched"} betDetails={betData?.betData?.betSelection}/>
+      <BetPlacePopup
+        status={betSuccess}
+        show={betSuccessShow}
+        setShow={setBetSuccessShow}
+        title={"Bet Matched"}
+        betDetails={betData?.betData?.betSelection}
+      />
     </React.Fragment>
   );
 };
