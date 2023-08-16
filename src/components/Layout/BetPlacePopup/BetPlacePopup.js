@@ -49,6 +49,7 @@ export const BetPlacePopup = ({
           className={`${styles.matchBetDetail} col-12 d-inline-flex align-items-stretch`}
         >
           
+          {betDetails?.runner_name ?
             <React.Fragment>
             <span
               className={`${styles.betTag} ${betDetails.type === 1 ? styles.OddbackTag : styles.OddLayTag} position-relative d-inline-flex align-items-center`}
@@ -69,7 +70,8 @@ export const BetPlacePopup = ({
               {betDetails.odds}
               </span>
             </React.Fragment>
-          
+            : <span className="col-12 text-center">{betDetails.message}</span>
+          }          
         </div>
       </div>
     </React.Fragment>

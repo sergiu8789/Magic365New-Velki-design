@@ -5,7 +5,6 @@ import { useBet } from "../../../context/BetContextProvider";
 export const PremiumOdds = ({ oddsList }) => {
   const betData = useBet();
   const placeBet = (item,selection) => {
-    console.log(item,selection)
     const betSelection = {
       amount: "",
       type: 1,
@@ -15,7 +14,7 @@ export const PremiumOdds = ({ oddsList }) => {
       runner_name: item.marketName + " --- (" + selection.selectionName + ")",
       selection_id: selection.id,
       market_id: item.id,
-      match_id: item.betfairEventId,
+      match_id: item.betfairEventId ? item.betfairEventId.toString():"",
       status : item.apiSiteStatus,
       market_type : 'premium',
       pmo:item,

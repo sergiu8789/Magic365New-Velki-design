@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./FancyOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 
-export const FancyOdds = ({ oddsList,matchId }) => {
+export const FancyOdds = ({ oddsList,matchId,time }) => {
   const betData = useBet();
   const placeBet = (item,type) => {
-    console.log(item)
     const betSelection = {
       amount: "",
       type: type,
@@ -23,7 +22,7 @@ export const FancyOdds = ({ oddsList,matchId }) => {
       market_id: item.mid,
       match_id: matchId,
       market_name: "",
-      status : item.gstatus === "" ? "ACTIVE" : "",
+      status : item.gstatus,
       market_type : 'fancy',
     };
     betData.setBetData({
@@ -32,9 +31,27 @@ export const FancyOdds = ({ oddsList,matchId }) => {
       betSelection: betSelection,
     });
   }
+  useEffect(() => {
+    if(oddsList?.length){
+      let matched =  oddsList.filter((item) => {
+        if(item.nat === betData?.betData?.betSelection?.selection && item.gstatus !== betData?.betData?.betSelection?.status){
+          return item;
+        }
+      });
+      if(matched?.length)
+           betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,status:matched[0].gstatus}})
+    }
+    else{
+      betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,status:"Expired"}})
+    }
+       
+  },[oddsList]);
   return (
     <React.Fragment>
       <div className="col-12 d-inline-flex justify-content-end">
+      <div className="col-8  align-items-center">
+        Last Updated : {time}
+      </div>
         <div className="col-4 d-inline-flex align-items-center">
           <span
             className={`${styles.backLayText} d-inline-flex justify-content-center col-6`}
@@ -48,7 +65,15 @@ export const FancyOdds = ({ oddsList,matchId }) => {
           </span>
         </div>
       </div>
-      {oddsList?.map((item, index) => {
+      {oddsList?.sort(function (a, b) {
+          if (a.nat < b.nat) {
+            return -1;
+          }
+          if (a.nat > b.nat) {
+            return 1;
+          }
+          return 0;
+        })?.map((item, index) => {
         return (
           <React.Fragment key={index}>
             <div className="position-relative col-12 d-inline-flex flex-wrap">
