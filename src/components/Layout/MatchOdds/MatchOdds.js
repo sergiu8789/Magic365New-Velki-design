@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./MatchOdds.module.css";
 import { MarketDepth } from "../MarketDepth/MarketDepth";
 import ApiService from "../../../services/ApiService";
@@ -31,9 +31,19 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const [premiumOddsList, setPremiumOddsList] = useState([]);
   const [exchangeTabList, setExchangeTabList] = useState([]);
   const [marketIdList, setMarketList] = useState([]);
+  const [matchOddsRunner, setMatchOddsRunner] = useState("");
+  const prevCountRef = useRef(matchOddsRunner);
 
   const selectFancyTab = (tab) => {
     setfancyTabActive(tab);
+  };
+
+  const usePrevious = (value) => {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    }, [value]);
+    return ref.current;
   };
 
   /****** method to fetch other market list from API  ********/
@@ -67,10 +77,12 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
 
   const selectPopularTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
+    let scrollPos = document.querySelector("." + styles.allTabList).scrollLeft;
     let inplay = parseInt(27);
     pageOffset = pageOffset + inplay;
     let TabPos = event.currentTarget.getBoundingClientRect().left;
     TabPos = TabPos - pageOffset;
+    TabPos = TabPos + scrollPos;
     let widthTab = event.currentTarget.getBoundingClientRect().width;
     setTabLineWidth(widthTab);
     setTabPosLeft(TabPos);
@@ -104,8 +116,8 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
       market_id: market.MarketId,
       match_id: market.eventId,
       market_name: "",
-      status : item.Status,
-      market_type : selectedMarket.market,
+      status: item.Status,
+      market_type: selectedMarket.market,
     };
     betData.setBetData({
       ...betData.betData,
@@ -117,11 +129,23 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   useEffect(() => {
     /******** Exchange odds brodacasting  *****/
     function onBroadCast(value) {
+      let allRunners = [];
       if (value?.length) {
         value?.map((item) => {
-          if (item.MarketId === selectedMarket.market_id)
-            // match marketId with socket response
+          // match marketId with socket response
+          if (item.MarketId === selectedMarket.market_id) {
             setSelectedRunner(item);
+            item?.Runners?.map((item, index) => {
+              let gameName = {
+                Back: item?.ExchangePrices?.AvailableToBack[0].price,
+                BackSize: item?.ExchangePrices?.AvailableToBack[0].size,
+                Lay: item?.ExchangePrices?.AvailableToLay[0].price,
+                LaySize: item?.ExchangePrices?.AvailableToLay[0].size,
+              };
+              allRunners.push(gameName);
+            });
+            setMatchOddsRunner(allRunners);
+          }
         });
       }
     }
@@ -165,6 +189,10 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   useEffect(() => {
     if (marketIdList?.length) socket.emit("subscription", marketIdList); // socket emit event for other exchange odd market
   }, [marketIdList]);
+
+  useEffect(() => {
+    prevCountRef.current = matchOddsRunner;
+  }, [matchOddsRunner]);
 
   useEffect(() => {
     if (
@@ -288,9 +316,22 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
                     >
                       <div
                         onClick={() => placeBet(item, 1, selectedRunner)}
-                        className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
+                        className={`${
+                          styles.backBetBox
+                        } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
+                          item?.ExchangePrices?.AvailableToBack[0].price !=
+                          prevCountRef.current[index]?.Back
+                            ? styles.animateSparkBack
+                            : ""
+                        } ${
+                          item?.ExchangePrices?.AvailableToBack[0].size !=
+                          prevCountRef.current[index]?.BackSize
+                            ? styles.animateSparkBack
+                            : ""
+                        }`}
                       >
                         <span className={`${styles.oddStake}`}>
+                          {prevCountRef.current.Back}
                           {item?.ExchangePrices?.AvailableToBack[0].price}
                         </span>
                         <span className={`${styles.oddExposure}`}>
@@ -299,13 +340,25 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
                       </div>
                       <div
                         onClick={() => placeBet(item, 2, selectedRunner)}
-                        className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
+                        className={`${
+                          styles.LayBetBox
+                        } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
+                          item?.ExchangePrices?.AvailableToBack[0].price !=
+                          prevCountRef.current[index]?.Lay
+                            ? styles.animateSparkLay
+                            : ""
+                        } ${
+                          item?.ExchangePrices?.AvailableToBack[0].size !=
+                          prevCountRef.current[index]?.LaySize
+                            ? styles.animateSparkLay
+                            : ""
+                        }`}
                       >
                         <span className={`${styles.oddStake}`}>
                           {item?.ExchangePrices?.AvailableToLay[0].price}
                         </span>
                         <span className={`${styles.oddExposure}`}>
-                          {item?.ExchangePrices?.AvailableToLay[0].price}
+                          {item?.ExchangePrices?.AvailableToLay[0].size}
                         </span>
                       </div>
                       {/* SUSPEND BOX */}
@@ -346,7 +399,9 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
       )}
 
       {/* BookMarker container */}
-      {bookmakerOddsList && <BookmakerOdds oddsList={bookmakerOddsList} matchId={matchId}/>}
+      {bookmakerOddsList && (
+        <BookmakerOdds oddsList={bookmakerOddsList} matchId={matchId} />
+      )}
 
       {/* Fancy Premium container */}
       <div className={`${styles.fancyOuterBox} col-12 d-inline-block`}>
@@ -373,7 +428,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
           className={`col-12 d-inline-flex position-relative align-items-center`}
         >
           <div
-            className={`${styles.allTabList} col-12 d-inline-flex align-items-center`}
+            className={`${styles.allTabList} col-12 d-inline-flex align-items-center position-relative`}
           >
             {TabList.map((item, index) => {
               return (

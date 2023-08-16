@@ -2,36 +2,30 @@ import React from "react";
 import styles from "./FancyOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 
-export const FancyOdds = ({ oddsList,matchId }) => {
+export const FancyOdds = ({ oddsList, matchId }) => {
   const betData = useBet();
-  const placeBet = (item,type) => {
-    console.log(item)
+  const placeBet = (item, type) => {
     const betSelection = {
       amount: "",
       type: type,
-      size:
-        type === 1
-          ? item?.b1
-          : item?.l1,
-      odds:
-        type === 1
-          ? item?.bs1
-          : item?.bs1,
+      size: type === 1 ? item?.b1 : item?.l1,
+      odds: type === 1 ? item?.bs1 : item?.bs1,
       selection: item.nat,
       runner_name: item.nat,
       selection_id: item.sid,
       market_id: item.mid,
       match_id: matchId,
       market_name: "",
-      status : item.gstatus === "" ? "ACTIVE" : "",
-      market_type : 'fancy',
+      status: item.gstatus === "" ? "ACTIVE" : "",
+      market_type: "fancy",
     };
     betData.setBetData({
       ...betData.betData,
       betSlipStatus: true,
       betSelection: betSelection,
     });
-  }
+  };
+
   return (
     <React.Fragment>
       <div className="col-12 d-inline-flex justify-content-end">
@@ -63,13 +57,15 @@ export const FancyOdds = ({ oddsList,matchId }) => {
                 <div
                   className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
                 >
-                  <div  onClick={() => placeBet(item,2)}
+                  <div
+                    onClick={() => placeBet(item, 2)}
                     className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
                   >
                     <span className={`${styles.oddStake}`}>{item.l1}</span>
                     <span className={`${styles.oddExposure}`}>{item.ls1}</span>
                   </div>
-                  <div onClick={() => placeBet(item,1)}
+                  <div
+                    onClick={() => placeBet(item, 1)}
                     className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
                   >
                     <span className={`${styles.oddStake}`}>{item.b1}</span>
