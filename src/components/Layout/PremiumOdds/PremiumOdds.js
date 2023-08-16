@@ -1,7 +1,31 @@
 import React from "react";
 import styles from "../MatchOdds/MatchOdds.module.css";
+import { useBet } from "../../../context/BetContextProvider";
 
 export const PremiumOdds = ({ oddsList }) => {
+  const betData = useBet();
+  const placeBet = (item,selection) => {
+    console.log(item,selection)
+    const betSelection = {
+      amount: "",
+      type: 1,
+      size:"",
+      odds:selection.odds,
+      selection: selection.selectionName,
+      runner_name: item.marketName + " --- (" + selection.selectionName + ")",
+      selection_id: selection.id,
+      market_id: item.id,
+      match_id: item.betfairEventId,
+      status : item.apiSiteStatus,
+      market_type : 'premium',
+      pmo:item,
+    };
+    betData.setBetData({
+      ...betData.betData,
+      betSlipStatus: true,
+      betSelection: betSelection,
+    });
+  }
   return (
     <React.Fragment>
       {oddsList?.map((item, index) => {
@@ -29,6 +53,7 @@ export const PremiumOdds = ({ oddsList }) => {
               {item?.sportsBookSelection?.map((selection, selectionIndex) => {
                 return (
                   <div
+                    onClick={() => placeBet(item,selection)}
                     key={selectionIndex}
                     className={`${styles.popularOddsStake} d-inline-flex flex-column align-items-center justify-content-center me-auto`}
                   >

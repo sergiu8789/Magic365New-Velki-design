@@ -159,9 +159,11 @@ export const BetSlip = () => {
           top: encrypt(Math.floor((new Date()).getTime() / 1000)),
           tou: encrypt(Math.floor((new Date()).getTime() / 1000)),
         };
-        if(betSelection.market_type === 'premium'){
-          data['pmo'] = betSelection.premiumMarketObject
-        }
+        if(betSelection.market_type === 'premium')
+          data['pmo'] = betSelection.pmo;
+        if(betSelection.market_type === 'casino')
+          data['market_name'] = betSelection.market_name;  
+        
         ApiService.placeBet(data)
           .then((res) => {
             appData.setAppData({...appData.appData,listLoading:false});
@@ -259,7 +261,7 @@ export const BetSlip = () => {
               {betData?.betData?.betSelection?.type === 1 ? "Back" : "Lay"}
             </span>
             <span className={`${styles.betTeamName} d-inline-block`}>
-              {betData?.betData?.betSelection?.runner_name}
+              {betData?.betData?.betSelection?.selection}
             </span>
             <span
               className={`${styles.BetIconClose} icon-close position-absolute d-flex justify-content-center align-items-center cursor-pointer`}

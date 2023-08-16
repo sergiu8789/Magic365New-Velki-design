@@ -7,9 +7,11 @@ import { BetSlip } from "../../Layout/BetSlip/BetSlip";
 import ApiService from "../../../services/ApiService";
 import { encrypt } from "../../../utils/crypto";
 import { socket } from "../../../services/socket";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const Sports = () => {
   const location = useLocation();
+  const appData = useApp();
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
@@ -55,6 +57,7 @@ useEffect(() => {
       settabActive(location?.state?.category);
       document.getElementById("SportsTab_" + catId).click();
     }
+    appData.setAppData({...appData.appData,listLoading:true});
   }, []);
 
   useEffect(() => {
@@ -85,6 +88,7 @@ useEffect(() => {
         timeTab = timeTab.toLowerCase();
         ApiService.tournamentMatchList(activeTab, "", timeTab,startDate,endDate).then((res) => {
         if(res?.data){
+          appData.setAppData({...appData.appData,listLoading:false});
           let tournaments = {Cricket:{},Soccer:{},Tennis:{}};
           let matchIdList = [];
           res?.data?.map((item,index) => {
