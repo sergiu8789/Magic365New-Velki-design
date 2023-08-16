@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
-import { BetPlacePopup } from "../../Layout/BetPlacePopup/BetPlacePopup";
+import { ToastPopup } from "../../Layout/ToastPopup/ToastPopup";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import { Form } from "react-bootstrap";
 import jwtDecode from "jwt-decode";
@@ -325,12 +325,11 @@ export const Login = () => {
         </div>
       </Form>
       {passChange && (
-        <BetPlacePopup
+        <ToastPopup
           status={passStatus}
           betbox={true}
           title={passChangeTitle}
           message={passChangeMsg}
-          type="1"
           setPassChange={setPassChange}
         />
       )}

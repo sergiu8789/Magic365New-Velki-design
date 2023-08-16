@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styles from "./BetPlacePopup.module.css";
 
-export const BetPlacePopup = ({
-  status,
-  show,
-  setShow,
-  title,
-  betDetails
- // setPassChange = false,
-}) => {
-
+export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
   useEffect(() => {
-    if(show){
+    if (show) {
       setTimeout(function () {
         setShow(false);
-       }, 6000);
+      }, 6000);
     }
   }, [show]);
 
@@ -48,28 +40,26 @@ export const BetPlacePopup = ({
         <div
           className={`${styles.matchBetDetail} col-12 d-inline-flex align-items-stretch`}
         >
-          
-            <React.Fragment>
+          <React.Fragment>
             <span
-              className={`${styles.betTag} ${betDetails.type === 1 ? styles.OddbackTag : styles.OddLayTag} position-relative d-inline-flex align-items-center`}
+              className={`${styles.betTag} ${
+                betDetails.type === 1 ? styles.OddbackTag : styles.OddLayTag
+              } position-relative d-inline-flex align-items-center`}
             >
               {betDetails.type === 1 ? "Back" : "Lay"}
             </span>
-              <span className={`${styles.matchName} flex-grow-1 d-inline-flex`}>
-                {betDetails.runner_name}
-              </span>
-              <span
-                className={`${styles.matchLoss} ${styles.matchLossBox} flex-shrink-0 d-inline-flex`}
-              >
-                PBU {betDetails.amount}
-              </span>
-              <span
-                className={`${styles.matchOdds} flex-shrink-0 d-inline-flex`}
-              >
+            <span className={`${styles.matchName} flex-grow-1 d-inline-flex`}>
+              {betDetails.runner_name}
+            </span>
+            <span
+              className={`${styles.matchLoss} ${styles.matchLossBox} flex-shrink-0 d-inline-flex`}
+            >
+              PBU {betDetails.amount}
+            </span>
+            <span className={`${styles.matchOdds} flex-shrink-0 d-inline-flex`}>
               {betDetails.odds}
-              </span>
-            </React.Fragment>
-          
+            </span>
+          </React.Fragment>
         </div>
       </div>
     </React.Fragment>

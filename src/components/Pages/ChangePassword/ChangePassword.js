@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./ChangePassword.module.css";
-import { BetPlacePopup } from "../../Layout/BetPlacePopup/BetPlacePopup";
+import { ToastPopup } from "../../Layout/ToastPopup/ToastPopup";
 import loginImgBanner from "../../../assets/images/login-banner.png";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
@@ -114,7 +114,6 @@ export const ChangePassword = () => {
         new_password: formValues.new_password.value,
         confirm_password: formValues.confirm_password.value,
       };
-      console.log("appData ", payload);
       ApiService.changePassword(payload)
         .then((res) => {
           console.log(res);
@@ -363,12 +362,11 @@ export const ChangePassword = () => {
         </div>
       </div>
       {passChange && (
-        <BetPlacePopup
+        <ToastPopup
           status={passStatus}
           betbox={true}
           title={passChangeTitle}
           message={passChangeMsg}
-          type="1"
           setPassChange={setPassChange}
         />
       )}
