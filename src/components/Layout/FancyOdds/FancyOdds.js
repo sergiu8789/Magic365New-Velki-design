@@ -8,14 +8,8 @@ export const FancyOdds = ({ oddsList,matchId,time }) => {
     const betSelection = {
       amount: "",
       type: type,
-      size:
-        type === 1
-          ? item?.b1
-          : item?.l1,
-      odds:
-        type === 1
-          ? item?.bs1
-          : item?.bs1,
+      size: type === 1 ? item?.b1 : item?.l1,
+      odds: type === 1 ? item?.bs1 : item?.bs1,
       selection: item.nat,
       runner_name: item.nat,
       selection_id: item.sid,
@@ -88,13 +82,15 @@ export const FancyOdds = ({ oddsList,matchId,time }) => {
                 <div
                   className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
                 >
-                  <div  onClick={() => placeBet(item,2)}
+                  <div
+                    onClick={() => placeBet(item, 2)}
                     className={`${styles.LayBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
                   >
                     <span className={`${styles.oddStake}`}>{item.l1}</span>
                     <span className={`${styles.oddExposure}`}>{item.ls1}</span>
                   </div>
-                  <div onClick={() => placeBet(item,1)}
+                  <div
+                    onClick={() => placeBet(item, 1)}
                     className={`${styles.backBetBox} col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center`}
                   >
                     <span className={`${styles.oddStake}`}>{item.b1}</span>

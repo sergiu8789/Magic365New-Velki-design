@@ -29,6 +29,7 @@ export const CurrentBets = () => {
   const [betStatusDrop, setbetStatusDrop] = useState("false");
   const [betStatus, setbetStatus] = useState("All");
   const [currentBetsList, SetCurrentBetsList] = useState([]);
+  const [openBetList, setopenBetList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
 
@@ -60,26 +61,14 @@ export const CurrentBets = () => {
   };
 
   const showBetInfo = (id) => {
-    if (
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.contains(styles.footerRecordOpen) === true
-    ) {
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.remove(styles.footerRecordOpen);
-      document
-        .getElementById("moreBetInfo_" + id)
-        .classList.remove("d-inline-block");
-      document.getElementById("moreBetInfo_" + id).classList.add("d-none");
+    let newBetArray = [];
+    newBetArray = [...openBetList];
+    if (newBetArray.indexOf(id) < 0) {
+      setopenBetList((prevopenBetList) => [...prevopenBetList, id]);
     } else {
-      document
-        .getElementById("footerRecord_" + id)
-        .classList.add(styles.footerRecordOpen);
-      document.getElementById("moreBetInfo_" + id).classList.remove("d-none");
-      document
-        .getElementById("moreBetInfo_" + id)
-        .classList.add("d-inline-block");
+      let betIndex = newBetArray.indexOf(id);
+      newBetArray.splice(betIndex, 1);
+      setopenBetList(openBetList.filter((x) => x !== id));
     }
   };
 
@@ -413,8 +402,12 @@ export const CurrentBets = () => {
                 </span>
               </div>
               <div
-                className={`${styles.betMoreInfo} col-12 d-none`}
-                id={`moreBetInfo_${item.game_id}`}
+                className={`${styles.betMoreInfo} col-12 ${
+                  openBetList.includes(item.game_id + index)
+                    ? "d-inline-block"
+                    : "d-none"
+                }`}
+                id={`moreBetInfo_${item.game_id}${index}`}
               >
                 <div
                   className={`${styles.balanceRecordInfo} ${styles.betTakenInfo} d-inline-flex align-items-center col-12`}
@@ -480,8 +473,8 @@ export const CurrentBets = () => {
               </div>
               <div
                 className={`${styles.footerRecord} col-12 d-inline-block position-relative`}
-                id={`footerRecord_${item.game_id}`}
-                onClick={() => showBetInfo(item.game_id)}
+                id={`footerRecord_${item.game_id}${index}`}
+                onClick={() => showBetInfo(item.game_id + index)}
               >
                 <div
                   className={`${styles.recordMoreDrop} position-absolute m-auto d-inline-flex align-items-center justify-content-center`}
