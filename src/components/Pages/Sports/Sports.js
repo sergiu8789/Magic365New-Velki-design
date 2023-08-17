@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./Sports.module.css";
 import { useLocation } from "react-router-dom";
 import { News } from "../../Layout/News/News";
@@ -17,35 +17,24 @@ export const Sports = () => {
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
   const [tabActive, settabActive] = useState("");
   const [inPlayTab, setinPlayTab] = useState("");
-  const [tournamentList,setTournamentList] = useState({});
-  const [matchIds,setMatchIds] = useState([]);
-
-
-useEffect(() => {
-  if(matchIds?.length){
-    socket.emit("subscription",matchIds);
-  }
-},[matchIds]);
+  const [tournamentList, setTournamentList] = useState({});
+  const [matchIds, setMatchIds] = useState([]);
+  const playRef = useRef();
+  const tabRef = useRef();
 
   useEffect(() => {
-    if (
-      document.querySelector(
-        "." +
-        styles.inPlayTabRow +
-        " ." +
-        styles.inPlayTabName +
-        ":nth-child(1)"
-      )
-    ) {
-      document
-        .querySelector(
-          "." +
-          styles.inPlayTabRow +
-          " ." +
-          styles.inPlayTabName +
-          ":nth-child(1)"
-        )
-        .click();
+    if (matchIds?.length) {
+      socket.emit("subscription", matchIds);
+    }
+  }, [matchIds]);
+
+  useEffect(() => {
+    if (tabRef && tabRef.current) {
+      tabRef.current.click();
+    }
+
+    if (playRef && playRef.current) {
+      playRef.current.click();
     }
     if (location?.state?.type === "1") {
       document.getElementById("inPlayToggle").checked = true;
@@ -57,60 +46,66 @@ useEffect(() => {
       settabActive(location?.state?.category);
       document.getElementById("SportsTab_" + catId).click();
     }
-    appData.setAppData({...appData.appData,listLoading:true});
+    appData.setAppData({ ...appData.appData, listLoading: true });
   }, []);
 
   useEffect(() => {
     if (inPlayTab) {
-      let timeTab = 'live';
+      let timeTab = "live";
       let activeTab = tabActive;
-      let startDate = '';
-      let endDate = '';
+      let startDate = "";
+      let endDate = "";
       let todayDate = new Date();
-      if (inPlayTab !== 'In-Play')
-        timeTab = inPlayTab;
-      if(inPlayTab === 'Today'){
-        startDate = todayDate.setHours(0,0,0,0);
+      if (inPlayTab !== "In-Play") timeTab = inPlayTab;
+      if (inPlayTab === "Today") {
+        startDate = todayDate.setHours(0, 0, 0, 0);
         startDate = encodeURIComponent(encrypt(startDate));
-        endDate = todayDate.setHours(23,59,59,99);
+        endDate = todayDate.setHours(23, 59, 59, 99);
         endDate = encodeURIComponent(encrypt(endDate));
       }
-      if(inPlayTab === 'Tomorrow'){
+      if (inPlayTab === "Tomorrow") {
         todayDate = todayDate.setDate(todayDate.getDate() + 1);
         todayDate = new Date(todayDate);
-        startDate = todayDate.setHours(0,0,0,0);
+        startDate = todayDate.setHours(0, 0, 0, 0);
         startDate = encodeURIComponent(encrypt(startDate));
-        endDate = todayDate.setHours(23,59,59,99);
+        endDate = todayDate.setHours(23, 59, 59, 99);
         endDate = encodeURIComponent(encrypt(endDate));
       }
-      if (activeTab)
-        activeTab = activeTab.toLowerCase();
-        timeTab = timeTab.toLowerCase();
-        ApiService.tournamentMatchList(activeTab, "", timeTab,startDate,endDate).then((res) => {
-        if(res?.data){
-          appData.setAppData({...appData.appData,listLoading:false});
-          let tournaments = {Cricket:{},Soccer:{},Tennis:{}};
+      if (activeTab) activeTab = activeTab.toLowerCase();
+      timeTab = timeTab.toLowerCase();
+      ApiService.tournamentMatchList(
+        activeTab,
+        "",
+        timeTab,
+        startDate,
+        endDate
+      ).then((res) => {
+        if (res?.data) {
+          appData.setAppData({ ...appData.appData, listLoading: false });
+          let tournaments = { Cricket: {}, Soccer: {}, Tennis: {} };
           let matchIdList = [];
-          res?.data?.map((item,index) => {
+          res?.data?.map((item, index) => {
             matchIdList.push(item.id);
-              Object.keys(tournaments)?.map((tour) => {
-                if(item.name === tour){
-                  if(tournaments[tour][item.trn_name]?.matches){
-                     tournaments[tour][item.trn_name].matches.push(item);
-                  }
-                  else{
-                   tournaments[tour][item.trn_name] = {matches:[],open:true}; 
-                   tournaments[tour][item.trn_name]?.matches.push(item);
-                  }
+            Object.keys(tournaments)?.map((tour) => {
+              if (item.name === tour) {
+                if (tournaments[tour][item.trn_name]?.matches) {
+                  tournaments[tour][item.trn_name].matches.push(item);
+                } else {
+                  tournaments[tour][item.trn_name] = {
+                    matches: [],
+                    open: true,
+                  };
+                  tournaments[tour][item.trn_name]?.matches.push(item);
                 }
-              });
-          });  
+              }
+            });
+          });
           setMatchIds(matchIdList);
-          setTournamentList(tournaments);     
+          setTournamentList(tournaments);
         }
       });
     }
-  }, [inPlayTab])
+  }, [inPlayTab]);
 
   const activeGameTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -198,8 +193,10 @@ useEffect(() => {
               return (
                 <React.Fragment key={index}>
                   <span
-                    className={`${styles.inPlayTabName} d-inline-flex ${item.name === inPlayTab && styles.inPlayTabActive
-                      }`}
+                    className={`${styles.inPlayTabName} d-inline-flex ${
+                      item.name === inPlayTab && styles.inPlayTabActive
+                    }`}
+                    ref={index === 0 ? playRef : null}
                     onClick={(event) => activeGameTab(event, item.name)}
                     id={`inPlayTab_${item.name}`}
                   >
@@ -230,9 +227,12 @@ useEffect(() => {
             return (
               <React.Fragment key={index}>
                 <div
-                  className={`${styles.sportsCatTab
-                    }  d-inline-flex justify-content-center align-items-center position-relative ${item.name === tabActive && styles.activeCatTab
-                    }`}
+                  className={`${
+                    styles.sportsCatTab
+                  }  d-inline-flex justify-content-center align-items-center position-relative ${
+                    item.name === tabActive && styles.activeCatTab
+                  }`}
+                  ref={index === 0 ? tabRef : null}
                   id={`SportsTab_${item.name}`}
                   onClick={(event) => activeSportsTab(event, item.name)}
                 >
@@ -249,7 +249,12 @@ useEffect(() => {
             style={{ transform: "translateX(" + CatTabPosLeft + "px)" }}
           ></div>
         </div>
-        <GameList tournamentList={tournamentList} setTournamentList={setTournamentList} inPlay={inPlayTab === 'In-Play' ? true : false} gameType={tabActive}/>
+        <GameList
+          tournamentList={tournamentList}
+          setTournamentList={setTournamentList}
+          inPlay={inPlayTab === "In-Play" ? true : false}
+          gameType={tabActive}
+        />
       </div>
       <BetSlip />
     </React.Fragment>

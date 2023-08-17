@@ -4,6 +4,8 @@ import ApiService from "../../../services/ApiService";
 import { socket } from "../../../services/socket";
 import { useBet } from "../../../context/BetContextProvider";
 
+const prevMatchOddsRunner = [];
+
 export const ExchangeOdds = ({
   matchId,
   marketId,
@@ -13,9 +15,11 @@ export const ExchangeOdds = ({
   setSelectedRunner,
 }) => {
   const betData = useBet();
-  const [matchOddsRunner, setMatchOddsRunner] = useState("");
+  const [matchOddsRunner, setMatchOddsRunner] = useState([]);
+
   const [fooEvents, setFooEvents] = useState([]);
   const prevCountRef = useRef(matchOddsRunner);
+  const tabRef = useRef(null);
   const [selectedMarket, setSelectedMarket] = useState({
     market_id: marketId,
     market: marketType,
@@ -86,11 +90,11 @@ export const ExchangeOdds = ({
                 market_id: item.market_id,
                 market: item.market_type,
               });
-            marketIds.push(item.market_id)
+            marketIds.push(item.market_id);
           }
         });
-        if(marketIds.length){
-            marketIds = [...new Set(marketIds)];
+        if (marketIds.length) {
+          marketIds = [...new Set(marketIds)];
           setMarketList(marketIds);
         }
         setExchangeTabList(marketTypes);
@@ -101,36 +105,36 @@ export const ExchangeOdds = ({
   useEffect(() => {
     /******** Exchange odds brodacasting  *****/
     function onBroadCast(value) {
-       let allRunners = [];
-       if (value?.length) {
-         value?.map((item) => {
-           // match marketId with socket response
-           if (item.MarketId === selectedMarket.market_id) {
-             setSelectedRunner(item);
-             item?.Runners?.map((item, index) => {
-               let gameName = {
-                 Back: item?.ExchangePrices?.AvailableToBack[0].price,
-                 BackSize: item?.ExchangePrices?.AvailableToBack[0].size,
-                 Lay: item?.ExchangePrices?.AvailableToLay[0].price,
-                 LaySize: item?.ExchangePrices?.AvailableToLay[0].size,
-               };
-               allRunners.push(gameName);
-             });
-             setMatchOddsRunner(allRunners);
-           }
-         });
-       }
-     }
-     socket.on("broadcast", onBroadCast); // exchange odds broadcast method
-     return () => {
-       socket.off("broadcast", onBroadCast);
-     };
-   }, [fooEvents, selectedMarket.market_id]);  
+      let allRunners = [];
+      if (value?.length) {
+        value?.map((item) => {
+          // match marketId with socket response
+          if (item.MarketId === selectedMarket.market_id) {
+            setSelectedRunner(item);
+            item?.Runners?.map((item, index) => {
+              let gameName = {
+                Back: item?.ExchangePrices?.AvailableToBack[0].price,
+                BackSize: item?.ExchangePrices?.AvailableToBack[0].size,
+                Lay: item?.ExchangePrices?.AvailableToLay[0].price,
+                LaySize: item?.ExchangePrices?.AvailableToLay[0].size,
+              };
+              allRunners.push(gameName);
+            });
+            setMatchOddsRunner(allRunners);
+          }
+        });
+      }
+    }
+    socket.on("broadcast", onBroadCast); // exchange odds broadcast method
+    return () => {
+      socket.off("broadcast", onBroadCast);
+    };
+  }, [fooEvents, selectedMarket.market_id]);
 
-   useEffect(() => {
-        getMatchOdds();
-        socket.emit("subscription", [marketId]); // socket emit event for exchange odd market
-  },[matchId]);
+  useEffect(() => {
+    getMatchOdds();
+    socket.emit("subscription", [marketId]); // socket emit event for exchange odd market
+  }, [matchId]);
 
   useEffect(() => {
     if (marketIdList?.length) socket.emit("subscription", marketIdList); // socket emit event for other exchange odd market
@@ -141,54 +145,53 @@ export const ExchangeOdds = ({
   }, [matchOddsRunner]);
 
   useEffect(() => {
-    if(selectedRunner?.Runners?.length){
-        selectedRunner?.Runners?.map((item) => {
-            if(item.SelectionId === betData.betData.betSelection.selection_id){
-               if(item.Status !== betData.betData.betSelection.status)
-                  betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,status:item.Status}})
-                if(betData.betData.betSelection.type === 1 &&  item.ExchangePrices?.AvailableToBack[0]?.price !==   betData.betData.betSelection.odds ){
-                   betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,odds:item.ExchangePrices?.AvailableToBack[0].price}})
-                }
-                if(betData.betData.betSelection.type === 2 &&  item.ExchangePrices?.AvailableToLay[0]?.price !==   betData.betData.betSelection.odds){
-                    betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,odds:item.ExchangePrices?.AvailableToLay[0]?.price}})
-                }
-            }
-         })
+    if (selectedRunner?.Runners?.length) {
+      selectedRunner?.Runners?.map((item) => {
+        if (item.SelectionId === betData.betData.betSelection.selection_id) {
+          if (item.Status !== betData.betData.betSelection.status)
+            betData.setBetData({
+              ...betData.betData,
+              betSelection: {
+                ...betData.betData.betSelection,
+                status: item.Status,
+              },
+            });
+          if (
+            betData.betData.betSelection.type === 1 &&
+            item.ExchangePrices?.AvailableToBack[0]?.price !==
+              betData.betData.betSelection.odds
+          ) {
+            betData.setBetData({
+              ...betData.betData,
+              betSelection: {
+                ...betData.betData.betSelection,
+                odds: item.ExchangePrices?.AvailableToBack[0].price,
+              },
+            });
+          }
+          if (
+            betData.betData.betSelection.type === 2 &&
+            item.ExchangePrices?.AvailableToLay[0]?.price !==
+              betData.betData.betSelection.odds
+          ) {
+            betData.setBetData({
+              ...betData.betData,
+              betSelection: {
+                ...betData.betData.betSelection,
+                odds: item.ExchangePrices?.AvailableToLay[0]?.price,
+              },
+            });
+          }
+        }
+      });
     }
-  },[selectedRunner]);
+  }, [selectedRunner]);
 
   useEffect(() => {
-    if (
-      document.querySelector(
-        "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-      )
-    ) {
-      document
-        .querySelector(
-          "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-        )
-        .click();
+    if (tabRef && tabRef.current) {
+      tabRef.current.click();
     }
-    if (
-      document.querySelector(
-        "." +
-          styles.matchOddTitleRow +
-          " ." +
-          styles.matchTitleHighlight +
-          ":nth-child(1)"
-      )
-    ) {
-      document
-        .querySelector(
-          "." +
-            styles.matchOddTitleRow +
-            " ." +
-            styles.matchTitleHighlight +
-            ":nth-child(1)"
-        )
-        .click();
-    }
-  }, []);
+  }, [exchangeTabList]);
 
   return (
     <React.Fragment>
@@ -225,6 +228,7 @@ export const ExchangeOdds = ({
                     setSelectedMarket(item);
                     selectMarketTab(event);
                   }}
+                  ref={index === 0 ? tabRef : null}
                   className={`${styles.matchTitleHighlight} d-inline-flex align-items-center flex-shrink-0`}
                 >
                   <i className="icon-star"></i>
@@ -291,7 +295,6 @@ export const ExchangeOdds = ({
                         }`}
                       >
                         <span className={`${styles.oddStake}`}>
-                          {prevCountRef.current.Back}
                           {item?.ExchangePrices?.AvailableToBack[0].price}
                         </span>
                         <span className={`${styles.oddExposure}`}>
@@ -303,12 +306,12 @@ export const ExchangeOdds = ({
                         className={`${
                           styles.LayBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
-                          item?.ExchangePrices?.AvailableToBack[0].price !=
+                          item?.ExchangePrices?.AvailableToLay[0].price !=
                           prevCountRef.current[index]?.Lay
                             ? styles.animateSparkLay
                             : ""
                         } ${
-                          item?.ExchangePrices?.AvailableToBack[0].size !=
+                          item?.ExchangePrices?.AvailableToLay[0].size !=
                           prevCountRef.current[index]?.LaySize
                             ? styles.animateSparkLay
                             : ""
