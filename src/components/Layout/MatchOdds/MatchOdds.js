@@ -46,8 +46,8 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
       if (value.matchId === matchId) {
         if (value.fancy) setFancyOddsList(value.fancy);
         if (value.bookmaker?.bm1) setBookmakerOddsList(value.bookmaker);
-        if(value?.servertime)
-         setFancyBookUpdated(formatFancyTime(value.servertime ))
+        if (value?.servertime)
+          setFancyBookUpdated(formatFancyTime(value.servertime));
       }
     }
 
@@ -154,7 +154,11 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
           {fancyTabActive === "PremiumBet" ? (
             <PremiumOdds oddsList={premiumOddsList} />
           ) : (
-            <FancyOdds oddsList={fancyOddsList} matchId={matchId} time={fancyBookUpdated}/>
+            <FancyOdds
+              oddsList={fancyOddsList}
+              matchId={matchId}
+              time={fancyBookUpdated}
+            />
           )}
         </div>
         

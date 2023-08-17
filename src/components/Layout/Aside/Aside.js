@@ -32,9 +32,10 @@ function Aside({ openAside, setopenAside }) {
   };
 
   useEffect(() => {
-    if (auth.loggedIn) {
+    if (auth.auth.loggedIn) {
       ApiService.currentBets(1, "", "")
         .then((res) => {
+          console.log(res);
           setTotalCount(res.data.count);
         })
         .catch((err) => {
@@ -53,7 +54,7 @@ function Aside({ openAside, setopenAside }) {
           }
         });
     }
-  });
+  }, [openAside]);
 
   return (
     <React.Fragment>

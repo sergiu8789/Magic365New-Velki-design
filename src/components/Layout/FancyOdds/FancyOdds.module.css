@@ -71,6 +71,64 @@
     color: inherit;
 }
 
+.animateSparkBack {
+    animation: sparkBack .1s ease;
+    -webkit-animation: sparkBack .1s ease;
+}
+
+.animateSparkLay {
+    animation: sparkLay .1s ease;
+    -webkit-animation: sparkLay .1s ease;
+}
+
+@keyframes sparkLay {
+    0%, to {
+        background: #26f1f8;
+        color: #000;
+    }
+
+    90% {
+        background: #26f1f8;
+        color: #000;
+    }
+}
+
+@-webkit-keyframes sparkLay {
+    0%, to {
+        background: #26f1f8;
+        color: #000;
+    }
+
+    90% {
+        background: #26f1f8;
+        color: #000;
+    }
+}
+
+@-webkit-keyframes sparkBack {
+    0%, to {
+        background: #f6ff0e;
+        color: #000;
+    }
+
+    90% {
+        background: #f6ff0e;
+        color: #000;
+    }
+}
+
+@keyframes sparkBack {
+    0%, to {
+        background: #f6ff0e;
+        color: #000;
+    }
+
+    90% {
+        background: #f6ff0e;
+        color: #000;
+    }
+}
+
 @media only screen and (max-width: 568px) {
     .gameName, .oddStake, .matchOddTitle, .matchTitleHighlight {
         font-size: 16px;
