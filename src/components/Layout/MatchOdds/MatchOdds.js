@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./MatchOdds.module.css";
 import { MarketDepth } from "../MarketDepth/MarketDepth";
 import { socket } from "../../../services/socket";
@@ -19,7 +19,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const [fancyOddsList, setFancyOddsList] = useState([]);
   const [bookmakerOddsList, setBookmakerOddsList] = useState("");
   const [premiumOddsList, setPremiumOddsList] = useState([]);
-  const [fancyBookUpdated,setFancyBookUpdated] = useState("");
+  const [fancyBookUpdated, setFancyBookUpdated] = useState("");
   const TabList = ["All", "Popular", "Match", "Over", "Innings", "Players"];
 
   const selectFancyTab = (tab) => {
@@ -39,7 +39,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     setTabPosLeft(TabPos);
     setpopularTabActive(name);
   };
-  
+
   useEffect(() => {
     /******** Fancy and Bookmaker odds brodacasting  *****/
     function onFancyBookBroadCast(value) {
@@ -75,19 +75,18 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     socket.emit("premiumSubscription", [matchId]); // socket emit event for premium markets
   }, [matchId]);
 
- 
   return (
     <React.Fragment>
-
       {/* Exchange Odds Container */}
-      {marketId &&(
-       <ExchangeOdds 
-         matchId={matchId} 
-         marketId={marketId} 
-         marketType={marketType} 
-         sethideMarketDepth={sethideMarketDepth} 
-         selectedRunner={selectedRunner}
-         setSelectedRunner={setSelectedRunner}/>
+      {marketId && (
+        <ExchangeOdds
+          matchId={matchId}
+          marketId={marketId}
+          marketType={marketType}
+          sethideMarketDepth={sethideMarketDepth}
+          selectedRunner={selectedRunner}
+          setSelectedRunner={setSelectedRunner}
+        />
       )}
 
       {/* BookMarker container */}
@@ -160,7 +159,6 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
             />
           )}
         </div>
-        
       </div>
       {hideMarketDepth && (
         <MarketDepth

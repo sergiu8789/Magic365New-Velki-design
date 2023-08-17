@@ -14,11 +14,11 @@ export const BetSlip = () => {
   const [betSlip, setBetSlip] = useState("");
   const [betButton, setbetButton] = useState(true);
   const [betStakeType, setbetStakeType] = useState("");
-  const [betPlacing,setBetPlacing] = useState(false);
-  const [betSuccess,setBetSuccess] = useState(true);
-  const [betSuccessShow,setBetSuccessShow] = useState(false);
-  const [betSuccessTitle,setBetTitleMessage] = useState("");
-  const [betFailedMessage,setBetFailMessage] = useState("");
+  const [betPlacing, setBetPlacing] = useState(false);
+  const [betSuccess, setBetSuccess] = useState(true);
+  const [betSuccessShow, setBetSuccessShow] = useState(false);
+  const [betSuccessTitle, setBetTitleMessage] = useState("");
+  const [betFailedMessage, setBetFailMessage] = useState("");
 
   const closeBetSlip = () => {
     setbetButton(true);
@@ -119,9 +119,13 @@ export const BetSlip = () => {
         }
       }
     } else if (betTyp === "plus") {
-      betSelection.amount = parseFloat(betSelection.amount) + parseFloat(1);
-      if (parseFloat(betSelection.amount) > 500) betSelection.amount = 500;
-      betData.setBetData({ ...betData.betData, betSelection: betSelection });
+      if (betSelection.amount) {
+        betSelection.amount = parseFloat(betSelection.amount) + parseFloat(1);
+        if (parseFloat(betSelection.amount) > 500) betSelection.amount = 500;
+        betData.setBetData({ ...betData.betData, betSelection: betSelection });
+      } else {
+        betSelection.amount = 1;
+      }
     }
     setbetButton(false);
   };
@@ -150,7 +154,10 @@ export const BetSlip = () => {
   useEffect(() => {
     if (betPlacing) {
       let betSelection = betData?.betData?.betSelection;
-      if (betSelection.status === 'ACTIVE' || (betSelection.market_type === 'fancy' && betSelection.status === '') ) {
+      if (
+        betSelection.status === "ACTIVE" ||
+        (betSelection.market_type === "fancy" && betSelection.status === "")
+      ) {
         const data = {
           amount: parseFloat(betSelection.amount),
           market_id: betSelection.market_id,
@@ -183,7 +190,7 @@ export const BetSlip = () => {
               ...betData.betData,
               betSlipStatus: false,
             });
-            auth.setAuth({...auth.auth,fetchWallet:true});
+            auth.setAuth({ ...auth.auth, fetchWallet: true });
             if (res.status === 200 || res.status === 201) {
               // setBetList(res.data.bets);
               // setSucees(true);
@@ -235,23 +242,20 @@ export const BetSlip = () => {
         // setProgress(20);
         // setProgressStatus("");
         let message = "Odds are Suspended";
-        if (betSelection.status === "SUSPENDED") 
-          message = "Odds are Suspended";
-        
-        if (betSelection.status === "CLOSED") 
-          message = "Market are Closed";
-        
-        if (betSelection.status === "Expired") 
-          message = "Market are Closed";
+        if (betSelection.status === "SUSPENDED") message = "Odds are Suspended";
+
+        if (betSelection.status === "CLOSED") message = "Market are Closed";
+
+        if (betSelection.status === "Expired") message = "Market are Closed";
         setBetSuccess(false);
-        setBetSuccessShow(true);  
+        setBetSuccessShow(true);
         setBetTitleMessage("Bet Expired");
         setBetFailMessage(message);
         betData.setBetData({
           ...betData.betData,
           betSlipStatus: false,
         });
-        appData.setAppData({...appData.appData,listLoading:false});
+        appData.setAppData({ ...appData.appData, listLoading: false });
       }
     }
   }, [betPlacing]);
@@ -427,8 +431,17 @@ export const BetSlip = () => {
           </div>
         </div>
       </div>
-      <BetPlacePopup status={betSuccess} show={betSuccessShow} setShow={setBetSuccessShow}
-       title={betSuccessTitle} betDetails={betSuccess ? betData?.betData?.betSelection : {message : betFailedMessage}}/>
+      <BetPlacePopup
+        status={betSuccess}
+        show={betSuccessShow}
+        setShow={setBetSuccessShow}
+        title={betSuccessTitle}
+        betDetails={
+          betSuccess
+            ? betData?.betData?.betSelection
+            : { message: betFailedMessage }
+        }
+      />
     </React.Fragment>
   );
 };

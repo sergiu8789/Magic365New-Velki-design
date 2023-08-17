@@ -27,6 +27,7 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
       betSelection: betSelection,
     });
   };
+
   useEffect(() => {
     let allRunners = [];
     if (oddsList?.length) {
@@ -65,8 +66,8 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
       setMatchFancyOdds(allRunners);
       prevCountRef.current = matchFancyOdds;
     }
-  },[oddsList]);
-  
+  }, [oddsList]);
+
   return (
     <React.Fragment>
       <div className="col-12 d-inline-flex justify-content-end">
