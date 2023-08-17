@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import styles from "../MatchOdds/MatchOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 
@@ -25,6 +25,22 @@ export const PremiumOdds = ({ oddsList }) => {
       betSelection: betSelection,
     });
   }
+
+  useEffect(() => {
+    if(oddsList?.length){
+      let matched =  oddsList.filter((item) => {
+        if(item.id === betData?.betData?.betSelection?.market_id && item.apiSiteStatus !== betData?.betData?.betSelection?.status){
+          return item;
+        }
+      });
+      if(matched?.length)
+           betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,status:matched[0].apiSiteStatus}})
+    }
+    else
+      betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,status:"Expired"}});
+       
+  },[oddsList]);
+
   return (
     <React.Fragment>
       {oddsList?.map((item, index) => {
