@@ -93,8 +93,12 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
 
   const selectMarketTab = (event) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
+    let scrollPos = document.querySelector(
+      "." + styles.matchOddTitleRow
+    ).scrollLeft;
     let TabPos = event.currentTarget.getBoundingClientRect().left;
     TabPos = TabPos - pageOffset - 5;
+    TabPos = TabPos + scrollPos;
     let widthTab = event.currentTarget.getBoundingClientRect().width;
     setMarketLineWidth(widthTab);
     setMarketPosLeft(TabPos);

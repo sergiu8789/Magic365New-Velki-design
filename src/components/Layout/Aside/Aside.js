@@ -35,7 +35,6 @@ function Aside({ openAside, setopenAside }) {
     if (auth.auth.loggedIn) {
       ApiService.currentBets(1, "", "")
         .then((res) => {
-          console.log(res);
           setTotalCount(res.data.count);
         })
         .catch((err) => {
