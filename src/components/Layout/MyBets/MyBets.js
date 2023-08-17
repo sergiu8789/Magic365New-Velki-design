@@ -221,7 +221,10 @@ export const MyBets = ({ openMyBets }) => {
                     className={`${styles.myBetTab} position-relative d-inline-flex align-items-center`}
                     onClick={(event) => activeBetTab(event, "Exchange")}
                   >
-                    Exchange <span className={`${styles.myBetCount}`}>{matchList?.length}</span>
+                    Exchange{" "}
+                    <span className={`${styles.myBetCount}`}>
+                      {matchList?.length}
+                    </span>
                   </div>
                   <div
                     className={`${styles.myBetTab} position-relative d-inline-flex align-items-center`}
@@ -334,9 +337,9 @@ export const MyBets = ({ openMyBets }) => {
             <div
               className={`${styles.allBetsList} ${styles.BetDetailList} ${
                 betWindow === "betDetail"
-                  ? `${styles.slideInRight} d-inline-block`
+                  ? `${styles.slideInRight} d-inline-flex`
                   : `${styles.slideOutRight} d-none`
-              } col-12 d-inline-block`}
+              } col-12 flex-column`}
               id="BetDetailList"
             >
               {betsList.map((item, index) => (

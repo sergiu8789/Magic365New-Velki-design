@@ -1,5 +1,5 @@
 .sportsScrollBox {
-    height: calc(100vh - 131px);
+    height: calc(100vh - 125px);
     overflow-y: auto;
 }
 
