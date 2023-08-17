@@ -71,7 +71,7 @@
     color: inherit;
 }
 
-/* .animateSparkBack {
+.animateSparkBack {
     animation: sparkBack .1s ease;
     -webkit-animation: sparkBack .1s ease;
 }
@@ -79,49 +79,53 @@
 .animateSparkLay {
     animation: sparkLay .1s ease;
     -webkit-animation: sparkLay .1s ease;
-} */
+}
 
 @keyframes sparkLay {
     0%, to {
-        background: #faa9ba;
+        background: #26f1f8;
+        color: #000;
     }
 
-    20% {
+    90% {
         background: #26f1f8;
-        color: #000
+        color: #000;
     }
 }
 
 @-webkit-keyframes sparkLay {
     0%, to {
-        background: #faa9ba;
+        background: #26f1f8;
+        color: #000;
     }
 
-    20% {
+    90% {
         background: #26f1f8;
-        color: #000
+        color: #000;
     }
 }
 
 @-webkit-keyframes sparkBack {
     0%, to {
-        background: #7cc3f5;
+        background: #f6ff0e;
+        color: #000;
     }
 
-    20% {
+    90% {
         background: #f6ff0e;
-        color: #000
+        color: #000;
     }
 }
 
 @keyframes sparkBack {
     0%, to {
-        background: #7cc3f5;
+        background: #f6ff0e;
+        color: #000;
     }
 
-    20% {
+    90% {
         background: #f6ff0e;
-        color: #000
+        color: #000;
     }
 }
 

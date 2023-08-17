@@ -48,7 +48,6 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
         });
 
       oddsList.map((item, index) => {
-        console.log(item);
         let gameName = {
           Back: item?.b1,
           BackSize: item?.bs1,
@@ -58,6 +57,7 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
         allRunners.push(gameName);
       });
       setMatchFancyOdds(allRunners);
+      prevCountRef.current = matchFancyOdds;
     } else {
       betData.setBetData({
         ...betData.betData,
@@ -65,11 +65,6 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
       });
     }
   }, [oddsList]);
-
-  useEffect(() => {
-    console.log(prevCountRef.current);
-    prevCountRef.current = matchFancyOdds;
-  }, [matchFancyOdds]);
   return (
     <React.Fragment>
       <div className="col-12 d-inline-flex justify-content-end">
@@ -137,11 +132,11 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
                         styles.backBetBox
                       } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center  ${
                         item.b1 != prevCountRef.current[index]?.Back
-                          ? styles.animateSparkLay
+                          ? styles.animateSparkBack
                           : ""
                       } ${
                         item.bs1 != prevCountRef.current[index]?.BackSize
-                          ? styles.animateSparkLay
+                          ? styles.animateSparkBack
                           : ""
                       }`}
                     >

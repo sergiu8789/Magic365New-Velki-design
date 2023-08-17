@@ -61,6 +61,10 @@ export const ProfitLoss = () => {
     setdateStatus("false");
   };
 
+  const stopPreviousDate = (event) => {
+    event.stopPropagation();
+  };
+
   const openBetStatusDrop = () => {
     if (betStatusDrop === "true") {
       setbetStatusDrop("false");
@@ -440,9 +444,11 @@ export const ProfitLoss = () => {
         className={`${styles.calendarShortArea} ${
           dateStatus === "true" && styles.showCalenderArea
         } col-12 m-auto position-fixed d-inline-flex`}
+        onClick={closeCalenderFilter}
       >
         <div
           className={`${styles.previousDateArea} col-12 position-absolute d-inline-block`}
+          onClick={(event) => stopPreviousDate(event)}
         >
           <h2 className={`${styles.dateFilterArea} col-12 m-0 text-center`}>
             During
@@ -464,7 +470,7 @@ export const ProfitLoss = () => {
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
               onClick={() => selectDateFilter("Yesterday")}
             >
-              Yesterday
+              From Yesterday
             </button>
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
