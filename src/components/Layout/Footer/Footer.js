@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MyBets } from "../MyBets/MyBets";
 import styles from "./Footer.module.css";
@@ -8,10 +8,11 @@ function Footer() {
   const location = useLocation();
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [openMyBets, setopenMyBets] = useState("");
+  const footerTab = useRef();
 
   useEffect(() => {
-    if (document.querySelector("." + styles.activeTabLink)) {
-      document.querySelector("." + styles.activeTabLink).click();
+    if (footerTab && footerTab.current) {
+      footerTab.current.click();
     }
   }, [location?.pathname]);
 
@@ -84,6 +85,7 @@ function Footer() {
                 } d-inline-flex align-items-center justify-content-center flex-column posiution-relative ${
                   location.pathname === item.link && styles.activeTabLink
                 }`}
+                ref={location.pathname === item.link ? footerTab : null}
                 onClick={(event) =>
                   navigatePage(event, item.link, item.type, item.click)
                 }

@@ -4,6 +4,8 @@ import ApiService from "../../../services/ApiService";
 import { socket } from "../../../services/socket";
 import { useBet } from "../../../context/BetContextProvider";
 
+const prevMatchOddsRunner = [];
+
 export const ExchangeOdds = ({
   matchId,
   marketId,
@@ -13,9 +15,11 @@ export const ExchangeOdds = ({
   setSelectedRunner,
 }) => {
   const betData = useBet();
-  const [matchOddsRunner, setMatchOddsRunner] = useState("");
+  const [matchOddsRunner, setMatchOddsRunner] = useState([]);
+
   const [fooEvents, setFooEvents] = useState([]);
   const prevCountRef = useRef(matchOddsRunner);
+  const tabRef = useRef(null);
   const [selectedMarket, setSelectedMarket] = useState({
     market_id: marketId,
     market: marketType,
@@ -108,37 +112,10 @@ export const ExchangeOdds = ({
   }, [matchOddsRunner]);
 
   useEffect(() => {
-    if (
-      document.querySelector(
-        "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-      )
-    ) {
-      document
-        .querySelector(
-          "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-        )
-        .click();
+    if (tabRef && tabRef.current) {
+      tabRef.current.click();
     }
-    if (
-      document.querySelector(
-        "." +
-          styles.matchOddTitleRow +
-          " ." +
-          styles.matchTitleHighlight +
-          ":nth-child(1)"
-      )
-    ) {
-      document
-        .querySelector(
-          "." +
-            styles.matchOddTitleRow +
-            " ." +
-            styles.matchTitleHighlight +
-            ":nth-child(1)"
-        )
-        .click();
-    }
-  }, []);
+  }, [exchangeTabList]);
 
   useEffect(() => {
     /******** Exchange odds brodacasting  *****/
@@ -204,6 +181,7 @@ export const ExchangeOdds = ({
                     setSelectedMarket(item);
                     selectMarketTab(event);
                   }}
+                  ref={index === 0 ? tabRef : null}
                   className={`${styles.matchTitleHighlight} d-inline-flex align-items-center flex-shrink-0`}
                 >
                   <i className="icon-star"></i>
@@ -270,7 +248,6 @@ export const ExchangeOdds = ({
                         }`}
                       >
                         <span className={`${styles.oddStake}`}>
-                          {prevCountRef.current.Back}
                           {item?.ExchangePrices?.AvailableToBack[0].price}
                         </span>
                         <span className={`${styles.oddExposure}`}>
@@ -282,12 +259,12 @@ export const ExchangeOdds = ({
                         className={`${
                           styles.LayBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
-                          item?.ExchangePrices?.AvailableToBack[0].price !=
+                          item?.ExchangePrices?.AvailableToLay[0].price !=
                           prevCountRef.current[index]?.Lay
                             ? styles.animateSparkLay
                             : ""
                         } ${
-                          item?.ExchangePrices?.AvailableToBack[0].size !=
+                          item?.ExchangePrices?.AvailableToLay[0].size !=
                           prevCountRef.current[index]?.LaySize
                             ? styles.animateSparkLay
                             : ""
