@@ -155,7 +155,7 @@ function Aside({ openAside, setopenAside }) {
           >
             <i className="icon-sphere mt-1"></i>
             <p className={`${styles.timeZoneTime} d-inline-flex`}>
-              Time Zone：{new Date().toTimeString().slice(9)}
+              Time Zone：GMT+6:00
             </p>
           </div>
         </div>
