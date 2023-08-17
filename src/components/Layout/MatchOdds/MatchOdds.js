@@ -73,7 +73,6 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   useEffect(() => {
     socket.emit("fancySubscription", [matchId]); // socket emit event for Fancy and Boomaker markets
     socket.emit("premiumSubscription", [matchId]); // socket emit event for premium markets
-    socket.emit("subscription", [marketId]); // socket emit event for exchange odd market
   }, [matchId]);
 
  

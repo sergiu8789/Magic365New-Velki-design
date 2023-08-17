@@ -77,17 +77,50 @@ export const ExchangeOdds = ({matchId,marketId,marketType,sethideMarketDepth,sel
                 market_id: item.market_id,
                 market: item.market_type,
               });
-            marketIds.push(item.market_id);
+            marketIds.push(item.market_id)
           }
         });
-        setMarketList(marketIds);
+        if(marketIds.length){
+            marketIds = [...new Set(marketIds)];
+          setMarketList(marketIds);
+        }
         setExchangeTabList(marketTypes);
       }
     });
   }; 
 
+  useEffect(() => {
+    /******** Exchange odds brodacasting  *****/
+    function onBroadCast(value) {
+       let allRunners = [];
+       if (value?.length) {
+         value?.map((item) => {
+           // match marketId with socket response
+           if (item.MarketId === selectedMarket.market_id) {
+             setSelectedRunner(item);
+             item?.Runners?.map((item, index) => {
+               let gameName = {
+                 Back: item?.ExchangePrices?.AvailableToBack[0].price,
+                 BackSize: item?.ExchangePrices?.AvailableToBack[0].size,
+                 Lay: item?.ExchangePrices?.AvailableToLay[0].price,
+                 LaySize: item?.ExchangePrices?.AvailableToLay[0].size,
+               };
+               allRunners.push(gameName);
+             });
+             setMatchOddsRunner(allRunners);
+           }
+         });
+       }
+     }
+     socket.on("broadcast", onBroadCast); // exchange odds broadcast method
+     return () => {
+       socket.off("broadcast", onBroadCast);
+     };
+   }, [fooEvents, selectedMarket.market_id]);  
+
    useEffect(() => {
         getMatchOdds();
+        socket.emit("subscription", [marketId]); // socket emit event for exchange odd market
   },[matchId]);
 
   useEffect(() => {
@@ -97,6 +130,23 @@ export const ExchangeOdds = ({matchId,marketId,marketType,sethideMarketDepth,sel
   useEffect(() => {
     prevCountRef.current = matchOddsRunner;
   }, [matchOddsRunner]);
+
+  useEffect(() => {
+    if(selectedRunner?.Runners?.length){
+        selectedRunner?.Runners?.map((item) => {
+            if(item.SelectionId === betData.betData.betSelection.selection_id){
+               if(item.Status !== betData.betData.betSelection.status)
+                  betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,status:item.Status}})
+                if(betData.betData.betSelection.type === 1 &&  item.ExchangePrices?.AvailableToBack[0]?.price !==   betData.betData.betSelection.odds ){
+                   betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,odds:item.ExchangePrices?.AvailableToBack[0].price}})
+                }
+                if(betData.betData.betSelection.type === 2 &&  item.ExchangePrices?.AvailableToLay[0]?.price !==   betData.betData.betSelection.odds){
+                    betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,odds:item.ExchangePrices?.AvailableToLay[0]?.price}})
+                }
+            }
+         })
+    }
+  },[selectedRunner]);
 
   useEffect(() => {
     if (
@@ -130,35 +180,6 @@ export const ExchangeOdds = ({matchId,marketId,marketType,sethideMarketDepth,sel
         .click();
     }
   }, []);
-
-  useEffect(() => {
-     /******** Exchange odds brodacasting  *****/
-     function onBroadCast(value) {
-        let allRunners = [];
-        if (value?.length) {
-          value?.map((item) => {
-            // match marketId with socket response
-            if (item.MarketId === selectedMarket.market_id) {
-              setSelectedRunner(item);
-              item?.Runners?.map((item, index) => {
-                let gameName = {
-                  Back: item?.ExchangePrices?.AvailableToBack[0].price,
-                  BackSize: item?.ExchangePrices?.AvailableToBack[0].size,
-                  Lay: item?.ExchangePrices?.AvailableToLay[0].price,
-                  LaySize: item?.ExchangePrices?.AvailableToLay[0].size,
-                };
-                allRunners.push(gameName);
-              });
-              setMatchOddsRunner(allRunners);
-            }
-          });
-        }
-      }
-      socket.on("broadcast", onBroadCast); // exchange odds broadcast method
-      return () => {
-        socket.off("broadcast", onBroadCast);
-      };
-    }, [fooEvents, selectedMarket.market_id]);  
 
   return (
     <React.Fragment>

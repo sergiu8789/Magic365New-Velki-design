@@ -21,6 +21,7 @@ export const BetSlip = () => {
   const [betFailedMessage,setBetFailMessage] = useState("");
 
   const closeBetSlip = () => {
+    setbetButton(true);
     betData.setBetData({
       ...betData.betData,
       betSlipStatus: false,

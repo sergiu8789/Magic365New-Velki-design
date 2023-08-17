@@ -38,7 +38,7 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
           return item;
         }
       });
-      if (matched?.length)
+      if (matched?.length){
         betData.setBetData({
           ...betData.betData,
           betSelection: {
@@ -46,8 +46,14 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
             status: matched[0].gstatus,
           },
         });
-
-      oddsList.map((item, index) => {
+      }
+      else{
+        betData.setBetData({
+          ...betData.betData,
+          betSelection: { ...betData.betData.betSelection, status: "Expired" },
+        });
+      }
+      oddsList?.map((item, index) => {
         let gameName = {
           Back: item?.b1,
           BackSize: item?.bs1,
@@ -58,11 +64,6 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
       });
       setMatchFancyOdds(allRunners);
       prevCountRef.current = matchFancyOdds;
-    } else {
-      betData.setBetData({
-        ...betData.betData,
-        betSelection: { ...betData.betData.betSelection, status: "Expired" },
-      });
     }
   },[oddsList]);
   

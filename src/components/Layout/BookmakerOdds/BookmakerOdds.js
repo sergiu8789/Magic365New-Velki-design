@@ -48,6 +48,14 @@ export const BookmakerOdds = ({ oddsList, matchId }) => {
         LaySize: item?.ls1,
       };
       allRunners.push(gameName);
+      if(betData?.betData?.betSelection?.selection_id === item.sid){
+         if(betData?.betData?.betSelection?.type === 1 && betData?.betData?.betSelection?.odds !== item.b1)
+            betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,odds:item.b1}});
+         if(betData?.betData?.betSelection?.type === 2 && betData?.betData?.betSelection?.odds !== item.l1)
+            betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,odds:item.l1}});   
+         if(betData?.betData?.betSelection?.status !== item.s)
+            betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,status:item.s}});   
+      }
     });
     setBookMarkerOdds(allRunners);
     prevCountRef.current = bookMarkerOdds;
