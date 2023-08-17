@@ -64,7 +64,8 @@ export const FancyOdds = ({ oddsList, matchId, time }) => {
         betSelection: { ...betData.betData.betSelection, status: "Expired" },
       });
     }
-  }, [oddsList]);
+  },[oddsList]);
+  
   return (
     <React.Fragment>
       <div className="col-12 d-inline-flex justify-content-end">
