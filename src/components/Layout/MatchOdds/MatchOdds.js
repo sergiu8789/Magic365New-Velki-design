@@ -75,8 +75,10 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
 
   /******* Sockets events *********/
   useEffect(() => {
-    socket.emit("fancySubscription", [matchId]); // socket emit event for Fancy and Boomaker markets
-    socket.emit("premiumSubscription", [matchId]); // socket emit event for premium markets
+    if(matchId){
+      socket.emit("fancySubscription", matchId); // socket emit event for Fancy and Boomaker markets
+      socket.emit("premiumSubscription", matchId); // socket emit event for premium markets
+    }
   }, [matchId]);
 
   return (
