@@ -7,8 +7,10 @@ import { PremiumOdds } from "../PremiumOdds/PremiumOdds";
 import { BookmakerOdds } from "../BookmakerOdds/BookmakerOdds";
 import { formatFancyTime } from "../../../utils/helper";
 import { ExchangeOdds } from "../ExchangeOdds/ExchangeOdds";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const MatchOdds = ({ matchId, marketId, marketType }) => {
+  const appData = useApp();
   const [hideMarketDepth, sethideMarketDepth] = useState(false);
   const [fancyTabActive, setfancyTabActive] = useState("Fancybet");
   const [popularTabActive, setpopularTabActive] = useState("All");
@@ -44,6 +46,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     /******** Fancy and Bookmaker odds brodacasting  *****/
     function onFancyBookBroadCast(value) {
       if (value.matchId === matchId) {
+        //appData.setAppData({...appData.appData,updatedFancyTime:Math.floor((new Date()).getTime() / 1000)});
         if (value.fancy) setFancyOddsList(value.fancy);
         if (value.bookmaker?.bm1) setBookmakerOddsList(value.bookmaker);
         if (value?.servertime)
@@ -55,6 +58,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     function onPremiumBroadCast(value) {
       if (value?.length) {
         if (value[0]?.betfairEventId == matchId) {
+          //appData.setAppData({...appData.appData, updatedPremiumTime :Math.floor((new Date()).getTime() / 1000)});
           setPremiumOddsList(value);
         }
       }

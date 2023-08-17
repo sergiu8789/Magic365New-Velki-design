@@ -3,7 +3,7 @@ import { useBet } from "../../../context/BetContextProvider";
 import styles from "./BetSlip.module.css";
 import { encrypt } from "../../../utils/crypto";
 import ApiService from "../../../services/ApiService";
-import { useAuth } from "../../../context/AuthContextProvider";
+import { AuthProvider, useAuth } from "../../../context/AuthContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
 import { BetPlacePopup } from "../BetPlacePopup/BetPlacePopup";
 
@@ -153,11 +153,19 @@ export const BetSlip = () => {
 
   useEffect(() => {
     if (betPlacing) {
+      const time = Math.floor((new Date()).getTime() / 1000);
       let betSelection = betData?.betData?.betSelection;
       if (
         betSelection.status === "ACTIVE" ||
         (betSelection.market_type === "fancy" && betSelection.status === "")
       ) {
+        // if((betSelection.market_type === 'fancy' || betSelection.market_type === 'bookmaker') && !(time - appData.appDataupdatedFancyTime) >= 3){
+        //   setBetSuccess(false);
+        //   setBetSuccessShow(true);
+        //   setBetTitleMessage("Odds Delayed");
+        //   setBetFailMessage("Odds are delayed");
+        //   return false;
+        // }
         const data = {
           amount: parseFloat(betSelection.amount),
           market_id: betSelection.market_id,
@@ -183,17 +191,15 @@ export const BetSlip = () => {
           .then((res) => {
             appData.setAppData({ ...appData.appData, listLoading: false });
             setBetPlacing(false);
-            setBetSuccessShow(true);
-            setBetSuccess(true);
-            setBetTitleMessage("Bet Matched");
             betData.setBetData({
               ...betData.betData,
               betSlipStatus: false,
             });
             auth.setAuth({ ...auth.auth, fetchWallet: true });
             if (res.status === 200 || res.status === 201) {
-              // setBetList(res.data.bets);
-              // setSucees(true);
+              setBetSuccessShow(true);
+              setBetSuccess(true);
+              setBetTitleMessage("Bet Matched");
               if (res?.data?.wallet) {
                 // setWalletDetails(res.data.wallet);
               }
