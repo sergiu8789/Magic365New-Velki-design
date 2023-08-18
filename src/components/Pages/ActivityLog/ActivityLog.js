@@ -4,7 +4,7 @@ import { NoData } from "../../Layout/NoData/NoData";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
-import { changeDateFormat, formatTime } from "../../../utils/helper";
+import { changeDateYearFormat, formatTime } from "../../../utils/helper";
 import { useApp } from "../../../context/AppContextProvider";
 
 export const ActivityLog = () => {
@@ -143,7 +143,7 @@ export const ActivityLog = () => {
                 <label
                   className={`${styles.activityheader} col-12 d-inline-block`}
                 >
-                  {changeDateFormat(item.createdAt) +
+                  {changeDateYearFormat(item.createdAt) +
                     " " +
                     formatTime(item.createdAt)}
                 </label>

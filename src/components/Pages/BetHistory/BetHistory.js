@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
+import moment from "moment";
 import styles from "./BetHistory.module.css";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import { NoData } from "../../Layout/NoData/NoData";
@@ -78,8 +79,10 @@ export const BetHistory = () => {
     if (fromDate === dateValue[0].trim() && toDate === dateValue[1].trim()) {
       appData.setAppData({ ...appData.appData, listLoading: false });
     }
-    setFromDate(dateValue[0].trim());
-    setToDate(dateValue[1].trim());
+    let startDate = moment(dateValue[0].trim()).format("YYYY-MM-DD");
+    let endDate = moment(dateValue[1].trim()).format("YYYY-MM-DD");
+    setFromDate(startDate + "T18:30");
+    setToDate(endDate + "T18:30");
   };
 
   const showCalenderFilter = () => {
@@ -100,8 +103,6 @@ export const BetHistory = () => {
     if (newBetArray.indexOf(id) < 0) {
       setopenBetList((prevopenBetList) => [...prevopenBetList, id]);
     } else {
-      let betIndex = newBetArray.indexOf(id);
-      newBetArray.splice(betIndex, 1);
       setopenBetList(openBetList.filter((x) => x !== id));
     }
   };

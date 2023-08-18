@@ -8,6 +8,7 @@ import ApiService from "../../../services/ApiService";
 import { encrypt } from "../../../utils/crypto";
 import { socket } from "../../../services/socket";
 import { useApp } from "../../../context/AppContextProvider";
+import { NoData } from "../../Layout/NoData/NoData";
 
 export const Sports = () => {
   const location = useLocation();
@@ -17,10 +18,11 @@ export const Sports = () => {
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
   const [tabActive, settabActive] = useState("");
   const [inPlayTab, setinPlayTab] = useState("");
+  const [inPlayCheck, setPlayCheck] = useState(true);
   const [tournamentList, setTournamentList] = useState({});
   const [matchIds, setMatchIds] = useState([]);
   const playRef = useRef();
-  const tabRef = useRef();
+  const tabRef = useRef([]);
 
   useEffect(() => {
     if (matchIds?.length) {
@@ -29,22 +31,26 @@ export const Sports = () => {
   }, [matchIds]);
 
   useEffect(() => {
-    if (tabRef && tabRef.current) {
-      tabRef.current.click();
+    if (tabRef && tabRef.current[0]) {
+      tabRef.current[0].click();
     }
 
     if (playRef && playRef.current) {
       playRef.current.click();
     }
     if (location?.state?.type === "1") {
-      document.getElementById("inPlayToggle").checked = true;
+      setPlayCheck(true);
     } else {
-      document.getElementById("inPlayToggle").checked = false;
+      setPlayCheck(false);
     }
     if (location?.state?.category) {
       let catId = location?.state?.category;
       settabActive(location?.state?.category);
-      document.getElementById("SportsTab_" + catId).click();
+      tabRef.current.map((item) => {
+        if (item.id === "SportsTab_" + catId) {
+          item.click();
+        }
+      });
     }
     appData.setAppData({ ...appData.appData, listLoading: true });
   }, []);
@@ -133,6 +139,14 @@ export const Sports = () => {
     settabActive(name);
   };
 
+  const inPlayToggleCheck = () => {
+    if (inPlayCheck) {
+      setPlayCheck(false);
+    } else {
+      setPlayCheck(true);
+    }
+  };
+
   const inPlayTabs = [
     {
       name: "In-Play",
@@ -181,6 +195,8 @@ export const Sports = () => {
             <input
               id="inPlayToggle"
               type="checkbox"
+              checked={inPlayCheck}
+              onChange={inPlayToggleCheck}
               className={`${styles.inPlayInput} position-absolute`}
             />
             <label className={styles.inPlayToggle}></label>
@@ -232,7 +248,7 @@ export const Sports = () => {
                   }  d-inline-flex justify-content-center align-items-center position-relative ${
                     item.name === tabActive && styles.activeCatTab
                   }`}
-                  ref={index === 0 ? tabRef : null}
+                  ref={(element) => (tabRef.current[index] = element)}
                   id={`SportsTab_${item.name}`}
                   onClick={(event) => activeSportsTab(event, item.name)}
                 >
@@ -249,12 +265,16 @@ export const Sports = () => {
             style={{ transform: "translateX(" + CatTabPosLeft + "px)" }}
           ></div>
         </div>
-        <GameList
-          tournamentList={tournamentList}
-          setTournamentList={setTournamentList}
-          inPlay={inPlayTab === "In-Play" ? true : false}
-          gameType={tabActive}
-        />
+        {Object.keys(tournamentList).length > 0 ? (
+          <GameList
+            tournamentList={tournamentList}
+            setTournamentList={setTournamentList}
+            inPlay={inPlayTab === "In-Play" ? true : false}
+            gameType={tabActive}
+          />
+        ) : (
+          <NoData title="No Data" />
+        )}
       </div>
       <BetSlip />
     </React.Fragment>

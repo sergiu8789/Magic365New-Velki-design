@@ -19,6 +19,18 @@ export const changeDateFormat = (date) => {
   return monthNames[newDate.getMonth()] + " " + newDate.getDate();
 };
 
+export const changeDateYearFormat = (date) => {
+  const newDate = new Date(date);
+  return (
+    monthNames[newDate.getMonth()] +
+    " " +
+    newDate.getDate() +
+    " " +
+    newDate.getFullYear()
+  );
+  //return monthNames[newDate.getMonth()] + " " + newDate.getDate();
+};
+
 export const matchDate = (date) => {
   const newDate = new Date(date);
   return monthNames[newDate.getMonth()] + " " + newDate.getDate();
@@ -334,7 +346,7 @@ export const formatFancyTime = (date) => {
   const newDate = new Date(date);
   var hours = newDate.getHours();
   var minutes = newDate.getMinutes();
-  var seconds =  newDate.getSeconds();
+  var seconds = newDate.getSeconds();
   var ampm = hours >= 12 ? "PM" : "AM";
   hours = hours % 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
@@ -342,4 +354,4 @@ export const formatFancyTime = (date) => {
   seconds = seconds < 10 ? "0" + seconds : seconds;
   var strTime = hours + ":" + minutes + ":" + seconds + " " + ampm;
   return strTime;
-}
+};

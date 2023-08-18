@@ -25,6 +25,7 @@ export const MyBets = ({ openMyBets }) => {
   const [matchList, setMatchList] = useState([]);
   const [matchListCount, setMatchListCount] = useState(0);
   const [selectedMatch, setSelectedMatch] = useState("");
+  const [hideBetLayerCls, sethideBetLayerCls] = useState(false);
 
   const activeBetTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -42,9 +43,7 @@ export const MyBets = ({ openMyBets }) => {
   };
 
   const hideBetLayer = () => {
-    document
-      .querySelector("." + styles.myBetsWindowLayer)
-      .classList.remove(styles.open);
+    sethideBetLayerCls(false);
   };
 
   const showBetDetail = (
@@ -168,9 +167,7 @@ export const MyBets = ({ openMyBets }) => {
   }, []);
 
   useEffect(() => {
-    document
-      .querySelector("." + styles.myBetsWindowLayer)
-      .classList.add(styles.open);
+    sethideBetLayerCls(true);
     document.getElementById("betHeaderTitle").innerHTML = "My Bets";
     setbetWindow("Exchange");
     setheaderBet(false);
@@ -183,7 +180,9 @@ export const MyBets = ({ openMyBets }) => {
   return (
     <React.Fragment>
       <div
-        className={`${styles.myBetsWindowLayer} col-12 d-inline-block m-auto position-fixed h-100`}
+        className={`${styles.myBetsWindowLayer} ${
+          hideBetLayerCls && styles.open
+        } col-12 d-inline-block m-auto position-fixed h-100`}
       >
         <div
           className={`${styles.myBetContent} position-absolute col-12 d-inline-block`}

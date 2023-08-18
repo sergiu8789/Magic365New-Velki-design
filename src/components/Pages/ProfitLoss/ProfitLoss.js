@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
+import moment from "moment";
 import styles from "./ProfitLoss.module.css";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import ApiService from "../../../services/ApiService";
@@ -81,8 +82,10 @@ export const ProfitLoss = () => {
     if (fromDate === dateValue[0].trim() && toDate === dateValue[1].trim()) {
       appData.setAppData({ ...appData.appData, listLoading: false });
     }
-    setFromDate(dateValue[0].trim());
-    setToDate(dateValue[1].trim());
+    let startDate = moment(dateValue[0].trim()).format("YYYY-MM-DD");
+    let endDate = moment(dateValue[1].trim()).format("YYYY-MM-DD");
+    setFromDate(startDate + "T18:30");
+    setToDate(endDate + "T18:30");
   };
 
   const setBetStatusVal = (name, val) => {

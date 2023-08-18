@@ -5,6 +5,7 @@ import { useBet } from "../../../context/BetContextProvider";
 export const PremiumOdds = ({ oddsList }) => {
   const betData = useBet();
   const [matchPremiumOdds, setMatchPremiumOdds] = useState("");
+  const [premiumOddsId, setpremiumOddsId] = useState([]);
   const prevCountRef = useRef(matchPremiumOdds);
 
   const placeBet = (item, selection) => {
@@ -27,6 +28,16 @@ export const PremiumOdds = ({ oddsList }) => {
       betSlipStatus: true,
       betSelection: betSelection,
     });
+  };
+
+  const togglePopularBet = (id) => {
+    let newBetArray = [];
+    newBetArray = [...premiumOddsId];
+    if (newBetArray.indexOf(id) < 0) {
+      setpremiumOddsId((prevopenBetList) => [...prevopenBetList, id]);
+    } else {
+      setpremiumOddsId(premiumOddsId.filter((x) => x !== id));
+    }
   };
 
   useEffect(() => {
@@ -73,10 +84,16 @@ export const PremiumOdds = ({ oddsList }) => {
         return (
           <div
             key={index}
-            className={`${styles.singlePopularBet} col-12 mb-1 d-inline-flex flex-column position-relative`}
+            className={`${styles.singlePopularBet} ${
+              premiumOddsId.includes("PopularBet_" + index)
+                ? styles.ClosePopularBet
+                : ""
+            } col-12 mb-1 d-inline-flex flex-column position-relative`}
+            id={`PopularBet_${index}`}
           >
             <div
               className={`${styles.popularTabTitle} col-12 d-inline-flex position-relative align-items-center`}
+              onClick={() => togglePopularBet("PopularBet_" + index)}
             >
               <div className={`d-inline-flex align-items-center`}>
                 <i className="icon-star"></i>
@@ -89,7 +106,7 @@ export const PremiumOdds = ({ oddsList }) => {
               ></i>
             </div>
             <div
-              className={`${styles.poplarOddRow} position-relative col-12 d-inline-flex justify-content-end flex-wrap`}
+              className={`${styles.poplarOddRow} position-relative col-12 justify-content-end flex-wrap`}
             >
               {item?.sportsBookSelection?.map((selection, selectionIndex) => {
                 return (

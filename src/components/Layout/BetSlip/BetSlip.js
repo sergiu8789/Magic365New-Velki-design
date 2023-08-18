@@ -103,6 +103,7 @@ export const BetSlip = () => {
       if (parseFloat(betSelection.amount) > 500) betSelection.amount = 500;
       betData.setBetData({ ...betData.betData, betSelection: betSelection });
     }
+    setbetButton(false);
     setbetStakeType("default");
   };
 
@@ -126,8 +127,8 @@ export const BetSlip = () => {
       } else {
         betSelection.amount = 1;
       }
+      setbetButton(false);
     }
-    setbetButton(false);
   };
 
   const deleteBetAmt = () => {
@@ -153,7 +154,7 @@ export const BetSlip = () => {
 
   useEffect(() => {
     if (betPlacing) {
-      const time = Math.floor((new Date()).getTime() / 1000);
+      const time = Math.floor(new Date().getTime() / 1000);
       let betSelection = betData?.betData?.betSelection;
       if (
         betSelection.status === "ACTIVE" ||
@@ -424,7 +425,7 @@ export const BetSlip = () => {
           >
             <i className="icon-min-max"></i>
             <span className={styles.minText}>min/max</span>
-            <span className={styles.betMinMax}>1/2,500</span>
+            <span className={styles.betMinMax}>1/500</span>
           </div>
           <div className="col-12 d-inline-flex">
             <button

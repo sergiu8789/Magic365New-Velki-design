@@ -179,6 +179,7 @@
 .BookmarkerTitleRow.BookmarkerTitleRound .gameOpenArrow {
     transform: translateY(-50%) rotate(180deg);
     -webkit-transform: translateY(-50%) rotate(180deg);
+    top: 50%;
 }
 
 .gameOpenArrow {
@@ -277,6 +278,26 @@
     padding: 10px;
     background: #FFF;
     gap: 4px;
+}
+
+.singlePopularBet .poplarOddRow {
+    display: inline-flex;
+}
+
+.singlePopularBet.ClosePopularBet .poplarOddRow {
+    display: none;
+}
+
+.singlePopularBet.ClosePopularBet .gameOpenArrow {
+    transform: scaleY(-1) translateY(-50%);
+    -webkit-transform: scaleY(-1) translateY(-50%);
+    top: 10px;
+}
+
+.singlePopularBet .gameOpenArrow {
+    transform: scaleY(1) translateY(-50%);
+    -webkit-transform: scaleY(1) translateY(-50%);
+    top: 50%;
 }
 
 .popularTabTitle {
