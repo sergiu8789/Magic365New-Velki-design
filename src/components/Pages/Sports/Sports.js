@@ -17,7 +17,6 @@ export const Sports = () => {
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
   const [tabActive, settabActive] = useState("");
-  const [tabActiveId, settabActiveId] = useState("");
   const [inPlayTab, setinPlayTab] = useState("");
   const [inPlayCheck, setPlayCheck] = useState(true);
   const [tournamentList, setTournamentList] = useState({});
@@ -32,8 +31,15 @@ export const Sports = () => {
   }, [matchIds]);
 
   useEffect(() => {
-    if (tabRef && tabRef.current[0]) {
+    let getGameTab = appData.appData.SportTabActive;
+    if (tabRef && tabRef.current[0] && !getGameTab) {
       tabRef.current[0].click();
+    } else {
+      tabRef.current.map((item) => {
+        if (item.id === getGameTab) {
+          item.click();
+        }
+      });
     }
 
     if (playRef && playRef.current) {
@@ -80,7 +86,7 @@ export const Sports = () => {
     TabPos = TabPos - pageOffset;
     setCatTabPosLeft(TabPos);
     settabActive(name);
-    settabActiveId(gameId);
+    appData.setAppData({ ...appData.appData, SportTabActive: gameId });
   };
 
   const inPlayToggleCheck = () => {

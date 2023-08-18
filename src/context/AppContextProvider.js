@@ -7,8 +7,9 @@ export const AppProvider = ({ children }) => {
     listLoading: false,
     highlightOdds: true,
     fullMarket: true,
-    updatedFancyTime : "",
-    updatedPremiumTime : ""
+    updatedFancyTime: "",
+    updatedPremiumTime: "",
+    SportTabActive: "",
   };
   const [appData, setAppData] = useState(initialValues);
   return (

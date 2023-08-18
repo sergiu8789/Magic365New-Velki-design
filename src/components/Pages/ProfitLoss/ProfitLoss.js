@@ -52,7 +52,8 @@ export const ProfitLoss = () => {
     if (name === "All") {
       name = "";
     }
-    setpopularTabActive(name);
+    let marketName = name.toLowerCase();
+    setpopularTabActive(marketName);
   };
 
   const showCalenderFilter = () => {
