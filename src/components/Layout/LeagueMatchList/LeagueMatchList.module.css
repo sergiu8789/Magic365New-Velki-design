@@ -11,6 +11,13 @@
 
 .leagueDirectory {
     top: 0px;
+    overflow-y: auto;
+    max-height: calc(100vh - 202px);
+    scroll-behavior: smooth;
+}
+
+.leagueDirectory::-webkit-scrollbar {
+    display: none;
 }
 
 .leagueInitialBox:after {

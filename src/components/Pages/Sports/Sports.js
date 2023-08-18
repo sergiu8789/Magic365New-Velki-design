@@ -17,6 +17,7 @@ export const Sports = () => {
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
   const [tabActive, settabActive] = useState("");
+  const [tabActiveId, settabActiveId] = useState("");
   const [inPlayTab, setinPlayTab] = useState("");
   const [inPlayCheck, setPlayCheck] = useState(true);
   const [tournamentList, setTournamentList] = useState({});
@@ -31,6 +32,7 @@ export const Sports = () => {
   }, [matchIds]);
 
   useEffect(() => {
+    console.log(tabRef);
     if (tabRef && tabRef.current[0]) {
       tabRef.current[0].click();
     }
@@ -54,6 +56,76 @@ export const Sports = () => {
     }
     appData.setAppData({ ...appData.appData, listLoading: true });
   }, []);
+
+  const activeGameTab = (event, name) => {
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
+    let inplay =
+      parseInt(
+        document.querySelector("." + styles.inplayBox).getBoundingClientRect()
+          .width
+      ) + parseInt(18);
+    pageOffset = pageOffset + inplay;
+    let TabPos = event.currentTarget.getBoundingClientRect().left;
+    TabPos = TabPos - pageOffset;
+    let widthTab = event.currentTarget.getBoundingClientRect().width;
+    setTabLineWidth(widthTab);
+    setTabPosLeft(TabPos);
+    setinPlayTab(name);
+  };
+
+  const activeSportsTab = (event, name, gameId) => {
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
+    let inplay = 10;
+    pageOffset = pageOffset + inplay;
+    let TabPos = event.currentTarget.getBoundingClientRect().left;
+    TabPos = TabPos - pageOffset;
+    setCatTabPosLeft(TabPos);
+    settabActive(name);
+    settabActiveId(gameId);
+  };
+
+  const inPlayToggleCheck = () => {
+    if (inPlayCheck) {
+      setPlayCheck(false);
+    } else {
+      setPlayCheck(true);
+    }
+  };
+
+  const inPlayTabs = [
+    {
+      name: "In-Play",
+    },
+    {
+      name: "Today",
+    },
+    {
+      name: "Tomorrow",
+    },
+  ];
+
+  const sportsCat = [
+    {
+      name: "All",
+      icon: "icon-all",
+      link: "/",
+    },
+    {
+      name: "Cricket",
+      icon: "icon-cricket",
+      link: "/",
+    },
+    {
+      name: "Soccer",
+      icon: "icon-soccer",
+      link: "/",
+    },
+    {
+      name: "Tennis",
+      icon: "icon-tennis",
+      link: "/",
+    },
+  ];
 
   useEffect(() => {
     if (inPlayTab) {
@@ -112,75 +184,6 @@ export const Sports = () => {
       });
     }
   }, [inPlayTab]);
-
-  const activeGameTab = (event, name) => {
-    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
-    let inplay =
-      parseInt(
-        document.querySelector("." + styles.inplayBox).getBoundingClientRect()
-          .width
-      ) + parseInt(18);
-    pageOffset = pageOffset + inplay;
-    let TabPos = event.currentTarget.getBoundingClientRect().left;
-    TabPos = TabPos - pageOffset;
-    let widthTab = event.currentTarget.getBoundingClientRect().width;
-    setTabLineWidth(widthTab);
-    setTabPosLeft(TabPos);
-    setinPlayTab(name);
-  };
-
-  const activeSportsTab = (event, name) => {
-    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
-    let inplay = 10;
-    pageOffset = pageOffset + inplay;
-    let TabPos = event.currentTarget.getBoundingClientRect().left;
-    TabPos = TabPos - pageOffset;
-    setCatTabPosLeft(TabPos);
-    settabActive(name);
-  };
-
-  const inPlayToggleCheck = () => {
-    if (inPlayCheck) {
-      setPlayCheck(false);
-    } else {
-      setPlayCheck(true);
-    }
-  };
-
-  const inPlayTabs = [
-    {
-      name: "In-Play",
-    },
-    {
-      name: "Today",
-    },
-    {
-      name: "Tomorrow",
-    },
-  ];
-
-  const sportsCat = [
-    {
-      name: "All",
-      icon: "icon-all",
-      link: "/",
-    },
-    {
-      name: "Cricket",
-      icon: "icon-cricket",
-      link: "/",
-    },
-    {
-      name: "Soccer",
-      icon: "icon-soccer",
-      link: "/",
-    },
-    {
-      name: "Tennis",
-      icon: "icon-tennis",
-      link: "/",
-    },
-  ];
 
   return (
     <React.Fragment>
@@ -250,7 +253,9 @@ export const Sports = () => {
                   }`}
                   ref={(element) => (tabRef.current[index] = element)}
                   id={`SportsTab_${item.name}`}
-                  onClick={(event) => activeSportsTab(event, item.name)}
+                  onClick={(event) =>
+                    activeSportsTab(event, item.name, "SportsTab_" + item.name)
+                  }
                 >
                   <i className={`${styles.sportsTabIcon} ${item.icon}`}></i>
                   <span className={`${styles.sportTabName} d-inline-flex`}>
