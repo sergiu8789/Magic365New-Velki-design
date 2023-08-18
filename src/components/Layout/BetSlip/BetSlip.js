@@ -25,6 +25,10 @@ export const BetSlip = () => {
     betData.setBetData({
       ...betData.betData,
       betSlipStatus: false,
+      betSelection:{
+        ...betData.betData.betSelection,
+        amount:""
+      }
     });
   };
 
