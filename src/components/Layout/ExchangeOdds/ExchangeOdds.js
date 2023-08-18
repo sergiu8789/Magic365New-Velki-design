@@ -233,6 +233,28 @@ export const ExchangeOdds = ({
     }
   }, [exchangeTabList]);
 
+  useEffect(() => {
+   if(expoData?.exchangeExpoData?.updatedExpo){
+    let updated = {};
+    let betSelection = betData?.betData?.betSelection;
+     Object.keys(expoData?.exchangeExpoData?.updatedExpo)?.map((item) => {
+        if(betSelection?.selection_id?.toString() === item ){
+          if(betSelection?.type === 1)
+           updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] + (betSelection?.amount!=='' ?  (parseFloat(betSelection?.odds) * parseFloat(betSelection?.amount) - parseFloat(betSelection?.amount)) : 0);
+          else
+           updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] - (betSelection?.amount!=='' ?  (parseFloat(betSelection?.odds) * parseFloat(betSelection?.amount) - parseFloat(betSelection?.amount)) : 0);
+        }
+        else{
+          if(betSelection?.type === 1)
+           updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] - (betSelection?.amount!=='' ? parseFloat(betSelection?.amount) : 0);
+          else
+          updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] + (betSelection?.amount!=='' ? parseFloat(betSelection?.amount) : 0);
+        }
+     });
+    expoData.setExchangeExpoData({...expoData.exchangeExpoData,updatedExpo:updated});
+   }
+  },[betData.betData.betSelection.amount]);
+
   return (
     <React.Fragment>
       <div
