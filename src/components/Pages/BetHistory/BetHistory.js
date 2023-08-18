@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import styles from "./BetHistory.module.css";
@@ -39,6 +39,7 @@ export const BetHistory = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [totalCount, setTotalCount] = useState(0);
+  const tabRef = useRef();
 
   const selectPopularTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -224,16 +225,8 @@ export const BetHistory = () => {
   }, [period, popularTabActive]);
 
   useEffect(() => {
-    if (
-      document.querySelector(
-        "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-      )
-    ) {
-      document
-        .querySelector(
-          "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-        )
-        .click();
+    if (tabRef && tabRef.current) {
+      tabRef.current.click();
     }
   }, []);
 
@@ -255,6 +248,7 @@ export const BetHistory = () => {
                     popularTabActive === item ||
                     (popularTabActive === "" && styles.popularTabActive)
                   } d-inline-flex align-items-center justify-content-center flex-shrink-0`}
+                  ref={index === 0 ? tabRef : null}
                   onClick={(event) => selectPopularTab(event, item)}
                 >
                   {item}

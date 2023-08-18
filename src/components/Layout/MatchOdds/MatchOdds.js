@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./MatchOdds.module.css";
 import { MarketDepth } from "../MarketDepth/MarketDepth";
 import { socket } from "../../../services/socket";
@@ -23,6 +23,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const [premiumOddsList, setPremiumOddsList] = useState([]);
   const [fancyBookUpdated, setFancyBookUpdated] = useState("");
   const TabList = ["All", "Popular", "Match", "Over", "Innings", "Players"];
+  const allTabRef = useRef();
 
   const selectFancyTab = (tab) => {
     setfancyTabActive(tab);
@@ -75,11 +76,17 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
 
   /******* Sockets events *********/
   useEffect(() => {
-    if(matchId){
+    if (matchId) {
       socket.emit("fancySubscription", matchId); // socket emit event for Fancy and Boomaker markets
       socket.emit("premiumSubscription", matchId); // socket emit event for premium markets
     }
   }, [matchId]);
+
+  useEffect(() => {
+    if (allTabRef && allTabRef?.current) {
+      allTabRef?.current.click();
+    }
+  }, []);
 
   return (
     <React.Fragment>
@@ -134,6 +141,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
                     className={`${styles.popularTab} ${
                       popularTabActive === item && styles.popularTabActive
                     } d-inline-flex align-items-center justify-content-center flex-shrink-0`}
+                    ref={index === 0 ? allTabRef : null}
                     onClick={(event) => selectPopularTab(event, item)}
                   >
                     {item}
