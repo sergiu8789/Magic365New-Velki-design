@@ -128,7 +128,7 @@ export const ExchangeOdds = ({
               allRunners.push(gameName);
             });
             setAllSelections((previousState) => {
-              if(previousState?.length !== selections?.length)
+              if(previousState?.join() !== selections?.join())
                 return selections;
               else 
                return previousState;
@@ -163,26 +163,25 @@ export const ExchangeOdds = ({
       exposure[item] = 0;
     });
     if(betList.length){
-      const filteredBets = betList?.filter((item) => item.market_type !== 'bookmaker' 
-      && item.market_type !== 'fancy' && item.market_type !== 'casino' && item.market_type!=='premium');
+      const filteredBets = betList?.filter((item) => item.market_type === selectedMarket.market);
       filteredBets?.map((item) => {
         allSelections?.map((selection) => {
            if(item?.selection_id === selection?.toString()){
-            if(item.type === 1){
-             exposure[selection] =  exposure[selection] + parseFloat(item.amount);
-            }
+            if(item.type === 1)
+             exposure[selection] =  exposure[selection] + (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
             else
-             exposure[selection] =  exposure[selection] - (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
+             exposure[selection] =  exposure[selection] - parseFloat(item.amount) ;
            }
            else{
             if(item.type === 1)
-            exposure[selection] =  exposure[selection] - parseFloat(item.amount);
+              exposure[selection] =  exposure[selection] - parseFloat(item.amount);
            else
             exposure[selection] =  exposure[selection] + (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
            }
         });
       });
     }
+    expoData.setExchangeExpoData({oldExpoData:exposure,updatedExpo:exposure});
   },[betList,allSelections]);
 
   useEffect(() => {
@@ -315,7 +314,10 @@ export const ExchangeOdds = ({
                       className={`${styles.gameName} d-inline-flex align-items-center col-8`}
                     >
                       {item.runnerName}
+                      ({expoData?.exchangeExpoData?.updatedExpo[item.SelectionId] ? expoData?.exchangeExpoData?.updatedExpo[item.SelectionId].toFixed(2) : "" })
                     </div>
+                    
+                  
                     <div
                       className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
                     >
