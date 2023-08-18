@@ -128,7 +128,7 @@ export const ExchangeOdds = ({
               allRunners.push(gameName);
             });
             setAllSelections((previousState) => {
-              if(previousState?.length !== selections?.length)
+              if(previousState?.join() !== selections?.join())
                 return selections;
               else 
                return previousState;
@@ -163,26 +163,25 @@ export const ExchangeOdds = ({
       exposure[item] = 0;
     });
     if(betList.length){
-      const filteredBets = betList?.filter((item) => item.market_type !== 'bookmaker' 
-      && item.market_type !== 'fancy' && item.market_type !== 'casino' && item.market_type!=='premium');
+      const filteredBets = betList?.filter((item) => item.market_type === selectedMarket.market);
       filteredBets?.map((item) => {
         allSelections?.map((selection) => {
            if(item?.selection_id === selection?.toString()){
-            if(item.type === 1){
-             exposure[selection] =  exposure[selection] + parseFloat(item.amount);
-            }
+            if(item.type === 1)
+             exposure[selection] =  exposure[selection] + (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
             else
-             exposure[selection] =  exposure[selection] - (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
+             exposure[selection] =  exposure[selection] - parseFloat(item.amount) ;
            }
            else{
             if(item.type === 1)
-            exposure[selection] =  exposure[selection] - parseFloat(item.amount);
+              exposure[selection] =  exposure[selection] - parseFloat(item.amount);
            else
             exposure[selection] =  exposure[selection] + (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
            }
         });
       });
     }
+    expoData.setExchangeExpoData({oldExpoData:exposure,updatedExpo:exposure});
   },[betList,allSelections]);
 
   useEffect(() => {
@@ -233,6 +232,28 @@ export const ExchangeOdds = ({
       tabRef.current.click();
     }
   }, [exchangeTabList]);
+
+  useEffect(() => {
+   if(expoData?.exchangeExpoData?.updatedExpo){
+    let updated = {};
+    let betSelection = betData?.betData?.betSelection;
+     Object.keys(expoData?.exchangeExpoData?.updatedExpo)?.map((item) => {
+        if(betSelection?.selection_id?.toString() === item ){
+          if(betSelection?.type === 1)
+           updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] + (betSelection?.amount!=='' ?  (parseFloat(betSelection?.odds) * parseFloat(betSelection?.amount) - parseFloat(betSelection?.amount)) : 0);
+          else
+           updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] - (betSelection?.amount!=='' ?  (parseFloat(betSelection?.odds) * parseFloat(betSelection?.amount) - parseFloat(betSelection?.amount)) : 0);
+        }
+        else{
+          if(betSelection?.type === 1)
+           updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] - (betSelection?.amount!=='' ? parseFloat(betSelection?.amount) : 0);
+          else
+          updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] + (betSelection?.amount!=='' ? parseFloat(betSelection?.amount) : 0);
+        }
+     });
+    expoData.setExchangeExpoData({...expoData.exchangeExpoData,updatedExpo:updated});
+   }
+  },[betData.betData.betSelection.amount]);
 
   return (
     <React.Fragment>
@@ -315,7 +336,10 @@ export const ExchangeOdds = ({
                       className={`${styles.gameName} d-inline-flex align-items-center col-8`}
                     >
                       {item.runnerName}
+                      ({expoData?.exchangeExpoData?.updatedExpo[item.SelectionId] ? expoData?.exchangeExpoData?.updatedExpo[item.SelectionId].toFixed(2) : "" })
                     </div>
+                    
+                  
                     <div
                       className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
                     >

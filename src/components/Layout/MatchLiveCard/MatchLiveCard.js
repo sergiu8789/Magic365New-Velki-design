@@ -15,7 +15,7 @@ export const MatchLiveCard = ({ streamUrl }) => {
     <React.Fragment>
       {streamUrl && ipAddress && (
         <div
-          className={`${styles.matchScoreGraph} col-12 overflow-hidden d-inline-flex align-items-center position-sticky`}
+          className={`${styles.matchScoreGraph} col-12 overflow-hidden d-inline-flex align-items-center `}
         >
           <iframe
             title="live-score"

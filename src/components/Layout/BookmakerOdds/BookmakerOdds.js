@@ -1,12 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "../MatchOdds/MatchOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
+import { useExposure } from "../../../context/ExposureContextProvider";
 
-export const BookmakerOdds = ({ oddsList, matchId }) => {
+export const BookmakerOdds = ({ oddsList, matchId,betList }) => {
   const betData = useBet();
+  const expoData = useExposure();
   const [hideBookMarker, sethideBookMarker] = useState("false");
   const [bookMarkerOdds, setBookMarkerOdds] = useState();
   const prevCountRef = useRef(bookMarkerOdds);
+  const [allSelections,setAllSelections] = useState([]);
 
   const hideBookMarkerOdd = () => {
     if (hideBookMarker === "true") {
@@ -40,6 +43,7 @@ export const BookmakerOdds = ({ oddsList, matchId }) => {
 
   useEffect(() => {
     let allRunners = [];
+    let selections = [];
     oddsList?.bm1?.map((item) => {
       let gameName = {
         Back: item?.b1,
@@ -56,10 +60,45 @@ export const BookmakerOdds = ({ oddsList, matchId }) => {
          if(betData?.betData?.betSelection?.status !== item.s)
             betData.setBetData({...betData.betData,betSelection:{...betData.betData.betSelection,status:item.s}});   
       }
+      selections.push(item.sid);  
     });
+    setAllSelections((previousState) => {
+      if(previousState?.join() !== selections?.join())
+        return selections;
+      else 
+       return previousState;
+      });
     setBookMarkerOdds(allRunners);
     prevCountRef.current = bookMarkerOdds;
   }, [oddsList]);
+
+  useEffect(() => {
+    let exposure = {};
+     allSelections.map((item) => {
+      exposure[item] = 0;
+    });
+    if(betList.length){
+      const filteredBets = betList?.filter((item) => item.market_type === 'bookmaker');
+      filteredBets?.map((item) => {
+        allSelections?.map((selection) => {
+           if(item?.selection_id === selection?.toString()){
+            if(item.type === 1)
+             exposure[selection] =  exposure[selection] + (parseFloat(item.amount) * (parseFloat(item.odds)/100 + 1) - parseFloat(item.amount));
+            else
+             exposure[selection] =  exposure[selection] - parseFloat(item.amount) ;
+           }
+           else{
+            if(item.type === 1)
+              exposure[selection] =  exposure[selection] - parseFloat(item.amount);
+           else
+            exposure[selection] =  exposure[selection] + (parseFloat(item.amount) * (parseFloat(item.odds)/100 + 1) - parseFloat(item.amount));
+           }
+        });
+      });
+    }
+    console.log(exposure)
+    expoData.setBookmakerExpoData({oldExpoData:exposure,updatedExpo:exposure});
+  },[betList,allSelections]);
 
   return (
     <div
@@ -109,6 +148,7 @@ export const BookmakerOdds = ({ oddsList, matchId }) => {
                   className={`${styles.gameName} d-inline-flex align-items-center col-8`}
                 >
                   {item.nat}
+                  ({ expoData?.bookmakerExpoData?.updatedExpo && item?.sid &&  expoData?.bookmakerExpoData?.updatedExpo[item?.sid] ? expoData?.bookmakerExpoData?.updatedExpo[item?.sid]?.toFixed(2) : "" })
                 </div>
                 <div
                   className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
