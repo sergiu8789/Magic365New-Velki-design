@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import styles from "./CurrentBets.module.css";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import { NoData } from "../../Layout/NoData/NoData";
@@ -32,6 +32,7 @@ export const CurrentBets = () => {
   const [openBetList, setopenBetList] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
+  const tabRef = useRef();
 
   const selectPopularTab = (event, name) => {
     let pageOffset = document.getElementById("centerMobileMode").offsetLeft;
@@ -141,16 +142,8 @@ export const CurrentBets = () => {
   }, [betStatus, popularTabActive]);
 
   useEffect(() => {
-    if (
-      document.querySelector(
-        "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-      )
-    ) {
-      document
-        .querySelector(
-          "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-        )
-        .click();
+    if (tabRef && tabRef.current) {
+      tabRef.current.click();
     }
   }, []);
 
@@ -171,6 +164,7 @@ export const CurrentBets = () => {
                   className={`${styles.popularTab} ${
                     popularTabActive === item && styles.popularTabActive
                   } d-inline-flex align-items-center justify-content-center flex-shrink-0`}
+                  ref={index === 0 ? tabRef : null}
                   onClick={(event) => selectPopularTab(event, item)}
                 >
                   {item}

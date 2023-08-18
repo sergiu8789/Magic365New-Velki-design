@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import DateRangePicker from "react-bootstrap-daterangepicker";
 import "bootstrap-daterangepicker/daterangepicker.css";
 import styles from "./ProfitLoss.module.css";
@@ -35,6 +35,7 @@ export const ProfitLoss = () => {
   const [gamesProfitList, setGamesProfitList] = useState([]);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+  const tabRef = useRef();
 
   const selectPopularTab = (event, name) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -285,16 +286,8 @@ export const ProfitLoss = () => {
   }, [period, popularTabActive]);
 
   useEffect(() => {
-    if (
-      document.querySelector(
-        "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-      )
-    ) {
-      document
-        .querySelector(
-          "." + styles.allTabList + " ." + styles.popularTab + ":nth-child(1)"
-        )
-        .click();
+    if (tabRef && tabRef.current) {
+      tabRef.current.click();
     }
   }, []);
 
@@ -316,6 +309,7 @@ export const ProfitLoss = () => {
                     popularTabActive === item ||
                     (popularTabActive === "" && styles.popularTabActive)
                   } d-inline-flex align-items-center justify-content-center flex-shrink-0`}
+                  ref={index === 0 ? tabRef : null}
                   onClick={(event) => selectPopularTab(event, item)}
                 >
                   {item}
