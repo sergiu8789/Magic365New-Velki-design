@@ -3,6 +3,7 @@ import styles from "../MatchOdds/MatchOdds.module.css";
 import ApiService from "../../../services/ApiService";
 import { socket } from "../../../services/socket";
 import { useBet } from "../../../context/BetContextProvider";
+import { useExposure } from "../../../context/ExposureContextProvider";
 
 const prevMatchOddsRunner = [];
 
@@ -13,8 +14,10 @@ export const ExchangeOdds = ({
   sethideMarketDepth,
   selectedRunner,
   setSelectedRunner,
+  betList
 }) => {
   const betData = useBet();
+  const expoData = useExposure();
   const [matchOddsRunner, setMatchOddsRunner] = useState([]);
 
   const [fooEvents, setFooEvents] = useState([]);
@@ -28,6 +31,7 @@ export const ExchangeOdds = ({
   const [marketIdList, setMarketList] = useState([]);
   const [MarketLineWidth, setMarketLineWidth] = useState("");
   const [MarketPosLeft, setMarketPosLeft] = useState("");
+  const [allSelections,setAllSelections] = useState([]);
 
   const selectMarketTab = (event) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -80,7 +84,8 @@ export const ExchangeOdds = ({
         res?.data?.odds[0]?.forEach((item) => {
           if (
             item.market_type !== "fancy" &&
-            item.market_type !== "bookmaker"
+            item.market_type !== "bookmaker"  &&
+            item.market_type !== selectedMarket.market
           ) {
             if (
               !marketTypes?.filter((type) => type.market_id === item.market_id)
@@ -111,6 +116,7 @@ export const ExchangeOdds = ({
           // match marketId with socket response
           if (item.MarketId === selectedMarket.market_id) {
             setSelectedRunner(item);
+            let selections = [];
             item?.Runners?.map((item, index) => {
               let gameName = {
                 Back: item?.ExchangePrices?.AvailableToBack[0].price,
@@ -118,8 +124,15 @@ export const ExchangeOdds = ({
                 Lay: item?.ExchangePrices?.AvailableToLay[0].price,
                 LaySize: item?.ExchangePrices?.AvailableToLay[0].size,
               };
+              selections.push(item.SelectionId);
               allRunners.push(gameName);
             });
+            setAllSelections((previousState) => {
+              if(previousState?.length !== selections?.length)
+                return selections;
+              else 
+               return previousState;
+              });
             setMatchOddsRunner(allRunners);
           }
         });
@@ -143,6 +156,34 @@ export const ExchangeOdds = ({
   useEffect(() => {
     prevCountRef.current = matchOddsRunner;
   }, [matchOddsRunner]);
+
+  useEffect(() => {
+    let exposure = {};
+     allSelections.map((item) => {
+      exposure[item] = 0;
+    });
+    if(betList.length){
+      const filteredBets = betList?.filter((item) => item.market_type !== 'bookmaker' 
+      && item.market_type !== 'fancy' && item.market_type !== 'casino' && item.market_type!=='premium');
+      filteredBets?.map((item) => {
+        allSelections?.map((selection) => {
+           if(item?.selection_id === selection?.toString()){
+            if(item.type === 1){
+             exposure[selection] =  exposure[selection] + parseFloat(item.amount);
+            }
+            else
+             exposure[selection] =  exposure[selection] - (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
+           }
+           else{
+            if(item.type === 1)
+            exposure[selection] =  exposure[selection] - parseFloat(item.amount);
+           else
+            exposure[selection] =  exposure[selection] + (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
+           }
+        });
+      });
+    }
+  },[betList,allSelections]);
 
   useEffect(() => {
     if (selectedRunner?.Runners?.length) {

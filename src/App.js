@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Main from "./components/Layout/Main/Main";
 import { AuthProvider } from "./context/AuthContextProvider";
 import { AppProvider } from "./context/AppContextProvider";
+import { ExposureProvider } from "./context/ExposureContextProvider";
 import "./App.css";
 
 function App() {
@@ -13,7 +14,9 @@ function App() {
      <AppProvider>
       <AuthProvider>
         <BetProvider>
-         <Main />
+          <ExposureProvider>
+            <Main />
+         </ExposureProvider>   
        </BetProvider>
       </AuthProvider> 
       </AppProvider>
