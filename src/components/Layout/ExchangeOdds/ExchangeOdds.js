@@ -14,7 +14,7 @@ export const ExchangeOdds = ({
   sethideMarketDepth,
   selectedRunner,
   setSelectedRunner,
-  betList
+  betList,
 }) => {
   const betData = useBet();
   const expoData = useExposure();
@@ -31,7 +31,7 @@ export const ExchangeOdds = ({
   const [marketIdList, setMarketList] = useState([]);
   const [MarketLineWidth, setMarketLineWidth] = useState("");
   const [MarketPosLeft, setMarketPosLeft] = useState("");
-  const [allSelections,setAllSelections] = useState([]);
+  const [allSelections, setAllSelections] = useState([]);
 
   const selectMarketTab = (event) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -84,7 +84,7 @@ export const ExchangeOdds = ({
         res?.data?.odds[0]?.forEach((item) => {
           if (
             item.market_type !== "fancy" &&
-            item.market_type !== "bookmaker"  &&
+            item.market_type !== "bookmaker" &&
             item.market_type !== selectedMarket.market
           ) {
             if (
@@ -128,11 +128,10 @@ export const ExchangeOdds = ({
               allRunners.push(gameName);
             });
             setAllSelections((previousState) => {
-              if(previousState?.join() !== selections?.join())
+              if (previousState?.join() !== selections?.join())
                 return selections;
-              else 
-               return previousState;
-              });
+              else return previousState;
+            });
             setMatchOddsRunner(allRunners);
           }
         });
@@ -159,30 +158,42 @@ export const ExchangeOdds = ({
 
   useEffect(() => {
     let exposure = {};
-     allSelections.map((item) => {
+    allSelections.map((item) => {
       exposure[item] = 0;
     });
-    if(betList.length){
-      const filteredBets = betList?.filter((item) => item.market_type === selectedMarket.market);
+    if (betList.length) {
+      const filteredBets = betList?.filter(
+        (item) => item.market_type === selectedMarket.market
+      );
       filteredBets?.map((item) => {
         allSelections?.map((selection) => {
-           if(item?.selection_id === selection?.toString()){
-            if(item.type === 1)
-             exposure[selection] =  exposure[selection] + (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
+          if (item?.selection_id === selection?.toString()) {
+            if (item.type === 1)
+              exposure[selection] =
+                exposure[selection] +
+                (parseFloat(item.amount) * parseFloat(item.odds) -
+                  parseFloat(item.amount));
             else
-             exposure[selection] =  exposure[selection] - parseFloat(item.amount) ;
-           }
-           else{
-            if(item.type === 1)
-              exposure[selection] =  exposure[selection] - parseFloat(item.amount);
-           else
-            exposure[selection] =  exposure[selection] + (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
-           }
+              exposure[selection] =
+                exposure[selection] - parseFloat(item.amount);
+          } else {
+            if (item.type === 1)
+              exposure[selection] =
+                exposure[selection] - parseFloat(item.amount);
+            else
+              exposure[selection] =
+                exposure[selection] +
+                (parseFloat(item.amount) * parseFloat(item.odds) -
+                  parseFloat(item.amount));
+          }
         });
       });
     }
-    expoData.setExchangeExpoData({oldExpoData:exposure,updatedExpo:exposure});
-  },[betList,allSelections]);
+    expoData.setExchangeExpoData({
+      oldExpoData: exposure,
+      updatedExpo: exposure,
+    });
+  }, [betList, allSelections]);
 
   useEffect(() => {
     if (selectedRunner?.Runners?.length) {
@@ -234,26 +245,48 @@ export const ExchangeOdds = ({
   }, [exchangeTabList]);
 
   useEffect(() => {
-   if(expoData?.exchangeExpoData?.updatedExpo){
-    let updated = {};
-    let betSelection = betData?.betData?.betSelection;
-     Object.keys(expoData?.exchangeExpoData?.updatedExpo)?.map((item) => {
-        if(betSelection?.selection_id?.toString() === item ){
-          if(betSelection?.type === 1)
-           updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] + (betSelection?.amount!=='' ?  (parseFloat(betSelection?.odds) * parseFloat(betSelection?.amount) - parseFloat(betSelection?.amount)) : 0);
+    if (expoData?.exchangeExpoData?.updatedExpo) {
+      let updated = {};
+      let betSelection = betData?.betData?.betSelection;
+      Object.keys(expoData?.exchangeExpoData?.updatedExpo)?.map((item) => {
+        if (betSelection?.selection_id?.toString() === item) {
+          if (betSelection?.type === 1)
+            updated[item] =
+              expoData?.exchangeExpoData?.oldExpoData[item] +
+              (betSelection?.amount !== ""
+                ? parseFloat(betSelection?.odds) *
+                    parseFloat(betSelection?.amount) -
+                  parseFloat(betSelection?.amount)
+                : 0);
           else
-           updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] - (betSelection?.amount!=='' ?  (parseFloat(betSelection?.odds) * parseFloat(betSelection?.amount) - parseFloat(betSelection?.amount)) : 0);
-        }
-        else{
-          if(betSelection?.type === 1)
-           updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] - (betSelection?.amount!=='' ? parseFloat(betSelection?.amount) : 0);
+            updated[item] =
+              expoData?.exchangeExpoData?.oldExpoData[item] -
+              (betSelection?.amount !== ""
+                ? parseFloat(betSelection?.odds) *
+                    parseFloat(betSelection?.amount) -
+                  parseFloat(betSelection?.amount)
+                : 0);
+        } else {
+          if (betSelection?.type === 1)
+            updated[item] =
+              expoData?.exchangeExpoData?.oldExpoData[item] -
+              (betSelection?.amount !== ""
+                ? parseFloat(betSelection?.amount)
+                : 0);
           else
-          updated[item] = expoData?.exchangeExpoData?.oldExpoData[item] + (betSelection?.amount!=='' ? parseFloat(betSelection?.amount) : 0);
+            updated[item] =
+              expoData?.exchangeExpoData?.oldExpoData[item] +
+              (betSelection?.amount !== ""
+                ? parseFloat(betSelection?.amount)
+                : 0);
         }
-     });
-    expoData.setExchangeExpoData({...expoData.exchangeExpoData,updatedExpo:updated});
-   }
-  },[betData.betData.betSelection.amount]);
+      });
+      expoData.setExchangeExpoData({
+        ...expoData.exchangeExpoData,
+        updatedExpo: updated,
+      });
+    }
+  }, [betData.betData.betSelection.amount]);
 
   return (
     <React.Fragment>
@@ -333,13 +366,26 @@ export const ExchangeOdds = ({
                     className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
                   >
                     <div
-                      className={`${styles.gameName} d-inline-flex align-items-center col-8`}
+                      className={`${styles.gameName} d-inline-flex flex-column justify-content-center align-items-center col-8`}
                     >
-                      {item.runnerName}
-                      ({expoData?.exchangeExpoData?.updatedExpo[item.SelectionId] ? expoData?.exchangeExpoData?.updatedExpo[item.SelectionId].toFixed(2) : "" })
+                      <label
+                        className={`${styles.gameName} d-inline-flex col-12`}
+                      >
+                        {item.runnerName}
+                      </label>
+                      <span
+                        className={`${styles.runningExposure} d-inline-flex col-12`}
+                      >
+                        {expoData?.exchangeExpoData?.updatedExpo[
+                          item.SelectionId
+                        ]
+                          ? expoData?.exchangeExpoData?.updatedExpo[
+                              item.SelectionId
+                            ].toFixed(2)
+                          : ""}
+                      </span>
                     </div>
-                    
-                  
+
                     <div
                       className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
                     >

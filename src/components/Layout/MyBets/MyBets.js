@@ -22,6 +22,7 @@ export const MyBets = ({ openMyBets }) => {
   const betData = useBet();
   const appData = useApp();
   const [betsList, setBetList] = useState([]);
+  const [betsListCount, setBetListCount] = useState(0);
   const [matchList, setMatchList] = useState([]);
   const [matchListCount, setMatchListCount] = useState(0);
   const [selectedMatch, setSelectedMatch] = useState("");
@@ -97,6 +98,7 @@ export const MyBets = ({ openMyBets }) => {
     setheaderBet(true);
     setbetWindow("betDetail");
     setBetList([]);
+    setBetListCount(0);
     ApiService.fetchAllBets(
       item.match_id ? item.match_id : "casino",
       item.market_id,
@@ -105,6 +107,7 @@ export const MyBets = ({ openMyBets }) => {
     ).then((res) => {
       if (res?.data?.rows) {
         setBetList(res.data.rows);
+        setBetListCount(res.data.count);
         appData.setAppData({ ...appData.appData, listLoading: false });
       } else {
         appData.setAppData({ ...appData.appData, listLoading: false });
@@ -158,6 +161,7 @@ export const MyBets = ({ openMyBets }) => {
 
   useEffect(() => {
     if (betData.betData.betsList?.length) setBetList(betData.betData.betsList);
+    setBetListCount(betData.betData.betsList?.length);
   }, [betData.betData.betsList]);
 
   useEffect(() => {
@@ -237,7 +241,10 @@ export const MyBets = ({ openMyBets }) => {
                   <div
                     className={`${styles.myBetTab} position-relative d-inline-flex align-items-center`}
                   >
-                    Matched <span className={`${styles.myBetCount}`}>0</span>
+                    Matched{" "}
+                    <span className={`${styles.myBetCount}`}>
+                      {betsListCount}
+                    </span>
                   </div>
                   <div
                     className={`${styles.activeMatchLine} position-absolute d-inline-block`}

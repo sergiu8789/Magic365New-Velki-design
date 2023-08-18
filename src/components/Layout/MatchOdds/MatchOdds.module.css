@@ -76,6 +76,10 @@
     background: #FFF;
 }
 
+.marketOddsBox .allMatchBox {
+    border-radius: 6px 6px 0px 0px;
+}
+
 .marketOddsBox .allMatchBox:last-child {
     border-bottom: none;
     border-radius: 0px 0px 6px 6px;
@@ -90,8 +94,12 @@
 
 .allMatchBox {
     border-bottom: 1px solid #FFF;
-    height: 46px;
+    min-height: 46px;
     background: rgb(238, 246, 251);
+}
+
+.MatchOddsBox {
+    padding: 6px 0px;
 }
 
 .gameName {
@@ -99,6 +107,13 @@
     font-size: 17px;
     color: rgb(30, 30, 30);
     font-weight: 700;
+}
+
+.runningExposure {
+    padding: 0 8px;
+    font-size: 13px;
+    font-weight: 300;
+    color: rgb(30, 30, 30);
 }
 
 .oddBetsBox {

@@ -32,7 +32,6 @@ export const Sports = () => {
   }, [matchIds]);
 
   useEffect(() => {
-    console.log(tabRef);
     if (tabRef && tabRef.current[0]) {
       tabRef.current[0].click();
     }
