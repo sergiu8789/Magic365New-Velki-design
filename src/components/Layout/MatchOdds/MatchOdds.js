@@ -8,6 +8,7 @@ import { BookmakerOdds } from "../BookmakerOdds/BookmakerOdds";
 import { formatFancyTime } from "../../../utils/helper";
 import { ExchangeOdds } from "../ExchangeOdds/ExchangeOdds";
 import { useApp } from "../../../context/AppContextProvider";
+import ApiService from "../../../services/ApiService";
 
 export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const appData = useApp();
@@ -23,6 +24,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const [premiumOddsList, setPremiumOddsList] = useState([]);
   const [fancyBookUpdated, setFancyBookUpdated] = useState("");
   const TabList = ["All", "Popular", "Match", "Over", "Innings", "Players"];
+  const [betList,setbetList] = useState([]);
   const allTabRef = useRef();
 
   const selectFancyTab = (tab) => {
@@ -42,6 +44,14 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     setTabPosLeft(TabPos);
     setpopularTabActive(name);
   };
+
+  const getMatchBets = (id) => {
+    ApiService.fetchAllBets(id).then((res) => {
+      if (res?.data?.rows) {
+        setbetList(res.data.rows)
+      }
+    });
+  }
 
   useEffect(() => {
     /******** Fancy and Bookmaker odds brodacasting  *****/
@@ -79,6 +89,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     if (matchId) {
       socket.emit("fancySubscription", matchId); // socket emit event for Fancy and Boomaker markets
       socket.emit("premiumSubscription", matchId); // socket emit event for premium markets
+      getMatchBets(matchId);
     }
   }, [matchId]);
 
@@ -99,12 +110,13 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
           sethideMarketDepth={sethideMarketDepth}
           selectedRunner={selectedRunner}
           setSelectedRunner={setSelectedRunner}
+          betList={betList}
         />
       )}
 
       {/* BookMarker container */}
       {bookmakerOddsList && (
-        <BookmakerOdds oddsList={bookmakerOddsList} matchId={matchId} />
+        <BookmakerOdds oddsList={bookmakerOddsList} matchId={matchId} betList={betList} />
       )}
 
       {/* Fancy Premium container */}
@@ -164,12 +176,13 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
         >
           {/***** premium and Fancy odds list ********/}
           {fancyTabActive === "PremiumBet" ? (
-            <PremiumOdds oddsList={premiumOddsList} />
+            <PremiumOdds oddsList={premiumOddsList} betList={betList}/>
           ) : (
             <FancyOdds
               oddsList={fancyOddsList}
               matchId={matchId}
               time={fancyBookUpdated}
+              betList={betList}
             />
           )}
         </div>
