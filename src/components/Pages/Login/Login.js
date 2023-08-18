@@ -6,8 +6,13 @@ import loginImgBanner from "../../../assets/images/login-banner.png";
 import { Form } from "react-bootstrap";
 import jwtDecode from "jwt-decode";
 import ApiService from "../../../services/ApiService";
-import { loadCaptchaEnginge, LoadCanvasTemplate } from "react-simple-captcha";
+import {
+  loadCaptchaEnginge,
+  LoadCanvasTemplate,
+  validateCaptcha,
+} from "react-simple-captcha";
 import { useAuth } from "../../../context/AuthContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const Login = () => {
   const auth = useAuth();
@@ -19,6 +24,7 @@ export const Login = () => {
   const [passStatus, setpassStatus] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const appData = useApp();
 
   const [form, setForm] = useState({
     username: {
@@ -99,50 +105,65 @@ export const Login = () => {
   /********** On Submit Login Form ***********/
   const onLogin = (e) => {
     e.preventDefault();
-    if (checkValidation()) {
-      const payload = {
-        email: form.username.value,
-        password: form.password.value,
-      };
-      ApiService.login(payload)
-        .then((res) => {
-          if (res?.data) {
-            if (res.data.token) {
-              setPassChange(true);
-              setpassChangeTitle("Login Success");
-              setpassChangeMsg("You have been LoggedIn successfully.");
-              setpassStatus(true);
-              const user = jwtDecode(res.data.token);
-              navigate("/");
-              auth.setAuth({
-                ...auth.auth,
-                user: user,
-                loggedIn: true,
-                fetchWallet: true,
-              });
-              localStorage.setItem("bettoken", res.data.token);
+    if (validateCaptcha(form.captcha.value)) {
+      if (checkValidation()) {
+        appData.setAppData({ ...appData.appData, listLoading: true });
+        const payload = {
+          email: form.username.value,
+          password: form.password.value,
+        };
+        ApiService.login(payload)
+          .then((res) => {
+            if (res?.data) {
+              if (res.data.token) {
+                appData.setAppData({ ...appData.appData, listLoading: false });
+                setPassChange(true);
+                setpassChangeTitle("Login Success");
+                setpassChangeMsg("You have been LoggedIn successfully.");
+                setpassStatus(true);
+                const user = jwtDecode(res.data.token);
+                navigate("/");
+                auth.setAuth({
+                  ...auth.auth,
+                  user: user,
+                  loggedIn: true,
+                  fetchWallet: true,
+                });
+                localStorage.setItem("bettoken", res.data.token);
+              }
             }
-          }
-          if (res.status === 202) {
-            setPassChange(true);
-            setpassChangeTitle("Failed to Login");
-            setpassChangeMsg("Your credentails are Inccorrect.");
-            setpassStatus(false);
-          }
-        })
-        .catch((err) => {
-          if (err.response.status === 401) {
-            setPassChange(true);
-            setpassChangeTitle("Failed to Login");
-            setpassChangeMsg("Your credentails are Inccorrect.");
-            setpassStatus(false);
-          } else {
-            setPassChange(true);
-            setpassChangeTitle("Failed to Login");
-            setpassChangeMsg("Network error.");
-            setpassStatus(false);
-          }
-        });
+            if (res.status === 202) {
+              appData.setAppData({ ...appData.appData, listLoading: false });
+              setPassChange(true);
+              setpassChangeTitle("Failed to Login");
+              setpassChangeMsg("Your credentials are Incorrect.");
+              setpassStatus(false);
+            }
+          })
+          .catch((err) => {
+            appData.setAppData({ ...appData.appData, listLoading: false });
+            if (err.response.status === 401) {
+              setPassChange(true);
+              setpassChangeTitle("Failed to Login");
+              setpassChangeMsg("Your credentials are Incorrect.");
+              setpassStatus(false);
+            } else {
+              setPassChange(true);
+              setpassChangeTitle("Failed to Login");
+              setpassChangeMsg("Network error.");
+              setpassStatus(false);
+            }
+          });
+      }
+    } else {
+      setForm({
+        ...form,
+        captcha: {
+          ...form["captcha"],
+          errorMessage: "Entered Captcha Code is Invalid",
+          error: true,
+        },
+      });
     }
   };
 
