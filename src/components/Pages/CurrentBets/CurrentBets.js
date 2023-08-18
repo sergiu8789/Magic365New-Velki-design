@@ -45,7 +45,11 @@ export const CurrentBets = () => {
     let widthTab = event.currentTarget.getBoundingClientRect().width;
     setTabLineWidth(widthTab);
     setTabPosLeft(TabPos);
-    setpopularTabActive(name);
+    if (name === "All") {
+      name = "";
+    }
+    let marketName = name.toLowerCase();
+    setpopularTabActive(marketName);
   };
 
   const openBetStatusDrop = () => {
@@ -96,13 +100,7 @@ export const CurrentBets = () => {
     } else if (betStatus === "UnMatched") {
       betStatusVal = 2;
     }
-    let selectedTab = "";
-    if (popularTabActive === "All") {
-      selectedTab = "";
-    } else {
-      selectedTab = popularTabActive;
-    }
-    ApiService.currentBets(page, betStatusVal, selectedTab)
+    ApiService.currentBets(page, betStatusVal, popularTabActive)
       .then((res) => {
         let totalPage = res.data.count / 10;
         totalPage = Math.ceil(totalPage);
@@ -162,7 +160,8 @@ export const CurrentBets = () => {
               <React.Fragment key={index}>
                 <div
                   className={`${styles.popularTab} ${
-                    popularTabActive === item && styles.popularTabActive
+                    popularTabActive === item ||
+                    (popularTabActive === "" && styles.popularTabActive)
                   } d-inline-flex align-items-center justify-content-center flex-shrink-0`}
                   ref={index === 0 ? tabRef : null}
                   onClick={(event) => selectPopularTab(event, item)}
