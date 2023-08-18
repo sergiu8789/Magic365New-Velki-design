@@ -160,7 +160,7 @@ export const Login = () => {
         ...form,
         captcha: {
           ...form["captcha"],
-          errorMessage: "Entered Captcha Code is Invalid",
+          errorMessage: "Captcha Code is Invalid",
           error: true,
         },
       });
