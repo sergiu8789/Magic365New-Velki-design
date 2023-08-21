@@ -81,13 +81,25 @@ ApiService.sportsList = function () {
   });
 };
 
+ApiService.sportsPlayCount = function (type) {
+  return fetch({
+    url: "/sports/match-count?type=" + type,
+  });
+};
+
 ApiService.liveGamesList = function (type) {
   return fetch({
     url: "/sports/tournament-matches?type=" + type,
   });
 };
 
-ApiService.tournamentMatchList = function (type, trn_slug,time_type="",startDate="",endDate="") {
+ApiService.tournamentMatchList = function (
+  type,
+  trn_slug,
+  time_type = "",
+  startDate = "",
+  endDate = ""
+) {
   let trn = "";
   if (trn_slug) trn = trn_slug;
   else trn = "";
@@ -97,11 +109,11 @@ ApiService.tournamentMatchList = function (type, trn_slug,time_type="",startDate
       type +
       "&trn_slug=" +
       trn +
-      "&type="+
+      "&type=" +
       time_type +
-      "&s="+
-      startDate + 
-      "&e="+
+      "&s=" +
+      startDate +
+      "&e=" +
       endDate,
   });
 };
@@ -274,8 +286,8 @@ ApiService.getCasinoResultsGet = function (data) {
 
 ApiService.getScoreCard = function (id) {
   return fetch({
-    url:"sports/fetch-match-score-urls?match_id="+id,
-    method: "get"
+    url: "sports/fetch-match-score-urls?match_id=" + id,
+    method: "get",
   });
-}
+};
 export default ApiService;

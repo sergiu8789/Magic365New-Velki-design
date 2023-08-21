@@ -108,7 +108,6 @@ export const ExchangeOdds = ({
   useEffect(() => {
     /******** Exchange odds brodacasting  *****/
     function onBroadCast(value) {
-     // console.log(value)
       let allRunners = [];
       if (value?.length) {
         value?.map((item) => {
@@ -143,7 +142,6 @@ export const ExchangeOdds = ({
   }, [fooEvents, selectedMarket.market_id]);
 
   useEffect(() => {
-    console.log(marketId)
     getMatchOdds();
     socket.emit("subscription", [marketId]); // socket emit event for exchange odd market
   }, [matchId]);
@@ -366,7 +364,7 @@ export const ExchangeOdds = ({
                     className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
                   >
                     <div
-                      className={`${styles.gameName} d-inline-flex flex-column justify-content-center align-items-center col-8`}
+                      className={`${styles.MatchOddsBox} d-inline-flex flex-column justify-content-center align-items-center col-8`}
                     >
                       <label
                         className={`${styles.gameName} d-inline-flex col-12`}
