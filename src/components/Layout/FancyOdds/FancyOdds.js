@@ -98,6 +98,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
   }, [betList]);
 
   useEffect(() => {
+   if(betData.betData.betSelection.amount){
     if (betData.betData.betSelection.market_type === "fancy") {
       let fancyExposure = {};
 
@@ -149,6 +150,10 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
         updatedExpo: fancyExposure,
       });
     }
+  }
+  else{
+    expoData.setFancyExpoData({oldExpoData:expoData.fancyExpoData.oldExpoData,updtedExpo : {}});
+  }
   }, [
     betData.betData.betSelection.amount,
     betData.betData.betSelection.selection_id,
@@ -205,7 +210,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                           expoData?.fancyExpoData?.oldExpoData[
                             item.sid
                           ]?.stake?.toFixed(2) > 0
-                            ? styles.runningPos
+                            ? styles.runningNeg
                             : styles.runningNeg
                         } d-inline-flex ps-2 pe-2`}
                       >
@@ -223,11 +228,11 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                           expoData?.fancyExpoData?.updatedExpo[
                             item.sid
                           ]?.stake?.toFixed(2) > 0
-                            ? styles.runningPos
+                            ? styles.runningNeg
                             : styles.runningNeg
                         } d-inline-flex ps-2 pe-2`}
                       >
-                        {expoData?.fancyExpoData?.updatedExpo[item.sid]?.stake
+                        { expoData?.fancyExpoData?.updatedExpo && expoData?.fancyExpoData?.updatedExpo[item.sid]?.stake
                           ? expoData?.fancyExpoData?.updatedExpo[
                               item.sid
                             ]?.stake?.toFixed(2)
