@@ -83,7 +83,8 @@ export const ChangePassword = () => {
         ...formValues,
         new_password: {
           ...formValues["new_password"],
-          errorMessage: "Password doesn't meet the with requirments",
+          errorMessage:
+            "Must contain at least 1 capital letter, 1 samll letter, 1 number, and not contain any special characters.",
           error: true,
         },
       });

@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./HomeGameCard.module.css";
+import { encrypt } from "../../../utils/crypto";
 import ApiService from "../../../services/ApiService";
 
 export const HomeGameCard = () => {
   const [gameTab, setGameTab] = useState("In-play");
   const [value, setValue] = useState("live");
+  const [startGameDate, setStartDate] = useState("");
+  const [endGameDate, setEndDate] = useState("");
+  const [sportsGame, setSportsGame] = useState("all");
+  const [SportsSlug, setSportsSlug] = useState("");
   const [gameCount, setgameCount] = useState({
     all: 0,
     cricket: 0,
@@ -15,32 +20,66 @@ export const HomeGameCard = () => {
   const navigate = useNavigate();
 
   const playCardTab = (tab) => {
-    if (tab === "In-play" || tab === "Today") {
+    let startDate = "";
+    let endDate = "";
+    let todayDate = new Date();
+    setSportsGame("All");
+    if (tab === "In-play") {
+      setStartDate("");
+      setEndDate("");
       setValue("live");
+    } else if (tab === "Today") {
+      startDate = todayDate.setHours(0, 0, 0, 0);
+      startDate = encodeURIComponent(encrypt(startDate));
+      endDate = todayDate.setHours(23, 59, 59, 99);
+      endDate = encodeURIComponent(encrypt(endDate));
+      setStartDate(startDate);
+      setEndDate(endDate);
+      setValue("today");
     } else if (tab === "Tomorrow") {
-      setValue("upcoming");
+      todayDate = todayDate.setDate(todayDate.getDate() + 1);
+      todayDate = new Date(todayDate);
+      startDate = todayDate.setHours(0, 0, 0, 0);
+      startDate = encodeURIComponent(encrypt(startDate));
+      endDate = todayDate.setHours(23, 59, 59, 99);
+      endDate = encodeURIComponent(encrypt(endDate));
+      setStartDate(startDate);
+      setEndDate(endDate);
+      setValue("tomorrow");
     }
     setGameTab(tab);
   };
 
-  const fetchLiveGameList = (value) => {
+  const fetchLiveGameList = (
+    sportsGame,
+    SportsSlug,
+    value,
+    startGameDate,
+    endGameDate
+  ) => {
     let gameDataList = [],
       cricketCount = 0,
       allSportsCount = 0,
       soccerCount = 0,
       tennisCount = 0;
-    ApiService.liveGamesList(value).then((res) => {
+    ApiService.sportsPlayCount(
+      sportsGame,
+      SportsSlug,
+      value,
+      startGameDate,
+      endGameDate
+    ).then((res) => {
       if (res.data) {
         gameDataList = res.data;
         gameDataList.map((item, index) => {
-          if (item.name === "Cricket") {
-            cricketCount++;
-          } else if (item.name === "Soccer") {
-            soccerCount++;
-          } else if (item.name === "Tennis") {
-            tennisCount++;
+          if (item.game_name === "Cricket") {
+            cricketCount = item.count;
+          } else if (item.game_name === "Soccer") {
+            soccerCount = item.count;
+          } else if (item.game_name === "Tennis") {
+            tennisCount = item.count;
           }
-          allSportsCount++;
+          allSportsCount = cricketCount + soccerCount + tennisCount;
           setgameCount({
             all: allSportsCount,
             cricket: cricketCount,
@@ -61,7 +100,13 @@ export const HomeGameCard = () => {
   };
 
   useEffect(() => {
-    fetchLiveGameList(value);
+    fetchLiveGameList(
+      sportsGame,
+      SportsSlug,
+      value,
+      startGameDate,
+      endGameDate
+    );
   }, [value]);
   return (
     <React.Fragment>
