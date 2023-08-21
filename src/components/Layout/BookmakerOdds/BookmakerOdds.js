@@ -148,7 +148,17 @@ export const BookmakerOdds = ({ oddsList, matchId,betList }) => {
                   className={`${styles.gameName} d-inline-flex align-items-center col-8`}
                 >
                   {item.nat}
-                  ({ expoData?.bookmakerExpoData?.updatedExpo && item?.sid &&  expoData?.bookmakerExpoData?.updatedExpo[item?.sid] ? expoData?.bookmakerExpoData?.updatedExpo[item?.sid]?.toFixed(2) : "" })
+                  <span
+                        className={`${styles.runningExposure} d-inline-flex col-12`}
+                      >
+                        { item?.sid && expoData?.bookmakerExpoData?.updatedExpo[
+                          item?.sid
+                        ]
+                          && expoData?.bookmakerExpoData?.updatedExpo[
+                            item?.sid
+                            ].toFixed(2)
+                         }
+                      </span>
                 </div>
                 <div
                   className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}

@@ -5,8 +5,6 @@ import { socket } from "../../../services/socket";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 
-const prevMatchOddsRunner = [];
-
 export const ExchangeOdds = ({
   matchId,
   marketId,
@@ -110,6 +108,7 @@ export const ExchangeOdds = ({
   useEffect(() => {
     /******** Exchange odds brodacasting  *****/
     function onBroadCast(value) {
+     // console.log(value)
       let allRunners = [];
       if (value?.length) {
         value?.map((item) => {
@@ -144,6 +143,7 @@ export const ExchangeOdds = ({
   }, [fooEvents, selectedMarket.market_id]);
 
   useEffect(() => {
+    console.log(marketId)
     getMatchOdds();
     socket.emit("subscription", [marketId]); // socket emit event for exchange odd market
   }, [matchId]);
