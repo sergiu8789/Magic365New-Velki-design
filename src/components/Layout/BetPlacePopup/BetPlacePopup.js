@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from "react";
 import styles from "./BetPlacePopup.module.css";
+import { useExposure } from "../../../context/ExposureContextProvider";
 
 export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
+  const expoData = useExposure();
   useEffect(() => {
     if (show) {
+      expoData.setExchangeExpoData({
+        ...expoData.exchangeExpoData,
+        oldExpo: expoData.exchangeExpoData.updatedExpo,
+      });
+      expoData.setBookmakerExpoData({
+        ...expoData.bookmakerExpoData,
+        oldExpo: expoData.bookmakerExpoData.updatedExpo,
+      });
       setTimeout(function () {
         setShow(false);
       }, 6000);

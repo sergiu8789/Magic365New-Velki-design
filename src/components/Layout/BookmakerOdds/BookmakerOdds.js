@@ -96,9 +96,52 @@ export const BookmakerOdds = ({ oddsList, matchId,betList }) => {
         });
       });
     }
-    console.log(exposure)
     expoData.setBookmakerExpoData({oldExpoData:exposure,updatedExpo:exposure});
   },[betList,allSelections]);
+
+  useEffect(() => {
+    if (expoData?.bookmakerExpoData?.updatedExpo) {
+      let updated = {};
+      let betSelection = betData?.betData?.betSelection;
+      Object.keys(expoData?.bookmakerExpoData?.updatedExpo)?.map((item) => {
+        if (betSelection?.selection_id?.toString() === item) {
+          if (betSelection?.type === 1)
+            updated[item] =
+              expoData?.bookmakerExpoData?.oldExpoData[item] +
+              (betSelection?.amount !== ""
+                ? (parseFloat(betSelection?.odds)/100 + 1) *
+                    parseFloat(betSelection?.amount) -
+                  parseFloat(betSelection?.amount)
+                : 0);
+          else
+            updated[item] =
+              expoData?.bookmakerExpoData?.oldExpoData[item] -
+              (betSelection?.amount !== ""
+                ? (parseFloat(betSelection?.odds)/100 + 1) *
+                    parseFloat(betSelection?.amount) -
+                  parseFloat(betSelection?.amount)
+                : 0);
+        } else {
+          if (betSelection?.type === 1)
+            updated[item] =
+              expoData?.bookmakerExpoData?.oldExpoData[item] -
+              (betSelection?.amount !== ""
+                ? parseFloat(betSelection?.amount)
+                : 0);
+          else
+            updated[item] =
+              expoData?.bookmakerExpoData?.oldExpoData[item] +
+              (betSelection?.amount !== ""
+                ? parseFloat(betSelection?.amount)
+                : 0);
+        }
+      });
+      expoData.setBookmakerExpoData({
+        ...expoData.bookmakerExpoData,
+        updatedExpo: updated,
+      });
+    }
+  }, [betData.betData.betSelection.amount]);
 
   return (
     <div
@@ -151,7 +194,7 @@ export const BookmakerOdds = ({ oddsList, matchId,betList }) => {
                   <span
                         className={`${styles.runningExposure} d-inline-flex col-12`}
                       >
-                        { item?.sid && expoData?.bookmakerExpoData?.updatedExpo[
+                        { item?.sid && expoData?.bookmakerExpoData?.updatedExpo && expoData?.bookmakerExpoData?.updatedExpo[
                           item?.sid
                         ]
                           && expoData?.bookmakerExpoData?.updatedExpo[
