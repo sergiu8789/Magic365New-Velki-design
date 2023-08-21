@@ -62,7 +62,7 @@ export const PremiumOdds = ({ oddsList }) => {
     } else
       betData.setBetData({
         ...betData.betData,
-        betSelection: { ...betData.betData.betSelection, status: "Expired" },
+        betSelection: { ...betData.betData.betSelection, status: "" },
       });
 
     oddsList?.map((item) => {
