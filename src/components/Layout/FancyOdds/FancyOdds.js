@@ -89,16 +89,15 @@ useEffect(() => {
       }
     }
   });
-
- expoData.setFancyExpoData({oldExpoData : fancyExposure,updatedExpo:{}});
- 
+  expoData.setFancyExpoData({oldExpoData : fancyExposure,updatedExpo:{}});
+  
 },[betList]);
 
 useEffect(() => {
   if (betData.betData.betSelection.market_type === "fancy") {
     let fancyExposure = {};
 
-    if (expoData.fancyExpoData.oldExpoData[betData.betData.betSelection.selection_id]) {
+    if ( expoData?.fancyExpoData?.oldExpoData  && expoData.fancyExpoData.oldExpoData[betData.betData.betSelection.selection_id]) {
       if(betData.betData.betSelection.amount){
        fancyExposure[betData.betData.betSelection.selection_id?.toString()] = {stake :  expoData.fancyExpoData.oldExpoData[betData.betData.betSelection.selection_id].stake + (betData.betData.betSelection.type === 1 ?  parseFloat(betData.betData.betSelection.amount) :  (parseFloat(betData.betData.betSelection.odds) / 100 + 1) * parseFloat(betData.betData.betSelection.amount) -
        parseFloat(betData.betData.betSelection.amount))};
@@ -106,7 +105,6 @@ useEffect(() => {
       }
       else
       fancyExposure[betData.betData.betSelection.selection_id?.toString()] = {stake : expoData.fancyExpoData.oldExpoData[betData.betData.betSelection.selection_id].stake}
-     
     } else {
       if(betData.betData.betSelection.amount){
         fancyExposure[betData.betData.betSelection.selection_id?.toString()] = {
@@ -118,11 +116,10 @@ useEffect(() => {
         fancyExposure[betData.betData.betSelection.selection_id?.toString()] = { stake : 0 }
       }
     }
-    expoData.setFancyExpoData({...expoData.fancyExpoData,updatedExpo: fancyExposure})
-   
+    expoData.setFancyExpoData({...expoData.fancyExpoData,updatedExpo: fancyExposure});
   }
-  
 }, [betData.betData.betSelection.amount,betData.betData.betSelection.selection_id]);
+
 
   return (
     <React.Fragment>
@@ -162,7 +159,7 @@ useEffect(() => {
                     className={`${styles.gameName} d-inline-flex align-items-center col-8`}
                   >
                     {item.nat}
-                    ({expoData?.fancyExpoData?.oldExpoData[item.sid]?.stake?.toFixed(2)})
+                    ({ expoData?.fancyExpoData?.oldExpoData && expoData?.fancyExpoData?.oldExpoData[item.sid]?.stake?.toFixed(2)})
                     --- ({ expoData?.fancyExpoData?.updatedExpo && expoData?.fancyExpoData?.updatedExpo[item.sid]?.stake?.toFixed(2)})
                   </div>
                   <div

@@ -32,8 +32,6 @@ export const BetSlip = () => {
         amount:""
       }
     });
-   // expoData.setFancyExpoData({...expoData.fancyExpoData,updatedExpo: {}})
-    
   };
 
   useEffect(() => {

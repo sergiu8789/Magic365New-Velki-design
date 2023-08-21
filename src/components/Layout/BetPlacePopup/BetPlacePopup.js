@@ -6,14 +6,19 @@ export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
   const expoData = useExposure();
   useEffect(() => {
     if (show) {
-      expoData.setExchangeExpoData({
-        ...expoData.exchangeExpoData,
-        oldExpo: expoData.exchangeExpoData.updatedExpo,
-      });
-      expoData.setBookmakerExpoData({
-        ...expoData.bookmakerExpoData,
-        oldExpo: expoData.bookmakerExpoData.updatedExpo,
-      });
+      if(status){
+        expoData.setExchangeExpoData({
+          ...expoData.exchangeExpoData,
+          oldExpo: expoData.exchangeExpoData.updatedExpo,
+        });
+        expoData.setBookmakerExpoData({
+          ...expoData.bookmakerExpoData,
+          oldExpo: expoData.bookmakerExpoData.updatedExpo,
+        });
+        expoData.setFancyExpoData({
+          oldExpoData:expoData.fancyExpoData.updatedExpo
+        });
+      }
       setTimeout(function () {
         setShow(false);
       }, 6000);
