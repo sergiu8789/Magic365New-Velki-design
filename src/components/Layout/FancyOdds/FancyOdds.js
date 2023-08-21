@@ -53,7 +53,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
       } else {
         betData.setBetData({
           ...betData.betData,
-          betSelection: { ...betData.betData.betSelection, status: "Expired" },
+          betSelection: { ...betData.betData.betSelection, status: "" },
         });
       }
       oddsList?.map((item, index) => {
@@ -223,6 +223,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                       <span
                         className={`${styles.runningExposure} ${
                           expoData?.fancyExpoData?.updatedExpo &&
+                          item?.sid &&
                           expoData?.fancyExpoData?.updatedExpo[item.sid]
                             ?.stake &&
                           expoData?.fancyExpoData?.updatedExpo[
