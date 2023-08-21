@@ -18,7 +18,7 @@ import { NoData } from "../../Layout/NoData/NoData";
 export const ProfitLoss = () => {
   const auth = useContext(AuthContext);
   const appData = useApp();
-  const TabList = ["All", "Exchange", "Bookmaker", "Fancybet", "Premium"];
+  const TabList = ["All", "Exchange", "Bookmaker", "Fancybet", "Sportsbook"];
   const [popularTabActive, setpopularTabActive] = useState("");
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
@@ -51,6 +51,8 @@ export const ProfitLoss = () => {
     setTabPosLeft(TabPos);
     if (name === "All") {
       name = "";
+    } else if (name === "Sportsbook") {
+      name = "Premium";
     }
     let marketName = name.toLowerCase();
     setpopularTabActive(marketName);

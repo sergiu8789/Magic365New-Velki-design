@@ -24,7 +24,7 @@ export const BetHistory = () => {
     "Bookmaker",
     "Fancybet",
     "Casino",
-    "Premium",
+    "Sportsbook",
   ];
   const [popularTabActive, setpopularTabActive] = useState("");
   const [TabLineWidth, setTabLineWidth] = useState("");
@@ -55,6 +55,8 @@ export const BetHistory = () => {
     setTabPosLeft(TabPos);
     if (name === "All") {
       name = "";
+    } else if (name === "Sportsbook") {
+      name = "Premium";
     }
     let marketName = name.toLowerCase();
     setpopularTabActive(marketName);
