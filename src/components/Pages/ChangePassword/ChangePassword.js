@@ -43,6 +43,7 @@ export const ChangePassword = () => {
     },
   };
   const [formValues, setFormValues] = useState(defaultValues);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
@@ -55,20 +56,39 @@ export const ChangePassword = () => {
     });
   };
 
-  const handleShowPassword = (name) => {
-    setFormValues({
-      ...formValues,
-      [name]: {
-        ...formValues[name],
-        showPassword: !formValues[name].showPassword,
-      },
-    });
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
     appData.setAppData({ ...appData.appData, listLoading: true });
-    if (
+    var errorType = true;
+    var errorMsg = "";
+    var format = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+    if (formValues.new_password.value == "") {
+      appData.setAppData({ ...appData.appData, listLoading: false });
+      setFormValues({
+        ...formValues,
+        new_password: {
+          ...formValues["new_password"],
+          errorMessage: "Please Enter New Password!",
+          error: true,
+        },
+      });
+    } else if (
+      formValues.new_password.value.match(format) === false ||
+      /[A-Z]/.test(formValues.new_password.value) === false ||
+      /[a-z]/.test(formValues.new_password.value) === false ||
+      /\d/.test(formValues.new_password.value) === false
+    ) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
+      setFormValues({
+        ...formValues,
+        new_password: {
+          ...formValues["new_password"],
+          errorMessage:
+            "Must contain at least 1 capital letter, 1 samll letter, 1 number, and not contain any special characters.",
+          error: true,
+        },
+      });
+    } else if (
       !formValues.old_password.value ||
       !formValues.new_password.value ||
       !formValues.confirm_password.value ||
@@ -228,6 +248,7 @@ export const ChangePassword = () => {
                   placeholder="New Password"
                   className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
                   maxLength={15}
+                  minLength={8}
                   onChange={handleInputChange}
                   value={formValues.new_password.value}
                 />
@@ -265,6 +286,7 @@ export const ChangePassword = () => {
                   placeholder="New Password Confirm"
                   className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
                   maxLength={15}
+                  minLength={8}
                   onChange={handleInputChange}
                   value={formValues.confirm_password.value}
                 />
@@ -302,6 +324,7 @@ export const ChangePassword = () => {
                   placeholder="Your Password"
                   className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
                   maxLength={15}
+                  minLength={8}
                   onChange={handleInputChange}
                   value={formValues.old_password.value}
                 />
