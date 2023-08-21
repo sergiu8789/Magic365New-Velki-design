@@ -207,7 +207,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                           ]?.stake?.toFixed(2) > 0
                             ? styles.runningPos
                             : styles.runningNeg
-                        } d-inline-flex ps-2 pe-2`}
+                        } d-inline-flex`}
                       >
                         {expoData?.fancyExpoData?.oldExpoData[item.sid]?.stake
                           ? expoData?.fancyExpoData?.oldExpoData[
@@ -225,7 +225,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                           ]?.stake?.toFixed(2) > 0
                             ? styles.runningPos
                             : styles.runningNeg
-                        } d-inline-flex ps-2 pe-2`}
+                        } d-inline-flex`}
                       >
                         {expoData?.fancyExpoData?.updatedExpo[item.sid]?.stake
                           ? expoData?.fancyExpoData?.updatedExpo[
