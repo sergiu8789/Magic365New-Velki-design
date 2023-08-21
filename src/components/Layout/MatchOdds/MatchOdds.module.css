@@ -44,6 +44,10 @@
     overflow-x: auto;
 }
 
+.matchOddTitleRow::-webkit-scrollbar {
+    height: 1px;
+}
+
 .matchTitleHighlight {
     font-size: 20px;
     padding: 0 6px 5px;
