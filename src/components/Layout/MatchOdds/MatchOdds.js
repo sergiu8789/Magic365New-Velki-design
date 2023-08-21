@@ -9,9 +9,11 @@ import { formatFancyTime } from "../../../utils/helper";
 import { ExchangeOdds } from "../ExchangeOdds/ExchangeOdds";
 import { useApp } from "../../../context/AppContextProvider";
 import ApiService from "../../../services/ApiService";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const appData = useApp();
+  const auth = useAuth();
   const [hideMarketDepth, sethideMarketDepth] = useState(false);
   const [fancyTabActive, setfancyTabActive] = useState("Fancybet");
   const [popularTabActive, setpopularTabActive] = useState("All");
@@ -89,6 +91,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     if (matchId) {
       socket.emit("fancySubscription", matchId); // socket emit event for Fancy and Boomaker markets
       socket.emit("premiumSubscription", matchId); // socket emit event for premium markets
+      if(auth.auth.loggedIn)
       getMatchBets(matchId);
     }
   }, [matchId]);
