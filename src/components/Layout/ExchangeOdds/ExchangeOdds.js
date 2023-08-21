@@ -372,7 +372,16 @@ export const ExchangeOdds = ({
                         {item.runnerName}
                       </label>
                       <span
-                        className={`${styles.runningExposure} d-inline-flex col-12`}
+                        className={`${styles.runningExposure} ${
+                          expoData?.exchangeExpoData?.updatedExpo[
+                            item.SelectionId
+                          ] &&
+                          expoData?.exchangeExpoData?.updatedExpo[
+                            item.SelectionId
+                          ].toFixed(2) > 0
+                            ? styles.runningPos
+                            : styles.runningNeg
+                        } d-inline-flex col-12`}
                       >
                         {expoData?.exchangeExpoData?.updatedExpo[
                           item.SelectionId

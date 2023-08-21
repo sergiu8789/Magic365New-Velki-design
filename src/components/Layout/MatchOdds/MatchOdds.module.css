@@ -116,8 +116,16 @@
 .runningExposure {
     padding: 0 8px;
     font-size: 13px;
-    font-weight: 300;
+    font-weight: 500;
     color: rgb(30, 30, 30);
+}
+
+.runningExposure.runningPos {
+    color: #62b70b;
+}
+
+.runningExposure.runningNeg {
+    color: #e20000;
 }
 
 .oddBetsBox {

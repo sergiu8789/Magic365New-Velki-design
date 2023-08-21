@@ -3,7 +3,7 @@ import styles from "./FancyOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 
-export const FancyOdds = ({ oddsList, matchId, time,betList }) => {
+export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
   const betData = useBet();
   const expoData = useExposure();
   const [matchFancyOdds, setMatchFancyOdds] = useState("");
@@ -42,7 +42,7 @@ export const FancyOdds = ({ oddsList, matchId, time,betList }) => {
           return item;
         }
       });
-      if (matched?.length){
+      if (matched?.length) {
         betData.setBetData({
           ...betData.betData,
           betSelection: {
@@ -50,8 +50,7 @@ export const FancyOdds = ({ oddsList, matchId, time,betList }) => {
             status: matched[0].gstatus,
           },
         });
-      }
-      else{
+      } else {
         betData.setBetData({
           ...betData.betData,
           betSelection: { ...betData.betData.betSelection, status: "Expired" },
@@ -71,90 +70,97 @@ export const FancyOdds = ({ oddsList, matchId, time,betList }) => {
     }
   }, [oddsList]);
 
-useEffect(() => {
-  let fancyExposure = {};
+  useEffect(() => {
+    let fancyExposure = {};
 
-  betList?.forEach((bet) => {
-    if (bet.market_type === "fancy") {
-      bet.selection = bet?.selection_id?.toString();
-      if (fancyExposure[bet.selection_id]) {
-        fancyExposure[bet.selection_id].stake =
-          fancyExposure[bet.selection_id].stake + (bet.type === 1 ?  parseFloat(bet.amount) :  (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
-          parseFloat(bet.amount));
-        if (bet.type === 1) {
-          if (fancyExposure[bet.selection_id].above.val >= bet.size) {
-            fancyExposure[bet.selection_id].above.pl =
-              fancyExposure[bet.selection_id].above.pl +
-              ((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+    betList?.forEach((bet) => {
+      if (bet.market_type === "fancy") {
+        bet.selection = bet?.selection_id?.toString();
+        if (fancyExposure[bet.selection_id]) {
+          fancyExposure[bet.selection_id].stake =
+            fancyExposure[bet.selection_id].stake +
+            (bet.type === 1
+              ? parseFloat(bet.amount)
+              : (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
                 parseFloat(bet.amount));
-            fancyExposure[bet.selection_id].below.pl =
-              fancyExposure[bet.selection_id].below.pl -
-              parseFloat(bet.amount);
+          if (bet.type === 1) {
+            if (fancyExposure[bet.selection_id].above.val >= bet.size) {
+              fancyExposure[bet.selection_id].above.pl =
+                fancyExposure[bet.selection_id].above.pl +
+                ((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                  parseFloat(bet.amount));
+              fancyExposure[bet.selection_id].below.pl =
+                fancyExposure[bet.selection_id].below.pl -
+                parseFloat(bet.amount);
+            } else {
+              fancyExposure[bet.selection_id].between = {
+                val:
+                  fancyExposure[bet.selection_id].above.val +
+                  "-" +
+                  (bet.size - 1),
+                pl:
+                  fancyExposure[bet.selection_id].above.pl -
+                  parseFloat(bet.amount),
+              };
+              fancyExposure[bet.selection_id].above.val = bet.size;
+              fancyExposure[bet.selection_id].above.pl =
+                fancyExposure[bet.selection_id].above.pl +
+                ((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                  parseFloat(bet.amount));
+              fancyExposure[bet.selection_id].below.pl =
+                fancyExposure[bet.selection_id].below.pl -
+                parseFloat(bet.amount);
+            }
           } else {
-            fancyExposure[bet.selection_id].between = {
-              val:
-                fancyExposure[bet.selection_id].above.val +
-                "-" +
-                (bet.size - 1),
-              pl:
+            if (fancyExposure[bet.selection_id].below.val <= bet.size) {
+              fancyExposure[bet.selection_id].above.pl =
                 fancyExposure[bet.selection_id].above.pl -
+                ((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                  parseFloat(bet.amount));
+              fancyExposure[bet.selection_id].below.pl =
+                fancyExposure[bet.selection_id].below.pl +
+                parseFloat(bet.amount);
+            }
+            //console.log(bet.selection_name,fancyExposure[bet.selection_name])
+          }
+        } else {
+          fancyExposure[bet.selection_id] = {
+            stake:
+              bet.type === 1
+                ? parseFloat(bet.amount)
+                : (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                  parseFloat(bet.amount),
+          };
+          if (bet.type === 1) {
+            fancyExposure[bet.selection_id].above = {
+              val: bet.size,
+              pl:
+                (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
                 parseFloat(bet.amount),
             };
-            fancyExposure[bet.selection_id].above.val = bet.size;
-            fancyExposure[bet.selection_id].above.pl =
-              fancyExposure[bet.selection_id].above.pl +
-              ((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
-                parseFloat(bet.amount));
-            fancyExposure[bet.selection_id].below.pl =
-              fancyExposure[bet.selection_id].below.pl -
-              parseFloat(bet.amount);
+            fancyExposure[bet.selection_id].below = {
+              val: bet.size - 1,
+              pl: -parseFloat(bet.amount),
+            };
+          } else {
+            fancyExposure[bet.selection_id].above = {
+              val: bet.size + 1,
+              pl: -(
+                (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                parseFloat(bet.amount)
+              ),
+            };
+            fancyExposure[bet.selection_id].below = {
+              val: bet.size,
+              pl: parseFloat(bet.amount),
+            };
           }
-        } else {
-          if (fancyExposure[bet.selection_id].below.val <= bet.size) {
-            fancyExposure[bet.selection_id].above.pl =
-              fancyExposure[bet.selection_id].above.pl -
-              ((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
-                parseFloat(bet.amount));
-            fancyExposure[bet.selection_id].below.pl =
-              fancyExposure[bet.selection_id].below.pl +
-              parseFloat(bet.amount);
-          }
-          //console.log(bet.selection_name,fancyExposure[bet.selection_name])
-        }
-      } else {
-        fancyExposure[bet.selection_id] = {
-          stake: bet.type === 1 ?  parseFloat(bet.amount) :  (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
-          parseFloat(bet.amount),
-        };
-        if (bet.type === 1) {
-          fancyExposure[bet.selection_id].above = {
-            val: bet.size,
-            pl:
-              (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
-              parseFloat(bet.amount),
-          };
-          fancyExposure[bet.selection_id].below = {
-            val: bet.size - 1,
-            pl: -parseFloat(bet.amount),
-          };
-        } else {
-          fancyExposure[bet.selection_id].above = {
-            val: bet.size + 1,
-            pl: -((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
-            parseFloat(bet.amount)),
-          };
-          fancyExposure[bet.selection_id].below = {
-            val: bet.size,
-            pl: parseFloat(bet.amount),
-          };
         }
       }
-    }
-  });
+    });
 
- expoData.setFancyExpoData(fancyExposure);
- 
-},[betList]);
+    expoData.setFancyExpoData(fancyExposure);
+  }, [betList]);
 
   return (
     <React.Fragment>
@@ -191,10 +197,25 @@ useEffect(() => {
                   className={`${styles.allMatchBox} col-12 d-inline-flex align-items-stretch position-relative`}
                 >
                   <div
-                    className={`${styles.gameName} d-inline-flex align-items-center col-8`}
+                    className={`${styles.MatchOddsBox} d-inline-flex flex-column justify-content-center align-items-center col-8`}
                   >
-                    {item.nat}
-                    ({expoData?.fancyExpoData[item.sid]?.stake?.toFixed(2)})
+                    <label
+                      className={`${styles.gameName} d-inline-flex col-12`}
+                    >
+                      {item.nat}
+                    </label>
+                    <span
+                      className={`${styles.runningExposure} ${
+                        expoData?.fancyExpoData[item.sid]?.stake &&
+                        expoData?.fancyExpoData[item.sid]?.stake?.toFixed(2) > 0
+                          ? styles.runningPos
+                          : styles.runningNeg
+                      } d-inline-flex col-12`}
+                    >
+                      {expoData?.fancyExpoData[item.sid]?.stake
+                        ? expoData?.fancyExpoData[item.sid]?.stake?.toFixed(2)
+                        : ""}
+                    </span>
                   </div>
                   <div
                     className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
