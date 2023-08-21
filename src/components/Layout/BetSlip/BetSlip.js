@@ -6,10 +6,12 @@ import ApiService from "../../../services/ApiService";
 import { AuthProvider, useAuth } from "../../../context/AuthContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
 import { BetPlacePopup } from "../BetPlacePopup/BetPlacePopup";
+import { useExposure } from "../../../context/ExposureContextProvider";
 
 export const BetSlip = () => {
   const betData = useBet();
   const auth = useAuth();
+  const expoData =  useExposure();
   const appData = useApp();
   const [betSlip, setBetSlip] = useState("");
   const [betButton, setbetButton] = useState(true);

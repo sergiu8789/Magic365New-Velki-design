@@ -243,7 +243,8 @@ export const ExchangeOdds = ({
   }, [exchangeTabList]);
 
   useEffect(() => {
-    if (expoData?.exchangeExpoData?.updatedExpo) {
+    if(betData.betData.betSelection.market_type !== 'fancy' && betData.betData.betSelection.market_type !== 'bookmaker' && betData.betData.betSelection.market_type !== 'premium' ){
+      if (expoData?.exchangeExpoData?.updatedExpo) {
       let updated = {};
       let betSelection = betData?.betData?.betSelection;
       Object.keys(expoData?.exchangeExpoData?.updatedExpo)?.map((item) => {
@@ -283,6 +284,7 @@ export const ExchangeOdds = ({
         ...expoData.exchangeExpoData,
         updatedExpo: updated,
       });
+      }
     }
   }, [betData.betData.betSelection.amount]);
 

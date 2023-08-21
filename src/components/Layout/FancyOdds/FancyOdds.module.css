@@ -9,11 +9,30 @@
     background: rgb(238, 246, 251);
 }
 
+.MatchOddsBox {
+    padding: 6px 0px;
+}
+
 .gameName {
-    padding: 8px;
+    padding: 0 8px;
     font-size: 17px;
     color: rgb(30, 30, 30);
     font-weight: 700;
+}
+
+.runningExposure {
+    padding: 0 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgb(30, 30, 30);
+}
+
+.runningExposure.runningPos {
+    color: #62b70b;
+}
+
+.runningExposure.runningNeg {
+    color: #e20000;
 }
 
 .oddBetsBox {

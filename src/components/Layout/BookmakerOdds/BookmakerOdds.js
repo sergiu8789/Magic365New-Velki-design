@@ -125,7 +125,8 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
   }, [betList, allSelections]);
 
   useEffect(() => {
-    if (expoData?.bookmakerExpoData?.updatedExpo) {
+    if(betData.betData.betSelection.market_type === 'bookmaker'){
+      if (expoData?.bookmakerExpoData?.updatedExpo) {
       let updated = {};
       let betSelection = betData?.betData?.betSelection;
       Object.keys(expoData?.bookmakerExpoData?.updatedExpo)?.map((item) => {
@@ -165,6 +166,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
         ...expoData.bookmakerExpoData,
         updatedExpo: updated,
       });
+      }
     }
   }, [betData.betData.betSelection.amount]);
 
