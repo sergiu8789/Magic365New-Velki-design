@@ -8,7 +8,7 @@ export const PremiumOdds = ({ oddsList }) => {
   const [premiumOddsId, setpremiumOddsId] = useState([]);
   const prevCountRef = useRef(matchPremiumOdds);
 
-  const placeBet = (item, selection) => {
+  const placeBet = (item, selection, event) => {
     const betSelection = {
       amount: "",
       type: 1,
@@ -28,6 +28,13 @@ export const PremiumOdds = ({ oddsList }) => {
       betSlipStatus: true,
       betSelection: betSelection,
     });
+    let cuurentElem = event.currentTarget;
+    setTimeout(function () {
+      cuurentElem.scrollIntoView({
+        behavior: "smooth",
+        top: 50,
+      });
+    }, 300);
   };
 
   const togglePopularBet = (id) => {
@@ -111,7 +118,7 @@ export const PremiumOdds = ({ oddsList }) => {
               {item?.sportsBookSelection?.map((selection, selectionIndex) => {
                 return (
                   <div
-                    onClick={() => placeBet(item, selection)}
+                    onClick={(event) => placeBet(item, selection, event)}
                     key={selectionIndex}
                     className={`${
                       styles.popularOddsStake

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "./Main.module.css";
 import Header from "../Header/Header";
@@ -53,7 +53,7 @@ function Main() {
     // return () => {
     //   socket.disconnect();
     // };
-  },[]);
+  }, []);
 
   return (
     <React.Fragment>
