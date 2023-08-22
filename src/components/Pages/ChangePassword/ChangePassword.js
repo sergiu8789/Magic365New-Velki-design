@@ -61,7 +61,7 @@ export const ChangePassword = () => {
     appData.setAppData({ ...appData.appData, listLoading: true });
     var errorType = true;
     var errorMsg = "";
-    var format = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+    var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     if (formValues.new_password.value == "") {
       appData.setAppData({ ...appData.appData, listLoading: false });
       setFormValues({
@@ -73,7 +73,7 @@ export const ChangePassword = () => {
         },
       });
     } else if (
-      formValues.new_password.value.match(format) === false ||
+      format.test(formValues.new_password.value) === true ||
       /[A-Z]/.test(formValues.new_password.value) === false ||
       /[a-z]/.test(formValues.new_password.value) === false ||
       /\d/.test(formValues.new_password.value) === false
@@ -84,7 +84,7 @@ export const ChangePassword = () => {
         new_password: {
           ...formValues["new_password"],
           errorMessage:
-            "Must contain at least 1 capital letter, 1 samll letter, 1 number, and not contain any special characters.",
+            "Must contain at least 1 capital letter, 1 small letter, 1 number, and not contain any special characters.",
           error: true,
         },
       });
