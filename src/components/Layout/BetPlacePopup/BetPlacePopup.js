@@ -9,14 +9,15 @@ export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
       if(status){
         expoData.setExchangeExpoData({
           ...expoData.exchangeExpoData,
-          oldExpo: expoData.exchangeExpoData.updatedExpo,
+          oldExpoData : expoData.exchangeExpoData.updatedExpo,
+          showUpdate : false
         });
         expoData.setBookmakerExpoData({
           ...expoData.bookmakerExpoData,
           oldExpo: expoData.bookmakerExpoData.updatedExpo,
         });
         expoData.setFancyExpoData({
-          oldExpoData:expoData.fancyExpoData.updatedExpo
+          oldExpoData: expoData.fancyExpoData.updatedExpo
         });
       }
       setTimeout(function () {

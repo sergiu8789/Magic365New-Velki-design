@@ -162,10 +162,9 @@ export const BetSlip = () => {
     if (betPlacing) {
       const time = Math.floor(new Date().getTime() / 1000);
       let betSelection = betData?.betData?.betSelection;
-      console.log(betSelection.status)
       if (
         betSelection.status === "ACTIVE" ||
-        (betSelection.market_type === "fancy" && betSelection.status === "")
+        ((betSelection.market_type === "fancy" || betSelection.market_type === "bookmaker") && betSelection.status === "")
       ) {
         // if((betSelection.market_type === 'fancy' || betSelection.market_type === 'bookmaker') && !(time - appData.appDataupdatedFancyTime) >= 3){
         //   setBetSuccess(false);

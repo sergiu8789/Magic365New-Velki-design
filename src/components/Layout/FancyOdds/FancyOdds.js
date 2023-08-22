@@ -75,7 +75,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
 
     betList?.forEach((bet) => {
       if (bet.market_type === "fancy") {
-        bet.selection = bet?.selection_id?.toString();
+        bet.selection_id = bet?.selection_id?.toString();
         if (fancyExposure[bet.selection_id]) {
           fancyExposure[bet.selection_id].stake =
             fancyExposure[bet.selection_id].stake +
