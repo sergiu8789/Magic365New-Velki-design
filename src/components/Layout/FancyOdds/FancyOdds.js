@@ -214,7 +214,8 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                             : styles.runningNeg
                         } d-inline-flex ps-2 pe-2`}
                       >
-                        {expoData?.fancyExpoData?.oldExpoData[item.sid]?.stake
+                        { expoData?.fancyExpoData?.oldExpoData && 
+                          expoData?.fancyExpoData?.oldExpoData[item.sid]?.stake
                           ? expoData?.fancyExpoData?.oldExpoData[
                               item.sid
                             ]?.stake?.toFixed(2)
