@@ -88,6 +88,16 @@ export const ChangePassword = () => {
           error: true,
         },
       });
+    } else if (formValues.new_password.value === auth.auth.user.username) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
+      setFormValues({
+        ...formValues,
+        new_password: {
+          ...formValues["new_password"],
+          errorMessage: "Password can't be same as username",
+          error: true,
+        },
+      });
     } else if (
       !formValues.old_password.value ||
       !formValues.new_password.value ||
