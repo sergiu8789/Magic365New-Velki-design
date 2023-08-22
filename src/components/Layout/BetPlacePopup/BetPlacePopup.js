@@ -12,15 +12,17 @@ export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
           oldExpoData : expoData.exchangeExpoData.updatedExpo,
           showUpdate : false
         });
+       
+       
         expoData.setBookmakerExpoData({
-          ...expoData.bookmakerExpoData,
-          oldExpo: expoData.bookmakerExpoData.updatedExpo,
+          oldExpoData: expoData.bookmakerExpoData.updatedExpo,
+          showUpdate : false
         });
+
         expoData.setFancyExpoData({
           oldExpoData: expoData.fancyExpoData.updatedExpo
         });
       
-
         if(expoData?.premiumExpoData?.updatedExpoData){
           let key  = Object.keys(expoData?.premiumExpoData?.updatedExpoData)[0];
           key = parseInt(key);
