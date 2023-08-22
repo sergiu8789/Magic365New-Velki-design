@@ -45,36 +45,43 @@ export const PremiumOdds = ({ oddsList,betList }) => {
   useEffect(() => {
     let premiumExposure = {};
     betList?.forEach((bet) => {
+      bet.selection_id = parseInt(bet.selection_id);
+      bet.market_id = parseInt(bet.market_id);
       if (bet.market_type === "premium") {
-        bet.selection_id = bet?.selection_id?.toString();
-        if (premiumExposure[bet.selection_id]) {
-           console.log("exist");
+        const filteredMarket = oddsList.filter((item) => item.id == bet.market_id);
+        if (premiumExposure[bet.market_id]) {
+          if(filteredMarket.length){
+            filteredMarket[0]?.sportsBookSelection?.map((item) => {
+              if(item.id == bet.selection_id)
+                premiumExposure[bet.market_id][item.id] = premiumExposure[bet.market_id][item.id] + parseFloat(bet.amount) * parseFloat(bet.odds) - parseFloat(bet.amount);
+             else
+                premiumExposure[bet.market_id][item.id] =  premiumExposure[bet.market_id][item.id] - parseFloat(bet.amount);
+           });
+          }
         } else {
           premiumExposure[bet.market_id] = {};
-          const filteredMarket = oddsList.filter((item) => item.id === bet.market_id);
           if(filteredMarket.length){
             filteredMarket[0]?.sportsBookSelection?.map((item) => {
               if(item.id == bet.selection_id)
                 premiumExposure[bet.market_id][item.id] = parseFloat(bet.amount) * parseFloat(bet.odds) - parseFloat(bet.amount);
              else
                 premiumExposure[bet.market_id][item.id] = -parseFloat(bet.amount);
-           })
+           });
           }
         }
       }
     });
-    expoData.setPremiumExpoData({ oldExpoData: premiumExposure, updatedExpoData: {} });
+    if(!expoData.premiumExpoData.oldExpoData)
+       expoData.setPremiumExpoData({...expoData.premiumExpoData, oldExpoData: premiumExposure});
   }, [betList,oddsList]);
 
   useEffect(() => {
-    console.log(expoData)
     let betSelection = betData.betData.betSelection;
      if (betSelection.market_type === "premium") {
       if(betSelection.amount){
        let marketExpo = {};
        let premiumExposure = {};
        const filteredMarket = oddsList.filter((item) => item.id === betSelection.market_id);
-       console.log(expoData.premiumExpoData)
        if (
          expoData?.premiumExpoData?.oldExpoData &&
          expoData?.premiumExpoData?.oldExpoData[betSelection.market_id] && 
@@ -101,9 +108,8 @@ export const PremiumOdds = ({ oddsList,betList }) => {
        marketExpo[betSelection.market_id] = premiumExposure;
        expoData.setPremiumExpoData({...expoData.premiumExpoData, updatedExpoData: marketExpo });
      }
-     else{
+     else
       expoData.setPremiumExpoData({...expoData.premiumExpoData, updatedExpoData: {} });
-     }
     }
    }, [
      betData.betData.betSelection.amount,
