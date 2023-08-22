@@ -196,7 +196,6 @@ export const ExchangeOdds = ({
     }
     expoData.setExchangeExpoData({
       oldExpoData: exposure,
-      updatedExpo: exposure,
       showUpdate: false,
     });
   }, [betList, allSelections]);
@@ -256,10 +255,11 @@ export const ExchangeOdds = ({
       betData.betData.betSelection.market_type !== "bookmaker" &&
       betData.betData.betSelection.market_type !== "premium"
     ) {
-      if (expoData?.exchangeExpoData?.updatedExpo) {
+      if( betData.betData.betSelection.amount){
+      if (expoData?.exchangeExpoData?.oldExpoData) {
         let updated = {};
         let betSelection = betData?.betData?.betSelection;
-        Object.keys(expoData?.exchangeExpoData?.updatedExpo)?.map((item) => {
+        Object.keys(expoData?.exchangeExpoData?.oldExpoData)?.map((item) => {
           if (betSelection?.selection_id?.toString() === item) {
             if (betSelection?.type === 1)
               updated[item] =
@@ -297,9 +297,11 @@ export const ExchangeOdds = ({
           updatedExpo: updated,
           showUpdate: true,
         });
-      } else {
+      } 
+      }else {
         expoData.setExchangeExpoData({
           ...expoData.exchangeExpoData,
+          updatedExpo : {},
           showUpdate: false,
         });
       }

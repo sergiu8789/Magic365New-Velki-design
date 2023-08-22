@@ -8,11 +8,9 @@ export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
     if (show) {
       if(status){
         expoData.setExchangeExpoData({
-          ...expoData.exchangeExpoData,
           oldExpoData : expoData.exchangeExpoData.updatedExpo,
           showUpdate : false
         });
-       
        
         expoData.setBookmakerExpoData({
           oldExpoData: expoData.bookmakerExpoData.updatedExpo,

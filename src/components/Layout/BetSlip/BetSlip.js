@@ -172,6 +172,8 @@ export const BetSlip = () => {
     if (betPlacing) {
       const time = Math.floor(new Date().getTime() / 1000);
       let betSelection = betData?.betData?.betSelection;
+      if( betSelection.status==='')
+        betSelection.status = "ACTIVE";
       if (
         betSelection.status === "ACTIVE" ||
         ((betSelection.market_type === "fancy" ||
