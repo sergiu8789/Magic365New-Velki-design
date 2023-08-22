@@ -2,4 +2,16 @@
     height: calc(100vh - 60px);
     overflow-y: auto;
     background: rgb(238, 246, 251);
+    scroll-behavior: smooth;
+    transition: all ease 400ms;
+    -webkit-transition: all ease 400ms;
+}
+
+.pageSlideUp {
+    padding-bottom: 240px;
+}
+
+.betCoverLayer {
+    inset: 0;
+    z-index: 5;
 }

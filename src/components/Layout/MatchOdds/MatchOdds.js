@@ -26,7 +26,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const [premiumOddsList, setPremiumOddsList] = useState([]);
   const [fancyBookUpdated, setFancyBookUpdated] = useState("");
   const TabList = ["All", "Popular", "Match", "Over", "Innings", "Players"];
-  const [betList,setbetList] = useState([]);
+  const [betList, setbetList] = useState([]);
   const allTabRef = useRef();
 
   const selectFancyTab = (tab) => {
@@ -50,10 +50,10 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const getMatchBets = (id) => {
     ApiService.fetchAllBets(id).then((res) => {
       if (res?.data?.rows) {
-        setbetList(res.data.rows)
+        setbetList(res.data.rows);
       }
     });
-  }
+  };
 
   useEffect(() => {
     /******** Fancy and Bookmaker odds brodacasting  *****/
@@ -91,8 +91,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
     if (matchId) {
       socket.emit("fancySubscription", matchId); // socket emit event for Fancy and Boomaker markets
       socket.emit("premiumSubscription", matchId); // socket emit event for premium markets
-      if(auth.auth.loggedIn)
-      getMatchBets(matchId);
+      if (auth.auth.loggedIn) getMatchBets(matchId);
     }
   }, [matchId]);
 
@@ -119,7 +118,11 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
 
       {/* BookMarker container */}
       {bookmakerOddsList && (
-        <BookmakerOdds oddsList={bookmakerOddsList} matchId={matchId} betList={betList} />
+        <BookmakerOdds
+          oddsList={bookmakerOddsList}
+          matchId={matchId}
+          betList={betList}
+        />
       )}
 
       {/* Fancy Premium container */}
@@ -179,7 +182,7 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
         >
           {/***** premium and Fancy odds list ********/}
           {fancyTabActive === "PremiumBet" ? (
-            <PremiumOdds oddsList={premiumOddsList} betList={betList}/>
+            <PremiumOdds oddsList={premiumOddsList} betList={betList} />
           ) : (
             <FancyOdds
               oddsList={fancyOddsList}

@@ -23,15 +23,15 @@ export const CurrentBets = () => {
     "Casino",
     "Sportsbook",
   ];
-  const [popularTabActive, setpopularTabActive] = useState("All");
+  const [popularTabActive, setpopularTabActive] = useState("");
   const [TabLineWidth, setTabLineWidth] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [betStatusDrop, setbetStatusDrop] = useState("false");
   const [betStatus, setbetStatus] = useState("All");
   const [currentBetsList, SetCurrentBetsList] = useState([]);
   const [openBetList, setopenBetList] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [totalRecords, setTotalRecords] = useState(0);
+  const [BetTotalCount, setBetTotalCount] = useState(0);
+  const [BetstotalRecords, setBetsTotalRecords] = useState(0);
   const tabRef = useRef();
 
   const selectPopularTab = (event, name) => {
@@ -106,14 +106,14 @@ export const CurrentBets = () => {
       .then((res) => {
         let totalPage = res.data.count / 10;
         totalPage = Math.ceil(totalPage);
-        setTotalRecords(totalPage);
-        setTotalCount(res.data.count);
+        setBetsTotalRecords(totalPage);
+        setBetTotalCount(res.data.count);
         SetCurrentBetsList(res.data.data);
         appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
-        setTotalRecords(0);
-        setTotalCount(0);
+        setBetsTotalRecords(0);
+        setBetTotalCount(0);
         appData.setAppData({ ...appData.appData, listLoading: false });
         if (
           err?.response?.data?.statusCode === 401 &&
@@ -142,6 +142,7 @@ export const CurrentBets = () => {
   }, [betStatus, popularTabActive]);
 
   useEffect(() => {
+    fetchCurrentBets();
     if (tabRef && tabRef.current) {
       tabRef.current.click();
     }
@@ -285,7 +286,7 @@ export const CurrentBets = () => {
       <div
         className={`${styles.allCurrentBetList} col-12 d-inline-flex flex-column`}
       >
-        {totalCount === 0 && <NoData title={"No Data"} />}
+        {BetTotalCount === 0 && <NoData title={"No Data"} />}
         {currentBetsList.map((item, index) =>
           item ? (
             <div
@@ -487,7 +488,7 @@ export const CurrentBets = () => {
       </div>
       <div
         className={`${styles.activePaginate} col-12 ${
-          totalRecords > 1 ? "d-inline-flex" : "d-none"
+          BetstotalRecords > 1 ? "d-inline-flex" : "d-none"
         } align-items-center justify-content-between`}
       >
         <div className="col-6 px-3">
@@ -506,7 +507,7 @@ export const CurrentBets = () => {
         <div className="col-6 px-3">
           <button
             className={`${styles.navigateBtn}  ${styles.rightnavigateBtn} ${
-              totalRecords === page && styles.navigateDisable
+              BetstotalRecords === page && styles.navigateDisable
             } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
             onClick={() => handlePage("next")}
           >

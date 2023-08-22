@@ -44,7 +44,7 @@ export const ExchangeOdds = ({
     setMarketPosLeft(TabPos);
   };
 
-  const placeBet = (item, type, market) => {
+  const placeBet = (item, type, market, event) => {
     const betSelection = {
       amount: "",
       type: type,
@@ -70,6 +70,13 @@ export const ExchangeOdds = ({
       betSlipStatus: true,
       betSelection: betSelection,
     });
+    let cuurentElem = event.currentTarget;
+    setTimeout(function () {
+      cuurentElem.scrollIntoView({
+        behavior: "smooth",
+        top: 50,
+      });
+    }, 300);
   };
 
   /****** method to fetch other market list from API  ********/
@@ -190,7 +197,7 @@ export const ExchangeOdds = ({
     expoData.setExchangeExpoData({
       oldExpoData: exposure,
       updatedExpo: exposure,
-      showUpdate : false
+      showUpdate: false,
     });
   }, [betList, allSelections]);
 
@@ -244,57 +251,60 @@ export const ExchangeOdds = ({
   }, [exchangeTabList]);
 
   useEffect(() => {
-    if(betData.betData.betSelection.market_type !== 'fancy' && betData.betData.betSelection.market_type !== 'bookmaker' && betData.betData.betSelection.market_type !== 'premium' ){
-      if (expoData?.exchangeExpoData?.updatedExpo && betData?.betData?.betSelection.amount) {
+    if (
+      betData.betData.betSelection.market_type !== "fancy" &&
+      betData.betData.betSelection.market_type !== "bookmaker" &&
+      betData.betData.betSelection.market_type !== "premium"
+    ) {
+      if (expoData?.exchangeExpoData?.updatedExpo) {
         let updated = {};
         let betSelection = betData?.betData?.betSelection;
-      Object.keys(expoData?.exchangeExpoData?.updatedExpo)?.map((item) => {
-        if (betSelection?.selection_id?.toString() === item) {
-          if (betSelection?.type === 1)
-            updated[item] =
-              expoData?.exchangeExpoData?.oldExpoData[item] +
-              (betSelection?.amount !== ""
-                ? parseFloat(betSelection?.odds) *
-                    parseFloat(betSelection?.amount) -
-                  parseFloat(betSelection?.amount)
-                : 0);
-          else
-            updated[item] =
-              expoData?.exchangeExpoData?.oldExpoData[item] -
-              (betSelection?.amount !== ""
-                ? parseFloat(betSelection?.odds) *
-                    parseFloat(betSelection?.amount) -
-                  parseFloat(betSelection?.amount)
-                : 0);
-        } else {
-          if (betSelection?.type === 1)
-            updated[item] =
-              expoData?.exchangeExpoData?.oldExpoData[item] -
-              (betSelection?.amount !== ""
-                ? parseFloat(betSelection?.amount)
-                : 0);
-          else
-            updated[item] =
-              expoData?.exchangeExpoData?.oldExpoData[item] +
-              (betSelection?.amount !== ""
-                ? parseFloat(betSelection?.amount)
-                : 0);
-        }
-      });
-      expoData.setExchangeExpoData({
-        ...expoData.exchangeExpoData,
-        updatedExpo: updated,
-        showUpdate: true
-      });
-      }
-      else{
+        Object.keys(expoData?.exchangeExpoData?.updatedExpo)?.map((item) => {
+          if (betSelection?.selection_id?.toString() === item) {
+            if (betSelection?.type === 1)
+              updated[item] =
+                expoData?.exchangeExpoData?.oldExpoData[item] +
+                (betSelection?.amount !== ""
+                  ? parseFloat(betSelection?.odds) *
+                      parseFloat(betSelection?.amount) -
+                    parseFloat(betSelection?.amount)
+                  : 0);
+            else
+              updated[item] =
+                expoData?.exchangeExpoData?.oldExpoData[item] -
+                (betSelection?.amount !== ""
+                  ? parseFloat(betSelection?.odds) *
+                      parseFloat(betSelection?.amount) -
+                    parseFloat(betSelection?.amount)
+                  : 0);
+          } else {
+            if (betSelection?.type === 1)
+              updated[item] =
+                expoData?.exchangeExpoData?.oldExpoData[item] -
+                (betSelection?.amount !== ""
+                  ? parseFloat(betSelection?.amount)
+                  : 0);
+            else
+              updated[item] =
+                expoData?.exchangeExpoData?.oldExpoData[item] +
+                (betSelection?.amount !== ""
+                  ? parseFloat(betSelection?.amount)
+                  : 0);
+          }
+        });
+        expoData.setExchangeExpoData({
+          ...expoData.exchangeExpoData,
+          updatedExpo: updated,
+          showUpdate: true,
+        });
+      } else {
         expoData.setExchangeExpoData({
           ...expoData.exchangeExpoData,
           showUpdate: false,
         });
       }
     }
-  }, [betData.betData.betSelection.amount,betData.betData.betSelection.odds]);
+  }, [betData.betData.betSelection.amount, betData.betData.betSelection.odds]);
 
   return (
     <React.Fragment>
@@ -382,57 +392,62 @@ export const ExchangeOdds = ({
                         {item.runnerName}
                       </label>
                       <div className="col-12 d-inline-flex align-items-center">
-                      <span
-                        className={`${styles.runningExposure} ${
-                          expoData?.exchangeExpoData?.oldExpoData && 
+                        <span
+                          className={`${styles.runningExposure} ${
+                            expoData?.exchangeExpoData?.oldExpoData &&
+                            expoData?.exchangeExpoData?.oldExpoData[
+                              item.SelectionId
+                            ] &&
+                            expoData?.exchangeExpoData?.oldExpoData[
+                              item.SelectionId
+                            ].toFixed(2) > 0
+                              ? styles.runningPos
+                              : styles.runningNeg
+                          } d-inline-flex ps-2 pe-2`}
+                        >
+                          {expoData?.exchangeExpoData?.oldExpoData &&
                           expoData?.exchangeExpoData?.oldExpoData[
                             item.SelectionId
-                          ] &&
-                          expoData?.exchangeExpoData?.oldExpoData[
-                            item.SelectionId
-                          ].toFixed(2) > 0
-                            ? styles.runningPos
-                            : styles.runningNeg
-                        } d-inline-flex ps-2 pe-2`}
-                      >
-                        {  expoData?.exchangeExpoData?.oldExpoData && expoData?.exchangeExpoData?.oldExpoData[
-                          item.SelectionId
-                        ]
-                          ? expoData?.exchangeExpoData?.oldExpoData[
+                          ]
+                            ? expoData?.exchangeExpoData?.oldExpoData[
+                                item.SelectionId
+                              ].toFixed(2)
+                            : ""}
+                        </span>
+                        {expoData?.exchangeExpoData?.showUpdate && (
+                          <span
+                            className={`${styles.runningExposure} ${
+                              expoData?.exchangeExpoData?.updatedExpo &&
+                              expoData?.exchangeExpoData?.updatedExpo[
+                                item.SelectionId
+                              ] &&
+                              expoData?.exchangeExpoData?.updatedExpo[
+                                item.SelectionId
+                              ].toFixed(2) > 0
+                                ? styles.runningPos
+                                : styles.runningNeg
+                            } d-inline-flex ps-2 pe-2`}
+                          >
+                            {expoData?.exchangeExpoData?.updatedExpo &&
+                            expoData?.exchangeExpoData?.updatedExpo[
                               item.SelectionId
-                            ].toFixed(2)
-                          : ""}
-                      </span>
-                      {expoData?.exchangeExpoData?.showUpdate &&
-                      <span
-                        className={`${styles.runningExposure} ${ 
-                          expoData?.exchangeExpoData?.updatedExpo && 
-                          expoData?.exchangeExpoData?.updatedExpo[
-                            item.SelectionId
-                          ] &&
-                          expoData?.exchangeExpoData?.updatedExpo[
-                            item.SelectionId
-                          ].toFixed(2) > 0
-                            ? styles.runningPos
-                            : styles.runningNeg
-                        } d-inline-flex ps-2 pe-2`}
-                      >
-                        { expoData?.exchangeExpoData?.updatedExpo && expoData?.exchangeExpoData?.updatedExpo[
-                          item.SelectionId
-                        ]
-                          ? expoData?.exchangeExpoData?.updatedExpo[
-                              item.SelectionId
-                            ].toFixed(2)
-                          : ""}
-                      </span> }
+                            ]
+                              ? expoData?.exchangeExpoData?.updatedExpo[
+                                  item.SelectionId
+                                ].toFixed(2)
+                              : ""}
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
 
                     <div
                       className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
                     >
                       <div
-                        onClick={() => placeBet(item, 1, selectedRunner)}
+                        onClick={(event) =>
+                          placeBet(item, 1, selectedRunner, event)
+                        }
                         className={`${
                           styles.backBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
@@ -455,7 +470,9 @@ export const ExchangeOdds = ({
                         </span>
                       </div>
                       <div
-                        onClick={() => placeBet(item, 2, selectedRunner)}
+                        onClick={(event) =>
+                          placeBet(item, 2, selectedRunner, event)
+                        }
                         className={`${
                           styles.LayBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${

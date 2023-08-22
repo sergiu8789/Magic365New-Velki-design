@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./FancyOdds.module.css";
+import { FancyBookOdds } from "../FancyBookOdds/FancyBookOdds";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 
@@ -7,9 +8,14 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
   const betData = useBet();
   const expoData = useExposure();
   const [matchFancyOdds, setMatchFancyOdds] = useState("");
+  const [fancyBookOdd, setFancyBookOdds] = useState(false);
   const prevCountRef = useRef(matchFancyOdds);
 
-  const placeBet = (item, type) => {
+  const showBookOdds = () => {
+    setFancyBookOdds(true);
+  };
+
+  const placeBet = (item, type, event) => {
     const betSelection = {
       amount: "",
       type: type,
@@ -29,6 +35,13 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
       betSlipStatus: true,
       betSelection: betSelection,
     });
+    let cuurentElem = event.currentTarget;
+    setTimeout(function () {
+      cuurentElem.scrollIntoView({
+        behavior: "smooth",
+        top: 50,
+      });
+    }, 300);
   };
 
   useEffect(() => {
@@ -98,19 +111,20 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
   }, [betList]);
 
   useEffect(() => {
-   if(betData.betData.betSelection.amount){
-    if (betData.betData.betSelection.market_type === "fancy") {
-      let fancyExposure = {};
+    if (betData.betData.betSelection.amount) {
+      if (betData.betData.betSelection.market_type === "fancy") {
+        let fancyExposure = {};
 
-      if (
-        expoData?.fancyExpoData?.oldExpoData &&
-        expoData.fancyExpoData.oldExpoData[
-          betData.betData.betSelection.selection_id
-        ]
-      ) {
-        if (betData.betData.betSelection.amount) {
-          fancyExposure[betData.betData.betSelection.selection_id?.toString()] =
-            {
+        if (
+          expoData?.fancyExpoData?.oldExpoData &&
+          expoData.fancyExpoData.oldExpoData[
+            betData.betData.betSelection.selection_id
+          ]
+        ) {
+          if (betData.betData.betSelection.amount) {
+            fancyExposure[
+              betData.betData.betSelection.selection_id?.toString()
+            ] = {
               stake:
                 expoData.fancyExpoData.oldExpoData[
                   betData.betData.betSelection.selection_id
@@ -121,18 +135,20 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                       parseFloat(betData.betData.betSelection.amount) -
                     parseFloat(betData.betData.betSelection.amount)),
             };
-        } else
-          fancyExposure[betData.betData.betSelection.selection_id?.toString()] =
-            {
+          } else
+            fancyExposure[
+              betData.betData.betSelection.selection_id?.toString()
+            ] = {
               stake:
                 expoData.fancyExpoData.oldExpoData[
                   betData.betData.betSelection.selection_id
                 ].stake,
             };
-      } else {
-        if (betData.betData.betSelection.amount) {
-          fancyExposure[betData.betData.betSelection.selection_id?.toString()] =
-            {
+        } else {
+          if (betData.betData.betSelection.amount) {
+            fancyExposure[
+              betData.betData.betSelection.selection_id?.toString()
+            ] = {
               stake:
                 betData.betData.betSelection.type === 1
                   ? parseFloat(betData.betData.betSelection.amount)
@@ -140,20 +156,23 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                       parseFloat(betData.betData.betSelection.amount) -
                     parseFloat(betData.betData.betSelection.amount),
             };
-        } else {
-          fancyExposure[betData.betData.betSelection.selection_id?.toString()] =
-            { stake: 0 };
+          } else {
+            fancyExposure[
+              betData.betData.betSelection.selection_id?.toString()
+            ] = { stake: 0 };
+          }
         }
+        expoData.setFancyExpoData({
+          ...expoData.fancyExpoData,
+          updatedExpo: fancyExposure,
+        });
       }
+    } else {
       expoData.setFancyExpoData({
-        ...expoData.fancyExpoData,
-        updatedExpo: fancyExposure,
+        oldExpoData: expoData.fancyExpoData.oldExpoData,
+        updtedExpo: {},
       });
     }
-  }
-  else{
-    expoData.setFancyExpoData({oldExpoData:expoData.fancyExpoData.oldExpoData,updtedExpo : {}});
-  }
   }, [
     betData.betData.betSelection.amount,
     betData.betData.betSelection.selection_id,
@@ -212,7 +231,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                           ]?.stake?.toFixed(2) > 0
                             ? styles.runningNeg
                             : styles.runningNeg
-                        } d-inline-flex ps-2 pe-2`}
+                        } d-inline-flex`}
                       >
                         { expoData?.fancyExpoData?.oldExpoData && 
                           expoData?.fancyExpoData?.oldExpoData[item.sid]?.stake
@@ -232,9 +251,10 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                           ]?.stake?.toFixed(2) > 0
                             ? styles.runningNeg
                             : styles.runningNeg
-                        } d-inline-flex ps-2 pe-2`}
+                        } d-inline-flex`}
                       >
-                        { expoData?.fancyExpoData?.updatedExpo && expoData?.fancyExpoData?.updatedExpo[item.sid]?.stake
+                        {expoData?.fancyExpoData?.updatedExpo &&
+                        expoData?.fancyExpoData?.updatedExpo[item.sid]?.stake
                           ? expoData?.fancyExpoData?.updatedExpo[
                               item.sid
                             ]?.stake?.toFixed(2)
@@ -246,7 +266,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                     className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
                   >
                     <div
-                      onClick={() => placeBet(item, 2)}
+                      onClick={(event) => placeBet(item, 2, event)}
                       className={`${
                         styles.LayBetBox
                       } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
@@ -265,7 +285,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                       </span>
                     </div>
                     <div
-                      onClick={() => placeBet(item, 1)}
+                      onClick={(event) => placeBet(item, 1, event)}
                       className={`${
                         styles.backBetBox
                       } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center  ${
@@ -306,10 +326,31 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                     1/500
                   </span>
                 </div>
+                {expoData?.fancyExpoData?.oldExpoData &&
+                  expoData?.fancyExpoData?.oldExpoData[item.sid] && (
+                    <div
+                      className={`${styles.marketDepthBox} ms-2 d-inline-flex justify-content-center align-items-center`}
+                      onClick={() => showBookOdds()}
+                    >
+                      <i className="icon-graph"></i>
+                      <span
+                        className={`${styles.marketDepthTxt} d-inline-flex`}
+                      >
+                        {" "}
+                        Book{" "}
+                      </span>
+                    </div>
+                  )}
               </div>
             </React.Fragment>
           );
         })}
+      {fancyBookOdd && (
+        <FancyBookOdds
+          fancyBookOdd={fancyBookOdd}
+          setFancyBookOdds={setFancyBookOdds}
+        />
+      )}
     </React.Fragment>
   );
 };

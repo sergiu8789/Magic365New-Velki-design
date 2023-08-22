@@ -19,7 +19,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
     }
   };
 
-  const placeBet = (item, type) => {
+  const placeBet = (item, type, event) => {
     const betSelection = {
       amount: "",
       type: type,
@@ -39,6 +39,13 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
       betSlipStatus: true,
       betSelection: betSelection,
     });
+    let cuurentElem = event.currentTarget;
+    setTimeout(function () {
+      cuurentElem.scrollIntoView({
+        behavior: "smooth",
+        top: 50,
+      });
+    }, 300);
   };
 
   useEffect(() => {
@@ -279,7 +286,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
                   className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}
                 >
                   <div
-                    onClick={() => placeBet(item, 1)}
+                    onClick={(event) => placeBet(item, 1, event)}
                     className={`${
                       styles.backBetBox
                     } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
@@ -300,7 +307,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
                     <span className={`${styles.oddExposure}`}>{item.bs1}</span>
                   </div>
                   <div
-                    onClick={() => placeBet(item, 2)}
+                    onClick={(event) => placeBet(item, 2, event)}
                     className={`${
                       styles.LayBetBox
                     } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
