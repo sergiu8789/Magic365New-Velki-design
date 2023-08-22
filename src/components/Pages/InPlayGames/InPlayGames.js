@@ -52,6 +52,8 @@ export const InPlayGames = () => {
             matchId={location?.state?.match_id}
             marketId={location?.state?.market_id}
             marketType={location?.state?.type}
+            teamone={location?.state?.teamone}
+            teamtwo={location?.state?.teamtwo}
           />
           <div
             className={`${styles.betCoverLayer} ${

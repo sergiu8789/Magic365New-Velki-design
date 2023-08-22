@@ -11,7 +11,7 @@ import { useApp } from "../../../context/AppContextProvider";
 import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
 
-export const MatchOdds = ({ matchId, marketId, marketType }) => {
+export const MatchOdds = ({ matchId, marketId, marketType,teamone,teamtwo }) => {
   const appData = useApp();
   const auth = useAuth();
   const [hideMarketDepth, sethideMarketDepth] = useState(false);
@@ -185,6 +185,8 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
             <PremiumOdds oddsList={premiumOddsList} betList={betList} />
           ) : (
             <FancyOdds
+              teamone={teamone}
+              teamtwo={teamtwo}
               oddsList={fancyOddsList}
               matchId={matchId}
               time={fancyBookUpdated}
