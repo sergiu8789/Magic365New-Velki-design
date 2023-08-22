@@ -14,6 +14,8 @@
     height: 100vh;
     background: rgb(238, 246, 251);
     scroll-behavior: smooth;
+    transition: all ease 400ms;
+    -webkit-transition: all ease 400ms;
 }
 
 .signupContainer {

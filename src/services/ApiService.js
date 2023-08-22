@@ -82,27 +82,13 @@ ApiService.sportsList = function () {
 };
 
 ApiService.sportsPlayCount = function (
-  type,
-  trn_slug,
-  time_type = "",
+  type = "",
   startDate = "",
   endDate = ""
 ) {
-  let trn = "";
-  if (trn_slug) trn = trn_slug;
-  else trn = "";
   return fetch({
     url:
-      "/sports/match-count?slug=" +
-      type +
-      "&trn_slug=" +
-      trn +
-      "&type=" +
-      time_type +
-      "&s=" +
-      startDate +
-      "&e=" +
-      endDate,
+      "/sports/match-count?type=" + type + "&s=" + startDate + "&e=" + endDate,
   });
 };
 

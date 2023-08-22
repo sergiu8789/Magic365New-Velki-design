@@ -11,7 +11,7 @@ import { useExposure } from "../../../context/ExposureContextProvider";
 export const BetSlip = () => {
   const betData = useBet();
   const auth = useAuth();
-  const expoData =  useExposure();
+  const expoData = useExposure();
   const appData = useApp();
   const [betSlip, setBetSlip] = useState("");
   const [betButton, setbetButton] = useState(true);
@@ -27,16 +27,26 @@ export const BetSlip = () => {
     betData.setBetData({
       ...betData.betData,
       betSlipStatus: false,
-      betSelection:{
+      betSelection: {
         ...betData.betData.betSelection,
-        amount:""
-      }
+        amount: "",
+      },
     });
   };
 
   useEffect(() => {
+    appData.setAppData({
+      ...appData.appData,
+      appBetSlipOpen: betData.betData.betSlipStatus,
+    });
     setBetSlip(betData.betData.betSlipStatus);
   }, [betData.betData.betSlipStatus]);
+
+  useEffect(() => {
+    if (appData.appData.appBetSlipOpen === false) {
+      setBetSlip(appData.appData.appBetSlipOpen);
+    }
+  }, [appData.appData.appBetSlipOpen]);
 
   const betAmount = [
     "1",
@@ -164,7 +174,9 @@ export const BetSlip = () => {
       let betSelection = betData?.betData?.betSelection;
       if (
         betSelection.status === "ACTIVE" ||
-        ((betSelection.market_type === "fancy" || betSelection.market_type === "bookmaker") && betSelection.status === "")
+        ((betSelection.market_type === "fancy" ||
+          betSelection.market_type === "bookmaker") &&
+          betSelection.status === "")
       ) {
         // if((betSelection.market_type === 'fancy' || betSelection.market_type === 'bookmaker') && !(time - appData.appDataupdatedFancyTime) >= 3){
         //   setBetSuccess(false);
@@ -278,7 +290,7 @@ export const BetSlip = () => {
       <div
         className={`${styles.BetSlipLayer} ${
           betSlip && styles.activeSlip
-        } position-fixed h-100 d-inline-flex align-items-end`}
+        } position-fixed d-inline-flex align-items-end`}
       >
         <div
           className={`${styles.BetSlipContainer} col-12 position-relative d-inline-block`}
@@ -435,7 +447,7 @@ export const BetSlip = () => {
           </div>
           <div className="col-12 d-inline-flex">
             <button
-              disabled={betButton || !auth.auth.loggedIn }
+              disabled={betButton || !auth.auth.loggedIn}
               onClick={placeBet}
               className={`${styles.placeBetBtn} col-12 d-inline-flex justify-content-center align-items-center`}
             >

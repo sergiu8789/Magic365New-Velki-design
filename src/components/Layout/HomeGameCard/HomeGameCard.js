@@ -9,8 +9,6 @@ export const HomeGameCard = () => {
   const [value, setValue] = useState("live");
   const [startGameDate, setStartDate] = useState("");
   const [endGameDate, setEndDate] = useState("");
-  const [sportsGame, setSportsGame] = useState("all");
-  const [SportsSlug, setSportsSlug] = useState("");
   const [gameCount, setgameCount] = useState({
     all: 0,
     cricket: 0,
@@ -23,7 +21,6 @@ export const HomeGameCard = () => {
     let startDate = "";
     let endDate = "";
     let todayDate = new Date();
-    setSportsGame("All");
     if (tab === "In-play") {
       setStartDate("");
       setEndDate("");
@@ -50,45 +47,35 @@ export const HomeGameCard = () => {
     setGameTab(tab);
   };
 
-  const fetchLiveGameList = (
-    sportsGame,
-    SportsSlug,
-    value,
-    startGameDate,
-    endGameDate
-  ) => {
+  const fetchLiveGameList = (value, startGameDate, endGameDate) => {
     let gameDataList = [],
       cricketCount = 0,
       allSportsCount = 0,
       soccerCount = 0,
       tennisCount = 0;
-    ApiService.sportsPlayCount(
-      sportsGame,
-      SportsSlug,
-      value,
-      startGameDate,
-      endGameDate
-    ).then((res) => {
-      if (res.data) {
-        gameDataList = res.data;
-        gameDataList.map((item, index) => {
-          if (item.game_name === "Cricket") {
-            cricketCount = item.count;
-          } else if (item.game_name === "Soccer") {
-            soccerCount = item.count;
-          } else if (item.game_name === "Tennis") {
-            tennisCount = item.count;
-          }
-          allSportsCount = cricketCount + soccerCount + tennisCount;
-          setgameCount({
-            all: allSportsCount,
-            cricket: cricketCount,
-            soccer: soccerCount,
-            tennis: tennisCount,
+    ApiService.sportsPlayCount(value, startGameDate, endGameDate).then(
+      (res) => {
+        if (res.data) {
+          gameDataList = res.data;
+          gameDataList.map((item, index) => {
+            if (item.game_name === "Cricket") {
+              cricketCount = item.count;
+            } else if (item.game_name === "Soccer") {
+              soccerCount = item.count;
+            } else if (item.game_name === "Tennis") {
+              tennisCount = item.count;
+            }
+            allSportsCount = cricketCount + soccerCount + tennisCount;
+            setgameCount({
+              all: allSportsCount,
+              cricket: cricketCount,
+              soccer: soccerCount,
+              tennis: tennisCount,
+            });
           });
-        });
+        }
       }
-    });
+    );
   };
 
   const gotoLeagues = () => {
@@ -100,13 +87,7 @@ export const HomeGameCard = () => {
   };
 
   useEffect(() => {
-    fetchLiveGameList(
-      sportsGame,
-      SportsSlug,
-      value,
-      startGameDate,
-      endGameDate
-    );
+    fetchLiveGameList(value, startGameDate, endGameDate);
   }, [value]);
   return (
     <React.Fragment>

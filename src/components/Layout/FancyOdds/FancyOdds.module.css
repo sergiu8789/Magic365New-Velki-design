@@ -90,6 +90,20 @@
     color: inherit;
 }
 
+.marketDepthBox {
+    background: #000;
+    gap: 5px;
+    border-radius: 5px;
+    height: 30px;
+    padding: 0 8px;
+    color: #FFF;
+}
+
+.marketDepthTxt {
+    font-size: 14px;
+    color: #FFF;
+}
+
 .animateSparkBack {
     animation: sparkBack .1s ease;
     -webkit-animation: sparkBack .1s ease;
