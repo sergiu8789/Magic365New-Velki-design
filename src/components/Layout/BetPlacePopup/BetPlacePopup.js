@@ -19,6 +19,19 @@ export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
         expoData.setFancyExpoData({
           oldExpoData: expoData.fancyExpoData.updatedExpo
         });
+      
+
+        if(expoData?.premiumExpoData?.updatedExpoData){
+          let key  = Object.keys(expoData?.premiumExpoData?.updatedExpoData)[0];
+          key = parseInt(key);
+          let oldExposure = expoData?.premiumExpoData?.oldExpoData;
+          if(oldExposure)
+            oldExposure[key] = expoData?.premiumExpoData.updatedExpoData[key];
+          expoData.setPremiumExpoData({
+              oldExpoData : oldExposure
+          });  
+        }
+        
       }
       setTimeout(function () {
         setShow(false);
