@@ -15,7 +15,13 @@ export const LeagueMatchBets = ({ selectedMatch, setleagueMatch }) => {
 
   const showMatchBetDetail = (market) => {
     navigate("/full-market",{
-      state:{match_id : selectedMatch.id,market_id:market.market_id,type:market.type}
+      state:{
+        match_id : selectedMatch.id,
+        market_id:market.market_id,
+        type:market.type,
+        teamone:selectedMatch.team_one_name,
+        teamtwo:selectedMatch.team_two_name
+      }
     });
   };
 

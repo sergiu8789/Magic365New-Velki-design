@@ -4,14 +4,25 @@ import { FancyBookOdds } from "../FancyBookOdds/FancyBookOdds";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 
-export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
+export const FancyOdds = ({ oddsList, matchId, time, betList,teamone,teamtwo }) => {
   const betData = useBet();
   const expoData = useExposure();
   const [matchFancyOdds, setMatchFancyOdds] = useState("");
   const [fancyBookOdd, setFancyBookOdds] = useState(false);
   const prevCountRef = useRef(matchFancyOdds);
+  const [selectionDetails,setSelectionDetails] = useState({});
 
-  const showBookOdds = () => {
+  const showBookOdds = (item,exposure) => {
+    const details = {
+      teamone: teamone,
+      teamtwo: teamtwo,
+      name : item.nat,
+      aboveValue : exposure.above.val,
+      belowValue : exposure.below.val,
+      abovePL:exposure.above.pl,
+      belowPL:exposure.below.pl
+    }
+    setSelectionDetails(details);
     setFancyBookOdds(true);
   };
 
@@ -88,7 +99,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
 
     betList?.forEach((bet) => {
       if (bet.market_type === "fancy") {
-        bet.selection = bet?.selection_id?.toString();
+        bet.selection_id = bet?.selection_id?.toString();
         if (fancyExposure[bet.selection_id]) {
           fancyExposure[bet.selection_id].stake =
             fancyExposure[bet.selection_id].stake +
@@ -96,6 +107,46 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
               ? parseFloat(bet.amount)
               : (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
                 parseFloat(bet.amount));
+              if (bet.type === 1) {
+                if (fancyExposure[bet.selection_id].above.val >= bet.size) {
+                  fancyExposure[bet.selection_id].above.pl =
+                    fancyExposure[bet.selection_id].above.pl +
+                    ((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                      parseFloat(bet.amount));
+                  fancyExposure[bet.selection_id].below.pl =
+                    fancyExposure[bet.selection_id].below.pl -
+                    parseFloat(bet.amount);
+                } else {
+                  fancyExposure[bet.selection_id].between = {
+                    val:
+                      fancyExposure[bet.selection_id].above.val +
+                      "-" +
+                      (bet.size - 1),
+                    pl:
+                      fancyExposure[bet.selection_id].above.pl -
+                      parseFloat(bet.amount),
+                  };
+                  fancyExposure[bet.selection_id].above.val = bet.size;
+                  fancyExposure[bet.selection_id].above.pl =
+                    fancyExposure[bet.selection_id].above.pl +
+                    ((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                      parseFloat(bet.amount));
+                  fancyExposure[bet.selection_id].below.pl =
+                    fancyExposure[bet.selection_id].below.pl -
+                    parseFloat(bet.amount);
+                }
+              } else {
+                if (fancyExposure[bet.selection_id].below.val <= bet.size) {
+                  fancyExposure[bet.selection_id].above.pl =
+                    fancyExposure[bet.selection_id].above.pl -
+                    ((parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                      parseFloat(bet.amount));
+                  fancyExposure[bet.selection_id].below.pl =
+                    fancyExposure[bet.selection_id].below.pl +
+                    parseFloat(bet.amount);
+                }
+                //console.log(bet.selection_name,fancyExposure[bet.selection_name])
+              }    
         } else {
           fancyExposure[bet.selection_id] = {
             stake:
@@ -104,6 +155,29 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                 : (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
                   parseFloat(bet.amount),
           };
+          if (bet.type === 1) {
+            fancyExposure[bet.selection_id].above = {
+              val: bet.size,
+              pl:
+                (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                parseFloat(bet.amount),
+            };
+            fancyExposure[bet.selection_id].below = {
+              val: bet.size - 1,
+              pl: -parseFloat(bet.amount),
+            };
+          } else {
+            fancyExposure[bet.selection_id].above = {
+              val: bet.size + 1,
+              pl: -parseFloat(bet.amount),
+            };
+            fancyExposure[bet.selection_id].below = {
+              val: bet.size,
+              pl:
+                (parseFloat(bet.odds) / 100 + 1) * parseFloat(bet.amount) -
+                parseFloat(bet.amount),
+            };
+          }
         }
       }
     });
@@ -235,7 +309,8 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                             : styles.runningNeg
                         } d-inline-flex`}
                       >
-                        {expoData?.fancyExpoData?.oldExpoData[item.sid]?.stake
+                        { expoData?.fancyExpoData?.oldExpoData && 
+                          expoData?.fancyExpoData?.oldExpoData[item.sid]?.stake
                           ? expoData?.fancyExpoData?.oldExpoData[
                               item.sid
                             ]?.stake?.toFixed(2)
@@ -331,7 +406,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                   expoData?.fancyExpoData?.oldExpoData[item.sid] && (
                     <div
                       className={`${styles.marketDepthBox} ms-2 d-inline-flex justify-content-center align-items-center`}
-                      onClick={() => showBookOdds()}
+                      onClick={() => showBookOdds(item,expoData?.fancyExpoData?.oldExpoData[item.sid])}
                     >
                       <i className="icon-graph"></i>
                       <span
@@ -348,6 +423,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
         })}
       {fancyBookOdd && (
         <FancyBookOdds
+          selection={selectionDetails}
           fancyBookOdd={fancyBookOdd}
           setFancyBookOdds={setFancyBookOdds}
         />

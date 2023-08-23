@@ -23,6 +23,8 @@ export const GameList = ({
         match_id: match.id,
         market_id: match.market_id,
         type: "match_odds",
+        teamone:match.team_one_name,
+        teamtwo:match.team_two_name
       },
     });
   };

@@ -11,7 +11,8 @@ export const BetProvider = ({ children }) => {
     betsList: [],
     selectedMatch: {},
     matchBetList: [],
-    betSelection : {}
+    betSelection : {},
+    betSuccess : false
   };
   const [betData, setBetData] = useState(initialValues);
   return (

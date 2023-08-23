@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../MatchOdds/MatchOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
+import { useExposure } from "../../../context/ExposureContextProvider";
 
-export const PremiumOdds = ({ oddsList }) => {
+export const PremiumOdds = ({ oddsList,betList }) => {
   const betData = useBet();
+  const expoData = useExposure();
   const [matchPremiumOdds, setMatchPremiumOdds] = useState("");
   const [premiumOddsId, setpremiumOddsId] = useState([]);
   const prevCountRef = useRef(matchPremiumOdds);
@@ -48,6 +50,81 @@ export const PremiumOdds = ({ oddsList }) => {
       }
     }
   };
+
+  useEffect(() => {
+    let premiumExposure = {};
+    betList?.forEach((bet) => {
+      bet.selection_id = parseInt(bet.selection_id);
+      bet.market_id = parseInt(bet.market_id);
+      if (bet.market_type === "premium") {
+        const filteredMarket = oddsList.filter((item) => item.id == bet.market_id);
+        if (premiumExposure[bet.market_id]) {
+          if(filteredMarket.length){
+            filteredMarket[0]?.sportsBookSelection?.map((item) => {
+              if(item.id == bet.selection_id)
+                premiumExposure[bet.market_id][item.id] = premiumExposure[bet.market_id][item.id] + parseFloat(bet.amount) * parseFloat(bet.odds) - parseFloat(bet.amount);
+             else
+                premiumExposure[bet.market_id][item.id] =  premiumExposure[bet.market_id][item.id] - parseFloat(bet.amount);
+           });
+          }
+        } else {
+          premiumExposure[bet.market_id] = {};
+          if(filteredMarket.length){
+            filteredMarket[0]?.sportsBookSelection?.map((item) => {
+              if(item.id == bet.selection_id)
+                premiumExposure[bet.market_id][item.id] = parseFloat(bet.amount) * parseFloat(bet.odds) - parseFloat(bet.amount);
+             else
+                premiumExposure[bet.market_id][item.id] = -parseFloat(bet.amount);
+           });
+          }
+        }
+      }
+    });
+    if(!expoData.premiumExpoData.oldExpoData)
+       expoData.setPremiumExpoData({...expoData.premiumExpoData, oldExpoData: premiumExposure});
+  }, [betList,oddsList]);
+
+  useEffect(() => {
+    let betSelection = betData.betData.betSelection;
+     if (betSelection.market_type === "premium") {
+      if(betSelection.amount){
+       let marketExpo = {};
+       let premiumExposure = {};
+       const filteredMarket = oddsList.filter((item) => item.id === betSelection.market_id);
+       if (
+         expoData?.premiumExpoData?.oldExpoData &&
+         expoData?.premiumExpoData?.oldExpoData[betSelection.market_id] && 
+         expoData.premiumExpoData.oldExpoData[betSelection.market_id][betSelection.selection_id]
+       ) {
+        if(filteredMarket.length){
+          filteredMarket[0]?.sportsBookSelection?.map((item) => {
+            if(item.id == betSelection.selection_id)
+              premiumExposure[item.id] = expoData.premiumExpoData.oldExpoData[betSelection.market_id][item.id] +  parseFloat(betSelection.amount) * parseFloat(betSelection.odds) - parseFloat(betSelection.amount);
+            else
+              premiumExposure[item.id] = expoData.premiumExpoData.oldExpoData[betSelection.market_id][item.id] - parseFloat(betSelection.amount);
+          });
+        }
+       } else {
+        if(filteredMarket.length){
+          filteredMarket[0]?.sportsBookSelection?.map((item) => {
+            if(item.id == betSelection.selection_id)
+                premiumExposure[item.id] = parseFloat(betSelection.amount) * parseFloat(betSelection.odds) - parseFloat(betSelection.amount);
+             else
+                premiumExposure[item.id] = -parseFloat(betSelection.amount);
+          });
+        }
+       }
+       marketExpo[betSelection.market_id] = premiumExposure;
+       expoData.setPremiumExpoData({...expoData.premiumExpoData, updatedExpoData: marketExpo });
+     }
+     else
+      expoData.setPremiumExpoData({...expoData.premiumExpoData, updatedExpoData: {} });
+    }
+   }, [
+     betData.betData.betSelection.amount,
+     betData.betData.betSelection.selection_id,
+     expoData.premiumExpoData.oldExpoData
+   ]);
 
   useEffect(() => {
     let allRunners = [];
@@ -146,6 +223,38 @@ export const PremiumOdds = ({ oddsList }) => {
                     <span className={`${styles.oddStake}`}>
                       {selection.odds}
                     </span>
+                    <div className="col-12 d-inline-flex align-items-center">
+                      <span
+                        className={`${styles.runningExposure} ${
+                          expoData?.premiumExpoData?.oldExpoData &&
+                          expoData?.premiumExpoData?.oldExpoData[item.id] && 
+                          expoData?.premiumExpoData?.oldExpoData[item.id][selection.id] &&
+                          expoData?.premiumExpoData?.oldExpoData[item.id][selection.id]?.toFixed(2) > 0
+                            ? styles.runningPos
+                            : styles.runningNeg
+                        } d-inline-flex ps-2 pe-2`}
+                      >
+                        { expoData?.premiumExpoData?.oldExpoData && 
+                         expoData?.premiumExpoData?.oldExpoData[item.id] && 
+                           expoData?.premiumExpoData?.oldExpoData[item.id][selection.id]?.toFixed(2)
+                         }
+                      </span>
+                      <span
+                        className={`${styles.runningExposure} ${
+                          expoData?.premiumExpoData?.updatedExpoData &&
+                          expoData?.premiumExpoData?.updatedExpoData[item.id] && 
+                          expoData?.premiumExpoData?.updatedExpoData[item.id][selection.id] &&
+                          expoData?.premiumExpoData?.updatedExpoData[item.id][selection.id]?.toFixed(2) > 0
+                            ? styles.runningPos
+                            : styles.runningNeg
+                        } d-inline-flex ps-2 pe-2`}
+                      >
+                        { expoData?.premiumExpoData?.updatedExpoData && 
+                         expoData?.premiumExpoData?.updatedExpoData[item.id] && 
+                           expoData?.premiumExpoData?.updatedExpoData[item.id][selection.id]?.toFixed(2)
+                         }
+                      </span>
+                    </div>
                   </div>
                 );
               })}

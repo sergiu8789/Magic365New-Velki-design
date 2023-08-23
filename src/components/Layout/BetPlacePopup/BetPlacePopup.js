@@ -8,16 +8,37 @@ export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
     if (show) {
       if(status){
         expoData.setExchangeExpoData({
-          ...expoData.exchangeExpoData,
-          oldExpo: expoData.exchangeExpoData.updatedExpo,
+          oldExpoData : expoData.exchangeExpoData.updatedExpo,
+          showUpdate : false
         });
+       
         expoData.setBookmakerExpoData({
-          ...expoData.bookmakerExpoData,
-          oldExpo: expoData.bookmakerExpoData.updatedExpo,
+          oldExpoData: expoData.bookmakerExpoData.updatedExpo,
+          showUpdate : false
         });
-        expoData.setFancyExpoData({
-          oldExpoData:expoData.fancyExpoData.updatedExpo
-        });
+
+        if(expoData?.fancyExpoData?.updatedExpo){
+          let key  = Object.keys(expoData?.fancyExpoData?.updatedExpo)[0];
+          key = parseInt(key);
+          let oldExposure = expoData?.fancyExpoData?.oldExpoData;
+          if(oldExposure)
+            oldExposure[key] = expoData?.fancyExpoData.updatedExpo[key];
+            expoData.setFancyExpoData({
+             oldExpoData : oldExposure
+           });  
+        }
+      
+        if(expoData?.premiumExpoData?.updatedExpoData){
+          let key  = Object.keys(expoData?.premiumExpoData?.updatedExpoData)[0];
+          key = parseInt(key);
+          let oldExposure = expoData?.premiumExpoData?.oldExpoData;
+          if(oldExposure)
+            oldExposure[key] = expoData?.premiumExpoData.updatedExpoData[key];
+          expoData.setPremiumExpoData({
+              oldExpoData : oldExposure
+          });  
+        }
+        
       }
       setTimeout(function () {
         setShow(false);

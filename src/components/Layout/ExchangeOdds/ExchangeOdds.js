@@ -196,7 +196,7 @@ export const ExchangeOdds = ({
     }
     expoData.setExchangeExpoData({
       oldExpoData: exposure,
-      updatedExpo: exposure,
+      showUpdate: false,
     });
   }, [betList, allSelections]);
 
@@ -255,10 +255,11 @@ export const ExchangeOdds = ({
       betData.betData.betSelection.market_type !== "bookmaker" &&
       betData.betData.betSelection.market_type !== "premium"
     ) {
-      if (expoData?.exchangeExpoData?.updatedExpo) {
+      if( betData.betData.betSelection.amount){
+      if (expoData?.exchangeExpoData?.oldExpoData) {
         let updated = {};
         let betSelection = betData?.betData?.betSelection;
-        Object.keys(expoData?.exchangeExpoData?.updatedExpo)?.map((item) => {
+        Object.keys(expoData?.exchangeExpoData?.oldExpoData)?.map((item) => {
           if (betSelection?.selection_id?.toString() === item) {
             if (betSelection?.type === 1)
               updated[item] =
@@ -294,10 +295,18 @@ export const ExchangeOdds = ({
         expoData.setExchangeExpoData({
           ...expoData.exchangeExpoData,
           updatedExpo: updated,
+          showUpdate: true,
+        });
+      } 
+      }else {
+        expoData.setExchangeExpoData({
+          ...expoData.exchangeExpoData,
+          updatedExpo : {},
+          showUpdate: false,
         });
       }
     }
-  }, [betData.betData.betSelection.amount]);
+  }, [betData.betData.betSelection.amount, betData.betData.betSelection.odds]);
 
   return (
     <React.Fragment>
@@ -384,26 +393,54 @@ export const ExchangeOdds = ({
                       >
                         {item.runnerName}
                       </label>
-                      <span
-                        className={`${styles.runningExposure} ${
-                          expoData?.exchangeExpoData?.updatedExpo[
-                            item.SelectionId
-                          ] &&
-                          expoData?.exchangeExpoData?.updatedExpo[
-                            item.SelectionId
-                          ].toFixed(2) > 0
-                            ? styles.runningPos
-                            : styles.runningNeg
-                        } d-inline-flex col-12`}
-                      >
-                        {expoData?.exchangeExpoData?.updatedExpo[
-                          item.SelectionId
-                        ]
-                          ? expoData?.exchangeExpoData?.updatedExpo[
+                      <div className="col-12 d-inline-flex align-items-center">
+                        <span
+                          className={`${styles.runningExposure} ${
+                            expoData?.exchangeExpoData?.oldExpoData &&
+                            expoData?.exchangeExpoData?.oldExpoData[
                               item.SelectionId
-                            ].toFixed(2)
-                          : ""}
-                      </span>
+                            ] &&
+                            expoData?.exchangeExpoData?.oldExpoData[
+                              item.SelectionId
+                            ].toFixed(2) > 0
+                              ? styles.runningPos
+                              : styles.runningNeg
+                          } d-inline-flex ps-2 pe-2`}
+                        >
+                          {expoData?.exchangeExpoData?.oldExpoData &&
+                          expoData?.exchangeExpoData?.oldExpoData[
+                            item.SelectionId
+                          ]
+                            ? expoData?.exchangeExpoData?.oldExpoData[
+                                item.SelectionId
+                              ].toFixed(2)
+                            : ""}
+                        </span>
+                        {expoData?.exchangeExpoData?.showUpdate && (
+                          <span
+                            className={`${styles.runningExposure} ${
+                              expoData?.exchangeExpoData?.updatedExpo &&
+                              expoData?.exchangeExpoData?.updatedExpo[
+                                item.SelectionId
+                              ] &&
+                              expoData?.exchangeExpoData?.updatedExpo[
+                                item.SelectionId
+                              ].toFixed(2) > 0
+                                ? styles.runningPos
+                                : styles.runningNeg
+                            } d-inline-flex ps-2 pe-2`}
+                          >
+                            {expoData?.exchangeExpoData?.updatedExpo &&
+                            expoData?.exchangeExpoData?.updatedExpo[
+                              item.SelectionId
+                            ]
+                              ? expoData?.exchangeExpoData?.updatedExpo[
+                                  item.SelectionId
+                                ].toFixed(2)
+                              : ""}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     <div

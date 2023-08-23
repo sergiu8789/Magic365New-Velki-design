@@ -10,9 +10,11 @@ import { ExchangeOdds } from "../ExchangeOdds/ExchangeOdds";
 import { useApp } from "../../../context/AppContextProvider";
 import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
+import { useBet } from "../../../context/BetContextProvider";
 
-export const MatchOdds = ({ matchId, marketId, marketType }) => {
+export const MatchOdds = ({ matchId, marketId, marketType,teamone,teamtwo }) => {
   const appData = useApp();
+  const betData = useBet();
   const auth = useAuth();
   const [hideMarketDepth, sethideMarketDepth] = useState(false);
   const [fancyTabActive, setfancyTabActive] = useState("Fancybet");
@@ -50,6 +52,10 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
   const getMatchBets = (id) => {
     ApiService.fetchAllBets(id).then((res) => {
       if (res?.data?.rows) {
+        betData.setBetData({
+          ...betData.betData,
+          betSuccess : false
+        });
         setbetList(res.data.rows);
       }
     });
@@ -100,6 +106,11 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
       allTabRef?.current.click();
     }
   }, []);
+
+  useEffect(() => {
+      if(betData.betData.betSuccess)
+        getMatchBets(matchId);
+  },[betData.betData.betSuccess]);
 
   return (
     <React.Fragment>
@@ -185,6 +196,8 @@ export const MatchOdds = ({ matchId, marketId, marketType }) => {
             <PremiumOdds oddsList={premiumOddsList} betList={betList} />
           ) : (
             <FancyOdds
+              teamone={teamone}
+              teamtwo={teamtwo}
               oddsList={fancyOddsList}
               matchId={matchId}
               time={fancyBookUpdated}
