@@ -3,7 +3,7 @@ import styles from "../MatchOdds/MatchOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 
-export const PremiumOdds = ({ oddsList, betList }) => {
+export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
   const betData = useBet();
   const expoData = useExposure();
   const [matchPremiumOdds, setMatchPremiumOdds] = useState("");
@@ -11,7 +11,6 @@ export const PremiumOdds = ({ oddsList, betList }) => {
   const prevCountRef = useRef(matchPremiumOdds);
 
   const placeBet = (item, selection, event) => {
-    console.log("placebet ", selection, item);
     const betSelection = {
       amount: "",
       type: 1,
@@ -31,13 +30,12 @@ export const PremiumOdds = ({ oddsList, betList }) => {
       betSlipStatus: true,
       betSelection: betSelection,
     });
-    let cuurentElem = event.currentTarget;
-    //let betScrollVal = event.currentTarget.getBoundingClientRect().top - 43;
+    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 100;
     setTimeout(function () {
-      cuurentElem.scrollIntoView({
-        top: 100,
-      });
-    }, 300);
+      let cuurentScroll = playWindow.current.scrollTop;
+      cuurentScroll = cuurentElem + cuurentScroll;
+      playWindow.current.scrollTop = cuurentScroll;
+    }, 500);
   };
 
   const togglePopularBet = (id, subOdds) => {

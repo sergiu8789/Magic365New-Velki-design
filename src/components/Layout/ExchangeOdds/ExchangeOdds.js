@@ -13,6 +13,7 @@ export const ExchangeOdds = ({
   selectedRunner,
   setSelectedRunner,
   betList,
+  playWindow,
 }) => {
   const betData = useBet();
   const expoData = useExposure();
@@ -70,13 +71,8 @@ export const ExchangeOdds = ({
       betSlipStatus: true,
       betSelection: betSelection,
     });
-    let cuurentElem = event.currentTarget;
-    setTimeout(function () {
-      cuurentElem.scrollIntoView({
-        behavior: "smooth",
-        top: 50,
-      });
-    }, 300);
+    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 43;
+    playWindow.current.scrollTop = cuurentElem;
   };
 
   /****** method to fetch other market list from API  ********/
@@ -193,7 +189,6 @@ export const ExchangeOdds = ({
           }
         });
       });
-      console.log(expoData);
     }
     expoData.setExchangeExpoData({
       oldExpoData: exposure,

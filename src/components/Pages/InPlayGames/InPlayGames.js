@@ -52,6 +52,7 @@ export const InPlayGames = () => {
 
   useEffect(() => {
     const handleScroll = () => {
+      console.log(playWindow.current.scrollTop);
       if (playWindow.current && liveWindow.current) {
         const el = playWindow.current;
         const playerBox = liveWindow.current.clientHeight;
@@ -99,6 +100,7 @@ export const InPlayGames = () => {
             marketType={location?.state?.type}
             teamone={location?.state?.teamone}
             teamtwo={location?.state?.teamtwo}
+            playWindow={playWindow}
           />
           <div
             className={`${styles.betCoverLayer} ${

@@ -12,7 +12,14 @@ import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
 import { useBet } from "../../../context/BetContextProvider";
 
-export const MatchOdds = ({ matchId, marketId, marketType,teamone,teamtwo }) => {
+export const MatchOdds = ({
+  matchId,
+  marketId,
+  marketType,
+  teamone,
+  teamtwo,
+  playWindow,
+}) => {
   const appData = useApp();
   const betData = useBet();
   const auth = useAuth();
@@ -54,7 +61,7 @@ export const MatchOdds = ({ matchId, marketId, marketType,teamone,teamtwo }) => 
       if (res?.data?.rows) {
         betData.setBetData({
           ...betData.betData,
-          betSuccess : false
+          betSuccess: false,
         });
         setbetList(res.data.rows);
       }
@@ -108,9 +115,8 @@ export const MatchOdds = ({ matchId, marketId, marketType,teamone,teamtwo }) => 
   }, []);
 
   useEffect(() => {
-      if(betData.betData.betSuccess)
-        getMatchBets(matchId);
-  },[betData.betData.betSuccess]);
+    if (betData.betData.betSuccess) getMatchBets(matchId);
+  }, [betData.betData.betSuccess]);
 
   return (
     <React.Fragment>
@@ -124,6 +130,7 @@ export const MatchOdds = ({ matchId, marketId, marketType,teamone,teamtwo }) => 
           selectedRunner={selectedRunner}
           setSelectedRunner={setSelectedRunner}
           betList={betList}
+          playWindow={playWindow}
         />
       )}
 
@@ -133,6 +140,7 @@ export const MatchOdds = ({ matchId, marketId, marketType,teamone,teamtwo }) => 
           oddsList={bookmakerOddsList}
           matchId={matchId}
           betList={betList}
+          playWindow={playWindow}
         />
       )}
 
@@ -193,7 +201,11 @@ export const MatchOdds = ({ matchId, marketId, marketType,teamone,teamtwo }) => 
         >
           {/***** premium and Fancy odds list ********/}
           {fancyTabActive === "PremiumBet" ? (
-            <PremiumOdds oddsList={premiumOddsList} betList={betList} />
+            <PremiumOdds
+              oddsList={premiumOddsList}
+              betList={betList}
+              playWindow={playWindow}
+            />
           ) : (
             <FancyOdds
               teamone={teamone}
@@ -202,6 +214,7 @@ export const MatchOdds = ({ matchId, marketId, marketType,teamone,teamtwo }) => 
               matchId={matchId}
               time={fancyBookUpdated}
               betList={betList}
+              playWindow={playWindow}
             />
           )}
         </div>

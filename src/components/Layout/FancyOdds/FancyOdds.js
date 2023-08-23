@@ -11,6 +11,7 @@ export const FancyOdds = ({
   betList,
   teamone,
   teamtwo,
+  playWindow,
 }) => {
   const betData = useBet();
   const expoData = useExposure();
@@ -51,17 +52,10 @@ export const FancyOdds = ({
     betData.setBetData({
       ...betData.betData,
       betSlipStatus: true,
-      betSelection: !betData.betData.betSelection,
+      betSelection: betSelection,
     });
-    console.log("fancy click");
-    console.log(betData);
-    let cuurentElem = event.currentTarget;
-    setTimeout(function () {
-      cuurentElem.scrollIntoView({
-        behavior: "smooth",
-        top: 50,
-      });
-    }, 300);
+    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 43;
+    playWindow.current.scrollTop = cuurentElem;
   };
 
   useEffect(() => {
@@ -319,13 +313,9 @@ export const FancyOdds = ({
                                 : styles.runningNeg
                             } d-inline-flex`}
                           >
-                            {expoData?.fancyExpoData?.oldExpoData &&
-                            expoData?.fancyExpoData?.oldExpoData[item.sid]
-                              ?.stake
-                              ? expoData?.fancyExpoData?.oldExpoData[
-                                  item.sid
-                                ]?.stake?.toFixed(2)
-                              : ""}
+                            {expoData?.fancyExpoData?.oldExpoData[
+                              item.sid
+                            ]?.stake?.toFixed(2)}
                           </span>
                         )}
                       {expoData?.fancyExpoData?.updatedExpo &&
@@ -344,13 +334,9 @@ export const FancyOdds = ({
                             <div
                               className={`${styles.ExposureArrow} icon-arrow-left`}
                             ></div>
-                            {expoData?.fancyExpoData?.updatedExpo &&
-                            expoData?.fancyExpoData?.updatedExpo[item.sid]
-                              ?.stake
-                              ? expoData?.fancyExpoData?.updatedExpo[
-                                  item.sid
-                                ]?.stake?.toFixed(2)
-                              : ""}
+                            {expoData?.fancyExpoData?.updatedExpo[
+                              item.sid
+                            ]?.stake?.toFixed(2)}
                           </span>
                         )}
                     </div>

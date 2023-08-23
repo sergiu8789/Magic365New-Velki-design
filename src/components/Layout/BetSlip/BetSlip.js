@@ -39,8 +39,6 @@ export const BetSlip = () => {
       ...appData.appData,
       appBetSlipOpen: betData.betData.betSlipStatus,
     });
-    console.log(betData.betData.betSlipStatus);
-    console.log(appData.appData.appBetSlipOpen);
     setBetSlip(betData.betData.betSlipStatus);
   }, [betData.betData.betSlipStatus]);
 
@@ -85,7 +83,7 @@ export const BetSlip = () => {
         // setbetStakeAmt(amt);
         betSelection.amount = amt;
         betData.setBetData({ ...betData.betData, betSelection: betSelection });
-        setbetButton(false);
+        if (parseFloat(betSelection.amount) > 0) setbetButton(false);
       }
     } else {
       if (amt !== ".") {
@@ -105,7 +103,7 @@ export const BetSlip = () => {
             betSelection: betSelection,
           });
         }
-        setbetButton(false);
+        if (parseFloat(betSelection.amount) > 0) setbetButton(false);
       }
     }
     setbetStakeType("manual");

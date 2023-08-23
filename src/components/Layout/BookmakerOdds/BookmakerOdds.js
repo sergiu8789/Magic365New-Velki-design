@@ -3,7 +3,7 @@ import styles from "../MatchOdds/MatchOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 
-export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
+export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
   const betData = useBet();
   const expoData = useExposure();
   const [hideBookMarker, sethideBookMarker] = useState("false");
@@ -39,13 +39,8 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
       betSlipStatus: true,
       betSelection: betSelection,
     });
-    let cuurentElem = event.currentTarget;
-    setTimeout(function () {
-      cuurentElem.scrollIntoView({
-        behavior: "smooth",
-        top: 50,
-      });
-    }, 300);
+    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 43;
+    playWindow.current.scrollTop = cuurentElem;
   };
 
   useEffect(() => {
