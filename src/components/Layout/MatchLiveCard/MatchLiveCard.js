@@ -9,7 +9,6 @@ export const MatchLiveCard = ({
   setStreamOut,
   setStreamOutScroll,
 }) => {
-  console.log(setStreamOutScroll);
   const [ipAddress, setIPAddress] = useState("");
 
   useEffect(() => {
@@ -21,7 +20,6 @@ export const MatchLiveCard = ({
   }, []);
 
   const closeStremingBox = () => {
-    console.log("close");
     setStreamOutScroll(1);
     setStreamOut(false);
   };

@@ -35,6 +35,13 @@
     color: #e20000;
 }
 
+.ExposureArrow {
+    color: inherit;
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    font-size: 9px;
+}
+
 .oddBetsBox {
     gap: 2px
 }

@@ -39,6 +39,8 @@ export const BetSlip = () => {
       ...appData.appData,
       appBetSlipOpen: betData.betData.betSlipStatus,
     });
+    console.log(betData.betData.betSlipStatus);
+    console.log(appData.appData.appBetSlipOpen);
     setBetSlip(betData.betData.betSlipStatus);
   }, [betData.betData.betSlipStatus]);
 
@@ -172,8 +174,7 @@ export const BetSlip = () => {
     if (betPlacing) {
       const time = Math.floor(new Date().getTime() / 1000);
       let betSelection = betData?.betData?.betSelection;
-      if( betSelection.status==='')
-        betSelection.status = "ACTIVE";
+      if (betSelection.status === "") betSelection.status = "ACTIVE";
       if (
         betSelection.status === "ACTIVE" ||
         ((betSelection.market_type === "fancy" ||
@@ -215,7 +216,7 @@ export const BetSlip = () => {
             betData.setBetData({
               ...betData.betData,
               betSlipStatus: false,
-              betSuccess : true
+              betSuccess: true,
             });
             auth.setAuth({ ...auth.auth, fetchWallet: true });
             if (res.status === 200 || res.status === 201) {

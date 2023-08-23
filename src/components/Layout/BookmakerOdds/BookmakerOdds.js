@@ -106,19 +106,21 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
           if (item?.selection_id === selection) {
             if (item.type === 1)
               exposure[selection] =
-                (exposure[selection] ? exposure[selection]: 0) +
+                (exposure[selection] ? exposure[selection] : 0) +
                 (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
                   parseFloat(item.amount));
             else
               exposure[selection] =
-              (exposure[selection] ? exposure[selection]: 0) - parseFloat(item.amount);
+                (exposure[selection] ? exposure[selection] : 0) -
+                parseFloat(item.amount);
           } else {
             if (item.type === 1)
               exposure[selection] =
-              (exposure[selection] ? exposure[selection]: 0) - parseFloat(item.amount);
+                (exposure[selection] ? exposure[selection] : 0) -
+                parseFloat(item.amount);
             else
               exposure[selection] =
-              (exposure[selection] ? exposure[selection]: 0) +
+                (exposure[selection] ? exposure[selection] : 0) +
                 (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
                   parseFloat(item.amount));
           }
@@ -128,61 +130,67 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
     expoData.setBookmakerExpoData({
       oldExpoData: exposure,
     });
-
   }, [betList, allSelections]);
 
   useEffect(() => {
-    if(betData.betData.betSelection.market_type === 'bookmaker'){
-      if(betData.betData.betSelection.amount){
+    if (betData.betData.betSelection.market_type === "bookmaker") {
+      if (betData.betData.betSelection.amount) {
         if (expoData?.bookmakerExpoData?.oldExpoData) {
-      let updated = {};
-      let betSelection = betData?.betData?.betSelection;
-      Object.keys(expoData?.bookmakerExpoData?.oldExpoData)?.map((item) => {
-        if (betSelection?.selection_id == item) {
-          if (betSelection?.type === 1)
-            updated[item] =
-            (expoData?.bookmakerExpoData?.oldExpoData[item] ? expoData?.bookmakerExpoData?.oldExpoData[item] : 0 ) +
-              (betSelection?.amount !== ""
-                ? (parseFloat(betSelection?.odds) / 100 + 1) *
-                    parseFloat(betSelection?.amount) -
-                  parseFloat(betSelection?.amount)
-                : 0);
-          else
-            updated[item] =
-            (expoData?.bookmakerExpoData?.oldExpoData[item] ? expoData?.bookmakerExpoData?.oldExpoData[item] : 0 ) -
-              (betSelection?.amount !== ""
-                ? (parseFloat(betSelection?.odds) / 100 + 1) *
-                    parseFloat(betSelection?.amount) -
-                  parseFloat(betSelection?.amount)
-                : 0);     
-        } else {
-          if (betSelection?.type === 1)
-            updated[item] =
-              (expoData?.bookmakerExpoData?.oldExpoData[item] ? expoData?.bookmakerExpoData?.oldExpoData[item] : 0 ) -
-              (betSelection?.amount !== ""
-                ? parseFloat(betSelection?.amount)
-                : 0);
-          else
-            updated[item] =
-              (expoData?.bookmakerExpoData?.oldExpoData[item] ? expoData?.bookmakerExpoData?.oldExpoData[item] : 0) +
-              (betSelection?.amount !== ""
-                ? parseFloat(betSelection?.amount)
-                : 0);   
-        }
-      });
+          let updated = {};
+          let betSelection = betData?.betData?.betSelection;
+          Object.keys(expoData?.bookmakerExpoData?.oldExpoData)?.map((item) => {
+            if (betSelection?.selection_id == item) {
+              if (betSelection?.type === 1)
+                updated[item] =
+                  (expoData?.bookmakerExpoData?.oldExpoData[item]
+                    ? expoData?.bookmakerExpoData?.oldExpoData[item]
+                    : 0) +
+                  (betSelection?.amount !== ""
+                    ? (parseFloat(betSelection?.odds) / 100 + 1) *
+                        parseFloat(betSelection?.amount) -
+                      parseFloat(betSelection?.amount)
+                    : 0);
+              else
+                updated[item] =
+                  (expoData?.bookmakerExpoData?.oldExpoData[item]
+                    ? expoData?.bookmakerExpoData?.oldExpoData[item]
+                    : 0) -
+                  (betSelection?.amount !== ""
+                    ? (parseFloat(betSelection?.odds) / 100 + 1) *
+                        parseFloat(betSelection?.amount) -
+                      parseFloat(betSelection?.amount)
+                    : 0);
+            } else {
+              if (betSelection?.type === 1)
+                updated[item] =
+                  (expoData?.bookmakerExpoData?.oldExpoData[item]
+                    ? expoData?.bookmakerExpoData?.oldExpoData[item]
+                    : 0) -
+                  (betSelection?.amount !== ""
+                    ? parseFloat(betSelection?.amount)
+                    : 0);
+              else
+                updated[item] =
+                  (expoData?.bookmakerExpoData?.oldExpoData[item]
+                    ? expoData?.bookmakerExpoData?.oldExpoData[item]
+                    : 0) +
+                  (betSelection?.amount !== ""
+                    ? parseFloat(betSelection?.amount)
+                    : 0);
+            }
+          });
           expoData.setBookmakerExpoData({
-          ...expoData.bookmakerExpoData,
-          updatedExpo: updated,
-          showUpdate : true
-         });
+            ...expoData.bookmakerExpoData,
+            updatedExpo: updated,
+            showUpdate: true,
+          });
         }
-      }
-      else{
+      } else {
         expoData.setBookmakerExpoData({
           ...expoData.bookmakerExpoData,
           updatedExpo: {},
-          showUpdate : false
-         });
+          showUpdate: false,
+        });
       }
     }
   }, [betData.betData.betSelection.amount]);
@@ -238,48 +246,55 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
                     {item.nat}
                   </label>
                   <div className="col-12 d-inline-flex align-items-center">
-                  <span
-                    className={`${styles.runningExposure} ${
-                      item?.sid &&
-                      expoData?.bookmakerExpoData?.oldExpoData &&
-                      expoData?.bookmakerExpoData?.oldExpoData[item?.sid] &&
-                      expoData?.bookmakerExpoData?.oldExpoData[
-                        item?.sid
-                      ].toFixed(2) > 0
-                        ? styles.runningPos
-                        : styles.runningNeg
-                    } d-inline-flex ps-2 pe-2`}
-                  >
                     {item?.sid &&
                       expoData?.bookmakerExpoData?.oldExpoData &&
-                      expoData?.bookmakerExpoData?.oldExpoData[item?.sid] &&
-                      expoData?.bookmakerExpoData?.oldExpoData[
-                        item?.sid
-                      ].toFixed(2)}
-                  </span>
-                  { expoData?.bookmakerExpoData?.showUpdate &&
-                    <span
-                    className={`${styles.runningExposure} ${
+                      expoData?.bookmakerExpoData?.oldExpoData[item?.sid] && (
+                        <span
+                          className={`${styles.runningExposure} ${
+                            expoData?.bookmakerExpoData?.oldExpoData[
+                              item?.sid
+                            ].toFixed(2) > 0
+                              ? styles.runningPos
+                              : styles.runningNeg
+                          } d-inline-flex`}
+                        >
+                          {item?.sid &&
+                            expoData?.bookmakerExpoData?.oldExpoData &&
+                            expoData?.bookmakerExpoData?.oldExpoData[
+                              item?.sid
+                            ] &&
+                            expoData?.bookmakerExpoData?.oldExpoData[
+                              item?.sid
+                            ].toFixed(2)}
+                        </span>
+                      )}
+                    {expoData?.bookmakerExpoData?.showUpdate &&
                       item?.sid &&
                       expoData?.bookmakerExpoData?.updatedExpo &&
-                      expoData?.bookmakerExpoData?.updatedExpo[item?.sid] &&
-                      expoData?.bookmakerExpoData?.updatedExpo[
-                        item?.sid
-                      ].toFixed(2) > 0
-                        ? styles.runningPos
-                        : styles.runningNeg
-                    } d-inline-flex ps-2 pe-2`}
-                  >
-                    {
-                      item?.sid &&
-                      expoData?.bookmakerExpoData?.updatedExpo &&
-                      expoData?.bookmakerExpoData?.updatedExpo[item?.sid] &&
-                      expoData?.bookmakerExpoData?.updatedExpo[
-                        item?.sid
-                      ].toFixed(2)}
-                  </span> }
-               
-                  </div> 
+                      expoData?.bookmakerExpoData?.updatedExpo[item?.sid] && (
+                        <span
+                          className={`${styles.runningExposure} ${
+                            expoData?.bookmakerExpoData?.updatedExpo[
+                              item?.sid
+                            ].toFixed(2) > 0
+                              ? styles.runningPos
+                              : styles.runningNeg
+                          } d-inline-flex align-items-center`}
+                        >
+                          <div
+                            className={`${styles.ExposureArrow} icon-arrow-left`}
+                          ></div>
+                          {item?.sid &&
+                            expoData?.bookmakerExpoData?.updatedExpo &&
+                            expoData?.bookmakerExpoData?.updatedExpo[
+                              item?.sid
+                            ] &&
+                            expoData?.bookmakerExpoData?.updatedExpo[
+                              item?.sid
+                            ].toFixed(2)}
+                        </span>
+                      )}
+                  </div>
                 </div>
                 <div
                   className={`${styles.oddBetsBox} col-4 position-relative d-inline-flex align-items-stretch`}

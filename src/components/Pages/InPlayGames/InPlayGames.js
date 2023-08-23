@@ -8,9 +8,11 @@ import { HomeFooter } from "../../Layout/HomeFooter/HomeFooter";
 import { useLocation } from "react-router-dom";
 import ApiService from "../../../services/ApiService";
 import { BetSlip } from "../../Layout/BetSlip/BetSlip";
+import { useBet } from "../../../context/BetContextProvider";
 
 export const InPlayGames = () => {
   const appData = useApp();
+  const betData = useBet();
   const playWindow = useRef(null);
   const liveWindow = useRef(null);
   const location = useLocation();
@@ -24,6 +26,14 @@ export const InPlayGames = () => {
     appData.setAppData({
       ...appData.appData,
       appBetSlipOpen: false,
+    });
+    betData.setBetData({
+      ...betData.betData,
+      betSlipStatus: false,
+      betSelection: {
+        ...betData.betData.betSelection,
+        amount: "",
+      },
     });
   };
 

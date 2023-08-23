@@ -1,0 +1,40 @@
+.NoInternetLayer {
+    max-width: 480px;
+    background: #FFF;
+    z-index: 999;
+    inset: 0;
+}
+
+.NoInternetContainer {
+    padding: 20px;
+    gap: 20px;
+}
+
+.noInternetSvg {
+    width: 100px;
+    object-fit: contain;
+}
+
+.noInternetLabel {
+    font-size: 24px;
+    color: #000;
+}
+
+.intertErrorMsg {
+    font-size: 16px;
+    color: #000;
+    padding: 0 20px;
+}
+
+.networkTry {
+    border: none;
+    box-shadow: none;
+    outline: none;
+    height: 45px;
+    border-radius: 40px;
+    background: #FFC800;
+    color: #000;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 0 45px;
+}
