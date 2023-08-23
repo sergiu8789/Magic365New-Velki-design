@@ -71,8 +71,12 @@ export const ExchangeOdds = ({
       betSlipStatus: true,
       betSelection: betSelection,
     });
-    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 43;
-    playWindow.current.scrollTop = cuurentElem;
+    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 70;
+    setTimeout(function () {
+      let cuurentScroll = playWindow.current.scrollTop;
+      cuurentScroll = cuurentElem + cuurentScroll;
+      playWindow.current.scrollTop = cuurentScroll;
+    }, 500);
   };
 
   /****** method to fetch other market list from API  ********/
