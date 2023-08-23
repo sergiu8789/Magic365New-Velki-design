@@ -125,7 +125,6 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
         });
       });
     }
-    console.log(expoData.bookmakerExpoData.oldExpoData,exposure);
     expoData.setBookmakerExpoData({
       oldExpoData: exposure,
     });
@@ -139,10 +138,10 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
       let updated = {};
       let betSelection = betData?.betData?.betSelection;
       Object.keys(expoData?.bookmakerExpoData?.oldExpoData)?.map((item) => {
-        if (betSelection?.selection_id?.toString() === item) {
+        if (betSelection?.selection_id == item) {
           if (betSelection?.type === 1)
             updated[item] =
-              expoData?.bookmakerExpoData?.oldExpoData[item] +
+            (expoData?.bookmakerExpoData?.oldExpoData[item] ? expoData?.bookmakerExpoData?.oldExpoData[item] : 0 ) +
               (betSelection?.amount !== ""
                 ? (parseFloat(betSelection?.odds) / 100 + 1) *
                     parseFloat(betSelection?.amount) -
@@ -150,25 +149,25 @@ export const BookmakerOdds = ({ oddsList, matchId, betList }) => {
                 : 0);
           else
             updated[item] =
-              expoData?.bookmakerExpoData?.oldExpoData[item] -
+            (expoData?.bookmakerExpoData?.oldExpoData[item] ? expoData?.bookmakerExpoData?.oldExpoData[item] : 0 ) -
               (betSelection?.amount !== ""
                 ? (parseFloat(betSelection?.odds) / 100 + 1) *
                     parseFloat(betSelection?.amount) -
                   parseFloat(betSelection?.amount)
-                : 0);
+                : 0);     
         } else {
           if (betSelection?.type === 1)
             updated[item] =
-              expoData?.bookmakerExpoData?.oldExpoData[item] -
+              (expoData?.bookmakerExpoData?.oldExpoData[item] ? expoData?.bookmakerExpoData?.oldExpoData[item] : 0 ) -
               (betSelection?.amount !== ""
                 ? parseFloat(betSelection?.amount)
                 : 0);
           else
             updated[item] =
-              expoData?.bookmakerExpoData?.oldExpoData[item] +
+              (expoData?.bookmakerExpoData?.oldExpoData[item] ? expoData?.bookmakerExpoData?.oldExpoData[item] : 0) +
               (betSelection?.amount !== ""
                 ? parseFloat(betSelection?.amount)
-                : 0);
+                : 0);   
         }
       });
           expoData.setBookmakerExpoData({
