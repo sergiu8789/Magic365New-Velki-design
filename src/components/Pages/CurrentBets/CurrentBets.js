@@ -49,6 +49,8 @@ export const CurrentBets = () => {
       name = "";
     } else if (name === "Sportsbook") {
       name = "Premium";
+    } else if (name === "Fancybet") {
+      name = "fancy";
     }
     let marketName = name.toLowerCase();
     setpopularTabActive(marketName);
@@ -294,7 +296,7 @@ export const CurrentBets = () => {
               key={index}
             >
               <div
-                className={`${styles.currentBetHeader} col-12 d-inline-flex justify-content-center align-items-center`}
+                className={`${styles.currentBetHeader} flex-wrap col-12 d-inline-flex justify-content-center align-items-center`}
               >
                 {item.game_name && (
                   <React.Fragment>

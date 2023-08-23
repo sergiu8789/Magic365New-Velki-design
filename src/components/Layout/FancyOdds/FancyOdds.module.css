@@ -104,6 +104,12 @@
     color: #FFF;
 }
 
+.lastUpdate {
+    font-size: 13px;
+    color: #000;
+    font-weight: 500;
+}
+
 .animateSparkBack {
     animation: sparkBack .1s ease;
     -webkit-animation: sparkBack .1s ease;

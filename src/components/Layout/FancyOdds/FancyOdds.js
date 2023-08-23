@@ -181,7 +181,9 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
   return (
     <React.Fragment>
       <div className="col-12 d-inline-flex justify-content-end">
-        <div className="col-8  align-items-center">Last Updated : {time}</div>
+        <div className={`${styles.lastUpdate} col-8 align-items-center`}>
+          Last Updated: {time}
+        </div>
         <div className="col-4 d-inline-flex align-items-center">
           <span
             className={`${styles.backLayText} d-inline-flex justify-content-center col-6`}
@@ -223,7 +225,7 @@ export const FancyOdds = ({ oddsList, matchId, time, betList }) => {
                     <div className="col-12 d-inline-flex align-items-center">
                       <span
                         className={`${styles.runningExposure} ${
-                          expoData?.fancyExpoData?.oldExpoData &&
+                          item.sid &&
                           expoData?.fancyExpoData?.oldExpoData[item.sid]
                             ?.stake &&
                           expoData?.fancyExpoData?.oldExpoData[

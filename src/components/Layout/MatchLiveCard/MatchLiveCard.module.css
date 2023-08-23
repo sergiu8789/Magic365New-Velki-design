@@ -1,12 +1,45 @@
-.matchScoreGraph {
+.matchStreemTv {
+    height: auto;
+    aspect-ratio: 16/9;
+}
+
+.matchLiveStreem {
     height: auto;
     aspect-ratio: 16/9;
     background: #000;
     z-index: 9;
     top: 0px;
+    transition: all .3s cubic-bezier(.075, .82, .165, 1);
 }
 
 .liveScoreFrame {
     width: 100%;
     aspect-ratio: 16/9;
+}
+
+.matchLiveStreem.outsideFrame {
+    margin-right: -231px;
+    right: 50%;
+    top: 126px;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    width: 240px;
+    position: fixed;
+}
+
+.closeIframe {
+    right: 8px;
+    top: 8px;
+    height: 22px;
+    width: 22px;
+    border-radius: 100%;
+    background: rgba(0, 0, 0, 0.50);
+    color: #FFF;
+    font-size: 10px;
+    z-index: 5;
+    display: none;
+}
+
+.outsideFrame .closeIframe {
+    display: inline-flex;
 }

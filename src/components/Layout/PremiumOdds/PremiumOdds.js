@@ -37,13 +37,15 @@ export const PremiumOdds = ({ oddsList }) => {
     }, 300);
   };
 
-  const togglePopularBet = (id) => {
-    let newBetArray = [];
-    newBetArray = [...premiumOddsId];
-    if (newBetArray.indexOf(id) < 0) {
-      setpremiumOddsId((prevopenBetList) => [...prevopenBetList, id]);
-    } else {
-      setpremiumOddsId(premiumOddsId.filter((x) => x !== id));
+  const togglePopularBet = (id, subOdds) => {
+    if (subOdds) {
+      let newBetArray = [];
+      newBetArray = [...premiumOddsId];
+      if (newBetArray.indexOf(id) < 0) {
+        setpremiumOddsId((prevopenBetList) => [...prevopenBetList, id]);
+      } else {
+        setpremiumOddsId(premiumOddsId.filter((x) => x !== id));
+      }
     }
   };
 
@@ -100,7 +102,12 @@ export const PremiumOdds = ({ oddsList }) => {
           >
             <div
               className={`${styles.popularTabTitle} col-12 d-inline-flex position-relative align-items-center`}
-              onClick={() => togglePopularBet("PopularBet_" + index)}
+              onClick={() =>
+                togglePopularBet(
+                  "PopularBet_" + index,
+                  item?.sportsBookSelection
+                )
+              }
             >
               <div className={`d-inline-flex align-items-center`}>
                 <i className="icon-star"></i>
@@ -108,9 +115,11 @@ export const PremiumOdds = ({ oddsList }) => {
                   {item.marketName}
                 </label>
               </div>
-              <i
-                className={`${styles.gameOpenArrow} position-absolute icon-arrow-down`}
-              ></i>
+              {item?.sportsBookSelection && (
+                <i
+                  className={`${styles.gameOpenArrow} position-absolute icon-arrow-down`}
+                ></i>
+              )}
             </div>
             <div
               className={`${styles.poplarOddRow} position-relative col-12 justify-content-end flex-wrap`}
