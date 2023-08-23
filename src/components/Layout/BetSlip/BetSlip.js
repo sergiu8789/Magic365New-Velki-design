@@ -215,6 +215,7 @@ export const BetSlip = () => {
             betData.setBetData({
               ...betData.betData,
               betSlipStatus: false,
+              betSuccess : true
             });
             auth.setAuth({ ...auth.auth, fetchWallet: true });
             if (res.status === 200 || res.status === 201) {

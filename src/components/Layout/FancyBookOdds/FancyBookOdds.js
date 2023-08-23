@@ -60,7 +60,7 @@ export const FancyBookOdds = ({fancyBookOdd, setFancyBookOdds,selection }) => {
               Runs
             </div>
             <div
-              className={`${styles.allMatchBetInfo} col-12 d-inline-flex align-items-center`}
+              className={`${styles.allMatchBetInfo} col-12 d-inline-flex flex-wrap align-items-center`}
             >
               <div
                 className={`${styles.oddsBetRow} ${styles.positiveValue} col-12 d-inline-flex align-items-stretch`}
@@ -71,39 +71,26 @@ export const FancyBookOdds = ({fancyBookOdd, setFancyBookOdds,selection }) => {
                   {selection.aboveValue} and above
                 </div>
                 <div
-                  className={`${styles.oddsStake} col-9 d-inline-flex align-items-center`}
+                  className={`${styles.oddsStake} col-8 d-inline-flex align-items-center`}
                 >
-                  {selection.abovePL}
+                  {selection.abovePL ? parseFloat(selection.abovePL).toFixed(2) : ""}
                 </div>
               </div>
               <div
-                className={`${styles.oddsBetRow} col-12 d-inline-flex align-items-stretch`}
+                className={`${styles.oddsBetRow} ${styles.negativeValue} col-12 d-inline-flex align-items-stretch`}
               >
                 <div
-                  className={`${styles.oddsValue} col-3 d-inline-flex align-items-center`}
+                  className={`${styles.oddsValue} col-4 d-inline-flex align-items-center`}
                 >
                   {selection.belowValue} and below
                 </div>
                 <div
-                  className={`${styles.oddsStake} col-9 d-inline-flex align-items-center`}
+                  className={`${styles.oddsStake} col-8 d-inline-flex align-items-center`}
                 >
-                  {selection.belowPL}
+                  {selection.belowPL ? parseFloat(selection.belowPL).toFixed(2) : ""}
                 </div>
               </div>
-              <div
-                className={`${styles.oddsBetRow} col-12 d-inline-flex align-items-stretch`}
-              >
-                <div
-                  className={`${styles.oddsValue} col-3 d-inline-flex align-items-center`}
-                >
-                  0
-                </div>
-                <div
-                  className={`${styles.oddsStake} col-9 d-inline-flex align-items-center`}
-                >
-                  1.00
-                </div>
-              </div>
+            
             </div>
           </div>
         </div>
