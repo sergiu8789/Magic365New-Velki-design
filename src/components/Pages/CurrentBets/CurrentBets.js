@@ -6,9 +6,10 @@ import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
 import {
-  changeDateFormat,
-  formatTime,
+  getDateYearNumFormat,
+  formatTimeHh,
   getCasinoMarketName,
+  getSportsMarketName,
 } from "../../../utils/helper";
 
 export const CurrentBets = () => {
@@ -111,6 +112,7 @@ export const CurrentBets = () => {
         setBetsTotalRecords(totalPage);
         setBetTotalCount(res.data.count);
         SetCurrentBetsList(res.data.data);
+        console.log(res.data.data);
         appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
@@ -317,7 +319,7 @@ export const CurrentBets = () => {
                   </React.Fragment>
                 )}
                 <span className="text-capitalize">
-                  {item.market_type?.replace("_", " ")}
+                  {getSportsMarketName(item.market_type)}
                   {item.market_name ? (
                     <>{getCasinoMarketName(item.market_name)}</>
                   ) : (
@@ -371,8 +373,10 @@ export const CurrentBets = () => {
                 <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
                   Bet ID
                 </span>
-                <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-                  {item.game_id}
+                <span
+                  className={`${styles.betRecordVal} text-break d-inline-flex col-8`}
+                >
+                  {item.bet_id}
                 </span>
               </div>
               <div
@@ -382,9 +386,9 @@ export const CurrentBets = () => {
                   Bet Placed
                 </span>
                 <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-                  {changeDateFormat(item.createdAt) +
+                  {getDateYearNumFormat(item.createdAt) +
                     " " +
-                    formatTime(item.createdAt)}
+                    formatTimeHh(item.createdAt)}
                 </span>
               </div>
               <div
@@ -394,9 +398,9 @@ export const CurrentBets = () => {
                   Matched Date
                 </span>
                 <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-                  {changeDateFormat(item.createdAt) +
+                  {getDateYearNumFormat(item.createdAt) +
                     " " +
-                    formatTime(item.createdAt)}
+                    formatTimeHh(item.createdAt)}
                 </span>
               </div>
               <div
@@ -418,9 +422,9 @@ export const CurrentBets = () => {
                   <span
                     className={`${styles.betRecordVal} d-inline-flex col-8`}
                   >
-                    {changeDateFormat(item.createdAt) +
+                    {getDateYearNumFormat(item.createdAt) +
                       " " +
-                      formatTime(item.createdAt)}
+                      formatTimeHh(item.createdAt)}
                   </span>
                 </div>
                 <div

@@ -4,7 +4,7 @@ import { NoData } from "../../Layout/NoData/NoData";
 import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
-import { changeDateYearFormat, formatTime } from "../../../utils/helper";
+import { getDateYearNumFormat, formatTimeHh } from "../../../utils/helper";
 import { useApp } from "../../../context/AppContextProvider";
 
 export const ActivityLog = () => {
@@ -143,9 +143,9 @@ export const ActivityLog = () => {
                 <label
                   className={`${styles.activityheader} col-12 d-inline-block`}
                 >
-                  {changeDateYearFormat(item.createdAt) +
+                  {getDateYearNumFormat(item.createdAt) +
                     " " +
-                    formatTime(item.createdAt)}
+                    formatTimeHh(item.createdAt)}
                 </label>
                 <div
                   className={`${styles.activeStatusBox} col-12 d-inline-flex flex-column`}

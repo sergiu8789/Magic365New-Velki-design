@@ -21,7 +21,7 @@ export const Sports = () => {
   const [inPlayCheck, setPlayCheck] = useState(true);
   const [tournamentList, setTournamentList] = useState({});
   const [matchIds, setMatchIds] = useState([]);
-  const playRef = useRef();
+  const playRef = useRef([]);
   const tabRef = useRef([]);
 
   useEffect(() => {
@@ -42,9 +42,24 @@ export const Sports = () => {
       });
     }
 
-    if (playRef && playRef.current) {
-      playRef.current.click();
+    let playTab = location?.state?.datetype;
+    if (playRef && playRef.current[0] && !playTab) {
+      playRef.current[0].click();
+    } else {
+      if (playTab === "live") {
+        playTab = "inPlayTab_In-Play";
+      } else if (playTab === "today") {
+        playTab = "inPlayTab_Today";
+      } else if (playTab === "tomorrow") {
+        playTab = "inPlayTab_Tomorrow";
+      }
+      playRef.current.map((item) => {
+        if (item.id === playTab) {
+          item.click();
+        }
+      });
     }
+
     if (location?.state?.type === "1") {
       setPlayCheck(true);
     } else {
@@ -156,6 +171,8 @@ export const Sports = () => {
       }
       if (activeTab) activeTab = activeTab.toLowerCase();
       timeTab = timeTab.toLowerCase();
+      setMatchIds([]);
+      setTournamentList({});
       ApiService.tournamentMatchList(
         activeTab,
         "",
@@ -185,10 +202,13 @@ export const Sports = () => {
           });
           setMatchIds(matchIdList);
           setTournamentList(tournaments);
+        } else {
+          setMatchIds([]);
+          setTournamentList({});
         }
       });
     }
-  }, [inPlayTab]);
+  }, [inPlayTab, tabActive]);
 
   return (
     <React.Fragment>
@@ -220,7 +240,7 @@ export const Sports = () => {
                     className={`${styles.inPlayTabName} d-inline-flex ${
                       item.name === inPlayTab && styles.inPlayTabActive
                     }`}
-                    ref={index === 0 ? playRef : null}
+                    ref={(element) => (playRef.current[index] = element)}
                     onClick={(event) => activeGameTab(event, item.name)}
                     id={`inPlayTab_${item.name}`}
                   >

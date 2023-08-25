@@ -82,8 +82,13 @@ export const HomeGameCard = () => {
     navigate("/leagues");
   };
 
-  const gotoSports = (id, cat) => {
-    navigate("/sports", { state: { type: id, category: cat } });
+  const gotoSports = (id, cat, type) => {
+    if (!type) {
+      type = "";
+    }
+    navigate("/sports", {
+      state: { type: id, category: cat, datetype: type },
+    });
   };
 
   useEffect(() => {
@@ -152,7 +157,7 @@ export const HomeGameCard = () => {
         >
           <div
             className={`${styles.singleCardRowBox} col-12 ${styles.allCategoryGame}`}
-            onClick={() => gotoSports("0", "All")}
+            onClick={() => gotoSports("0", "All", value)}
           >
             <div
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
@@ -163,7 +168,7 @@ export const HomeGameCard = () => {
           </div>
           <div
             className={`${styles.singleCardRowBox} col-12 ${styles.cricketCategoryGame}`}
-            onClick={() => gotoSports("0", "Cricket")}
+            onClick={() => gotoSports("0", "Cricket", value)}
           >
             <div
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
@@ -174,7 +179,7 @@ export const HomeGameCard = () => {
           </div>
           <div
             className={`${styles.singleCardRowBox} col-12 ${styles.soccerCategoryGame}`}
-            onClick={() => gotoSports("0", "Soccer")}
+            onClick={() => gotoSports("0", "Soccer", value)}
           >
             <div
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
@@ -185,7 +190,7 @@ export const HomeGameCard = () => {
           </div>
           <div
             className={`${styles.singleCardRowBox} col-12 ${styles.tennisCategoryGame}`}
-            onClick={() => gotoSports("0", "Tennis")}
+            onClick={() => gotoSports("0", "Tennis", value)}
           >
             <div
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}

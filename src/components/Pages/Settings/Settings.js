@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Settings.module.css";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
 import { useApp } from "../../../context/AppContextProvider";
@@ -27,6 +27,20 @@ export const Settings = () => {
       appData.setAppData({ ...appData.appData, highlightOdds: false });
     }
   };
+
+  useEffect(() => {
+    if (appData.appData.highlightOdds) {
+      sethighlightOdds(true);
+    } else {
+      sethighlightOdds(false);
+    }
+
+    if (appData.appData.fullMarket) {
+      setfullMarket(true);
+    } else {
+      setfullMarket(false);
+    }
+  }, [appData.appData.highlightOdds, appData.appData.fullMarket]);
 
   return (
     <React.Fragment>

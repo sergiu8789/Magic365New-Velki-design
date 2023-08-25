@@ -394,24 +394,29 @@ export const ExchangeOdds = ({
                         {item.runnerName}
                       </label>
                       <div className="col-12 d-inline-flex align-items-center">
-                        {expoData?.exchangeExpoData?.oldExpoData &&
-                          expoData?.exchangeExpoData?.oldExpoData[
-                            item.SelectionId
-                          ] && (
-                            <span
-                              className={`${styles.runningExposure} ${
-                                expoData?.exchangeExpoData?.oldExpoData[
-                                  item.SelectionId
-                                ].toFixed(2) > 0
-                                  ? styles.runningPos
-                                  : styles.runningNeg
-                              } d-inline-flex ps-2 pe-2`}
-                            >
-                              {expoData?.exchangeExpoData?.oldExpoData[
-                                item.SelectionId
-                              ].toFixed(2)}
-                            </span>
-                          )}
+                        <span
+                          className={`${styles.runningExposure} ${
+                            expoData?.exchangeExpoData?.oldExpoData[
+                              item.SelectionId
+                            ].toFixed(2) > 0
+                              ? styles.runningPos
+                              : styles.runningNeg
+                          } ${
+                            item.SelectionId &&
+                            expoData?.exchangeExpoData?.oldExpoData &&
+                            expoData?.exchangeExpoData?.oldExpoData[
+                              item.SelectionId
+                            ]
+                              ? "d-inline-flex"
+                              : "d-none"
+                          }`}
+                        >
+                          {parseFloat(
+                            expoData?.exchangeExpoData?.oldExpoData[
+                              item.SelectionId
+                            ]
+                          ).toFixed(2)}
+                        </span>
                         {expoData?.exchangeExpoData?.showUpdate &&
                           expoData?.exchangeExpoData?.updatedExpo &&
                           expoData?.exchangeExpoData?.updatedExpo[
@@ -424,14 +429,16 @@ export const ExchangeOdds = ({
                                 ].toFixed(2) > 0
                                   ? styles.runningPos
                                   : styles.runningNeg
-                              } d-inline-flex align-items-center ps-2 pe-2`}
+                              } d-inline-flex align-items-center`}
                             >
                               <div
                                 className={`${styles.ExposureArrow} icon-arrow-left`}
                               ></div>
-                              {expoData?.exchangeExpoData?.updatedExpo[
-                                item.SelectionId
-                              ].toFixed(2)}
+                              {parseFloat(
+                                expoData?.exchangeExpoData?.updatedExpo[
+                                  item.SelectionId
+                                ]
+                              ).toFixed(2)}
                             </span>
                           )}
                       </div>

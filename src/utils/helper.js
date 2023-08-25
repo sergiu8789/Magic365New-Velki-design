@@ -28,7 +28,23 @@ export const changeDateYearFormat = (date) => {
     " " +
     newDate.getFullYear()
   );
-  //return monthNames[newDate.getMonth()] + " " + newDate.getDate();
+};
+
+export const getDateYearNumFormat = (date, type) => {
+  const newDate = new Date(date);
+  let month = monthNames[newDate.getMonth()];
+  var fulldate = "";
+  if (type === 1) {
+    month = monthNames[newDate.getMonth()];
+    fulldate = month + " " + newDate.getDate();
+  } else {
+    month = newDate.getMonth() + 1;
+    if (month < 10) {
+      month = "0" + month;
+    }
+    fulldate = newDate.getFullYear() + "-" + month + "-" + newDate.getDate();
+  }
+  return fulldate;
 };
 
 export const matchDate = (date) => {
@@ -56,6 +72,29 @@ export const formatTime = (date) => {
   hours = hours ? hours : 12; // the hour '0' should be '12'
   minutes = minutes < 10 ? "0" + minutes : minutes;
   var strTime = hours + ":" + minutes + " " + ampm;
+  return strTime;
+};
+
+export const formatTimeHh = (date, type) => {
+  const newDate = new Date(date);
+  var hours = newDate.getHours();
+  if (hours < 10) {
+    hours = "0" + hours;
+  }
+  var minutes = newDate.getMinutes();
+  if (minutes < 10) {
+    minutes = "0" + minutes;
+  }
+  var seconds = newDate.getSeconds();
+  if (seconds < 10) {
+    seconds = "0" + seconds;
+  }
+  var strTime = "";
+  if (type === 1) {
+    strTime = hours + ":" + minutes;
+  } else {
+    strTime = hours + ":" + minutes + ":" + seconds;
+  }
   return strTime;
 };
 
@@ -337,6 +376,20 @@ export const getCasinoMarketName = (name) => {
       break;
     case "card32eu":
       updatedName = "Card 32-B";
+      break;
+    case "premium":
+      updatedName = "Sportsbook";
+      break;
+  }
+  return updatedName;
+};
+
+export const getSportsMarketName = (name) => {
+  let marketName = name?.replace("_", " ");
+  let updatedName = marketName;
+  switch (marketName) {
+    case "premium":
+      updatedName = "Sportsbook";
       break;
   }
   return updatedName;

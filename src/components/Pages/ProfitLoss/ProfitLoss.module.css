@@ -228,13 +228,14 @@
 .proftStatus {
     font-size: 18px;
     font-weight: 700;
+    color: #000;
 }
 
-.proftStatusLoss, .balanceInfoAmt.proftStatusLoss, .betRecordVal.proftStatusLoss {
+.proftStatus.proftStatusLoss, .balanceInfoAmt.proftStatusLoss, .betRecordVal.proftStatusLoss {
     color: #e20000;
 }
 
-.proftStatusSuccess, .balanceInfoAmt.proftStatusSuccess, .betRecordVal.proftStatusSuccess {
+.proftStatus.proftStatusSuccess, .balanceInfoAmt.proftStatusSuccess, .betRecordVal.proftStatusSuccess {
     color: #62b70b;
 }
 

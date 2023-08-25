@@ -21,7 +21,7 @@
 }
 
 .runningExposure {
-    padding: 0 8px;
+    padding-left: 8px;
     font-size: 13px;
     font-weight: 500;
     color: rgb(30, 30, 30);

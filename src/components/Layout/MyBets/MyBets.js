@@ -6,8 +6,8 @@ import { useAuth } from "../../../context/AuthContextProvider";
 import { useBet } from "../../../context/BetContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
 import {
-  matchDate,
-  formatTime,
+  getDateYearNumFormat,
+  formatTimeHh,
   getCasinoMarketName,
 } from "../../../utils/helper";
 
@@ -457,7 +457,8 @@ export const MyBets = ({ openMyBets }) => {
                   >
                     <span className={styles.refIdTxt}>Ref: {item.bet_id}</span>
                     <span className={styles.refIdTxt}>
-                      {matchDate(item.createdAt)} {formatTime(item.createdAt)}
+                      {getDateYearNumFormat(item.createdAt)}{" "}
+                      {formatTimeHh(item.createdAt, 1)}
                     </span>
                   </div>
                 </div>

@@ -299,7 +299,7 @@
 .balanceRecordInfo {
     background: #FFF;
     border-bottom: 1px solid rgb(212, 224, 229);
-    height: 34px;
+    min-height: 34px;
     padding: 8px;
 }
 

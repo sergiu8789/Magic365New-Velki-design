@@ -8,10 +8,11 @@ import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
 import {
-  changeDateFormat,
-  formatTime,
+  getDateYearNumFormat,
+  formatTimeHh,
   formatDate,
   getCasinoMarketName,
+  getSportsMarketName,
 } from "../../../utils/helper";
 import { NoData } from "../../Layout/NoData/NoData";
 
@@ -89,12 +90,11 @@ export const ProfitLoss = () => {
     }
     let startDate = moment(dateValue[0].trim()).format("YYYY-MM-DD");
     let endDate = moment(dateValue[1].trim()).format("YYYY-MM-DD");
-    setFromDate(startDate + "T18:30");
-    setToDate(endDate + "T18:30");
+    setFromDate(startDate + "T00:00");
+    setToDate(endDate + "T23:59");
   };
 
   const setBetStatusVal = (name, val) => {
-    appData.setAppData({ ...appData.appData, listLoading: true });
     settotalBetCount(val);
     setbetStatus(name);
     setbetStatusDrop("false");
@@ -520,7 +520,7 @@ export const ProfitLoss = () => {
                     </React.Fragment>
                   )}
                   <span className="text-capitalize">
-                    {item.market_type?.replace("_", " ")}
+                    {getSportsMarketName(item.market_type)}
                     {item.market_name ? (
                       <>{getCasinoMarketName(item.market_name)}</>
                     ) : (
@@ -536,9 +536,9 @@ export const ProfitLoss = () => {
                   >
                     <label className={styles.balanceInfoTxt}>Start Time</label>
                     <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                      {changeDateFormat(item.createdAt) +
+                      {getDateYearNumFormat(item.createdAt) +
                         " " +
-                        formatTime(item.createdAt)}
+                        formatTimeHh(item.createdAt)}
                     </div>
                   </div>
                   <div
@@ -548,9 +548,9 @@ export const ProfitLoss = () => {
                       Settled date
                     </label>
                     <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                      {changeDateFormat(item.setteled_on) +
+                      {getDateYearNumFormat(item.setteled_on) +
                         " " +
-                        formatTime(item.setteled_on)}
+                        formatTimeHh(item.setteled_on)}
                     </div>
                   </div>
                   <div
@@ -594,9 +594,9 @@ export const ProfitLoss = () => {
                             className={`${styles.betRecordVal} d-inline-flex ms-auto`}
                           >
                             Bet Placed{" "}
-                            {changeDateFormat(row.createdAt) +
+                            {getDateYearNumFormat(row.createdAt) +
                               " " +
-                              formatTime(row.createdAt)}
+                              formatTimeHh(row.createdAt)}
                           </span>
                         </div>
                         <div

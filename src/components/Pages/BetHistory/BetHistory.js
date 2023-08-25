@@ -9,10 +9,11 @@ import ApiService from "../../../services/ApiService";
 import { AuthContext } from "../../../context/AuthContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
 import {
-  changeDateFormat,
-  formatTime,
+  getDateYearNumFormat,
+  formatTimeHh,
   formatDate,
   getCasinoMarketName,
+  getSportsMarketName,
 } from "../../../utils/helper";
 
 export const BetHistory = () => {
@@ -86,8 +87,8 @@ export const BetHistory = () => {
     }
     let startDate = moment(dateValue[0].trim()).format("YYYY-MM-DD");
     let endDate = moment(dateValue[1].trim()).format("YYYY-MM-DD");
-    setFromDate(startDate + "T18:30");
-    setToDate(endDate + "T18:30");
+    setFromDate(startDate + "T00:00");
+    setToDate(endDate + "T23:59");
   };
 
   const showCalenderFilter = () => {
@@ -112,8 +113,16 @@ export const BetHistory = () => {
     }
   };
 
-  const checkProfitLoss = (checkVal) => {
-    if (checkVal >= 0) {
+  const checkProfit = (checkVal) => {
+    if (checkVal > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const checkLoss = (checkVal) => {
+    if (checkVal < 0) {
       return true;
     } else {
       return false;
@@ -151,11 +160,11 @@ export const BetHistory = () => {
     } else if (betStatus === "Matched") {
       betStatusVal = 1;
     } else if (betStatus === "Cancelled") {
-      betStatusVal = 2;
-    } else if (betStatus === "Won") {
       betStatusVal = 3;
-    } else if (betStatus === "Loss") {
+    } else if (betStatus === "Won") {
       betStatusVal = 4;
+    } else if (betStatus === "Loss") {
+      betStatusVal = 5;
     }
 
     ApiService.getBettingHistory(
@@ -461,7 +470,7 @@ export const BetHistory = () => {
                   </React.Fragment>
                 )}
                 <span className="text-capitalize">
-                  {item.market_type?.replace("_", " ")}
+                  {getSportsMarketName(item.market_type)}
                   {item.market_name ? (
                     <>{getCasinoMarketName(item.market_name)}</>
                   ) : (
@@ -515,8 +524,10 @@ export const BetHistory = () => {
                 <span className={`${styles.betRecordLbl} d-inline-flex col-4`}>
                   Bet ID
                 </span>
-                <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-                  {item.game_id}
+                <span
+                  className={`${styles.betRecordVal} text-break d-inline-flex col-8`}
+                >
+                  {item.bet_id}
                 </span>
               </div>
               <div
@@ -526,9 +537,9 @@ export const BetHistory = () => {
                   Bet Placed
                 </span>
                 <span className={`${styles.betRecordVal} d-inline-flex col-8`}>
-                  {changeDateFormat(item.createdAt) +
+                  {getDateYearNumFormat(item.createdAt) +
                     " " +
-                    formatTime(item.createdAt)}
+                    formatTimeHh(item.createdAt)}
                 </span>
               </div>
               <div
@@ -539,9 +550,11 @@ export const BetHistory = () => {
                 </span>
                 <span
                   className={`${styles.betRecordVal} ${
-                    checkProfitLoss(item.pl_amount)
+                    checkProfit(item.pl_amount)
                       ? styles.betProfit
-                      : styles.betLoss
+                      : checkLoss(item.pl_amount)
+                      ? styles.betLoss
+                      : ""
                   } d-inline-flex col-8`}
                 >
                   ({item.pl_amount})
@@ -566,9 +579,9 @@ export const BetHistory = () => {
                   <span
                     className={`${styles.betRecordVal} d-inline-flex col-8`}
                   >
-                    {changeDateFormat(item.createdAt) +
+                    {getDateYearNumFormat(item.createdAt) +
                       " " +
-                      formatTime(item.createdAt)}
+                      formatTimeHh(item.createdAt)}
                   </span>
                 </div>
                 <div

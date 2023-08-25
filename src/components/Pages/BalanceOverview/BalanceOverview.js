@@ -4,7 +4,7 @@ import styles from "./BalanceOverview.module.css";
 import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
 import { AppContext, useApp } from "../../../context/AppContextProvider";
-import { changeDateYearFormat, formatTime } from "../../../utils/helper";
+import { getDateYearNumFormat, formatTimeHh } from "../../../utils/helper";
 
 export const BalanceOverview = () => {
   const auth = useAuth();
@@ -12,6 +12,7 @@ export const BalanceOverview = () => {
   const [page, setPage] = useState(1);
   const [transactionList, setTransactionList] = useState([]);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [totalBalRecords, setTotalBalRecords] = useState(0);
 
   const handlePage = (state) => {
     appData.setAppData({ ...appData.appData, listLoading: true });
@@ -28,16 +29,23 @@ export const BalanceOverview = () => {
   };
 
   useEffect(() => {
+    setTransactionList([]);
     appData.setAppData({ ...appData.appData, listLoading: true });
     const result = ApiService.transactionHistory(page);
     result
       .then((res) => {
         appData.setAppData({ ...appData.appData, listLoading: false });
+        let totalPage = res.data.count / 10;
+        totalPage = Math.ceil(totalPage);
+        setTotalBalRecords(totalPage);
         setTransactionList(res.data.data);
         setTotalRecords(res.data.count);
       })
       .catch((err) => {
         appData.setAppData({ ...appData.appData, listLoading: false });
+        setTotalBalRecords(0);
+        setTransactionList([]);
+        setTotalRecords(0);
         if (
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"
@@ -86,9 +94,9 @@ export const BalanceOverview = () => {
                 <div
                   className={`${styles.balanceHeaderTime} col-12 d-inline-flex align-items-center`}
                 >
-                  {changeDateYearFormat(item.createdAt) +
+                  {getDateYearNumFormat(item.createdAt) +
                     " " +
-                    formatTime(item.createdAt)}
+                    formatTimeHh(item.createdAt)}
                 </div>
                 <div
                   className={`${styles.balanceInfoBox} col-12 d-inline-flex flex-column`}
@@ -138,7 +146,7 @@ export const BalanceOverview = () => {
       </div>
       <div
         className={`${styles.activePaginate} col-12 ${
-          totalRecords > 1 ? "d-inline-flex" : "d-none"
+          totalBalRecords > 1 ? "d-inline-flex" : "d-none"
         } align-items-center justify-content-between`}
       >
         <div className="col-6 px-3">
@@ -157,7 +165,7 @@ export const BalanceOverview = () => {
         <div className="col-6 px-3">
           <button
             className={`${styles.navigateBtn}  ${styles.rightnavigateBtn} ${
-              totalRecords === page && styles.navigateDisable
+              totalBalRecords === page && styles.navigateDisable
             } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
             onClick={() => handlePage("next")}
           >

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./GameList.module.css";
 import { NoData } from "../NoData/NoData";
+import { getDateYearNumFormat, formatTimeHh } from "../../../utils/helper";
+import { GameListCompetition } from "../GameListCompetition/GameListCompetition";
 
 export const GameList = ({
   tournamentList,
@@ -16,6 +18,8 @@ export const GameList = ({
     Tennis: false,
   });
   const [allGameList, setGameList] = useState([]);
+  const [allGameTournament, setAllGameTournament] = useState(tournamentList);
+  const [sortGameList, setsortGameList] = useState("");
 
   const openGameDetail = (match) => {
     navigate("/full-market", {
@@ -23,8 +27,8 @@ export const GameList = ({
         match_id: match.id,
         market_id: match.market_id,
         type: "match_odds",
-        teamone:match.team_one_name,
-        teamtwo:match.team_two_name
+        teamone: match.team_one_name,
+        teamtwo: match.team_two_name,
       },
     });
   };
@@ -47,6 +51,7 @@ export const GameList = ({
   };
 
   const getTournaments = (tournamentList) => {
+    setGameList([]);
     let filteredGames = Object.keys(tournamentList)
       ?.filter(
         (gameTypeFilter) =>
@@ -64,10 +69,21 @@ export const GameList = ({
 
   useEffect(() => {
     getTournaments(tournamentList);
-  }, [gameType]);
+    console.log(tournamentList);
+  }, [gameType, inPlay]);
+
+  useEffect(() => {
+    if (sortGameList === "by Time") {
+    }
+  }, [sortGameList]);
 
   return (
     <React.Fragment>
+      {gameType === "All" && (
+        <div className={`${styles.gameAllCompeteBox} col-12 d-inline-flex`}>
+          <GameListCompetition setsortGameList={setsortGameList} />
+        </div>
+      )}
       {allGameList.length > 0 ? (
         allGameList.map((tour, tourIndex) => {
           return (
@@ -81,15 +97,19 @@ export const GameList = ({
                   " col-12 d-inline-flex justify-content-between"
                 }
               >
-                <div
-                  className={`${styles.titleGameName} position-relative d-inline-flex`}
-                >
-                  {tour}
-                </div>
+                {tour != gameType ? (
+                  <div
+                    className={`${styles.titleGameName} position-relative d-inline-flex`}
+                  >
+                    {tour}
+                  </div>
+                ) : (
+                  <GameListCompetition setsortGameList={setsortGameList} />
+                )}
                 <div
                   className={`${styles.sortFilterBtn} ${
                     closeAllMatchBox[tour] && styles.closeAllGames
-                  } d-inline-flex align-items-center justify-content-center`}
+                  } d-inline-flex align-items-center justify-content-center ms-auto`}
                   onClick={() => closeAllMatch(tour)}
                 >
                   <span className="d-inline-flex">ALL</span>
@@ -200,6 +220,17 @@ export const GameList = ({
                                           >
                                             In-play
                                           </div>
+                                        )}
+                                        {match?.date && (
+                                          <span
+                                            className={`${styles.mateDateBox} d-inline-flex align-items-center`}
+                                          >
+                                            {getDateYearNumFormat(
+                                              match.date,
+                                              1
+                                            )}{" "}
+                                            {formatTimeHh(match.date, 1)}
+                                          </span>
                                         )}
                                       </div>
                                       <div

@@ -1,0 +1,51 @@
+.gameCompetitionBox {
+    padding: 7px 7px;
+    border-radius: 5px;
+    background: #FFF;
+    gap: 5px;
+    z-index: 5;
+    min-width: 150px;
+}
+
+.gameToggle {
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+}
+
+.gameToggle, .gameSelectionName, .gameComptionName {
+    font-size: 14px;
+    color: #111;
+    line-height: 14px;
+}
+
+.gameSelectionbtn {
+    border: none;
+    background: transparent;
+    padding: 0;
+    outline: none;
+    gap: 5px;
+    width: calc(100% - 20px);
+}
+
+.gameSelctionArrow {
+    font-size: 9px;
+    font-weight: 400;
+    transition: all ease 400ms;
+    -webkit-transition: all ease 400ms;
+}
+
+.gameSelectOpen .gameSelctionArrow {
+    transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+}
+
+.competionList {
+    top: 30px;
+    background: #FFF;
+    border-radius: 0px 0px 4px 4px;
+    left: 0px;
+    right: 0px;
+    padding: 10px 13px 12px 25px;
+    box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.06) 0px 2.56px 5.12px 0px;
+    gap: 15px;
+}
