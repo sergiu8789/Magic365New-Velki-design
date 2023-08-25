@@ -5,8 +5,8 @@ export const AppContext = createContext(null);
 export const AppProvider = ({ children }) => {
   const initialValues = {
     listLoading: false,
-    highlightOdds: true,
-    fullMarket: true,
+    highlightOdds: localStorage.getItem("highlightOdds") ? false : true,
+    fullMarket: localStorage.getItem("fullMarket") ? false : true,
     updatedFancyTime: "",
     updatedPremiumTime: "",
     SportTabActive: "",

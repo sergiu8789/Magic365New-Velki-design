@@ -3,6 +3,7 @@ import styles from "./FancyOdds.module.css";
 import { FancyBookOdds } from "../FancyBookOdds/FancyBookOdds";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const FancyOdds = ({
   oddsList,
@@ -15,6 +16,7 @@ export const FancyOdds = ({
 }) => {
   const betData = useBet();
   const expoData = useExposure();
+  const appData = useApp();
   const [matchFancyOdds, setMatchFancyOdds] = useState("");
   const [fancyBookOdd, setFancyBookOdds] = useState(false);
   const prevCountRef = useRef(matchFancyOdds);
@@ -353,11 +355,11 @@ export const FancyOdds = ({
                       className={`${
                         styles.LayBetBox
                       } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
-                        item.l1 != prevCountRef.current[index]?.Lay
+                        item.l1 != prevCountRef.current[index]?.Lay && appData.appData.highlightOdds
                           ? styles.animateSparkLay
                           : ""
                       } ${
-                        item.ls1 != prevCountRef.current[index]?.LaySize
+                        item.ls1 != prevCountRef.current[index]?.LaySize && appData.appData.highlightOdds
                           ? styles.animateSparkLay
                           : ""
                       }`}
@@ -372,11 +374,11 @@ export const FancyOdds = ({
                       className={`${
                         styles.backBetBox
                       } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center  ${
-                        item.b1 != prevCountRef.current[index]?.Back
+                        item.b1 != prevCountRef.current[index]?.Back && appData.appData.highlightOdds
                           ? styles.animateSparkBack
                           : ""
                       } ${
-                        item.bs1 != prevCountRef.current[index]?.BackSize
+                        item.bs1 != prevCountRef.current[index]?.BackSize && appData.appData.highlightOdds
                           ? styles.animateSparkBack
                           : ""
                       }`}

@@ -2,10 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import styles from "../MatchOdds/MatchOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
   const betData = useBet();
   const expoData = useExposure();
+  const appData = useApp();
   const [hideBookMarker, sethideBookMarker] = useState("false");
   const [bookMarkerOdds, setBookMarkerOdds] = useState();
   const prevCountRef = useRef(bookMarkerOdds);
@@ -303,13 +305,13 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                     } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
                       prevCountRef.current &&
                       item?.ExchangePrices?.AvailableToBack[0].price !=
-                        prevCountRef.current[index]?.Back
+                        prevCountRef.current[index]?.Back && appData.appData.highlightOdds
                         ? styles.animateSparkBack
                         : ""
                     } ${
                       prevCountRef.current &&
                       item?.ExchangePrices?.AvailableToBack[0].size !=
-                        prevCountRef.current[index]?.BackSize
+                        prevCountRef.current[index]?.BackSize && appData.appData.highlightOdds
                         ? styles.animateSparkBack
                         : ""
                     }`}
@@ -324,13 +326,13 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                     } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
                       prevCountRef.current &&
                       item?.ExchangePrices?.AvailableToBack[0].price !=
-                        prevCountRef.current[index]?.Lay
+                        prevCountRef.current[index]?.Lay && appData.appData.highlightOdds
                         ? styles.animateSparkLay
                         : ""
                     } ${
                       prevCountRef.current &&
                       item?.ExchangePrices?.AvailableToBack[0].size !=
-                        prevCountRef.current[index]?.LaySize
+                        prevCountRef.current[index]?.LaySize && appData.appData.highlightOdds
                         ? styles.animateSparkLay
                         : ""
                     }`}

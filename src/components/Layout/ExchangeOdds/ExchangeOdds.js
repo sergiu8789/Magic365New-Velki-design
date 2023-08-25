@@ -4,6 +4,7 @@ import ApiService from "../../../services/ApiService";
 import { socket } from "../../../services/socket";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const ExchangeOdds = ({
   matchId,
@@ -17,6 +18,7 @@ export const ExchangeOdds = ({
 }) => {
   const betData = useBet();
   const expoData = useExposure();
+  const appData = useApp();
   const [matchOddsRunner, setMatchOddsRunner] = useState([]);
 
   const [fooEvents, setFooEvents] = useState([]);
@@ -459,12 +461,12 @@ export const ExchangeOdds = ({
                           styles.backBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
                           item?.ExchangePrices?.AvailableToBack[0].price !=
-                          prevCountRef.current[index]?.Back
+                          prevCountRef.current[index]?.Back && appData.appData.highlightOdds
                             ? styles.animateSparkBack
                             : ""
                         } ${
                           item?.ExchangePrices?.AvailableToBack[0].size !=
-                          prevCountRef.current[index]?.BackSize
+                          prevCountRef.current[index]?.BackSize && appData.appData.highlightOdds
                             ? styles.animateSparkBack
                             : ""
                         }`}
@@ -484,12 +486,12 @@ export const ExchangeOdds = ({
                           styles.LayBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
                           item?.ExchangePrices?.AvailableToLay[0].price !=
-                          prevCountRef.current[index]?.Lay
+                          prevCountRef.current[index]?.Lay && appData.appData.highlightOdds
                             ? styles.animateSparkLay
                             : ""
                         } ${
                           item?.ExchangePrices?.AvailableToLay[0].size !=
-                          prevCountRef.current[index]?.LaySize
+                          prevCountRef.current[index]?.LaySize && appData.appData.highlightOdds
                             ? styles.animateSparkLay
                             : ""
                         }`}

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "../MatchOdds/MatchOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
   const betData = useBet();
@@ -9,6 +10,7 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
   const [matchPremiumOdds, setMatchPremiumOdds] = useState("");
   const [premiumOddsId, setpremiumOddsId] = useState([]);
   const prevCountRef = useRef(matchPremiumOdds);
+  const appData = useApp();
 
   const placeBet = (item, selection, event) => {
     const betSelection = {
@@ -243,8 +245,8 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
                       styles.popularOddsStake
                     } d-inline-flex flex-column align-items-center justify-content-center me-auto ${
                       prevCountRef?.current &&
-                      selection.odds != prevCountRef.current[index]?.Back
-                        ? styles.animateSparkBack
+                      selection.odds != prevCountRef.current[index]?.Back && appData.appData.highlightOdds
+                        ? styles.animateSparkBack 
                         : ""
                     }`}
                   >

@@ -5,42 +5,24 @@ import { useApp } from "../../../context/AppContextProvider";
 
 export const Settings = () => {
   const appData = useApp();
-  const [highlightOdds, sethighlightOdds] = useState(true);
-  const [fullMarket, setfullMarket] = useState(true);
-
-  const changeFullMarket = () => {
-    if (fullMarket) {
-      setfullMarket(false);
-      appData.setAppData({ ...appData.appData, fullMarket: false });
-    } else {
-      setfullMarket(true);
-      appData.setAppData({ ...appData.appData, fullMarket: true });
-    }
-  };
-
-  const changeMarketOdds = () => {
-    if (highlightOdds) {
-      sethighlightOdds(false);
-      appData.setAppData({ ...appData.appData, highlightOdds: true });
-    } else {
-      sethighlightOdds(true);
-      appData.setAppData({ ...appData.appData, highlightOdds: false });
-    }
-  };
 
   useEffect(() => {
-    if (appData.appData.highlightOdds) {
-      sethighlightOdds(true);
-    } else {
-      sethighlightOdds(false);
-    }
+     if(!appData.appData.fullMarket)
+       localStorage.setItem("fullMarket",1);
+     else{
+       if(localStorage.getItem("fullMarket"))
+          localStorage.removeItem("fullMarket");
+     }
+  },[appData.appData.fullMarket]);
 
-    if (appData.appData.fullMarket) {
-      setfullMarket(true);
-    } else {
-      setfullMarket(false);
+  useEffect(() => {
+    if(!appData.appData.highlightOdds)
+      localStorage.setItem("highlightOdds",1);
+    else{
+      if(localStorage.getItem("highlightOdds"))
+         localStorage.removeItem("highlightOdds");
     }
-  }, [appData.appData.highlightOdds, appData.appData.fullMarket]);
+ },[appData.appData.highlightOdds])
 
   return (
     <React.Fragment>
@@ -60,8 +42,8 @@ export const Settings = () => {
               id="settingOdds"
               className={`${styles.btntoggle} position-absolute`}
               type="checkbox"
-              checked={highlightOdds}
-              onChange={() => changeMarketOdds()}
+              checked={appData.appData.highlightOdds}
+              onChange={() => appData.setAppData({...appData.appData,highlightOdds:!appData.appData.highlightOdds})}
             />
             <label
               className={styles.btntoggleLabel}
@@ -83,8 +65,8 @@ export const Settings = () => {
               id="settingEventsWidget"
               className={`${styles.btntoggle} position-absolute`}
               type="checkbox"
-              checked={fullMarket}
-              onChange={() => changeFullMarket()}
+              checked={appData.appData.fullMarket}
+              onChange={() => appData.setAppData({...appData.appData,fullMarket:!appData.appData.fullMarket})}
             />
             <label
               className={styles.btntoggleLabel}

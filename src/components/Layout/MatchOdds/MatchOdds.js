@@ -135,7 +135,7 @@ export const MatchOdds = ({
       )}
 
       {/* BookMarker container */}
-      {bookmakerOddsList && (
+      {bookmakerOddsList && appData.appData.fullMarket && (
         <BookmakerOdds
           oddsList={bookmakerOddsList}
           matchId={matchId}
