@@ -52,7 +52,6 @@ export const InPlayGames = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      console.log(playWindow.current.scrollTop);
       if (playWindow.current && liveWindow.current) {
         const el = playWindow.current;
         const playerBox = liveWindow.current.clientHeight;

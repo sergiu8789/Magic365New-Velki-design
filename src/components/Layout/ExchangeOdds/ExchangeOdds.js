@@ -4,6 +4,7 @@ import ApiService from "../../../services/ApiService";
 import { socket } from "../../../services/socket";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 import { useAuth } from "../../../context/AuthContextProvider";
 
 export const ExchangeOdds = ({
@@ -19,6 +20,7 @@ export const ExchangeOdds = ({
   const auth = useAuth();
   const betData = useBet();
   const expoData = useExposure();
+  const appData = useApp();
   const [matchOddsRunner, setMatchOddsRunner] = useState([]);
 
   const [fooEvents, setFooEvents] = useState([]);
@@ -414,6 +416,10 @@ export const ExchangeOdds = ({
                       <div className="col-12 d-inline-flex align-items-center">
                         <span
                           className={`${styles.runningExposure} ${
+                            expoData?.exchangeExpoData?.oldExpoData &&
+                            expoData?.exchangeExpoData?.oldExpoData[
+                              item.SelectionId
+                            ] &&
                             expoData?.exchangeExpoData?.oldExpoData[
                               item.SelectionId
                             ].toFixed(2) > 0
@@ -429,11 +435,15 @@ export const ExchangeOdds = ({
                               : "d-none"
                           }`}
                         >
-                          {parseFloat(
+                          {expoData?.exchangeExpoData?.oldExpoData &&
                             expoData?.exchangeExpoData?.oldExpoData[
                               item.SelectionId
-                            ]
-                          ).toFixed(2)}
+                            ] &&
+                            parseFloat(
+                              expoData?.exchangeExpoData?.oldExpoData[
+                                item.SelectionId
+                              ]
+                            ).toFixed(2)}
                         </span>
                         {expoData?.exchangeExpoData?.showUpdate &&
                           expoData?.exchangeExpoData?.updatedExpo &&
@@ -442,6 +452,10 @@ export const ExchangeOdds = ({
                           ] && (
                             <span
                               className={`${styles.runningExposure} ${
+                                expoData?.exchangeExpoData?.updatedExpo &&
+                                expoData?.exchangeExpoData?.updatedExpo[
+                                  item.SelectionId
+                                ] &&
                                 expoData?.exchangeExpoData?.updatedExpo[
                                   item.SelectionId
                                 ].toFixed(2) > 0
@@ -452,11 +466,15 @@ export const ExchangeOdds = ({
                               <div
                                 className={`${styles.ExposureArrow} icon-arrow-left`}
                               ></div>
-                              {parseFloat(
+                              {expoData?.exchangeExpoData?.updatedExpo &&
                                 expoData?.exchangeExpoData?.updatedExpo[
                                   item.SelectionId
-                                ]
-                              ).toFixed(2)}
+                                ] &&
+                                parseFloat(
+                                  expoData?.exchangeExpoData?.updatedExpo[
+                                    item.SelectionId
+                                  ]
+                                ).toFixed(2)}
                             </span>
                           )}
                       </div>
@@ -473,12 +491,14 @@ export const ExchangeOdds = ({
                           styles.backBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
                           item?.ExchangePrices?.AvailableToBack[0].price !=
-                          prevCountRef.current[index]?.Back
+                            prevCountRef.current[index]?.Back &&
+                          appData.appData.highlightOdds
                             ? styles.animateSparkBack
                             : ""
                         } ${
                           item?.ExchangePrices?.AvailableToBack[0].size !=
-                          prevCountRef.current[index]?.BackSize
+                            prevCountRef.current[index]?.BackSize &&
+                          appData.appData.highlightOdds
                             ? styles.animateSparkBack
                             : ""
                         }`}
@@ -498,12 +518,14 @@ export const ExchangeOdds = ({
                           styles.LayBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
                           item?.ExchangePrices?.AvailableToLay[0].price !=
-                          prevCountRef.current[index]?.Lay
+                            prevCountRef.current[index]?.Lay &&
+                          appData.appData.highlightOdds
                             ? styles.animateSparkLay
                             : ""
                         } ${
                           item?.ExchangePrices?.AvailableToLay[0].size !=
-                          prevCountRef.current[index]?.LaySize
+                            prevCountRef.current[index]?.LaySize &&
+                          appData.appData.highlightOdds
                             ? styles.animateSparkLay
                             : ""
                         }`}
