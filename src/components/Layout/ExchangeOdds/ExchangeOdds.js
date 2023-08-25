@@ -390,6 +390,8 @@ export const ExchangeOdds = ({
                       <div className="col-12 d-inline-flex align-items-center">
                         <span
                           className={`${styles.runningExposure} ${
+                            expoData?.exchangeExpoData?.oldExpoData && 
+                            expoData?.exchangeExpoData?.oldExpoData[item.SelectionId] &&
                             expoData?.exchangeExpoData?.oldExpoData[
                               item.SelectionId
                             ].toFixed(2) > 0
@@ -417,7 +419,9 @@ export const ExchangeOdds = ({
                             item.SelectionId
                           ] && (
                             <span
-                              className={`${styles.runningExposure} ${
+                              className={`${styles.runningExposure} ${ 
+                                expoData?.exchangeExpoData?.updatedExpo &&
+                                expoData?.exchangeExpoData?.updatedExpo[item.SelectionId] &&
                                 expoData?.exchangeExpoData?.updatedExpo[
                                   item.SelectionId
                                 ].toFixed(2) > 0

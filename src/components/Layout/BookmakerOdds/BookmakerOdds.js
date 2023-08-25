@@ -315,7 +315,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                     }`}
                   >
                     <span className={`${styles.oddStake}`}>{item.b1}</span>
-                    <span className={`${styles.oddExposure}`}>{item.bs1}</span>
+                    {/* <span className={`${styles.oddExposure}`}>{item.bs1}</span> */}
                   </div>
                   <div
                     onClick={(event) => placeBet(item, 2, event)}
@@ -336,7 +336,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                     }`}
                   >
                     <span className={`${styles.oddStake}`}>{item.l1}</span>
-                    <span className={`${styles.oddExposure}`}>{item.ls1}</span>
+                    {/* <span className={`${styles.oddExposure}`}>{item.ls1}</span> */}
                   </div>
                   {/* SUSPEND BOX */}
                   {item.s !== "ACTIVE" && (
