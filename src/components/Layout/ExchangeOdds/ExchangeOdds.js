@@ -175,21 +175,15 @@ export const ExchangeOdds = ({
           if (item?.selection_id === selection?.toString()) {
             if (item.type === 1)
               exposure[selection] =
-                exposure[selection] +
-                (parseFloat(item.amount) * parseFloat(item.odds) -
-                  parseFloat(item.amount));
+                exposure[selection] + (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
             else
               exposure[selection] =
-                exposure[selection] - parseFloat(item.amount);
+                exposure[selection] - (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
           } else {
             if (item.type === 1)
-              exposure[selection] =
-                exposure[selection] - parseFloat(item.amount);
+              exposure[selection] = exposure[selection] - parseFloat(item.amount);
             else
-              exposure[selection] =
-                exposure[selection] +
-                (parseFloat(item.amount) * parseFloat(item.odds) -
-                  parseFloat(item.amount));
+              exposure[selection] = exposure[selection] + parseFloat(item.amount);
           }
         });
       });

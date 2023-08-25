@@ -104,14 +104,14 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
         allSelections?.map((selection) => {
           if (item?.selection_id === selection) {
             if (item.type === 1)
-              exposure[selection] =
-                (exposure[selection] ? exposure[selection] : 0) +
-                (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
+              exposure[selection] = (exposure[selection] ? exposure[selection]: 0) +
+                 (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
                   parseFloat(item.amount));
             else
               exposure[selection] =
-                (exposure[selection] ? exposure[selection] : 0) -
-                parseFloat(item.amount);
+              (exposure[selection] ? exposure[selection]: 0) -
+                 (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
+                  parseFloat(item.amount));
           } else {
             if (item.type === 1)
               exposure[selection] =
@@ -119,9 +119,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                 parseFloat(item.amount);
             else
               exposure[selection] =
-                (exposure[selection] ? exposure[selection] : 0) +
-                (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
-                  parseFloat(item.amount));
+              (exposure[selection] ? exposure[selection]: 0) + parseFloat(item.amount);
           }
         });
       });
