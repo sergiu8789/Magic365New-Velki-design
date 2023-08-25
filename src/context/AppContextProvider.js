@@ -11,6 +11,7 @@ export const AppProvider = ({ children }) => {
     updatedPremiumTime: "",
     SportTabActive: "",
     appBetSlipOpen: "",
+    sportTabType: "by Competition",
   };
   const [appData, setAppData] = useState(initialValues);
   return (

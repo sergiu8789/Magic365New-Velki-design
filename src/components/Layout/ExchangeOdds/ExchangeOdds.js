@@ -4,6 +4,7 @@ import ApiService from "../../../services/ApiService";
 import { socket } from "../../../services/socket";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const ExchangeOdds = ({
   matchId,
@@ -15,6 +16,7 @@ export const ExchangeOdds = ({
   betList,
   playWindow,
 }) => {
+  const auth = useAuth();
   const betData = useBet();
   const expoData = useExposure();
   const [matchOddsRunner, setMatchOddsRunner] = useState([]);
@@ -83,33 +85,49 @@ export const ExchangeOdds = ({
   const getMatchOdds = () => {
     let marketTypes = [selectedMarket];
     setExchangeTabList(marketTypes);
-    ApiService.getMatchOdds(matchId).then((res) => {
-      if (res?.data?.odds?.length) {
-        let marketIds = [];
-        res?.data?.odds[0]?.forEach((item) => {
-          if (
-            item.market_type !== "fancy" &&
-            item.market_type !== "bookmaker" &&
-            item.market_type !== selectedMarket.market
-          ) {
+    ApiService.getMatchOdds(matchId)
+      .then((res) => {
+        if (res?.data?.odds?.length) {
+          let marketIds = [];
+          res?.data?.odds[0]?.forEach((item) => {
             if (
-              !marketTypes?.filter((type) => type.market_id === item.market_id)
-                ?.length
-            )
-              marketTypes.push({
-                market_id: item.market_id,
-                market: item.market_type,
-              });
-            marketIds.push(item.market_id);
+              item.market_type !== "fancy" &&
+              item.market_type !== "bookmaker" &&
+              item.market_type !== selectedMarket.market
+            ) {
+              if (
+                !marketTypes?.filter(
+                  (type) => type.market_id === item.market_id
+                )?.length
+              )
+                marketTypes.push({
+                  market_id: item.market_id,
+                  market: item.market_type,
+                });
+              marketIds.push(item.market_id);
+            }
+          });
+          if (marketIds.length) {
+            marketIds = [...new Set(marketIds)];
+            setMarketList(marketIds);
           }
-        });
-        if (marketIds.length) {
-          marketIds = [...new Set(marketIds)];
-          setMarketList(marketIds);
+          setExchangeTabList(marketTypes);
         }
-        setExchangeTabList(marketTypes);
-      }
-    });
+      })
+      .catch((err) => {
+        if (
+          err?.response?.data?.statusCode === 401 &&
+          err?.response?.data?.message === "Unauthorized"
+        ) {
+          localStorage.removeItem("token");
+          auth.setAuth({
+            ...auth.auth,
+            isloggedIn: false,
+            user: {},
+            showSessionExpire: true,
+          });
+        }
+      });
   };
 
   useEffect(() => {
@@ -175,15 +193,21 @@ export const ExchangeOdds = ({
           if (item?.selection_id === selection?.toString()) {
             if (item.type === 1)
               exposure[selection] =
-                exposure[selection] + (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
+                exposure[selection] +
+                (parseFloat(item.amount) * parseFloat(item.odds) -
+                  parseFloat(item.amount));
             else
               exposure[selection] =
-                exposure[selection] - (parseFloat(item.amount) * parseFloat(item.odds) - parseFloat(item.amount));
+                exposure[selection] -
+                (parseFloat(item.amount) * parseFloat(item.odds) -
+                  parseFloat(item.amount));
           } else {
             if (item.type === 1)
-              exposure[selection] = exposure[selection] - parseFloat(item.amount);
+              exposure[selection] =
+                exposure[selection] - parseFloat(item.amount);
             else
-              exposure[selection] = exposure[selection] + parseFloat(item.amount);
+              exposure[selection] =
+                exposure[selection] + parseFloat(item.amount);
           }
         });
       });

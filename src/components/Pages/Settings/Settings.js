@@ -12,21 +12,33 @@ export const Settings = () => {
     if (fullMarket) {
       setfullMarket(false);
       appData.setAppData({ ...appData.appData, fullMarket: false });
+      localStorage.setItem("fullMarket", false);
     } else {
       setfullMarket(true);
       appData.setAppData({ ...appData.appData, fullMarket: true });
+      localStorage.setItem("fullMarket", true);
     }
   };
 
   const changeMarketOdds = () => {
     if (highlightOdds) {
       sethighlightOdds(false);
-      appData.setAppData({ ...appData.appData, highlightOdds: true });
+      appData.setAppData({ ...appData.appData, highlightOdds: false });
+      localStorage.setItem("highlightOdds", false);
     } else {
       sethighlightOdds(true);
-      appData.setAppData({ ...appData.appData, highlightOdds: false });
+      appData.setAppData({ ...appData.appData, highlightOdds: true });
+      localStorage.setItem("highlightOdds", true);
     }
   };
+
+  useEffect(() => {
+    if (appData.appData.fullMarket) {
+      setfullMarket(true);
+    } else {
+      setfullMarket(false);
+    }
+  }, [appData.appData.fullMarket, fullMarket]);
 
   useEffect(() => {
     if (appData.appData.highlightOdds) {
@@ -34,13 +46,31 @@ export const Settings = () => {
     } else {
       sethighlightOdds(false);
     }
+  }, [appData.appData.highlightOdds, highlightOdds]);
 
-    if (appData.appData.fullMarket) {
-      setfullMarket(true);
+  useEffect(() => {
+    let fullMarket = localStorage.getItem("fullMarket");
+
+    if (fullMarket) {
+      appData.setAppData({ ...appData.appData, fullMarket: fullMarket });
+      setfullMarket(fullMarket);
     } else {
+      appData.setAppData({ ...appData.appData, fullMarket: false });
       setfullMarket(false);
     }
-  }, [appData.appData.highlightOdds, appData.appData.fullMarket]);
+  }, []);
+
+  useEffect(() => {
+    let flashOdds = localStorage.getItem("highlightOdds");
+
+    if (flashOdds) {
+      appData.setAppData({ ...appData.appData, highlightOdds: flashOdds });
+      sethighlightOdds(flashOdds);
+    } else {
+      appData.setAppData({ ...appData.appData, highlightOdds: false });
+      sethighlightOdds(false);
+    }
+  }, []);
 
   return (
     <React.Fragment>
@@ -60,7 +90,7 @@ export const Settings = () => {
               id="settingOdds"
               className={`${styles.btntoggle} position-absolute`}
               type="checkbox"
-              checked={highlightOdds}
+              checked={highlightOdds ? 1 : 0}
               onChange={() => changeMarketOdds()}
             />
             <label
@@ -83,7 +113,7 @@ export const Settings = () => {
               id="settingEventsWidget"
               className={`${styles.btntoggle} position-absolute`}
               type="checkbox"
-              checked={fullMarket}
+              checked={fullMarket ? 1 : 0}
               onChange={() => changeFullMarket()}
             />
             <label

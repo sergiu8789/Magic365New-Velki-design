@@ -1,13 +1,31 @@
 import React, { useEffect, useState } from "react";
 import styles from "./News.module.css";
 import ApiService from "../../../services/ApiService";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const News = () => {
   const [newsContent, setNewsContent] = useState([]);
+  const auth = useAuth();
+
   useEffect(() => {
-    ApiService.getNews().then((res) => {
-      if (res?.data?.rows) setNewsContent(res.data.rows);
-    });
+    ApiService.getNews()
+      .then((res) => {
+        if (res?.data?.rows) setNewsContent(res.data.rows);
+      })
+      .catch((err) => {
+        if (
+          err?.response?.data?.statusCode === 401 &&
+          err?.response?.data?.message === "Unauthorized"
+        ) {
+          localStorage.removeItem("token");
+          auth.setAuth({
+            ...auth.auth,
+            isloggedIn: false,
+            user: {},
+            showSessionExpire: true,
+          });
+        }
+      });
   }, []);
 
   return (

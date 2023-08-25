@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import styles from "./HomeGameCard.module.css";
 import { encrypt } from "../../../utils/crypto";
 import ApiService from "../../../services/ApiService";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const HomeGameCard = () => {
+  const auth = useAuth();
   const [gameTab, setGameTab] = useState("In-play");
   const [value, setValue] = useState("live");
   const [startGameDate, setStartDate] = useState("");
@@ -53,8 +55,8 @@ export const HomeGameCard = () => {
       allSportsCount = 0,
       soccerCount = 0,
       tennisCount = 0;
-    ApiService.sportsPlayCount(value, startGameDate, endGameDate).then(
-      (res) => {
+    ApiService.sportsPlayCount(value, startGameDate, endGameDate)
+      .then((res) => {
         if (res.data) {
           gameDataList = res.data;
           gameDataList.map((item, index) => {
@@ -74,8 +76,21 @@ export const HomeGameCard = () => {
             });
           });
         }
-      }
-    );
+      })
+      .catch((err) => {
+        if (
+          err?.response?.data?.statusCode === 401 &&
+          err?.response?.data?.message === "Unauthorized"
+        ) {
+          localStorage.removeItem("token");
+          auth.setAuth({
+            ...auth.auth,
+            isloggedIn: false,
+            user: {},
+            showSessionExpire: true,
+          });
+        }
+      });
   };
 
   const gotoLeagues = () => {

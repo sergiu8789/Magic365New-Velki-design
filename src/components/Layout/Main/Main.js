@@ -8,6 +8,7 @@ import { PublicRoutes } from "../../../routes/publicRoutes";
 import "../../../assets/css/iconmoon.css";
 import "../../../assets/css/style.css";
 import { useAuth } from "../../../context/AuthContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 import { Loader } from "../Loader/Loader";
 import { Offline, Online } from "react-detect-offline";
 import { NoInternet } from "../NoInternet/NoInternet";
@@ -16,6 +17,7 @@ import { socket } from "../../../services/socket";
 function Main() {
   const location = useLocation();
   const auth = useAuth();
+  const appData = useApp();
 
   const fetchWalletMoney = () => {
     ApiService.wallet()

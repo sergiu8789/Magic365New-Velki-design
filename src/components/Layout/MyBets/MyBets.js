@@ -104,15 +104,30 @@ export const MyBets = ({ openMyBets }) => {
       item.market_id,
       item.market_type,
       item.market_name ? item.market_name : null
-    ).then((res) => {
-      if (res?.data?.rows) {
-        setBetList(res.data.rows);
-        setBetListCount(res.data.count);
-        appData.setAppData({ ...appData.appData, listLoading: false });
-      } else {
-        appData.setAppData({ ...appData.appData, listLoading: false });
-      }
-    });
+    )
+      .then((res) => {
+        if (res?.data?.rows) {
+          setBetList(res.data.rows);
+          setBetListCount(res.data.count);
+          appData.setAppData({ ...appData.appData, listLoading: false });
+        } else {
+          appData.setAppData({ ...appData.appData, listLoading: false });
+        }
+      })
+      .catch((err) => {
+        if (
+          err?.response?.data?.statusCode === 401 &&
+          err?.response?.data?.message === "Unauthorized"
+        ) {
+          localStorage.removeItem("token");
+          auth.setAuth({
+            ...auth.auth,
+            isloggedIn: false,
+            user: {},
+            showSessionExpire: true,
+          });
+        }
+      });
   };
 
   const betDetailList = () => {

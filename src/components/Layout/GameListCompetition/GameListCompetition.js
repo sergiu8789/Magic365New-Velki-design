@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styles from "./GameListCompetition.module.css";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const GameListCompetition = ({ setsortGameList }) => {
+  const appData = useApp();
   const [competeDrop, setcompeteDrop] = useState(false);
-  const [sortCompetition, setSortCompetition] = useState("by Competition");
-  const competionName = ["by Competition", "by Time", "by Matched"];
+  const [sortCompetition, setSortCompetition] = useState(
+    appData.appData.sportTabType
+  );
+  const competionName = ["by Competition", "by Time"];
 
   const openCompetDrop = () => {
     if (competeDrop) {
@@ -15,6 +19,7 @@ export const GameListCompetition = ({ setsortGameList }) => {
   };
 
   const selectCompetion = (item) => {
+    appData.setAppData({ ...appData.appData, sportTabType: item });
     setSortCompetition(item);
     setsortGameList(item);
     setcompeteDrop(false);

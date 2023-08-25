@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./MatchLiveCard.module.css";
 import LiveScoreApiService from "../../../services/LiveScoreApiService";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 export const MatchLiveCard = ({
   streamUrl,
@@ -10,13 +11,27 @@ export const MatchLiveCard = ({
   setStreamOutScroll,
 }) => {
   const [ipAddress, setIPAddress] = useState("");
+  const auth = useAuth();
 
   useEffect(() => {
     LiveScoreApiService.getIP("https://api.ipify.org?format=json")
       .then((response) => {
         if (response?.ip) setIPAddress(response.ip);
       })
-      .catch((error) => console.log(error));
+      .catch((err) => {
+        if (
+          err?.response?.data?.statusCode === 401 &&
+          err?.response?.data?.message === "Unauthorized"
+        ) {
+          localStorage.removeItem("token");
+          auth.setAuth({
+            ...auth.auth,
+            isloggedIn: false,
+            user: {},
+            showSessionExpire: true,
+          });
+        }
+      });
   }, []);
 
   const closeStremingBox = () => {

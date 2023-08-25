@@ -28,7 +28,6 @@
     font-weight: 700;
     line-height: 20px;
     align-self: center;
-
 }
 
 .sortFilterBtn {
@@ -271,6 +270,49 @@
 .gameAllCompeteBox {
     background: rgb(238, 246, 251);
     padding: 12px 10px;
+}
+
+/* BY TIME LIST */
+.GameTabTitle.allTabTitle {
+    padding: 0 10px;
+    min-height: 45px;
+    background: #000;
+}
+
+.GameTabTitle.allTabTitle .titleGameName:before {
+    background: #ffc800;
+}
+
+.GameTabTitle .titleGameName {
+    color: #ffc800;
+}
+
+.singleGameCardRow {
+    gap: 10px;
+    border-bottom: 1px solid rgb(238, 246, 251);
+}
+
+.singleGameCardRow .bgInPlay, .todayPlay, .tomorrowPlay {
+    font-size: 12px;
+    padding: 0 6px;
+}
+
+.singleGameCardRow:last-child {
+    border-bottom: none;
+}
+
+.singleGameCardRow .gameHeaderRow {
+    padding: 10px 5px 10px 0px;
+}
+
+.todayPlay, .tomorrowPlay {
+    background: rgb(255, 216, 77);
+    color: #000;
+    font-weight: 700;
+}
+
+.tomorrowPlay {
+    background: rgb(226, 234, 239);
 }
 
 @media only screen and (max-width: 568px) {

@@ -21,6 +21,8 @@ export const Sports = () => {
   const [inPlayCheck, setPlayCheck] = useState(true);
   const [tournamentList, setTournamentList] = useState({});
   const [matchIds, setMatchIds] = useState([]);
+  const [sortGameList, setsortGameList] = useState("by Competition");
+  const [storeTournament, setStoreTournament] = useState("");
   const playRef = useRef([]);
   const tabRef = useRef([]);
 
@@ -147,7 +149,44 @@ export const Sports = () => {
     },
   ];
 
+  const getAllTournament = (res) => {
+    let tournaments = { Cricket: {}, Soccer: {}, Tennis: {} };
+    let matchIdList = [];
+    res?.data?.map((item, index) => {
+      matchIdList.push(item.id);
+      Object.keys(tournaments)?.map((tour) => {
+        if (item.name === tour) {
+          if (sortGameList === "by Time" || sortGameList === "by Matched") {
+            if (tournaments[tour]?.matches) {
+              tournaments[tour].matches.push(item);
+            } else {
+              tournaments[tour] = {
+                matches: [],
+                open: true,
+              };
+              tournaments[tour].matches.push(item);
+            }
+          } else if (sortGameList === "by Competition") {
+            if (tournaments[tour][item.trn_name]?.matches) {
+              tournaments[tour][item.trn_name].matches.push(item);
+            } else {
+              tournaments[tour][item.trn_name] = {
+                matches: [],
+                open: true,
+              };
+              tournaments[tour][item.trn_name]?.matches.push(item);
+            }
+          }
+        }
+      });
+    });
+    appData.setAppData({ ...appData.appData, listLoading: false });
+    setMatchIds(matchIdList);
+    setTournamentList(tournaments);
+  };
+
   useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
     if (inPlayTab) {
       let timeTab = "live";
       let activeTab = tabActive;
@@ -181,27 +220,8 @@ export const Sports = () => {
         endDate
       ).then((res) => {
         if (res?.data) {
-          appData.setAppData({ ...appData.appData, listLoading: false });
-          let tournaments = { Cricket: {}, Soccer: {}, Tennis: {} };
-          let matchIdList = [];
-          res?.data?.map((item, index) => {
-            matchIdList.push(item.id);
-            Object.keys(tournaments)?.map((tour) => {
-              if (item.name === tour) {
-                if (tournaments[tour][item.trn_name]?.matches) {
-                  tournaments[tour][item.trn_name].matches.push(item);
-                } else {
-                  tournaments[tour][item.trn_name] = {
-                    matches: [],
-                    open: true,
-                  };
-                  tournaments[tour][item.trn_name]?.matches.push(item);
-                }
-              }
-            });
-          });
-          setMatchIds(matchIdList);
-          setTournamentList(tournaments);
+          getAllTournament(res);
+          setStoreTournament(res);
         } else {
           setMatchIds([]);
           setTournamentList({});
@@ -209,6 +229,11 @@ export const Sports = () => {
       });
     }
   }, [inPlayTab, tabActive]);
+
+  useEffect(() => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
+    getAllTournament(storeTournament);
+  }, [sortGameList]);
 
   return (
     <React.Fragment>
@@ -301,6 +326,9 @@ export const Sports = () => {
             setTournamentList={setTournamentList}
             inPlay={inPlayTab === "In-Play" ? true : false}
             gameType={tabActive}
+            setsortGameList={setsortGameList}
+            sortGameList={sortGameList}
+            playType={inPlayTab}
           />
         ) : (
           <NoData title="No Data" />

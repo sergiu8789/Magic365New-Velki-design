@@ -57,15 +57,30 @@ export const MatchOdds = ({
   };
 
   const getMatchBets = (id) => {
-    ApiService.fetchAllBets(id).then((res) => {
-      if (res?.data?.rows) {
-        betData.setBetData({
-          ...betData.betData,
-          betSuccess: false,
-        });
-        setbetList(res.data.rows);
-      }
-    });
+    ApiService.fetchAllBets(id)
+      .then((res) => {
+        if (res?.data?.rows) {
+          betData.setBetData({
+            ...betData.betData,
+            betSuccess: false,
+          });
+          setbetList(res.data.rows);
+        }
+      })
+      .catch((err) => {
+        if (
+          err?.response?.data?.statusCode === 401 &&
+          err?.response?.data?.message === "Unauthorized"
+        ) {
+          localStorage.removeItem("token");
+          auth.setAuth({
+            ...auth.auth,
+            isloggedIn: false,
+            user: {},
+            showSessionExpire: true,
+          });
+        }
+      });
   };
 
   useEffect(() => {

@@ -270,7 +270,7 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
                                 expoData?.premiumExpoData?.oldExpoData[item.id][
                                   selection.id
                                 ]
-                              )?.toFixed(2) > -1
+                              )?.toFixed(2) > 0
                                 ? styles.runningPos
                                 : styles.runningNeg
                             } d-inline-flex align-items-center`}
@@ -291,9 +291,11 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
                             className={`${styles.runningExposure} ${
                               styles.premiumExposure
                             } ${
-                              expoData?.premiumExpoData?.updatedExpoData[
-                                item.id
-                              ][selection.id]?.toFixed(2) > 0
+                              parseFloat(
+                                expoData?.premiumExpoData?.updatedExpoData[
+                                  item.id
+                                ][selection.id]
+                              )?.toFixed(2) > 0
                                 ? styles.runningPos
                                 : styles.runningNeg
                             } d-inline-flex align-items-center`}
