@@ -407,7 +407,10 @@ export const ExchangeOdds = ({
                               : "d-none"
                           }`}
                         >
-                          {parseFloat(
+                          {
+                           expoData?.exchangeExpoData?.oldExpoData && 
+                           expoData?.exchangeExpoData?.oldExpoData[item.SelectionId] &&
+                          parseFloat(
                             expoData?.exchangeExpoData?.oldExpoData[
                               item.SelectionId
                             ]
@@ -432,7 +435,10 @@ export const ExchangeOdds = ({
                               <div
                                 className={`${styles.ExposureArrow} icon-arrow-left`}
                               ></div>
-                              {parseFloat(
+                              {
+                               expoData?.exchangeExpoData?.updatedExpo &&
+                               expoData?.exchangeExpoData?.updatedExpo[item.SelectionId] &&
+                               parseFloat(
                                 expoData?.exchangeExpoData?.updatedExpo[
                                   item.SelectionId
                                 ]
