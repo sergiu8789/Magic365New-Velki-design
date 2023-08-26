@@ -20,7 +20,7 @@ export const News = () => {
           localStorage.removeItem("token");
           auth.setAuth({
             ...auth.auth,
-            isloggedIn: false,
+            loggedIn: false,
             user: {},
             showSessionExpire: true,
           });
