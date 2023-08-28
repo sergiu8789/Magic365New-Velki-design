@@ -63,7 +63,7 @@ export const LeagueMatchBets = ({ selectedMatch, setleagueMatch }) => {
           localStorage.removeItem("token");
           auth.setAuth({
             ...auth.auth,
-            isloggedIn: false,
+            loggedIn: false,
             user: {},
             showSessionExpire: true,
           });

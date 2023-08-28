@@ -39,7 +39,7 @@ function Main() {
           localStorage.removeItem("token");
           auth.setAuth({
             ...auth.auth,
-            isloggedIn: false,
+            loggedIn: false,
             user: {},
             fetchWallet: false,
             showSessionExpire: true,

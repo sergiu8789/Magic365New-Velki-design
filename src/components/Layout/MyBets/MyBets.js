@@ -122,7 +122,7 @@ export const MyBets = ({ openMyBets }) => {
           localStorage.removeItem("token");
           auth.setAuth({
             ...auth.auth,
-            isloggedIn: false,
+            loggedIn: false,
             user: {},
             showSessionExpire: true,
           });
@@ -165,7 +165,7 @@ export const MyBets = ({ openMyBets }) => {
             localStorage.removeItem("token");
             auth.setAuth({
               ...auth.auth,
-              isloggedIn: false,
+              loggedIn: false,
               user: {},
               showSessionExpire: true,
             });

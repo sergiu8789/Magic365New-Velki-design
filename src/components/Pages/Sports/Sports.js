@@ -9,6 +9,7 @@ import { encrypt } from "../../../utils/crypto";
 import { socket } from "../../../services/socket";
 import { useApp } from "../../../context/AppContextProvider";
 import { NoData } from "../../Layout/NoData/NoData";
+import { SportsSearch } from "../../Layout/SportsSearch/SportsSearch";
 
 export const Sports = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ export const Sports = () => {
   const [matchIds, setMatchIds] = useState([]);
   const [sortGameList, setsortGameList] = useState("by Competition");
   const [storeTournament, setStoreTournament] = useState("");
+  const [sportSearch, setSportSearch] = useState(false);
   const playRef = useRef([]);
   const tabRef = useRef([]);
 
@@ -335,6 +337,7 @@ export const Sports = () => {
         )}
       </div>
       <BetSlip />
+      {/* <SportsSearch /> */}
     </React.Fragment>
   );
 };
