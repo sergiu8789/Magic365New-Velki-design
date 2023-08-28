@@ -9,7 +9,7 @@ import { encrypt } from "../../../utils/crypto";
 import { socket } from "../../../services/socket";
 import { useApp } from "../../../context/AppContextProvider";
 import { NoData } from "../../Layout/NoData/NoData";
-import { SportsSearch } from "../../Layout/SportsSearch/SportsSearch";
+// import { SportsSearch } from "../../Layout/SportsSearch/SportsSearch";
 
 export const Sports = () => {
   const location = useLocation();
