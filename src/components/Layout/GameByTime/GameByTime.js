@@ -12,9 +12,9 @@ export const GameByTime = ({
   inPlay,
   gameType,
   setsortGameList,
+  sortGameList,
   playType,
 }) => {
-  console.log(allGameList, tournamentList);
   const navigate = useNavigate();
   const [closeAllMatchBox, setcloseAllMatchBox] = useState({
     Cricket: false,
@@ -72,13 +72,25 @@ export const GameByTime = ({
                     >
                       {tournamentList[tour]?.matches
                         ?.sort(function (a, b) {
-                          if (a.date < b.date) {
-                            return -1;
+                          if(sortGameList === 'by Time'){
+                            if (a.date < b.date) {
+                              return -1;
+                            }
+                            if (a.date > b.date) {
+                              return 1;
+                            }
+                            return 0;
                           }
-                          if (a.date > b.date) {
-                            return 1;
+                          if(sortGameList === 'by Matched'){
+                            
+                            if (a.totalMatched > b.totalMatched) {
+                              return -1;
+                            }
+                            if (a.totalMatched < b.totalMatched || !a.totalMatched || !b.totalMatched) {
+                              return 1;
+                            }
+                            return 0;
                           }
-                          return 0;
                         })
                         .map((match, matchIndex) => {
                           return (
@@ -87,6 +99,8 @@ export const GameByTime = ({
                               className={`${styles.singleGameCardRow} col-12 d-inline-flex align-items-stretch justify-content-between`}
                               onClick={() => openGameDetail(match)}
                             >
+                              {sortGameList === 'by Time' &&
+                              <>
                               {inPlay ? (
                                 <div
                                   className={`${styles.bgInPlay} d-inline-flex flex-shrink-0 align-items-center justify-content-center`}
@@ -107,9 +121,9 @@ export const GameByTime = ({
                                   {getDateYearNumFormat(match.date, 1)} <br />
                                   {formatTimeHh(match.date, 1)}
                                 </div>
-                              ) : (
-                                <></>
-                              )}
+                              ) : ""}
+                              </>
+                              }
                               <div
                                 className={`${styles.gameHeaderRow} col-12 flex-shrink-1 d-inline-flex align-items-center justify-content-between`}
                               >
@@ -117,7 +131,7 @@ export const GameByTime = ({
                                   className={`${styles.gamesTypeName} d-inline-flex align-items-center`}
                                 >
                                   <div className={styles.gameFavorate}>
-                                    <span className="icon-star"></span>
+                                    <span className="icon-star ml-1"></span>
                                   </div>
                                   <div className="d-inline-flex flex-column">
                                     <div
@@ -130,7 +144,9 @@ export const GameByTime = ({
                                       className={`${styles.gameBetType} d-inline-flex align-items-center`}
                                     >
                                       <i className="icon-live"></i>
-
+                                        <span className={styles.matchedData}>
+                                          Matched - {match.totalMatched ? match.totalMatched : 0 }
+                                        </span>
                                       {match.has_fancy ? (
                                         <div className="icon-fancybet">
                                           <span className="icon-fancybet path1"></span>
@@ -141,6 +157,7 @@ export const GameByTime = ({
                                       ) : (
                                         ""
                                       )}
+                                      
                                       {match.has_premium ? (
                                         <div className="icon-sportsbook">
                                           <span className="icon-sportsbook path1"></span>

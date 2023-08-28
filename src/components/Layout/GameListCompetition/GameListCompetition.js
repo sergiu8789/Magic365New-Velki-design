@@ -8,7 +8,7 @@ export const GameListCompetition = ({ setsortGameList }) => {
   const [sortCompetition, setSortCompetition] = useState(
     appData.appData.sportTabType
   );
-  const competionName = ["by Competition", "by Time"];
+  const competionName = ["by Competition", "by Time","by Matched"];
 
   const openCompetDrop = () => {
     if (competeDrop) {
