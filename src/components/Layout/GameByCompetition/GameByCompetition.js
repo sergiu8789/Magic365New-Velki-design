@@ -6,9 +6,6 @@ import { GameListCompetition } from "../GameListCompetition/GameListCompetition"
 import {
   getDateYearNumFormat,
   formatTimeHh,
-  compareHours,
-  compareMinutes,
-  compareMonth,
   compareDate,
 } from "../../../utils/helper";
 
@@ -57,16 +54,9 @@ export const GameByCompetition = ({
     setcloseAllMatchBox({ ...closeAllMatchBox });
   };
 
-  const setGameFavrite = (
-    event,
-    hour,
-    minute,
-    matchHh,
-    matchMm,
-    matchId,
-    match
-  ) => {
-    if (hour < matchHh || (hour === matchHh && minute < matchMm)) {
+  const setGameFavrite = (event, date, matchId, match) => {
+    let dateVal = compareDate(date);
+    if (dateVal) {
       let newFavArry = [];
       newFavArry = [...faveGame];
       if (newFavArry.indexOf(matchId) < 0) {
@@ -176,18 +166,7 @@ export const GameByCompetition = ({
                                   >
                                     <div
                                       className={`${styles.gameFavorate} ${
-                                        new Date().getMonth <
-                                          compareMonth(match.date) ||
-                                        (new Date().getMonth ===
-                                          compareMonth(match.date) &&
-                                          new Date.getDate() <
-                                            compareDate(match.date) &&
-                                          new Date().getHours() <
-                                            compareHours(match.date)) ||
-                                        (new Date().getHours() ===
-                                          compareHours(match.date) &&
-                                          new Date().getMinutes() <
-                                            compareMinutes(match.date))
+                                        compareDate(match.date)
                                           ? styles.bookMarkGame
                                           : styles.inactiveGame
                                       } ${
@@ -197,21 +176,13 @@ export const GameByCompetition = ({
                                       onClick={(event) =>
                                         setGameFavrite(
                                           event,
-                                          new Date().getHours(),
-                                          new Date().getMinutes(),
-                                          compareHours(match.date),
-                                          compareMinutes(match.date),
+                                          compareDate(match.date),
                                           matchIndex,
                                           match
                                         )
                                       }
                                     >
-                                      {new Date().getHours() <
-                                        compareHours(match.date) ||
-                                      (new Date().getHours() ===
-                                        compareHours(match.date) &&
-                                        new Date().getMinutes() <
-                                          compareMinutes(match.date)) ? (
+                                      {compareDate(match.date) ? (
                                         <span className="icon-star invisible"></span>
                                       ) : (
                                         <span className="icon-star-solid"></span>

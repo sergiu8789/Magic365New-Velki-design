@@ -98,28 +98,35 @@ export const formatTimeHh = (date, type) => {
   return strTime;
 };
 
-export const compareHours = (date) => {
-  const newDate = new Date(date);
-  var hours = newDate.getHours();
-  return hours;
-};
-
-export const compareMinutes = (date) => {
-  const newDate = new Date(date);
-  var hours = newDate.getMinutes();
-  return hours;
-};
-
-export const compareMonth = (date) => {
-  const newDate = new Date(date);
-  var month = newDate.getMonth();
-  return month;
-};
-
 export const compareDate = (date) => {
   const newDate = new Date(date);
-  var date = newDate.getDate();
-  return date;
+  const month = newDate.getMonth();
+  const newdate = newDate.getDate();
+  const hours = newDate.getHours();
+  const minutes = newDate.getMinutes();
+
+  const nowDate = new Date();
+  const nowMonth = nowDate.getMonth();
+  const nowdate = nowDate.getDate();
+  const nowHours = nowDate.getHours();
+  const nowTime = nowDate.getMinutes();
+  if (
+    (month === nowMonth && newdate === nowdate) ||
+    month < nowMonth ||
+    (month === nowMonth && newdate < nowdate)
+  ) {
+    if (nowHours < hours || nowHours === hours || minutes > nowTime) {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (
+    month > nowMonth ||
+    (nowMonth === month && nowDate === newDate) ||
+    (nowMonth === month && nowDate < newDate)
+  ) {
+    return true;
+  }
 };
 
 export const matchDateOption = (date, inplay = false) => {
