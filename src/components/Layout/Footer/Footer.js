@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MyBets } from "../MyBets/MyBets";
 import styles from "./Footer.module.css";
+import { useAuth } from "../../../context/AuthContextProvider";
 
 function Footer() {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ function Footer() {
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [openMyBets, setopenMyBets] = useState("");
   const footerTab = useRef();
+  const auth = useAuth();
 
   useEffect(() => {
     if (footerTab && footerTab.current) {
@@ -27,8 +29,12 @@ function Footer() {
         navigate(link);
         setTabPosLeft(TabPos);
       } else if (type === "click" && click === "bets") {
-        let LoginRand = Math.floor(Math.random() * 100000) + 1;
-        setopenMyBets(LoginRand);
+        if (auth.auth.loggedIn) {
+          let LoginRand = Math.floor(Math.random() * 100000) + 1;
+          setopenMyBets(LoginRand);
+        } else {
+          navigate("/login");
+        }
       }
     }, 200);
   };
