@@ -3,7 +3,14 @@ import { useNavigate } from "react-router-dom";
 import styles from "../GameList/GameList.module.css";
 import { NoData } from "../NoData/NoData";
 import { GameListCompetition } from "../GameListCompetition/GameListCompetition";
-import { getDateYearNumFormat, formatTimeHh } from "../../../utils/helper";
+import {
+  getDateYearNumFormat,
+  formatTimeHh,
+  compareHours,
+  compareMinutes,
+  compareMonth,
+  compareDate,
+} from "../../../utils/helper";
 
 export const GameByCompetition = ({
   allGameList,
@@ -19,6 +26,7 @@ export const GameByCompetition = ({
     Soccer: false,
     Tennis: false,
   });
+  const [faveGame, setFaveGame] = useState([]);
 
   const openMatchDetail = (gameType, tournament) => {
     tournamentList[gameType][tournament].open =
@@ -47,6 +55,29 @@ export const GameByCompetition = ({
     closeAllMatchBox[gameType] = !closeAllMatchBox[gameType];
     setTournamentList({ ...tournamentList });
     setcloseAllMatchBox({ ...closeAllMatchBox });
+  };
+
+  const setGameFavrite = (
+    event,
+    hour,
+    minute,
+    matchHh,
+    matchMm,
+    matchId,
+    match
+  ) => {
+    if (hour < matchHh || (hour === matchHh && minute < matchMm)) {
+      let newFavArry = [];
+      newFavArry = [...faveGame];
+      if (newFavArry.indexOf(matchId) < 0) {
+        setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+      } else {
+        let betIndex = newFavArry.indexOf(matchId);
+        newFavArry.splice(betIndex, 1);
+        setFaveGame(faveGame.filter((x) => x !== matchId));
+      }
+      event.stopPropagation();
+    }
   };
 
   return (
@@ -143,8 +174,48 @@ export const GameByCompetition = ({
                                   <div
                                     className={`${styles.gamesTypeName} d-inline-flex align-items-center`}
                                   >
-                                    <div className={styles.gameFavorate}>
-                                      <span className="icon-star"></span>
+                                    <div
+                                      className={`${styles.gameFavorate} ${
+                                        new Date().getMonth <
+                                          compareMonth(match.date) ||
+                                        (new Date().getMonth ===
+                                          compareMonth(match.date) &&
+                                          new Date.getDate() <
+                                            compareDate(match.date) &&
+                                          new Date().getHours() <
+                                            compareHours(match.date)) ||
+                                        (new Date().getHours() ===
+                                          compareHours(match.date) &&
+                                          new Date().getMinutes() <
+                                            compareMinutes(match.date))
+                                          ? styles.bookMarkGame
+                                          : styles.inactiveGame
+                                      } ${
+                                        faveGame.indexOf(matchIndex) > -1 &&
+                                        styles.favourateGame
+                                      } position-relative`}
+                                      onClick={(event) =>
+                                        setGameFavrite(
+                                          event,
+                                          new Date().getHours(),
+                                          new Date().getMinutes(),
+                                          compareHours(match.date),
+                                          compareMinutes(match.date),
+                                          matchIndex,
+                                          match
+                                        )
+                                      }
+                                    >
+                                      {new Date().getHours() <
+                                        compareHours(match.date) ||
+                                      (new Date().getHours() ===
+                                        compareHours(match.date) &&
+                                        new Date().getMinutes() <
+                                          compareMinutes(match.date)) ? (
+                                        <span className="icon-star invisible"></span>
+                                      ) : (
+                                        <span className="icon-star-solid"></span>
+                                      )}
                                     </div>
                                     <div className="d-inline-flex flex-column">
                                       <div

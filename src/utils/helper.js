@@ -98,6 +98,30 @@ export const formatTimeHh = (date, type) => {
   return strTime;
 };
 
+export const compareHours = (date) => {
+  const newDate = new Date(date);
+  var hours = newDate.getHours();
+  return hours;
+};
+
+export const compareMinutes = (date) => {
+  const newDate = new Date(date);
+  var hours = newDate.getMinutes();
+  return hours;
+};
+
+export const compareMonth = (date) => {
+  const newDate = new Date(date);
+  var month = newDate.getMonth();
+  return month;
+};
+
+export const compareDate = (date) => {
+  const newDate = new Date(date);
+  var date = newDate.getDate();
+  return date;
+};
+
 export const matchDateOption = (date, inplay = false) => {
   if (inplay) return "In-Play";
   const newDate = new Date(date);

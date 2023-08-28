@@ -9,7 +9,8 @@ import { encrypt } from "../../../utils/crypto";
 import { socket } from "../../../services/socket";
 import { useApp } from "../../../context/AppContextProvider";
 import { NoData } from "../../Layout/NoData/NoData";
-// import { SportsSearch } from "../../Layout/SportsSearch/SportsSearch";
+import { SportsSearch } from "../../Layout/SportsSearch/SportsSearch";
+import { FavourateGames } from "../../Layout/FavourateGames/FavourateGames";
 
 export const Sports = () => {
   const location = useLocation();
@@ -26,6 +27,7 @@ export const Sports = () => {
   const [sortGameList, setsortGameList] = useState("by Competition");
   const [storeTournament, setStoreTournament] = useState("");
   const [sportSearch, setSportSearch] = useState(false);
+  const [favorateGame, setfavorateGame] = useState(false);
   const playRef = useRef([]);
   const tabRef = useRef([]);
 
@@ -103,6 +105,7 @@ export const Sports = () => {
     setTabLineWidth(widthTab);
     setTabPosLeft(TabPos);
     setinPlayTab(name);
+    setfavorateGame(false);
   };
 
   const activeSportsTab = (event, name, gameId) => {
@@ -296,7 +299,9 @@ export const Sports = () => {
                 <React.Fragment key={index}>
                   <span
                     className={`${styles.inPlayTabName} d-inline-flex ${
-                      item.name === inPlayTab && styles.inPlayTabActive
+                      item.name === inPlayTab &&
+                      favorateGame === false &&
+                      styles.inPlayTabActive
                     }`}
                     ref={(element) => (playRef.current[index] = element)}
                     onClick={(event) => activeGameTab(event, item.name)}
@@ -308,13 +313,19 @@ export const Sports = () => {
               );
             })}
             <span
-              className={`text-icon-light icon-star-solid ${styles.inPlayTabIcon}`}
+              className={`text-icon-light icon-star-solid ${
+                styles.inPlayTabIcon
+              } ${favorateGame && styles.activeStar}`}
+              onClick={() => setfavorateGame(true)}
             ></span>
             <span
               className={`text-icon-light icon-search ${styles.inPlayTabIcon}`}
+              onClick={() => setSportSearch(true)}
             ></span>
             <div
-              className={`${styles.activeLine} position-absolute d-inline-flex`}
+              className={`${styles.activeLine} position-absolute ${
+                favorateGame ? "d-none" : "d-inline-flex"
+              }`}
               style={{
                 width: TabLineWidth + "px",
                 transform: "translateX(" + TabPosLeft + "px)",
@@ -368,7 +379,13 @@ export const Sports = () => {
         )}
       </div>
       <BetSlip />
-      {/* <SportsSearch /> */}
+      {sportSearch && (
+        <SportsSearch
+          sportSearch={sportSearch}
+          setSportSearch={setSportSearch}
+        />
+      )}
+      {favorateGame && <FavourateGames />}
     </React.Fragment>
   );
 };

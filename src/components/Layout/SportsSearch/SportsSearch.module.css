@@ -1,0 +1,78 @@
+.searchLayer {
+    top: 50px;
+    background: #eef6fb;
+    z-index: 1000;
+    max-width: 480px;
+}
+
+.SearchBox {
+    height: 54px;
+    background: #000;
+}
+
+.matchSearch {
+    padding: 13px;
+    font-size: 18px;
+    color: #FFF;
+    font-weight: 500;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+}
+
+.matchSearch:focus {
+    outline: none;
+    border: none
+}
+
+.closeSearch {
+    height: 54px;
+    width: 54px;
+    font-size: 15px;
+    color: #FFF;
+}
+
+.allSearchResult {
+    height: 100%;
+}
+
+.recentSearches {
+    padding: 8px 17px;
+}
+
+.leagueTitle {
+    font-size: 19px;
+    font-weight: 700;
+    color: #1E1E1E;
+}
+
+.allRecentHistory {
+    border-radius: 13px;
+    gap: 1px 0px;
+    margin-top: 10px;
+    background: rgb(212, 224, 229);
+}
+
+.recentSearchRow {
+    background: #FFF;
+    min-height: 55px;
+    padding: 0 10px;
+}
+
+.recentSearchName {
+    gap: 10px;
+    font-size: 17px;
+    color: #000;
+}
+
+.searchName {
+    font-size: 18px;
+    color: #000;
+}
+
+.searchIcon {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+    color: #7e919e;
+    font-size: 17px;
+}
