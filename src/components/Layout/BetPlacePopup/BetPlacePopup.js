@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styles from "./BetPlacePopup.module.css";
 import { useExposure } from "../../../context/ExposureContextProvider";
+import { useBet } from "../../../context/BetContextProvider";
 
 export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
   const expoData = useExposure();
+  const betData = useBet();
   useEffect(() => {
     if (show) {
       if(status){
@@ -39,6 +41,32 @@ export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
           });  
         }
         
+      }
+      else{
+        console.log("ss")
+        if(betData?.betData?.betSelection?.market_type !== 'fancy' &&  betData?.betData?.betSelection?.market_type !== 'bookmaker' && betData?.betData?.betSelection?.market_type !== 'premium' ){
+          expoData.setExchangeExpoData({
+            oldExpoData : expoData.exchangeExpoData.oldExpoData,
+            showUpdate : false
+          });
+        }
+        if(betData?.betData?.betSelection?.market_type === 'fancy'){
+          let oldExposure = expoData?.fancyExpoData?.oldExpoData;
+          expoData.setFancyExpoData({
+            oldExpoData : oldExposure
+          });  
+        }
+        if(betData?.betData?.betSelection?.market_type === 'bookmaker'){
+          expoData.setBookmakerExpoData({
+            oldExpoData: expoData.bookmakerExpoData.oldExpoData,
+            showUpdate : false
+          });
+        }
+        if(betData?.betData?.betSelection?.market_type === 'premium'){
+          expoData.setPremiumExpoData({
+            oldExpoData: expoData.premiumExpoData.oldExpoData,
+          });
+        }
       }
       setTimeout(function () {
         setShow(false);

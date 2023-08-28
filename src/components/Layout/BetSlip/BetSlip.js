@@ -70,10 +70,24 @@ export const BetSlip = () => {
     let timeout = 4000;
     if (betSelection.market_type === "casino") {
       timeout = 0;
-    }
+    }  
+    if(auth.auth.walletBalance!==0 || auth.auth.exposure!= 0){
     setTimeout(() => {
       setBetPlacing(true);
     }, timeout);
+    }
+    else{
+      appData.setAppData({ ...appData.appData, listLoading: false });
+      betData.setBetData({
+        ...betData.betData,
+        betSlipStatus: false,
+      });
+      setBetPlacing(false);
+      setBetSuccessShow(true);
+      setBetSuccess(false);
+      setBetTitleMessage("Bet Error");
+      setBetFailMessage("Insufficient Balance");
+    }
   };
 
   const setBetAmount = (amt) => {
@@ -221,13 +235,12 @@ export const BetSlip = () => {
               setBetSuccessShow(true);
               setBetSuccess(true);
               setBetTitleMessage("Bet Matched");
-              if (res?.data?.wallet) {
-                // setWalletDetails(res.data.wallet);
-              }
             }
-            if (res.status === 202) {
-              // setSucees(false);
-              // setFailedMessage(res.message);
+            if (res.status === 202 && res.message === 'Insufficient Balance') {
+              setBetSuccessShow(true);
+              setBetSuccess(false);
+              setBetTitleMessage("Bet Error");
+              setBetFailMessage("Insufficient Balance");
             }
           })
           .catch((err) => {
