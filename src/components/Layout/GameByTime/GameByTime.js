@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "../GameList/GameList.module.css";
 import { NoData } from "../NoData/NoData";
 import { GameListCompetition } from "../GameListCompetition/GameListCompetition";
-import { getDateYearNumFormat, formatTimeHh } from "../../../utils/helper";
+import { getDateYearNumFormat, formatTimeHh,checkECricket } from "../../../utils/helper";
 
 export const GameByTime = ({
   allGameList,
@@ -160,6 +160,11 @@ export const GameByTime = ({
                                       ) : (
                                         ""
                                       )}
+                                       {checkECricket(match) && (
+                                          <span className={styles.gameE}>
+                                            <i></i> {match.name}
+                                         </span>
+                                        )}
                                     </div>
                                   </div>
                                 </div>

@@ -449,7 +449,7 @@ export const BetSlip = () => {
           </div>
           <div className="col-12 d-inline-flex">
             <button
-              disabled={betButton || !auth.auth.loggedIn}
+              disabled={betButton || !auth.auth.loggedIn || betData?.betData?.betSelection?.amount == 0}
               onClick={placeBet}
               className={`${styles.placeBetBtn} col-12 d-inline-flex justify-content-center align-items-center`}
             >
