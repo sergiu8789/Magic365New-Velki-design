@@ -301,7 +301,7 @@ export const checkECricket = (match) => {
       match.team_one_name?.includes("T10") ||
       match.team_two_name?.includes("SLR") ||
       match.team_two_name?.includes("T10")) &&
-    match.name === "Cricket"
+    (match.name === "Cricket" || match.name === "Soccer")
   )
     return true;
   else return false;

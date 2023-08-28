@@ -4,6 +4,7 @@ import styles from "../GameList/GameList.module.css";
 import { NoData } from "../NoData/NoData";
 import { GameListCompetition } from "../GameListCompetition/GameListCompetition";
 import { getDateYearNumFormat, formatTimeHh } from "../../../utils/helper";
+import { checkECricket } from "../../../utils/helper";
 
 export const GameByCompetition = ({
   allGameList,
@@ -198,6 +199,11 @@ export const GameByCompetition = ({
                                             )}{" "}
                                             {formatTimeHh(match.date, 1)}
                                           </span>
+                                        )}
+                                        {checkECricket(match) && (
+                                          <span className={styles.gameE}>
+                                            <i></i> {match.name}
+                                         </span>
                                         )}
                                       </div>
                                       <div
