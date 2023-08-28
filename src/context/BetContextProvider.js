@@ -6,7 +6,7 @@ export const BetProvider = ({ children }) => {
   //let route = window.location.pathname?.replace("/", "");
   const initialValues = {
     betSlipStatus: false,
-    betsLoading: true,
+    betsFetch: true,
     userMatchBets: [],
     betsList: [],
     selectedMatch: {},

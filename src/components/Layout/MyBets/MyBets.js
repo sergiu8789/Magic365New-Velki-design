@@ -140,7 +140,7 @@ export const MyBets = ({ openMyBets }) => {
   };
 
   useEffect(() => {
-    if (auth.auth.loggedIn) {
+    if (auth.auth.loggedIn && betData.betData.betsFetch) {
       ApiService.getUserBetMatches()
         .then((res) => {
           appData.setAppData({ ...appData.appData, listLoading: false });
@@ -150,6 +150,7 @@ export const MyBets = ({ openMyBets }) => {
             betData.setBetData({
               ...betData.betData,
               userMatchBets: res.data.rows,
+              betsFetch : false
             });
           } else {
             setMatchListCount(0);
@@ -162,7 +163,7 @@ export const MyBets = ({ openMyBets }) => {
             err?.response?.data?.statusCode === 401 &&
             err?.response?.data?.message === "Unauthorized"
           ) {
-            localStorage.removeItem("token");
+            localStorage.removeItem("bettoken");
             auth.setAuth({
               ...auth.auth,
               loggedIn: false,
@@ -172,7 +173,7 @@ export const MyBets = ({ openMyBets }) => {
           }
         });
     }
-  }, [betData.betData.betsLoading, auth.auth.loggedIn]);
+  }, [betData.betData.betsFetch, auth.auth.loggedIn]);
 
   useEffect(() => {
     if (betData.betData.betsList?.length) setBetList(betData.betData.betsList);
@@ -193,6 +194,7 @@ export const MyBets = ({ openMyBets }) => {
     if (tabRef && tabRef.current) {
       tabRef.current.click();
     }
+    betData.setBetData({ ...betData.betData, betsFetch : true });
     appData.setAppData({ ...appData.appData, listLoading: true });
   }, [openMyBets]);
 
