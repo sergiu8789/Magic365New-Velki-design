@@ -135,11 +135,14 @@ export const ExchangeOdds = ({
   useEffect(() => {
     /******** Exchange odds brodacasting  *****/
     function onBroadCast(value) {
+      console.log(value);
       let allRunners = [];
       if (value?.length) {
         value?.map((item) => {
+          console.log(item);
           // match marketId with socket response
           if (item.MarketId === selectedMarket.market_id) {
+            console.log(item);
             setSelectedRunner(item);
             let selections = [];
             item?.Runners?.map((item, index) => {

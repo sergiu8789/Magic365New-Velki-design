@@ -22,6 +22,7 @@ export const Sports = () => {
   const [inPlayCheck, setPlayCheck] = useState(true);
   const [tournamentList, setTournamentList] = useState({});
   const [matchIds, setMatchIds] = useState([]);
+  const [allMatchId, setMatchedId] = useState([]);
   const [sortGameList, setsortGameList] = useState("by Competition");
   const [storeTournament, setStoreTournament] = useState("");
   const [sportSearch, setSportSearch] = useState(false);
@@ -32,6 +33,13 @@ export const Sports = () => {
     if (matchIds?.length) {
       socket.emit("subscription", matchIds);
     }
+    function onBroadCast(value) {
+      setMatchedId(value);
+    }
+    socket.on("broadcast", onBroadCast); // exchange odds broadcast method
+    return () => {
+      socket.off("broadcast", onBroadCast);
+    };
   }, [matchIds]);
 
   useEffect(() => {
@@ -158,7 +166,30 @@ export const Sports = () => {
       matchIdList.push(item.id);
       Object.keys(tournaments)?.map((tour) => {
         if (item.name === tour) {
-          if (sortGameList === "by Time" || sortGameList === "by Matched") {
+          if (sortGameList === "by Matched") {
+            let TotalMId = "";
+            console.log(allMatchId);
+            allMatchId.map((mitem, mindex) => {
+              console.log(mitem.eventId);
+              console.log(item.id);
+              if (mitem.eventId === item.id) {
+                TotalMId = mitem?.TotalMatched;
+                console.log("TotalMId ", TotalMId);
+              }
+            });
+            if (tournaments[tour]?.matches) {
+              tournaments[tour].matches.push(item);
+              tournaments[tour].matchId.push(TotalMId);
+            } else {
+              tournaments[tour] = {
+                matches: [],
+                open: true,
+                matchId: [],
+              };
+              tournaments[tour].matches.push(item);
+              tournaments[tour].matchId.push(TotalMId);
+            }
+          } else if (sortGameList === "by Time") {
             if (tournaments[tour]?.matches) {
               tournaments[tour].matches.push(item);
             } else {

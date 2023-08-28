@@ -123,6 +123,7 @@ export const CurrentBets = () => {
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"
         ) {
+          console.log("hello");
           localStorage.removeItem("token");
           auth.setAuth({
             ...auth.auth,
@@ -130,6 +131,7 @@ export const CurrentBets = () => {
             user: {},
             showSessionExpire: true,
           });
+          console.log("auth ", auth);
         }
       });
   };
