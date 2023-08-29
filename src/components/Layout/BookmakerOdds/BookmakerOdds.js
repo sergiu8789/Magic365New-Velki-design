@@ -3,11 +3,15 @@ import styles from "../MatchOdds/MatchOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
+import { useAuth } from "../../../context/AuthContextProvider";
+import { useNavigate } from "react-router-dom";
 
 export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
   const betData = useBet();
   const expoData = useExposure();
+  const auth = useAuth();
   const appData = useApp();
+  const navigate = useNavigate();
   const [hideBookMarker, sethideBookMarker] = useState("false");
   const [bookMarkerOdds, setBookMarkerOdds] = useState();
   const prevCountRef = useRef(bookMarkerOdds);
@@ -22,6 +26,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
   };
 
   const placeBet = (item, type, event) => {
+    if(auth.auth.loggedIn){
     const betSelection = {
       amount: "",
       type: type,
@@ -47,6 +52,10 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
       cuurentScroll = cuurentElem + cuurentScroll;
       playWindow.current.scrollTop = cuurentScroll;
     }, 500);
+   }
+   else
+     navigate('/login');
+   
   };
 
   useEffect(() => {
@@ -270,7 +279,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                     {expoData?.bookmakerExpoData?.showUpdate &&
                       item?.sid &&
                       expoData?.bookmakerExpoData?.updatedExpo &&
-                      expoData?.bookmakerExpoData?.updatedExpo[item?.sid] && (
+                      expoData?.bookmakerExpoData?.updatedExpo[item?.sid] !==undefined && (
                         <span
                           className={`${styles.runningExposure} ${
                             expoData?.bookmakerExpoData?.updatedExpo[

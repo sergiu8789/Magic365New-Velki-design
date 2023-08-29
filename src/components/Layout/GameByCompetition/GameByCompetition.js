@@ -7,6 +7,7 @@ import {
   getDateYearNumFormat,
   formatTimeHh,
   compareDate,
+  checkECricket,
 } from "../../../utils/helper";
 import ApiService from "../../../services/ApiService";
 
@@ -239,6 +240,11 @@ export const GameByCompetition = ({
                                               1
                                             )}{" "}
                                             {formatTimeHh(match.date, 1)}
+                                          </span>
+                                        )}
+                                        {checkECricket(match) && (
+                                          <span className={styles.gameE}>
+                                            <i></i> {match.name}
                                           </span>
                                         )}
                                       </div>

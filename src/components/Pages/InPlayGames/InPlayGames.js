@@ -21,6 +21,11 @@ export const InPlayGames = () => {
   const [streamOutscroll, setStreamOutScroll] = useState(0);
   const [scorecardUrl, setScoreCardUrl] = useState("");
   const [slideUpPage, setSlideUpPage] = useState(false);
+  const [MarketPosLeft, setMarketPosLeft] = useState("");
+  const [MarketLineWidth, setMarketLineWidth] = useState("");
+  const tabRef = useRef(null);
+  const [scoreTabList,setScoreTabList] = useState(["Live","Scoreboard"]);
+  const [selectedScoreTab,setSelectedScoreTab] = useState("Live");
 
   const closeBetPopup = () => {
     appData.setAppData({
@@ -37,6 +42,17 @@ export const InPlayGames = () => {
     });
   };
 
+  const selectScoreTab = (event,name) => {
+    setSelectedScoreTab(name)
+    let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
+    let TabPos = event.currentTarget.getBoundingClientRect().left;
+    TabPos = TabPos - pageOffset - 5;
+    TabPos = TabPos;
+    let widthTab = event.currentTarget.getBoundingClientRect().width;
+    setMarketLineWidth(widthTab);
+    setMarketPosLeft(TabPos);
+  };
+
   useEffect(() => {
     if (location?.state?.match_id) {
       ApiService.getScoreCard(location?.state?.match_id).then((res) => {
@@ -49,6 +65,7 @@ export const InPlayGames = () => {
   useEffect(() => {
     setSlideUpPage(appData.appData.appBetSlipOpen);
   }, [appData.appData.appBetSlipOpen]);
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,6 +90,13 @@ export const InPlayGames = () => {
       element.removeEventListener("scroll", handleScroll);
     };
   }, [streamOutscroll]);
+  
+  useEffect(() => {
+    console.log(selectedScoreTab)
+    if (tabRef && tabRef.current) {
+      tabRef.current.click();
+    }
+  }, [scoreTabList]);
 
   return (
     <React.Fragment>
@@ -85,14 +109,35 @@ export const InPlayGames = () => {
         <div
           className={`${styles.allPlayDetail} position-relative d-inline-block`}
         >
+          {streamUrl && scorecardUrl &&
+          <div className={styles.scoreBoard+ " col-12 d-flex justify-content-center"}>
+            {scoreTabList?.map((item,index) => {
+              return(
+                <div key={index} onClick={(e) => selectScoreTab(e,item)} ref={index === 0 ? tabRef : null}
+                   className={`${styles.matchTitleHighlight} col-6 d-inline-flex align-items-center justify-content-center flex-shrink-0`}
+                >
+                  <label className={styles.scoreboardTitle}>
+                    {item}
+                  </label>
+                </div>
+              )
+            })}
+               <div
+               className={`${styles.scoreActiveLine} d-inline-block position-absolute`}
+                style={{ width: MarketLineWidth + "px", transform: "translateX(" + MarketPosLeft + "px)",}}
+            ></div>
+          </div> }
+          { selectedScoreTab === 'Live' && streamUrl && 
           <MatchLiveCard
             liveWindow={liveWindow}
             streamUrl={streamUrl}
             streamOut={streamOut}
             setStreamOut={setStreamOut}
             setStreamOutScroll={setStreamOutScroll}
-          />
-          <MatchScoreCard scoreUrl={scorecardUrl} />
+          /> }
+           { ((selectedScoreTab === 'Scoreboard' && scorecardUrl) || !streamUrl) &&  
+           <MatchScoreCard scoreUrl={scorecardUrl} />
+          }
           <MatchOdds
             matchId={location?.state?.match_id}
             marketId={location?.state?.market_id}

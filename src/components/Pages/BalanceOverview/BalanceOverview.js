@@ -130,11 +130,12 @@ export const BalanceOverview = () => {
                   <div
                     className={`${styles.balanceRecordRow} col-12 d-inline-flex align-items-center`}
                   >
-                    <span>{item.to_username}</span>
+                    <span>{item.from_username}</span>
                     <span
                       className={`${styles.recordTraingle} icon-triangle-black-400`}
                     ></span>
-                    <span>{item.from_username}</span>
+                   
+                    <span>{item.to_username}</span>
                   </div>
                 </div>
               </div>

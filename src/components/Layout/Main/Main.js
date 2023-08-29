@@ -36,7 +36,7 @@ function Main() {
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"
         ) {
-          localStorage.removeItem("token");
+          localStorage.removeItem("bettoken");
           auth.setAuth({
             ...auth.auth,
             loggedIn: false,

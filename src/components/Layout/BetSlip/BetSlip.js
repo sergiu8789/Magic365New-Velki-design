@@ -64,16 +64,35 @@ export const BetSlip = () => {
   ];
 
   const placeBet = () => {
+    console.log("bet place",new Date());
     //setProgressStatus("placing");
     let betSelection = betData?.betData?.betSelection;
     appData.setAppData({ ...appData.appData, listLoading: true });
     let timeout = 4000;
-    if (betSelection.market_type === "casino") {
-      timeout = 0;
+    if(betSelection.market_type !== "casino" && betSelection.market_type != 'bookmaker' && betSelection.market_type !==' fancy' && betSelection.market_type != 'premium'){
+       timeout = 8000;
     }
-    setTimeout(() => {
-      setBetPlacing(true);
-    }, timeout);
+    if (betSelection.market_type === "casino") 
+      timeout = 0;
+    
+    if(auth.auth.walletBalance!==0 || auth.auth.exposure!= 0){
+      setTimeout(() => {
+        console.log("placing",new Date())
+        setBetPlacing(true);
+      }, timeout);
+    }
+    else{
+      appData.setAppData({ ...appData.appData, listLoading: false });
+      betData.setBetData({
+        ...betData.betData,
+        betSlipStatus: false,
+      });
+      setBetPlacing(false);
+      setBetSuccessShow(true);
+      setBetSuccess(false);
+      setBetTitleMessage("Bet Error");
+      setBetFailMessage("Insufficient Balance");
+    }
   };
 
   const setBetAmount = (amt) => {
@@ -179,13 +198,6 @@ export const BetSlip = () => {
           betSelection.market_type === "bookmaker") &&
           betSelection.status === "")
       ) {
-        // if((betSelection.market_type === 'fancy' || betSelection.market_type === 'bookmaker') && !(time - appData.appDataupdatedFancyTime) >= 3){
-        //   setBetSuccess(false);
-        //   setBetSuccessShow(true);
-        //   setBetTitleMessage("Odds Delayed");
-        //   setBetFailMessage("Odds are delayed");
-        //   return false;
-        // }
         const data = {
           amount: parseFloat(betSelection.amount),
           market_id: betSelection.market_id,
@@ -221,23 +233,21 @@ export const BetSlip = () => {
               setBetSuccessShow(true);
               setBetSuccess(true);
               setBetTitleMessage("Bet Matched");
-              if (res?.data?.wallet) {
-                // setWalletDetails(res.data.wallet);
-              }
             }
-            if (res.status === 202) {
-              // setSucees(false);
-              // setFailedMessage(res.message);
+            if (res.status === 202 && res.message === 'Insufficient Balance') {
+              setBetSuccessShow(true);
+              setBetSuccess(false);
+              setBetTitleMessage("Bet Error");
+              setBetFailMessage("Insufficient Balance");
             }
           })
           .catch((err) => {
             setBetSuccessShow(true);
-            //setBetPlacing(false);
             if (
               err?.response?.data?.statusCode === 401 &&
               err?.response?.data?.message === "Unauthorized"
             ) {
-              localStorage.removeItem("token");
+              localStorage.removeItem("bettoken");
               auth.setAuth({
                 ...auth.auth,
                 loggedIn: false,
@@ -246,28 +256,11 @@ export const BetSlip = () => {
               });
             }
             if (err?.response?.data?.statusCode === 400) {
-              //setSucees(false);
-              //setFailedMessage(err?.response?.data?.message[0]);
             }
           });
-        // }
-        // else{
-        //   setBetPlacing(false);
-        //   setProgress(20);
-        //   setProgressStatus("");
-        //   let message = "Odds are Suspended";
-        //   messageData.setMessageData({
-        //     ...messageData.messageData,
-        //     betConfimationData: {
-        //       type: "failed",
-        //       message: message,
-        //     },
-        //   });
-        // }
+       
       } else {
         setBetPlacing(false);
-        // setProgress(20);
-        // setProgressStatus("");
         let message = "Odds are Suspended";
         if (betSelection.status === "SUSPENDED") message = "Odds are Suspended";
 
@@ -449,7 +442,7 @@ export const BetSlip = () => {
           </div>
           <div className="col-12 d-inline-flex">
             <button
-              disabled={betButton || !auth.auth.loggedIn}
+              disabled={betButton || !auth.auth.loggedIn || betData?.betData?.betSelection?.amount == 0}
               onClick={placeBet}
               className={`${styles.placeBetBtn} col-12 d-inline-flex justify-content-center align-items-center`}
             >

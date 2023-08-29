@@ -48,8 +48,7 @@ export const Login = () => {
   const gotoHome = () => {
     setloginSlide("false");
     setTimeout(function () {
-      if (auth.auth.loggedIn) navigate(-1);
-      else navigate("/");
+      navigate(-1);
     }, 250);
   };
 

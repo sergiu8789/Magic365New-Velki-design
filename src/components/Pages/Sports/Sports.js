@@ -16,13 +16,14 @@ export const Sports = () => {
   const location = useLocation();
   const appData = useApp();
   const [TabLineWidth, setTabLineWidth] = useState("");
+  const [sockEvents, setSockEvents] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
   const [tabActive, settabActive] = useState("");
   const [inPlayTab, setinPlayTab] = useState("");
   const [inPlayCheck, setPlayCheck] = useState(true);
   const [tournamentList, setTournamentList] = useState({});
-  const [matchIds, setMatchIds] = useState([]);
+  const [matchIds, setMarkIds] = useState([]);
   const [allMatchId, setMatchedId] = useState([]);
   const [sortGameList, setsortGameList] = useState("by Competition");
   const [storeTournament, setStoreTournament] = useState("");
@@ -30,19 +31,31 @@ export const Sports = () => {
   const [favorateGame, setfavorateGame] = useState(false);
   const playRef = useRef([]);
   const tabRef = useRef([]);
+  const [allMarkList, setAllMarkList] = useState([]);
 
   useEffect(() => {
-    if (matchIds?.length) {
-      socket.emit("subscription", matchIds);
-    }
+    if (matchIds?.length) socket.emit("subscription", matchIds);
+  }, [matchIds]);
+
+  useEffect(() => {
     function onBroadCast(value) {
       setMatchedId(value);
+      if (value?.length) {
+        value?.map((item) => {
+          if (
+            !allMarkList?.filter((itm) => itm.MarketId === item.MarketId)
+              ?.length
+          ) {
+            setAllMarkList((prev) => [...prev, item]);
+          }
+        });
+      }
     }
     socket.on("broadcast", onBroadCast); // exchange odds broadcast method
     return () => {
       socket.off("broadcast", onBroadCast);
     };
-  }, [matchIds]);
+  }, [sockEvents, allMarkList]);
 
   useEffect(() => {
     let getGameTab = appData.appData.SportTabActive;
@@ -162,27 +175,28 @@ export const Sports = () => {
     },
   ];
 
-  const getAllTournament = (res) => {
+  const getAllTournament = (res, allMarkList) => {
     let tournaments = { Cricket: {}, Soccer: {}, Tennis: {} };
-    let matchIdList = [];
+    let marketIdList = [];
     res?.data?.map((item, index) => {
-      matchIdList.push(item.id);
+      const filteredMarket = allMarkList?.filter(
+        (markets) => markets.MarketId === item.market_id
+      );
+      if (filteredMarket?.length)
+        item.totalMatched = filteredMarket[0].TotalMatched;
+      marketIdList.push(item.market_id);
       Object.keys(tournaments)?.map((tour) => {
         if (item.name === tour) {
           if (sortGameList === "by Matched") {
-            let TotalMId = "";
-            console.log(allMatchId);
-            allMatchId.map((mitem, mindex) => {
-              console.log(mitem.eventId);
-              console.log(item.id);
-              if (mitem.eventId === item.id) {
-                TotalMId = mitem?.TotalMatched;
-                console.log("TotalMId ", TotalMId);
-              }
-            });
+            // let TotalMId = "";
+            // allMatchId.map((mitem, mindex) => {
+            //   if (mitem.eventId === item.id) {
+            //     TotalMId = mitem?.TotalMatched;
+            //   }
+            // });
             if (tournaments[tour]?.matches) {
               tournaments[tour].matches.push(item);
-              tournaments[tour].matchId.push(TotalMId);
+              //tournaments[tour].matchId.push(TotalMId);
             } else {
               tournaments[tour] = {
                 matches: [],
@@ -190,7 +204,7 @@ export const Sports = () => {
                 matchId: [],
               };
               tournaments[tour].matches.push(item);
-              tournaments[tour].matchId.push(TotalMId);
+              // tournaments[tour].matchId.push(TotalMId);
             }
           } else if (sortGameList === "by Time") {
             if (tournaments[tour]?.matches) {
@@ -217,7 +231,7 @@ export const Sports = () => {
       });
     });
     appData.setAppData({ ...appData.appData, listLoading: false });
-    setMatchIds(matchIdList);
+    setMarkIds(marketIdList);
     setTournamentList(tournaments);
   };
 
@@ -246,13 +260,13 @@ export const Sports = () => {
       }
       if (activeTab) activeTab = activeTab.toLowerCase();
       timeTab = timeTab.toLowerCase();
-      setMatchIds([]);
+      setMarkIds([]);
       setTournamentList({});
       ApiService.tournamentMatchList(activeTab, "", timeTab, startDate, endDate)
         .then((res) => {
           if (res?.data) {
             appData.setAppData({ ...appData.appData, listLoading: false });
-            getAllTournament(res);
+            //getAllTournament(res);
             setStoreTournament(res);
           } else {
             appData.setAppData({ ...appData.appData, listLoading: false });
@@ -267,9 +281,9 @@ export const Sports = () => {
   }, [inPlayTab, tabActive]);
 
   useEffect(() => {
-    appData.setAppData({ ...appData.appData, listLoading: true });
-    getAllTournament(storeTournament);
-  }, [sortGameList]);
+    //appData.setAppData({ ...appData.appData, listLoading: true });
+    if (storeTournament) getAllTournament(storeTournament, allMarkList);
+  }, [sortGameList, storeTournament, allMarkList]);
 
   return (
     <React.Fragment>

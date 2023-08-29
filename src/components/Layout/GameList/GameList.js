@@ -60,7 +60,7 @@ export const GameList = ({
           setsortGameList={setsortGameList}
           playType={playType}
         />
-      ) : sortGameList === "by Time" ? (
+      ) : sortGameList === "by Time" || sortGameList === "by Matched" ? (
         <GameByTime
           allGameList={allGameList}
           tournamentList={tournamentList}
@@ -68,10 +68,9 @@ export const GameList = ({
           inPlay={inPlay}
           gameType={gameType}
           setsortGameList={setsortGameList}
+          sortGameList={sortGameList}
           playType={playType}
         />
-      ) : sortGameList === "by Match" ? (
-        <GameByMatch />
       ) : (
         <React.Fragment></React.Fragment>
       )}

@@ -4,6 +4,8 @@ import { FancyBookOdds } from "../FancyBookOdds/FancyBookOdds";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
+import { useAuth } from "../../../context/AuthContextProvider";
+import { useNavigate } from "react-router-dom";
 
 export const FancyOdds = ({
   oddsList,
@@ -17,6 +19,8 @@ export const FancyOdds = ({
   const betData = useBet();
   const expoData = useExposure();
   const appData = useApp();
+  const auth = useAuth();
+  const navigate = useNavigate();
   const [matchFancyOdds, setMatchFancyOdds] = useState("");
   const [fancyBookOdd, setFancyBookOdds] = useState(false);
   const prevCountRef = useRef(matchFancyOdds);
@@ -37,6 +41,7 @@ export const FancyOdds = ({
   };
 
   const placeBet = (item, type, event) => {
+    if(auth.auth.loggedIn){
     const betSelection = {
       amount: "",
       type: type,
@@ -62,6 +67,9 @@ export const FancyOdds = ({
       cuurentScroll = cuurentElem + cuurentScroll;
       playWindow.current.scrollTop = cuurentScroll;
     }, 500);
+   }
+   else
+     navigate('/login');
   };
 
   useEffect(() => {
@@ -307,6 +315,8 @@ export const FancyOdds = ({
                     </label>
                     <div className="col-12 d-inline-flex align-items-center">
                       {item.sid &&
+                      expoData?.fancyExpoData?.oldExpoData &&
+                      expoData?.fancyExpoData?.oldExpoData[item.sid] &&
                         expoData?.fancyExpoData?.oldExpoData[item.sid]
                           ?.stake && (
                           <span
