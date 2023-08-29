@@ -3,6 +3,8 @@ import styles from "../MatchOdds/MatchOdds.module.css";
 import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
+import { useAuth } from "../../../context/AuthContextProvider";
+import { useNavigate } from "react-router-dom";
 
 export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
   const betData = useBet();
@@ -11,8 +13,11 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
   const [premiumOddsId, setpremiumOddsId] = useState([]);
   const prevCountRef = useRef(matchPremiumOdds);
   const appData = useApp();
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   const placeBet = (item, selection, event) => {
+  if(auth.auth.loggedIn){ 
     const betSelection = {
       amount: "",
       type: 1,
@@ -38,6 +43,9 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
       cuurentScroll = cuurentElem + cuurentScroll;
       playWindow.current.scrollTop = cuurentScroll;
     }, 500);
+  }
+  else
+    navigate('/login'); 
   };
 
   const togglePopularBet = (id, subOdds) => {

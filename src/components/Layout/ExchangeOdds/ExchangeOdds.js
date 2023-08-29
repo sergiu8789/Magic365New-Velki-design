@@ -6,6 +6,7 @@ import { useBet } from "../../../context/BetContextProvider";
 import { useExposure } from "../../../context/ExposureContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
 import { useAuth } from "../../../context/AuthContextProvider";
+import { useNavigate } from "react-router-dom";
 
 export const ExchangeOdds = ({
   matchId,
@@ -21,6 +22,7 @@ export const ExchangeOdds = ({
   const betData = useBet();
   const expoData = useExposure();
   const appData = useApp();
+  const navigate = useNavigate();
   const [matchOddsRunner, setMatchOddsRunner] = useState([]);
 
   const [fooEvents, setFooEvents] = useState([]);
@@ -50,37 +52,41 @@ export const ExchangeOdds = ({
   };
 
   const placeBet = (item, type, market, event) => {
-    const betSelection = {
-      amount: "",
-      type: type,
-      size:
-        type === 1
-          ? item?.ExchangePrices?.AvailableToBack[0]?.size
-          : item?.ExchangePrices?.AvailableToLay[0]?.size,
-      odds:
-        type === 1
-          ? item?.ExchangePrices?.AvailableToBack[0]?.price
-          : item?.ExchangePrices?.AvailableToLay[0]?.price,
-      selection: item.runnerName,
-      runner_name: item.runnerName,
-      selection_id: item.SelectionId,
-      market_id: market.MarketId,
-      match_id: market.eventId,
-      market_name: "",
-      status: item.Status,
-      market_type: selectedMarket.market,
-    };
-    betData.setBetData({
-      ...betData.betData,
-      betSlipStatus: true,
-      betSelection: betSelection,
-    });
-    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 70;
-    setTimeout(function () {
-      let cuurentScroll = playWindow.current.scrollTop;
-      cuurentScroll = cuurentElem + cuurentScroll;
-      playWindow.current.scrollTop = cuurentScroll;
-    }, 500);
+    if(auth.auth.loggedIn){
+      const betSelection = {
+        amount: "",
+        type: type,
+        size:
+          type === 1
+            ? item?.ExchangePrices?.AvailableToBack[0]?.size
+            : item?.ExchangePrices?.AvailableToLay[0]?.size,
+        odds:
+          type === 1
+            ? item?.ExchangePrices?.AvailableToBack[0]?.price
+            : item?.ExchangePrices?.AvailableToLay[0]?.price,
+        selection: item.runnerName,
+        runner_name: item.runnerName,
+        selection_id: item.SelectionId,
+        market_id: market.MarketId,
+        match_id: market.eventId,
+        market_name: "",
+        status: item.Status,
+        market_type: selectedMarket.market,
+      };
+      betData.setBetData({
+        ...betData.betData,
+        betSlipStatus: true,
+        betSelection: betSelection,
+      });
+      let cuurentElem = event.currentTarget.getBoundingClientRect().top - 70;
+      setTimeout(function () {
+        let cuurentScroll = playWindow.current.scrollTop;
+        cuurentScroll = cuurentElem + cuurentScroll;
+        playWindow.current.scrollTop = cuurentScroll;
+      }, 500);
+    }
+    else
+      navigate('/login');
   };
 
   /****** method to fetch other market list from API  ********/
@@ -433,7 +439,7 @@ export const ExchangeOdds = ({
                             expoData?.exchangeExpoData?.oldExpoData &&
                             expoData?.exchangeExpoData?.oldExpoData[
                               item.SelectionId
-                            ]
+                            ] 
                               ? "d-inline-flex"
                               : "d-none"
                           }`}
@@ -452,7 +458,7 @@ export const ExchangeOdds = ({
                           expoData?.exchangeExpoData?.updatedExpo &&
                           expoData?.exchangeExpoData?.updatedExpo[
                             item.SelectionId
-                          ] && (
+                          ] !== undefined && (
                             <span
                               className={`${styles.runningExposure} ${
                                 expoData?.exchangeExpoData?.updatedExpo &&
