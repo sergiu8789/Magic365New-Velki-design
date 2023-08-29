@@ -135,7 +135,7 @@ export const InPlayGames = () => {
             setStreamOut={setStreamOut}
             setStreamOutScroll={setStreamOutScroll}
           /> }
-           { selectedScoreTab === 'Scoreboard' && scorecardUrl &&  
+           { ((selectedScoreTab === 'Scoreboard' && scorecardUrl) || !streamUrl) &&  
            <MatchScoreCard scoreUrl={scorecardUrl} />
           }
           <MatchOdds
