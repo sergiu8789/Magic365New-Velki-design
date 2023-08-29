@@ -16,13 +16,12 @@
     z-index: 5;
 }
 
-.scoreBoard{
-    background: black;
-    height: 46.0781px;
-    margin-bottom: 2px;
+.scoreBoard {
+    background: #000;
+    min-height: 55px;
 }
 
-.scoreboardTitle{
+.scoreboardTitle {
     color: white;
     font-size: 16.64px;
     font-weight: 700;

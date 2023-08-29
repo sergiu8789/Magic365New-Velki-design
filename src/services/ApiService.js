@@ -310,7 +310,7 @@ ApiService.sportsSearchList = function (search) {
 
 ApiService.sportsCompetitionList = function (search) {
   return fetch({
-    url: "/sports/get-sports?type=search&search=" + search,
+    url: "/sports/get-sports?search=" + search,
   });
 };
 

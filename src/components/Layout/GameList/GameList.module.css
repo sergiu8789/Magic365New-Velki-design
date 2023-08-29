@@ -355,9 +355,9 @@
     overflow: hidden;
     vertical-align: top;
     font-weight: 400;
-  }
-  
-  .gameE i {
+}
+
+.gameE i {
     position: relative;
     width: 18px;
     height: 100%;
@@ -367,10 +367,10 @@
     align-items: center;
     justify-content: center;
     display: flex;
-  }
-  
-  
-  .gameE i:before {
+}
+
+
+.gameE i:before {
     content: "";
     width: 7px;
     height: 8px;
@@ -378,20 +378,37 @@
     background-repeat: no-repeat;
     margin-left: -3px;
     background-image: url("../../../assets/images/e-cricket.svg");
-  }
-  
-  .gameE i:after {
+}
+
+.gameE i:after {
     position: absolute;
     right: 0;
     content: "";
     border-left: 5px solid #0000;
     border-bottom: 14px solid #fff;
-  }
+}
 
-  .matchedData {
+.matchedData {
     font-size: 12px;
     color: grey;
-  }
+}
+
+.Favourats {
+    top: 139px;
+    background: #eef6fb;
+    z-index: 7;
+    max-width: 480px;
+    bottom: 74px;
+}
+
+.Favourats .gamesCardContainer {
+    border-radius: 13px;
+    padding-top: 10px;
+}
+
+.Favourats .gameHeaderRow {
+    padding: 7px 0px;
+}
 
 @media only screen and (max-width: 568px) {
     .matchOdds {
