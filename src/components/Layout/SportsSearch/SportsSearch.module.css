@@ -1,7 +1,7 @@
 .searchLayer {
     top: 50px;
     background: #eef6fb;
-    z-index: 90;
+    z-index: 8;
     max-width: 480px;
 }
 

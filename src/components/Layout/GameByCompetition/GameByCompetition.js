@@ -59,7 +59,6 @@ export const GameByCompetition = ({
 
   const setGameFavrite = (event, date, matchId) => {
     let dateVal = compareDate(date);
-
     let newFavArry = [];
     newFavArry = [...faveGame];
     if (newFavArry.indexOf(matchId) < 0) {
@@ -177,8 +176,9 @@ export const GameByCompetition = ({
                                       className={`${styles.gameFavorate} ${
                                         styles.bookMarkGame
                                       } ${
-                                        faveGame.indexOf(match.id) > -1 &&
-                                        styles.favourateGame
+                                        faveGame.indexOf(match.id) > -1 ||
+                                        (match.is_fav === 1 &&
+                                          styles.favourateGame)
                                       } position-relative`}
                                       onClick={(event) =>
                                         setGameFavrite(
