@@ -67,13 +67,15 @@ export const BetSlip = () => {
     console.log("bet place",new Date());
     //setProgressStatus("placing");
     let betSelection = betData?.betData?.betSelection;
+    console.log(betSelection.market_type)
     appData.setAppData({ ...appData.appData, listLoading: true });
-    let timeout = 4000;
-    if(betSelection.market_type !== "casino" && betSelection.market_type != 'bookmaker' && betSelection.market_type !==' fancy' && betSelection.market_type != 'premium'){
+    let timeout = 5000;
+    if(betSelection.market_type !== "casino" && betSelection.market_type !== 'bookmaker' && betSelection.market_type !=='fancy' && betSelection.market_type !== 'premium'){
        timeout = 8000;
     }
     if (betSelection.market_type === "casino") 
       timeout = 0;
+    console.log(timeout)  
     
     if(auth.auth.walletBalance!==0 || auth.auth.exposure!= 0){
       setTimeout(() => {
