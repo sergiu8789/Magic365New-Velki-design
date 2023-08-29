@@ -82,11 +82,22 @@ export const GameByTime = ({
                             return 0;
                           }
                           if(sortGameList === 'by Matched'){
+
+                            if (a.totalMatched === b.totalMatched) {
+                              return 0;
+                            }
+                        
+                            if (!a.totalMatched) {
+                                return 1;
+                            }
+                            if (!b.totalMatched) {
+                                return -1;
+                            }
                             
                             if (a.totalMatched > b.totalMatched) {
                               return -1;
                             }
-                            if (a.totalMatched < b.totalMatched || !a.totalMatched || !b.totalMatched) {
+                            if (a.totalMatched < b.totalMatched ) {
                               return 1;
                             }
                             return 0;
