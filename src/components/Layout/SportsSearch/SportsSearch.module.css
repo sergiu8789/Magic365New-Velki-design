@@ -1,7 +1,7 @@
 .searchLayer {
     top: 50px;
     background: #eef6fb;
-    z-index: 1000;
+    z-index: 90;
     max-width: 480px;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .allSearchResult {
-    height: 100%;
+    height: calc(100% - 55px);
 }
 
 .recentSearches {
@@ -44,6 +44,7 @@
     font-size: 19px;
     font-weight: 700;
     color: #1E1E1E;
+    padding-left: 5px;
 }
 
 .allRecentHistory {
@@ -75,4 +76,34 @@
     transform: rotate(180deg);
     color: #7e919e;
     font-size: 17px;
+}
+
+.resultSearchName {
+    padding: 8px 0;
+}
+
+.highlightText {
+    color: rgb(26, 142, 225);
+    font-weight: 700;
+}
+
+.backSearchList {
+    border-radius: 13px;
+    padding: 17px;
+    background: #FFF;
+    margin: 10px 0;
+}
+
+.backSearch {
+    font-size: 18px;
+    gap: 10px;
+    color: rgb(126, 145, 158);
+    padding-right: 8px;
+    border-right: 1px solid rgb(126, 145, 158);
+}
+
+.tournamentName {
+    padding-left: 17px;
+    color: rgb(30, 30, 30);
+    font-size: 19px;
 }

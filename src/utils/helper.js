@@ -112,20 +112,18 @@ export const compareDate = (date) => {
   const nowTime = nowDate.getMinutes();
   if (
     (month === nowMonth && newdate === nowdate) ||
-    month < nowMonth ||
-    (month === nowMonth && newdate < nowdate)
+    month > nowMonth ||
+    (month === nowMonth && newdate > nowdate)
   ) {
     if (nowHours < hours || nowHours === hours || minutes > nowTime) {
       return true;
     } else {
       return false;
     }
-  } else if (
-    month > nowMonth ||
-    (nowMonth === month && nowDate === newDate) ||
-    (nowMonth === month && nowDate < newDate)
-  ) {
+  } else if (month > nowMonth || (nowMonth === month && nowDate < newDate)) {
     return true;
+  } else {
+    return false;
   }
 };
 

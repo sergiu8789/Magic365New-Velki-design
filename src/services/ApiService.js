@@ -93,7 +93,6 @@ ApiService.sportsPlayCount = function (
 };
 
 ApiService.liveGamesList = function (type) {
-  console.log(type);
   return fetch({
     url: "/sports/tournament-matches?type=" + type,
   });
@@ -294,6 +293,32 @@ ApiService.getScoreCard = function (id) {
   return fetch({
     url: "sports/fetch-match-score-urls?match_id=" + id,
     method: "get",
+  });
+};
+
+ApiService.sportsList = function () {
+  return fetch({
+    url: "/sports",
+  });
+};
+
+ApiService.sportsSearchList = function (search) {
+  return fetch({
+    url: "/sports/tournament-matches?type=live&search=" + search,
+  });
+};
+
+ApiService.sportsCompetitionList = function (search) {
+  return fetch({
+    url: "/sports/get-sports?type=live&search=" + search,
+  });
+};
+
+ApiService.setGameFav = function (data) {
+  return fetch({
+    url: "/sports/markfav",
+    method: "post",
+    data: data,
   });
 };
 export default ApiService;

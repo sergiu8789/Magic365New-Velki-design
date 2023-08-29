@@ -8,6 +8,7 @@ import {
   formatTimeHh,
   compareDate,
 } from "../../../utils/helper";
+import ApiService from "../../../services/ApiService";
 
 export const GameByCompetition = ({
   allGameList,
@@ -54,20 +55,26 @@ export const GameByCompetition = ({
     setcloseAllMatchBox({ ...closeAllMatchBox });
   };
 
-  const setGameFavrite = (event, date, matchId, match) => {
+  const setGameFavrite = (event, date, matchId) => {
     let dateVal = compareDate(date);
-    if (dateVal) {
-      let newFavArry = [];
-      newFavArry = [...faveGame];
-      if (newFavArry.indexOf(matchId) < 0) {
-        setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
-      } else {
-        let betIndex = newFavArry.indexOf(matchId);
-        newFavArry.splice(betIndex, 1);
-        setFaveGame(faveGame.filter((x) => x !== matchId));
-      }
-      event.stopPropagation();
+
+    let newFavArry = [];
+    newFavArry = [...faveGame];
+    if (newFavArry.indexOf(matchId) < 0) {
+      setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+    } else {
+      let betIndex = newFavArry.indexOf(matchId);
+      newFavArry.splice(betIndex, 1);
+      setFaveGame(faveGame.filter((x) => x !== matchId));
     }
+    let favMatchjson = { match_id: matchId };
+    ApiService.setGameFav(favMatchjson)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {});
+
+    event.stopPropagation();
   };
 
   return (
@@ -166,27 +173,20 @@ export const GameByCompetition = ({
                                   >
                                     <div
                                       className={`${styles.gameFavorate} ${
-                                        compareDate(match.date)
-                                          ? styles.bookMarkGame
-                                          : styles.inactiveGame
+                                        styles.bookMarkGame
                                       } ${
-                                        faveGame.indexOf(matchIndex) > -1 &&
+                                        faveGame.indexOf(match.id) > -1 &&
                                         styles.favourateGame
                                       } position-relative`}
                                       onClick={(event) =>
                                         setGameFavrite(
                                           event,
-                                          compareDate(match.date),
-                                          matchIndex,
-                                          match
+                                          match.date,
+                                          match.id
                                         )
                                       }
                                     >
-                                      {compareDate(match.date) ? (
-                                        <span className="icon-star invisible"></span>
-                                      ) : (
-                                        <span className="icon-star-solid"></span>
-                                      )}
+                                      <span className="icon-star invisible"></span>
                                     </div>
                                     <div className="d-inline-flex flex-column">
                                       <div

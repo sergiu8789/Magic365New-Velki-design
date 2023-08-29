@@ -248,21 +248,21 @@ export const Sports = () => {
       timeTab = timeTab.toLowerCase();
       setMatchIds([]);
       setTournamentList({});
-      ApiService.tournamentMatchList(
-        activeTab,
-        "",
-        timeTab,
-        startDate,
-        endDate
-      ).then((res) => {
-        if (res?.data) {
-          getAllTournament(res);
-          setStoreTournament(res);
-        } else {
-          setMatchIds([]);
-          setTournamentList({});
-        }
-      });
+      ApiService.tournamentMatchList(activeTab, "", timeTab, startDate, endDate)
+        .then((res) => {
+          if (res?.data) {
+            appData.setAppData({ ...appData.appData, listLoading: false });
+            getAllTournament(res);
+            setStoreTournament(res);
+          } else {
+            appData.setAppData({ ...appData.appData, listLoading: false });
+            setMatchIds([]);
+            setTournamentList({});
+          }
+        })
+        .catch((error) => {
+          appData.setAppData({ ...appData.appData, listLoading: false });
+        });
     }
   }, [inPlayTab, tabActive]);
 

@@ -15,6 +15,11 @@ import { Settings } from "../components/Pages/Settings/Settings";
 import { MyAccount } from "../components/Pages/MyAccount/MyAccount";
 import { ChangePassword } from "../components/Pages/ChangePassword/ChangePassword";
 import { Leagues } from "../components/Pages/Leagues/Leagues";
+import { PrivacyPolicy } from "../components/Pages/PrivacyPolicy/PrivacyPolicy";
+import { Terms } from "../components/Pages/Terms/Terms";
+import { KYC } from "../components/Pages/KYC/KYC";
+import { RulesRegulation } from "../components/Pages/RulesRegulation/RulesRegulation";
+import { ResponsibleGame } from "../components/Pages/ResponsibleGame/ResponsibleGame";
 import { ProtectedRoutes } from "../components/auth/ProtectedRoutes";
 
 export const PublicRoutes = () => {
@@ -61,6 +66,11 @@ export const PublicRoutes = () => {
         element={<ProtectedRoutes element={<ChangePassword />} />}
       />
       <Route path="/leagues" element={<Leagues />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="/rules" element={<RulesRegulation />} />
+      <Route path="/kyc" element={<KYC />} />
+      <Route path="/gaming" element={<ResponsibleGame />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="*" element={<Home />} />
     </Routes>

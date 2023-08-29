@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./HomeFooter.module.css";
 
 export const HomeFooter = () => {
+  const navigate = useNavigate();
   return (
     <React.Fragment>
       <div
@@ -28,26 +30,31 @@ export const HomeFooter = () => {
       >
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
+          onClick={() => navigate("/privacy")}
         >
           Privacy Policy
         </span>
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
+          onClick={() => navigate("/terms")}
         >
           Terms and Conditions
         </span>
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
+          onClick={() => navigate("/rules")}
         >
           Rules and Regulations
         </span>
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
+          onClick={() => navigate("/kyc")}
         >
           KYC
         </span>
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
+          onClick={() => navigate("/gaming")}
         >
           Responsible Gaming
         </span>
