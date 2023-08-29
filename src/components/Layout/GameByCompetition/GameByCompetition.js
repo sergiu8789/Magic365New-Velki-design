@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../GameList/GameList.module.css";
+import { encrypt } from "../../../utils/crypto";
 import { NoData } from "../NoData/NoData";
 import { GameListCompetition } from "../GameListCompetition/GameListCompetition";
 import {
@@ -68,7 +69,7 @@ export const GameByCompetition = ({
       newFavArry.splice(betIndex, 1);
       setFaveGame(faveGame.filter((x) => x !== matchId));
     }
-    let favMatchjson = { match_id: matchId };
+    let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
     ApiService.setGameFav(favMatchjson)
       .then((res) => {
         console.log(res);

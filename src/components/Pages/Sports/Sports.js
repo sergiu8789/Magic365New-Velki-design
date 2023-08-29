@@ -266,11 +266,11 @@ export const Sports = () => {
         .then((res) => {
           if (res?.data) {
             appData.setAppData({ ...appData.appData, listLoading: false });
-            //getAllTournament(res);
+            getAllTournament(res);
             setStoreTournament(res);
           } else {
             appData.setAppData({ ...appData.appData, listLoading: false });
-            setMatchIds([]);
+            setMarkIds([]);
             setTournamentList({});
           }
         })

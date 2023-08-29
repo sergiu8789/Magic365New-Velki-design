@@ -304,13 +304,13 @@ ApiService.sportsList = function () {
 
 ApiService.sportsSearchList = function (search) {
   return fetch({
-    url: "/sports/tournament-matches?type=live&search=" + search,
+    url: "/sports/tournament-matches?type=search&search=" + search,
   });
 };
 
 ApiService.sportsCompetitionList = function (search) {
   return fetch({
-    url: "/sports/get-sports?type=live&search=" + search,
+    url: "/sports/get-sports?type=search&search=" + search,
   });
 };
 
