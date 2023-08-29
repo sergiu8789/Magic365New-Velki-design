@@ -64,7 +64,6 @@ export const BetSlip = () => {
   ];
 
   const placeBet = () => {
-    console.log("bet place",new Date());
     //setProgressStatus("placing");
     let betSelection = betData?.betData?.betSelection;
     console.log(betSelection.market_type)
@@ -75,11 +74,8 @@ export const BetSlip = () => {
     }
     if (betSelection.market_type === "casino") 
       timeout = 0;
-    console.log(timeout)  
-    
     if(auth.auth.walletBalance!==0 || auth.auth.exposure!= 0){
       setTimeout(() => {
-        console.log("placing",new Date())
         setBetPlacing(true);
       }, timeout);
     }
@@ -132,11 +128,11 @@ export const BetSlip = () => {
 
   const addBetAmount = (amt) => {
     let betSelection = betData?.betData?.betSelection;
-    if (betStakeType === "manual" || betStakeType === "") {
+    if (betStakeType === "manual" || betStakeType === "" ) {
       betSelection.amount = amt;
       betData.setBetData({ ...betData.betData, betSelection: betSelection });
     } else {
-      betSelection.amount = parseFloat(betSelection.amount) + parseFloat(amt);
+      betSelection.amount = (betSelection.amount ? parseFloat(betSelection.amount) : 0) + parseFloat(amt);
       if (parseFloat(betSelection.amount) > 500) betSelection.amount = 500;
       betData.setBetData({ ...betData.betData, betSelection: betSelection });
     }
