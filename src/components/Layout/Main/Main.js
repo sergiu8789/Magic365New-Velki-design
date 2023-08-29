@@ -57,14 +57,13 @@ function Main() {
   const onIdle = () => {
     if(auth.auth.loggedIn){
     auth.setAuth({
-     ...auth.auth,
-     loggedIn: false,
-     showSucessMessage: true,
-     showSessionMessage:false,
-     successMessage: "Session Timeout",
+      loggedIn: false,
+      user: {},
+      fetchWallet: false,
+      showSessionExpire: false
     });
-    //  localStorage.removeItem("token");
-    //  navigate("/");
+     localStorage.removeItem("bettoken");
+     navigate("/");
    }
  };
 

@@ -5,7 +5,7 @@ import { useAuth } from '../../../context/AuthContextProvider';
 export const SessionExpire = ({remaining}) => {
     const auth = useAuth();
   return (
-    <Modal size='sm' centered={true} show={false} onHide={(e) => e}>
+    <Modal size='sm' centered={true} show={auth.auth.showSessionMessage} onHide={(e) => e}>
         <Modal.Header closeButton>
         <Modal.Title>Session Expiring!</Modal.Title>
         </Modal.Header>
