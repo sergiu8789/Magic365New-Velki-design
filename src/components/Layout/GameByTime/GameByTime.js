@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../GameList/GameList.module.css";
+import { encrypt } from "../../../utils/crypto";
 import { NoData } from "../NoData/NoData";
 import { GameListCompetition } from "../GameListCompetition/GameListCompetition";
-import { getDateYearNumFormat, formatTimeHh,checkECricket } from "../../../utils/helper";
+import {
+  getDateYearNumFormat,
+  formatTimeHh,
+  checkECricket,
+} from "../../../utils/helper";
+import ApiService from "../../../services/ApiService";
 
 export const GameByTime = ({
   allGameList,
@@ -21,6 +27,7 @@ export const GameByTime = ({
     Soccer: false,
     Tennis: false,
   });
+  const [faveGame, setFaveGame] = useState([]);
 
   const openGameDetail = (match) => {
     navigate("/full-market", {
@@ -32,6 +39,26 @@ export const GameByTime = ({
         teamtwo: match.team_two_name,
       },
     });
+  };
+
+  const setGameFavrite = (event, date, matchId) => {
+    let newFavArry = [];
+    newFavArry = [...faveGame];
+    if (newFavArry.indexOf(matchId) < 0) {
+      setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+    } else {
+      let betIndex = newFavArry.indexOf(matchId);
+      newFavArry.splice(betIndex, 1);
+      setFaveGame(faveGame.filter((x) => x !== matchId));
+    }
+    let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
+    ApiService.setGameFav(favMatchjson)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {});
+
+    event.stopPropagation();
   };
 
   return (
@@ -72,7 +99,7 @@ export const GameByTime = ({
                     >
                       {tournamentList[tour]?.matches
                         ?.sort(function (a, b) {
-                          if(sortGameList === 'by Time'){
+                          if (sortGameList === "by Time") {
                             if (a.date < b.date) {
                               return -1;
                             }
@@ -81,23 +108,22 @@ export const GameByTime = ({
                             }
                             return 0;
                           }
-                          if(sortGameList === 'by Matched'){
-
+                          if (sortGameList === "by Matched") {
                             if (a.totalMatched === b.totalMatched) {
                               return 0;
                             }
-                        
+
                             if (!a.totalMatched) {
-                                return 1;
+                              return 1;
                             }
                             if (!b.totalMatched) {
-                                return -1;
+                              return -1;
                             }
-                            
+
                             if (a.totalMatched > b.totalMatched) {
                               return -1;
                             }
-                            if (a.totalMatched < b.totalMatched ) {
+                            if (a.totalMatched < b.totalMatched) {
                               return 1;
                             }
                             return 0;
@@ -110,39 +136,57 @@ export const GameByTime = ({
                               className={`${styles.singleGameCardRow} col-12 d-inline-flex align-items-stretch justify-content-between`}
                               onClick={() => openGameDetail(match)}
                             >
-                              {sortGameList === 'by Time' &&
-                              <>
-                              {inPlay ? (
-                                <div
-                                  className={`${styles.bgInPlay} d-inline-flex flex-shrink-0 align-items-center justify-content-center`}
-                                >
-                                  In-play
-                                </div>
-                              ) : playType === "Today" ? (
-                                <div
-                                  className={`${styles.todayPlay} d-inline-flex flex-shrink-0 align-items-center justify-content-center flex-wrap text-center`}
-                                >
-                                  Today <br />
-                                  {formatTimeHh(match.date, 1)}
-                                </div>
-                              ) : playType === "Tomorrow" ? (
-                                <div
-                                  className={`${styles.tomorrowPlay} d-inline-flex flex-shrink-0 align-items-center justify-content-center flex-wrap text-center`}
-                                >
-                                  {getDateYearNumFormat(match.date, 1)} <br />
-                                  {formatTimeHh(match.date, 1)}
-                                </div>
-                              ) : ""}
-                              </>
-                              }
+                              {sortGameList === "by Time" && (
+                                <>
+                                  {inPlay ? (
+                                    <div
+                                      className={`${styles.bgInPlay} d-inline-flex flex-shrink-0 align-items-center justify-content-center`}
+                                    >
+                                      In-play
+                                    </div>
+                                  ) : playType === "Today" ? (
+                                    <div
+                                      className={`${styles.todayPlay} d-inline-flex flex-shrink-0 align-items-center justify-content-center flex-wrap text-center`}
+                                    >
+                                      Today <br />
+                                      {formatTimeHh(match.date, 1)}
+                                    </div>
+                                  ) : playType === "Tomorrow" ? (
+                                    <div
+                                      className={`${styles.tomorrowPlay} d-inline-flex flex-shrink-0 align-items-center justify-content-center flex-wrap text-center`}
+                                    >
+                                      {getDateYearNumFormat(match.date, 1)}{" "}
+                                      <br />
+                                      {formatTimeHh(match.date, 1)}
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                </>
+                              )}
                               <div
-                                className={`${styles.gameHeaderRow} col-12 flex-shrink-1 d-inline-flex align-items-center justify-content-between`}
+                                className={`${styles.gameHeaderRow} ps-3 col-12 flex-shrink-1 d-inline-flex align-items-center justify-content-between`}
                               >
                                 <div
                                   className={`${styles.gamesTypeName} d-inline-flex align-items-center`}
                                 >
-                                  <div className={styles.gameFavorate}>
-                                    <span className="icon-star ml-1"></span>
+                                  <div
+                                    className={`${styles.gameFavorate} ${
+                                      styles.bookMarkGame
+                                    } ${
+                                      faveGame.indexOf(match.id) > -1 ||
+                                      (match.is_fav === 1 &&
+                                        styles.favourateGame)
+                                    } position-relative`}
+                                    onClick={(event) =>
+                                      setGameFavrite(
+                                        event,
+                                        match.date,
+                                        match.id
+                                      )
+                                    }
+                                  >
+                                    <span className="icon-star invisible"></span>
                                   </div>
                                   <div className="d-inline-flex flex-column">
                                     <div
@@ -155,9 +199,12 @@ export const GameByTime = ({
                                       className={`${styles.gameBetType} d-inline-flex align-items-center`}
                                     >
                                       <i className="icon-live"></i>
-                                        <span className={styles.matchedData}>
-                                          Matched - {match.totalMatched ? match.totalMatched : 0 }
-                                        </span>
+                                      <span className={styles.matchedData}>
+                                        Matched -{" "}
+                                        {match.totalMatched
+                                          ? match.totalMatched
+                                          : 0}
+                                      </span>
                                       {match.has_fancy ? (
                                         <div className="icon-fancybet">
                                           <span className="icon-fancybet path1"></span>
@@ -168,7 +215,7 @@ export const GameByTime = ({
                                       ) : (
                                         ""
                                       )}
-                                      
+
                                       {match.has_premium ? (
                                         <div className="icon-sportsbook">
                                           <span className="icon-sportsbook path1"></span>
@@ -188,11 +235,11 @@ export const GameByTime = ({
                                       ) : (
                                         ""
                                       )}
-                                       {checkECricket(match) && (
-                                          <span className={styles.gameE}>
-                                            <i></i> {match.name}
-                                         </span>
-                                        )}
+                                      {checkECricket(match) && (
+                                        <span className={styles.gameE}>
+                                          <i></i> {match.name}
+                                        </span>
+                                      )}
                                     </div>
                                   </div>
                                 </div>

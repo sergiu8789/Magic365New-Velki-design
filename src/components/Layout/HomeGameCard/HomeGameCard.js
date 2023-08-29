@@ -4,9 +4,11 @@ import styles from "./HomeGameCard.module.css";
 import { encrypt } from "../../../utils/crypto";
 import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
+import { useApp } from "../../../context/AppContextProvider";
 
 export const HomeGameCard = () => {
   const auth = useAuth();
+  const appData = useApp();
   const [gameTab, setGameTab] = useState("In-play");
   const [value, setValue] = useState("live");
   const [startGameDate, setStartDate] = useState("");
@@ -101,6 +103,7 @@ export const HomeGameCard = () => {
     if (!type) {
       type = "";
     }
+    appData.setAppData({ ...appData.appData, sportTabType: "by Competition" });
     navigate("/sports", {
       state: { type: id, category: cat, datetype: type },
     });
