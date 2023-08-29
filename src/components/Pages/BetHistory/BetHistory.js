@@ -498,7 +498,7 @@ export const BetHistory = () => {
                 >
                   <label className={styles.balanceInfoTxt}>Odds req.</label>
                   <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                    {item.odds}
+                  {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
                   </div>
                 </div>
                 <div
@@ -506,7 +506,7 @@ export const BetHistory = () => {
                 >
                   <label className={styles.balanceInfoTxt}>Avg. Odds</label>
                   <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                    {item.odds}
+                  {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
                   </div>
                 </div>
                 <div
@@ -592,7 +592,7 @@ export const BetHistory = () => {
                   >
                     <label className={styles.balanceInfoTxt}>Odds req.</label>
                     <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                      {item.odds}
+                    {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
                     </div>
                   </div>
                   <div
@@ -600,7 +600,7 @@ export const BetHistory = () => {
                   >
                     <label className={styles.balanceInfoTxt}>Avg. Odds</label>
                     <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                      {item.odds}
+                    {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
                     </div>
                   </div>
                   <div

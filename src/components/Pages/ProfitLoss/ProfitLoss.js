@@ -631,7 +631,7 @@ export const ProfitLoss = () => {
                             <div
                               className={`${styles.balanceInfoAmt} d-inline-flex`}
                             >
-                              {row.odds}
+                              {item.market_type === 'fancy' && row.size ? row.size+"/":""}{row.odds}
                             </div>
                           </div>
                           <div
@@ -744,7 +744,7 @@ export const ProfitLoss = () => {
                           : styles.proftStatusLoss
                       } d-inline-flex col-8`}
                     >
-                      ({parseFloat(item.netTotal).toFixed(2)})
+                      ({item.netTotal ? parseFloat(item.netTotal).toFixed(2) : 0})
                     </span>
                   </div>
                 </div>
