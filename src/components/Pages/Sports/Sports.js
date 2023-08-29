@@ -25,6 +25,8 @@ export const Sports = () => {
   const [tournamentList, setTournamentList] = useState({});
   const [matchIds, setMarkIds] = useState([]);
   const [allMatchId, setMatchedId] = useState([]);
+  const [faveMatchList, setFaveMatchList] = useState([]);
+  const [faveMatchCount, setFaveMatchCount] = useState(0);
   const [sortGameList, setsortGameList] = useState("by Competition");
   const [storeTournament, setStoreTournament] = useState("");
   const [sportSearch, setSportSearch] = useState(false);
@@ -235,6 +237,28 @@ export const Sports = () => {
     setTournamentList(tournaments);
   };
 
+  const showFavourateGame = () => {
+    appData.setAppData({ ...appData.appData, listLoading: true });
+    setFaveMatchList([]);
+    setFaveMatchCount(0);
+    setfavorateGame(true);
+    ApiService.tournamentMatchList("all", "", "fav", "", "")
+      .then((res) => {
+        if (res?.data) {
+          setFaveMatchList(res?.data);
+          setFaveMatchCount(res?.data.length);
+          appData.setAppData({ ...appData.appData, listLoading: false });
+        } else {
+          setFaveMatchList([]);
+          setFaveMatchCount(0);
+          appData.setAppData({ ...appData.appData, listLoading: false });
+        }
+      })
+      .catch((error) => {
+        appData.setAppData({ ...appData.appData, listLoading: false });
+      });
+  };
+
   useEffect(() => {
     appData.setAppData({ ...appData.appData, listLoading: true });
     if (inPlayTab) {
@@ -330,7 +354,7 @@ export const Sports = () => {
               className={`text-icon-light icon-star-solid ${
                 styles.inPlayTabIcon
               } ${favorateGame && styles.activeStar}`}
-              onClick={() => setfavorateGame(true)}
+              onClick={() => showFavourateGame()}
             ></span>
             <span
               className={`text-icon-light icon-search ${styles.inPlayTabIcon}`}
@@ -399,7 +423,13 @@ export const Sports = () => {
           setSportSearch={setSportSearch}
         />
       )}
-      {favorateGame && <FavourateGames />}
+      {favorateGame && (
+        <FavourateGames
+          setFaveMatchList={setFaveMatchList}
+          faveMatchList={faveMatchList}
+          faveMatchCount={faveMatchCount}
+        />
+      )}
     </React.Fragment>
   );
 };
