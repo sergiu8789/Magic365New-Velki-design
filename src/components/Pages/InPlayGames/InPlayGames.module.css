@@ -15,3 +15,40 @@
     inset: 0;
     z-index: 5;
 }
+
+.scoreBoard{
+    background: black;
+    height: 46.0781px;
+    margin-bottom: 2px;
+}
+
+.scoreboardTitle{
+    color: white;
+    font-size: 16.64px;
+    font-weight: 700;
+    line-height: 26px;
+}
+
+.matchOddTitleRow {
+    background: #ffc800;
+    padding: 6px 10px;
+    gap: 15px;
+    overflow-x: auto;
+}
+
+.matchOddTitleRow::-webkit-scrollbar {
+    height: 1px;
+}
+
+.matchTitleHighlight {
+    font-size: 20px;
+}
+
+.scoreActiveLine {
+    left: 4px;
+    border-radius: 4px;
+    background: white;
+    height: 4px;
+    transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
+    -webkit-transition: transform .3s cubic-bezier(.175, .885, .32, 1.275), width .3s cubic-bezier(.175, .885, .32, 1.275);
+}

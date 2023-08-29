@@ -43,6 +43,7 @@ export const ExchangeOdds = ({
     let scrollPos = document.querySelector(
       "." + styles.matchOddTitleRow
     ).scrollLeft;
+    console.log(scrollPos)
     let TabPos = event.currentTarget.getBoundingClientRect().left;
     TabPos = TabPos - pageOffset - 5;
     TabPos = TabPos + scrollPos;

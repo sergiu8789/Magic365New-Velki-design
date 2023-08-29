@@ -19,18 +19,7 @@ export const MatchLiveCard = ({
         if (response?.ip) setIPAddress(response.ip);
       })
       .catch((err) => {
-        if (
-          err?.response?.data?.statusCode === 401 &&
-          err?.response?.data?.message === "Unauthorized"
-        ) {
-          localStorage.removeItem("token");
-          auth.setAuth({
-            ...auth.auth,
-            loggedIn: false,
-            user: {},
-            showSessionExpire: true,
-          });
-        }
+        console.log(err)
       });
   }, []);
 
@@ -41,7 +30,7 @@ export const MatchLiveCard = ({
 
   return (
     <React.Fragment>
-      {streamUrl && ipAddress && (
+      {streamUrl &&  (
         <div
           className={`${styles.matchStreemTv} col-12 position-relative`}
           ref={liveWindow}
