@@ -1,0 +1,26 @@
+.infoPageheader {
+    padding: 15px 0 25px;
+    background: #000;
+}
+
+.pageName {
+    color: #FFF;
+    font-size: 19px;
+}
+
+.closePage {
+    color: #FFF;
+    font-size: 18px;
+    width: 50px;
+}
+
+.infoPageContent {
+    padding: 15px 25px;
+    border-top-left-radius: 13px;
+    background: #FFF;
+    margin-top: -10px;
+    height: calc(100% - 115px);
+    color: #000;
+    font-size: 18px;
+    line-height: 30px;
+}

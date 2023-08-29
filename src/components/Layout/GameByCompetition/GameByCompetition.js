@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../GameList/GameList.module.css";
+import { encrypt } from "../../../utils/crypto";
 import { NoData } from "../NoData/NoData";
 import { GameListCompetition } from "../GameListCompetition/GameListCompetition";
-import { getDateYearNumFormat, formatTimeHh } from "../../../utils/helper";
-import { checkECricket } from "../../../utils/helper";
+import {
+  getDateYearNumFormat,
+  formatTimeHh,
+  compareDate,
+  checkECricket,
+} from "../../../utils/helper";
+import ApiService from "../../../services/ApiService";
 
 export const GameByCompetition = ({
   allGameList,
@@ -20,6 +26,7 @@ export const GameByCompetition = ({
     Soccer: false,
     Tennis: false,
   });
+  const [faveGame, setFaveGame] = useState([]);
 
   const openMatchDetail = (gameType, tournament) => {
     tournamentList[gameType][tournament].open =
@@ -48,6 +55,28 @@ export const GameByCompetition = ({
     closeAllMatchBox[gameType] = !closeAllMatchBox[gameType];
     setTournamentList({ ...tournamentList });
     setcloseAllMatchBox({ ...closeAllMatchBox });
+  };
+
+  const setGameFavrite = (event, date, matchId) => {
+    let dateVal = compareDate(date);
+
+    let newFavArry = [];
+    newFavArry = [...faveGame];
+    if (newFavArry.indexOf(matchId) < 0) {
+      setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+    } else {
+      let betIndex = newFavArry.indexOf(matchId);
+      newFavArry.splice(betIndex, 1);
+      setFaveGame(faveGame.filter((x) => x !== matchId));
+    }
+    let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
+    ApiService.setGameFav(favMatchjson)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {});
+
+    event.stopPropagation();
   };
 
   return (
@@ -144,8 +173,22 @@ export const GameByCompetition = ({
                                   <div
                                     className={`${styles.gamesTypeName} d-inline-flex align-items-center`}
                                   >
-                                    <div className={styles.gameFavorate}>
-                                      <span className="icon-star"></span>
+                                    <div
+                                      className={`${styles.gameFavorate} ${
+                                        styles.bookMarkGame
+                                      } ${
+                                        faveGame.indexOf(match.id) > -1 &&
+                                        styles.favourateGame
+                                      } position-relative`}
+                                      onClick={(event) =>
+                                        setGameFavrite(
+                                          event,
+                                          match.date,
+                                          match.id
+                                        )
+                                      }
+                                    >
+                                      <span className="icon-star invisible"></span>
                                     </div>
                                     <div className="d-inline-flex flex-column">
                                       <div
@@ -203,7 +246,7 @@ export const GameByCompetition = ({
                                         {checkECricket(match) && (
                                           <span className={styles.gameE}>
                                             <i></i> {match.name}
-                                         </span>
+                                          </span>
                                         )}
                                       </div>
                                       <div

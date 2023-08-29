@@ -91,6 +91,10 @@
     color: #FFF;
 }
 
+.inPlayTabIcon.activeStar {
+    color: #ffc800;
+}
+
 .activeLine {
     border-radius: 5px;
     height: 4px;

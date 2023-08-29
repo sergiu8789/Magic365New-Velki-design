@@ -9,13 +9,14 @@ import { encrypt } from "../../../utils/crypto";
 import { socket } from "../../../services/socket";
 import { useApp } from "../../../context/AppContextProvider";
 import { NoData } from "../../Layout/NoData/NoData";
-// import { SportsSearch } from "../../Layout/SportsSearch/SportsSearch";
+import { SportsSearch } from "../../Layout/SportsSearch/SportsSearch";
+import { FavourateGames } from "../../Layout/FavourateGames/FavourateGames";
 
 export const Sports = () => {
   const location = useLocation();
   const appData = useApp();
   const [TabLineWidth, setTabLineWidth] = useState("");
-  const [sockEvents,setSockEvents] = useState("");
+  const [sockEvents, setSockEvents] = useState("");
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [CatTabPosLeft, setCatTabPosLeft] = useState("");
   const [tabActive, settabActive] = useState("");
@@ -27,22 +28,25 @@ export const Sports = () => {
   const [sortGameList, setsortGameList] = useState("by Competition");
   const [storeTournament, setStoreTournament] = useState("");
   const [sportSearch, setSportSearch] = useState(false);
+  const [favorateGame, setfavorateGame] = useState(false);
   const playRef = useRef([]);
   const tabRef = useRef([]);
-  const [allMarkList,setAllMarkList] = useState([]);
+  const [allMarkList, setAllMarkList] = useState([]);
 
   useEffect(() => {
-    if (matchIds?.length) 
-      socket.emit("subscription", matchIds);
+    if (matchIds?.length) socket.emit("subscription", matchIds);
   }, [matchIds]);
 
   useEffect(() => {
     function onBroadCast(value) {
       setMatchedId(value);
-      if(value?.length){
-         value?.map((item) => {
-          if(!allMarkList?.filter((itm) =>  itm.MarketId === item.MarketId)?.length){
-            setAllMarkList((prev) => [...prev,item] );
+      if (value?.length) {
+        value?.map((item) => {
+          if (
+            !allMarkList?.filter((itm) => itm.MarketId === item.MarketId)
+              ?.length
+          ) {
+            setAllMarkList((prev) => [...prev, item]);
           }
         });
       }
@@ -51,8 +55,7 @@ export const Sports = () => {
     return () => {
       socket.off("broadcast", onBroadCast);
     };
-  },[sockEvents,allMarkList]);
-
+  }, [sockEvents, allMarkList]);
 
   useEffect(() => {
     let getGameTab = appData.appData.SportTabActive;
@@ -115,6 +118,7 @@ export const Sports = () => {
     setTabLineWidth(widthTab);
     setTabPosLeft(TabPos);
     setinPlayTab(name);
+    setfavorateGame(false);
   };
 
   const activeSportsTab = (event, name, gameId) => {
@@ -171,12 +175,14 @@ export const Sports = () => {
     },
   ];
 
-  const getAllTournament = (res,allMarkList) => {
+  const getAllTournament = (res, allMarkList) => {
     let tournaments = { Cricket: {}, Soccer: {}, Tennis: {} };
     let marketIdList = [];
     res?.data?.map((item, index) => {
-      const filteredMarket =  allMarkList?.filter((markets) => markets.MarketId === item.market_id);
-      if(filteredMarket?.length)
+      const filteredMarket = allMarkList?.filter(
+        (markets) => markets.MarketId === item.market_id
+      );
+      if (filteredMarket?.length)
         item.totalMatched = filteredMarket[0].TotalMatched;
       marketIdList.push(item.market_id);
       Object.keys(tournaments)?.map((tour) => {
@@ -198,7 +204,7 @@ export const Sports = () => {
                 matchId: [],
               };
               tournaments[tour].matches.push(item);
-             // tournaments[tour].matchId.push(TotalMId);
+              // tournaments[tour].matchId.push(TotalMId);
             }
           } else if (sortGameList === "by Time") {
             if (tournaments[tour]?.matches) {
@@ -256,29 +262,28 @@ export const Sports = () => {
       timeTab = timeTab.toLowerCase();
       setMarkIds([]);
       setTournamentList({});
-      ApiService.tournamentMatchList(
-        activeTab,
-        "",
-        timeTab,
-        startDate,
-        endDate
-      ).then((res) => {
-        if (res?.data) {
-         // getAllTournament(res);
-          setStoreTournament(res);
-        } else {
-          setMarkIds([]);
-          setTournamentList({});
-        }
-      });
+      ApiService.tournamentMatchList(activeTab, "", timeTab, startDate, endDate)
+        .then((res) => {
+          if (res?.data) {
+            appData.setAppData({ ...appData.appData, listLoading: false });
+            getAllTournament(res);
+            setStoreTournament(res);
+          } else {
+            appData.setAppData({ ...appData.appData, listLoading: false });
+            setMarkIds([]);
+            setTournamentList({});
+          }
+        })
+        .catch((error) => {
+          appData.setAppData({ ...appData.appData, listLoading: false });
+        });
     }
   }, [inPlayTab, tabActive]);
 
   useEffect(() => {
-   //appData.setAppData({ ...appData.appData, listLoading: true });
-    if(storeTournament)
-       getAllTournament(storeTournament,allMarkList);
-  }, [sortGameList,storeTournament,allMarkList]);
+    //appData.setAppData({ ...appData.appData, listLoading: true });
+    if (storeTournament) getAllTournament(storeTournament, allMarkList);
+  }, [sortGameList, storeTournament, allMarkList]);
 
   return (
     <React.Fragment>
@@ -308,7 +313,9 @@ export const Sports = () => {
                 <React.Fragment key={index}>
                   <span
                     className={`${styles.inPlayTabName} d-inline-flex ${
-                      item.name === inPlayTab && styles.inPlayTabActive
+                      item.name === inPlayTab &&
+                      favorateGame === false &&
+                      styles.inPlayTabActive
                     }`}
                     ref={(element) => (playRef.current[index] = element)}
                     onClick={(event) => activeGameTab(event, item.name)}
@@ -320,13 +327,19 @@ export const Sports = () => {
               );
             })}
             <span
-              className={`text-icon-light icon-star-solid ${styles.inPlayTabIcon}`}
+              className={`text-icon-light icon-star-solid ${
+                styles.inPlayTabIcon
+              } ${favorateGame && styles.activeStar}`}
+              onClick={() => setfavorateGame(true)}
             ></span>
             <span
               className={`text-icon-light icon-search ${styles.inPlayTabIcon}`}
+              onClick={() => setSportSearch(true)}
             ></span>
             <div
-              className={`${styles.activeLine} position-absolute d-inline-flex`}
+              className={`${styles.activeLine} position-absolute ${
+                favorateGame ? "d-none" : "d-inline-flex"
+              }`}
               style={{
                 width: TabLineWidth + "px",
                 transform: "translateX(" + TabPosLeft + "px)",
@@ -380,7 +393,13 @@ export const Sports = () => {
         )}
       </div>
       <BetSlip />
-      {/* <SportsSearch /> */}
+      {sportSearch && (
+        <SportsSearch
+          sportSearch={sportSearch}
+          setSportSearch={setSportSearch}
+        />
+      )}
+      {favorateGame && <FavourateGames />}
     </React.Fragment>
   );
 };

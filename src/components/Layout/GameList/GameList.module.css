@@ -132,6 +132,31 @@
 .gameFavorate {
     padding: 0px 10px 0px 0px;
     font-size: 20px;
+    color: #111;
+    flex-shrink: 0;
+}
+
+.inactiveGame.gameFavorate {
+    color: rgb(212, 224, 229)
+}
+
+.bookMarkGame {
+    background-position: 0 0;
+    height: 45px;
+    margin: -12px -9px 0 -22px;
+    max-height: 45px;
+    max-width: 70px;
+    transform: scale(0.58);
+    transform-origin: center center;
+    width: 61px;
+    z-index: 5;
+    background-image: url(../../../assets/images/mypin-star-sprit-black.webp);
+}
+
+.bookMarkGame.favourateGame {
+    background-position: -3519px 0;
+    -webkit-transition: background-position .8s steps(55);
+    transition: background-position .8s steps(55);
 }
 
 .gameBetType {
