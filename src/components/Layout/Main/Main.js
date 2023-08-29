@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./Main.module.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
@@ -13,11 +13,17 @@ import { Loader } from "../Loader/Loader";
 import { Offline, Online } from "react-detect-offline";
 import { NoInternet } from "../NoInternet/NoInternet";
 import { socket } from "../../../services/socket";
+import { useIdleTimer } from "react-idle-timer";
+import { SessionExpire } from "../SessionExpire/SessionExpire";
 
 function Main() {
   const location = useLocation();
   const auth = useAuth();
   const appData = useApp();
+  const navigate = useNavigate();
+  const timeout = 5 * 60 * 1000;
+  const promptBeforeIdle = 30000;
+  const [remaining, setRemaining] = useState(timeout)
 
   const fetchWalletMoney = () => {
     ApiService.wallet()
@@ -48,16 +54,56 @@ function Main() {
       });
   };
 
+  const onIdle = () => {
+    if(auth.auth.loggedIn){
+    auth.setAuth({
+     ...auth.auth,
+     loggedIn: false,
+     showSucessMessage: true,
+     showSessionMessage:false,
+     successMessage: "Session Timeout",
+    });
+    //  localStorage.removeItem("token");
+    //  navigate("/");
+   }
+ };
+
+ const onPrompt = () => {
+   if(auth.auth.loggedIn){
+     auth.setAuth({
+       ...auth.auth,
+       showSessionMessage: true,
+     });
+   }
+ }
+
+ const { getRemainingTime,activate } = useIdleTimer({
+  onIdle,
+  onPrompt,
+  timeout, //5 minute idle timeout
+  promptBeforeIdle
+});
+
+
   useEffect(() => {
     if (auth.auth.fetchWallet && auth.auth.loggedIn) fetchWalletMoney();
   }, [auth.auth.fetchWallet]);
 
   useEffect(() => {
     socket.connect();
-    // return () => {
-    //   socket.disconnect();
-    // };
+    const interval = setInterval(() => {
+      setRemaining(Math.ceil(getRemainingTime() / 1000))
+    }, 500)
+    return () => {
+      clearInterval(interval)
+    }
   }, []);
+
+
+  useEffect(() => {
+    if(!auth.auth.showSessionMessage)
+    activate();
+  },[auth.auth.showSessionMessage]);
 
   return (
     <React.Fragment>
@@ -91,6 +137,7 @@ function Main() {
       {/* <Offline>
         <NoInternet />
       </Offline> */}
+      <SessionExpire  remaining={remaining}/>
     </React.Fragment>
   );
 }
