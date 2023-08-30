@@ -314,11 +314,7 @@ export const SportsSearch = ({ sportSearch, setSportSearch }) => {
               )}
               {searchVal !== "" &&
                 newCompetition.length === 0 &&
-                newEvents.length === 0 && (
-                  <React.Fragment>
-                    <NoData title="No Data" />
-                  </React.Fragment>
-                )}
+                newEvents.length === 0 && <NoData title="No Data" />}
             </React.Fragment>
           ) : leagueMatch === "LeagueMatches" ? (
             <React.Fragment>
