@@ -510,7 +510,11 @@ export const ExchangeOdds = ({
                             ? styles.animateSparkBack
                             : ""
                         } ${
-                          item?.ExchangePrices?.AvailableToBack[0].price > 20
+                          item?.ExchangePrices?.AvailableToBack[0].price > 20 ||
+                          item?.ExchangePrices?.AvailableToBack[0].price ===
+                            "" ||
+                          item?.ExchangePrices?.AvailableToBack[0].price ===
+                            null
                             ? styles.betDisabled
                             : ""
                         }`}
@@ -541,7 +545,10 @@ export const ExchangeOdds = ({
                             ? styles.animateSparkLay
                             : ""
                         } ${
-                          item?.ExchangePrices?.AvailableToLay[0].price > 20
+                          item?.ExchangePrices?.AvailableToLay[0].price > 20 ||
+                          item?.ExchangePrices?.AvailableToLay[0].price ===
+                            "" ||
+                          item?.ExchangePrices?.AvailableToLay[0].price === null
                             ? styles.betDisabled
                             : ""
                         }`}

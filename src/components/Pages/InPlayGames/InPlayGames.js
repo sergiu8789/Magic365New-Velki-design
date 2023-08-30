@@ -55,10 +55,12 @@ export const InPlayGames = () => {
 
   useEffect(() => {
     if (location?.state?.match_id) {
-      ApiService.getScoreCard(location?.state?.match_id).then((res) => {
-        if (res?.streamingUrl) setStreamUrl(res.streamingUrl);
-        if (res?.scoreUrl) setScoreCardUrl(res.scoreUrl);
-      });
+      ApiService.getScoreCard(location?.state?.match_id)
+        .then((res) => {
+          if (res?.streamingUrl) setStreamUrl(res.streamingUrl);
+          if (res?.scoreUrl) setScoreCardUrl(res.scoreUrl);
+        })
+        .catch((error) => {});
     }
   }, [location?.state?.match_id]);
 

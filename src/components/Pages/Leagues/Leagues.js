@@ -31,27 +31,31 @@ export const Leagues = () => {
 
   useEffect(() => {
     appData.setAppData({ ...appData.appData, listLoading: true });
-    ApiService.getSports().then((res) => {
-      appData.setAppData({ ...appData.appData, listLoading: false });
-      if (res?.data) setTournamentList(res.data);
-    });
+    ApiService.getSports()
+      .then((res) => {
+        appData.setAppData({ ...appData.appData, listLoading: false });
+        if (res?.data) setTournamentList(res.data);
+      })
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
     if (leagueName) {
       appData.setAppData({ ...appData.appData, listLoading: true });
       setMatchList([]);
-      ApiService.tournamentMatchList(tabActive, leagueName).then((res) => {
-        appData.setAppData({ ...appData.appData, listLoading: false });
-        if (res?.data?.data) {
-          let marketId = [];
-          setMatchList(res.data.data);
-          res?.data?.data?.forEach((item) => {
-            marketId.push(item.market_id);
-          });
-          setMatchIds(marketId);
-        }
-      });
+      ApiService.tournamentMatchList(tabActive, leagueName)
+        .then((res) => {
+          appData.setAppData({ ...appData.appData, listLoading: false });
+          if (res?.data?.data) {
+            let marketId = [];
+            setMatchList(res.data.data);
+            res?.data?.data?.forEach((item) => {
+              marketId.push(item.market_id);
+            });
+            setMatchIds(marketId);
+          }
+        })
+        .catch((error) => {});
     }
   }, [leagueName]);
 

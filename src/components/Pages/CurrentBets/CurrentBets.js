@@ -112,7 +112,6 @@ export const CurrentBets = () => {
         setBetsTotalRecords(totalPage);
         setBetTotalCount(res.data.count);
         SetCurrentBetsList(res.data.data);
-        console.log(res.data.data);
         appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
@@ -123,7 +122,6 @@ export const CurrentBets = () => {
           err?.response?.data?.statusCode === 401 &&
           err?.response?.data?.message === "Unauthorized"
         ) {
-          console.log("hello");
           localStorage.removeItem("token");
           auth.setAuth({
             ...auth.auth,
@@ -131,7 +129,6 @@ export const CurrentBets = () => {
             user: {},
             showSessionExpire: true,
           });
-          console.log("auth ", auth);
         }
       });
   };
@@ -349,7 +346,8 @@ export const CurrentBets = () => {
                 >
                   <label className={styles.balanceInfoTxt}>Odds req.</label>
                   <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                   {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
+                    {item.market_type === "fancy" ? item.size + "/" : ""}
+                    {item.odds}
                   </div>
                 </div>
                 <div
@@ -357,7 +355,8 @@ export const CurrentBets = () => {
                 >
                   <label className={styles.balanceInfoTxt}>Avg. Odds</label>
                   <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                  {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
+                    {item.market_type === "fancy" ? item.size + "/" : ""}
+                    {item.odds}
                   </div>
                 </div>
                 <div
@@ -437,7 +436,8 @@ export const CurrentBets = () => {
                   >
                     <label className={styles.balanceInfoTxt}>Odds req.</label>
                     <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                    {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
+                      {item.market_type === "fancy" ? item.size + "/" : ""}
+                      {item.odds}
                     </div>
                   </div>
                   <div
@@ -445,7 +445,8 @@ export const CurrentBets = () => {
                   >
                     <label className={styles.balanceInfoTxt}>Avg. Odds</label>
                     <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                    {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
+                      {item.market_type === "fancy" ? item.size + "/" : ""}
+                      {item.odds}
                     </div>
                   </div>
                   <div
