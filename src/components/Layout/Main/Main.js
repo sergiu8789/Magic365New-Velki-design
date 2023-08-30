@@ -15,6 +15,7 @@ import { NoInternet } from "../NoInternet/NoInternet";
 import { socket } from "../../../services/socket";
 import { useIdleTimer } from "react-idle-timer";
 import { SessionExpire } from "../SessionExpire/SessionExpire";
+import { ToastPopup } from "../ToastPopup/ToastPopup";
 
 function Main() {
   const location = useLocation();
@@ -23,7 +24,8 @@ function Main() {
   const navigate = useNavigate();
   const timeout = 5 * 60 * 1000;
   const promptBeforeIdle = 30000;
-  const [remaining, setRemaining] = useState(timeout)
+  const [remaining, setRemaining] = useState(timeout);
+  const [sessionExpiredSucees,setSessionExpiredSuccess] = useState(false);
 
   const fetchWalletMoney = () => {
     ApiService.wallet()
@@ -62,6 +64,7 @@ function Main() {
       fetchWallet: false,
       showSessionExpire: false
     });
+    setSessionExpiredSuccess(true);
      localStorage.removeItem("bettoken");
      navigate("/");
    }
@@ -137,6 +140,13 @@ function Main() {
         <NoInternet />
       </Offline> */}
       <SessionExpire  remaining={remaining}/>
+      <ToastPopup
+          status={sessionExpiredSucees}
+          betbox={sessionExpiredSucees}
+          title={"Session Expired!"}
+          message={"Your session is expired"}
+          setPassChange={(e) => setSessionExpiredSuccess(e)}
+        />
     </React.Fragment>
   );
 }
