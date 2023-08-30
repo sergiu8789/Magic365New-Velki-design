@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
+import { NoData } from "../NoData/NoData";
 
 export const SportsSearch = ({ sportSearch, setSportSearch }) => {
   const [searchVal, setSearchVal] = useState("");
@@ -22,6 +23,7 @@ export const SportsSearch = ({ sportSearch, setSportSearch }) => {
 
   const getInputVal = (event) => {
     setSearchVal(event.target.value);
+    showleagueMatch("SearchList");
   };
 
   const submitSearchVal = (event, value) => {
@@ -47,8 +49,10 @@ export const SportsSearch = ({ sportSearch, setSportSearch }) => {
   };
 
   const highlightText = (text, val) => {
-    if (text.indexOf(val) > -1) {
-      let textMatch = text.split(val);
+    let matchName = text.toLowerCase();
+    let searchValtxt = val.toLowerCase();
+    if (matchName.indexOf(searchValtxt) > -1) {
+      let textMatch = text.split(new RegExp(val, "i"));
       return (
         <div className="truncate">
           {textMatch[0] ? textMatch[0] : ""}
@@ -82,28 +86,41 @@ export const SportsSearch = ({ sportSearch, setSportSearch }) => {
     if (leagueName) {
       appData.setAppData({ ...appData.appData, listLoading: true });
       setMatchList([]);
-      ApiService.tournamentMatchList(tabActive, leagueName).then((res) => {
-        appData.setAppData({ ...appData.appData, listLoading: false });
-        if (res?.data?.data) {
-          let marketId = [];
-          setMatchList(res.data.data);
-          res?.data?.data?.forEach((item) => {
-            marketId.push(item.market_id);
-          });
-          setMatchIds(marketId);
-        }
-      });
+      ApiService.tournamentMatchList(tabActive, leagueName)
+        .then((res) => {
+          appData.setAppData({ ...appData.appData, listLoading: false });
+          if (res?.data?.data) {
+            let marketId = [];
+            setMatchList(res.data.data);
+            res?.data?.data?.forEach((item) => {
+              marketId.push(item.market_id);
+            });
+            setMatchIds(marketId);
+          } else {
+            setMatchList([]);
+          }
+        })
+        .catch((error) => {
+          setMatchList([]);
+        });
     }
   }, [leagueName]);
 
   useEffect(() => {
     appData.setAppData({ ...appData.appData, listLoading: true });
+    setnewEvents([]);
+    setnewCompetition([]);
     ApiService.sportsSearchList(searchVal)
       .then((res) => {
-        setnewEvents(res.data);
+        if (res.data) {
+          setnewEvents(res.data);
+        } else {
+          setnewEvents([]);
+        }
         appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
+        setnewEvents([]);
         appData.setAppData({ ...appData.appData, listLoading: false });
         if (
           err?.response?.data?.statusCode === 401 &&
@@ -121,10 +138,15 @@ export const SportsSearch = ({ sportSearch, setSportSearch }) => {
 
     ApiService.sportsCompetitionList(searchVal)
       .then((res) => {
-        setnewCompetition(res.data);
+        if (res.data) {
+          setnewCompetition(res.data);
+        } else {
+          setnewCompetition([]);
+        }
         appData.setAppData({ ...appData.appData, listLoading: false });
       })
       .catch((err) => {
+        setnewCompetition([]);
         appData.setAppData({ ...appData.appData, listLoading: false });
         if (
           err?.response?.data?.statusCode === 401 &&
@@ -248,7 +270,6 @@ export const SportsSearch = ({ sportSearch, setSportSearch }) => {
                   </div>
                 </div>
               )}
-
               {searchVal !== "" && newEvents.length > 0 && (
                 <div
                   className={`${styles.recentSearches} col-12 d-inline-flex flex-column`}
@@ -291,6 +312,13 @@ export const SportsSearch = ({ sportSearch, setSportSearch }) => {
                   </div>
                 </div>
               )}
+              {searchVal !== "" &&
+                newCompetition.length === 0 &&
+                newEvents.length === 0 && (
+                  <React.Fragment>
+                    <NoData title="No Data" />
+                  </React.Fragment>
+                )}
             </React.Fragment>
           ) : leagueMatch === "LeagueMatches" ? (
             <React.Fragment>

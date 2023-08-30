@@ -384,6 +384,23 @@
     border-radius: 0px 0px 13px 13px;
 }
 
+.backBetBox.popularOddsStake, .LayBetBox.betDisabled {
+    animation: unset;
+    -webkit-animation: unset;
+    background: #EEE;
+    pointer-events: none;
+}
+
+.backBetBox.popularOddsStake::after, .LayBetBox.betDisabled::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(51, 51, 51, 0.20) url(../../../assets/images/bg-disabled.png);
+    width: 100%;
+    height: 100%;
+}
+
 .animateSparkBack {
     animation: sparkBack .1s ease;
     -webkit-animation: sparkBack .1s ease;

@@ -17,35 +17,33 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
   const navigate = useNavigate();
 
   const placeBet = (item, selection, event) => {
-  if(auth.auth.loggedIn){ 
-    const betSelection = {
-      amount: "",
-      type: 1,
-      size: "",
-      odds: selection.odds,
-      selection: selection.selectionName,
-      runner_name: item.marketName + " --- (" + selection.selectionName + ")",
-      selection_id: selection.id,
-      market_id: item.id,
-      match_id: item.betfairEventId ? item.betfairEventId.toString() : "",
-      status: item.apiSiteStatus,
-      market_type: "premium",
-      pmo: item,
-    };
-    betData.setBetData({
-      ...betData.betData,
-      betSlipStatus: true,
-      betSelection: betSelection,
-    });
-    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 100;
-    setTimeout(function () {
-      let cuurentScroll = playWindow.current.scrollTop;
-      cuurentScroll = cuurentElem + cuurentScroll;
-      playWindow.current.scrollTop = cuurentScroll;
-    }, 500);
-  }
-  else
-    navigate('/login'); 
+    if (auth.auth.loggedIn) {
+      const betSelection = {
+        amount: "",
+        type: 1,
+        size: "",
+        odds: selection.odds,
+        selection: selection.selectionName,
+        runner_name: item.marketName + " --- (" + selection.selectionName + ")",
+        selection_id: selection.id,
+        market_id: item.id,
+        match_id: item.betfairEventId ? item.betfairEventId.toString() : "",
+        status: item.apiSiteStatus,
+        market_type: "premium",
+        pmo: item,
+      };
+      betData.setBetData({
+        ...betData.betData,
+        betSlipStatus: true,
+        betSelection: betSelection,
+      });
+      let cuurentElem = event.currentTarget.getBoundingClientRect().top - 100;
+      setTimeout(function () {
+        let cuurentScroll = playWindow.current.scrollTop;
+        cuurentScroll = cuurentElem + cuurentScroll;
+        playWindow.current.scrollTop = cuurentScroll;
+      }, 500);
+    } else navigate("/login");
   };
 
   const togglePopularBet = (id, subOdds) => {
@@ -251,10 +249,11 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
                     key={selectionIndex}
                     className={`${
                       styles.popularOddsStake
-                    } d-inline-flex flex-column align-items-center justify-content-center me-auto ${
+                    } d-inline-flex flex-column align-items-center justify-content-center position-relative me-auto overflow-hidden ${
                       prevCountRef?.current &&
-                      selection.odds != prevCountRef.current[index]?.Back && appData.appData.highlightOdds
-                        ? styles.animateSparkBack 
+                      selection.odds != prevCountRef.current[index]?.Back &&
+                      appData.appData.highlightOdds
+                        ? styles.animateSparkBack
                         : ""
                     }`}
                   >

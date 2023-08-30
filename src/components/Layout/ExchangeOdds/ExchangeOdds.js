@@ -43,7 +43,7 @@ export const ExchangeOdds = ({
     let scrollPos = document.querySelector(
       "." + styles.matchOddTitleRow
     ).scrollLeft;
-    console.log(scrollPos)
+    console.log(scrollPos);
     let TabPos = event.currentTarget.getBoundingClientRect().left;
     TabPos = TabPos - pageOffset - 5;
     TabPos = TabPos + scrollPos;
@@ -53,7 +53,7 @@ export const ExchangeOdds = ({
   };
 
   const placeBet = (item, type, market, event) => {
-    if(auth.auth.loggedIn){
+    if (auth.auth.loggedIn) {
       const betSelection = {
         amount: "",
         type: type,
@@ -85,9 +85,7 @@ export const ExchangeOdds = ({
         cuurentScroll = cuurentElem + cuurentScroll;
         playWindow.current.scrollTop = cuurentScroll;
       }, 500);
-    }
-    else
-      navigate('/login');
+    } else navigate("/login");
   };
 
   /****** method to fetch other market list from API  ********/
@@ -142,14 +140,14 @@ export const ExchangeOdds = ({
   useEffect(() => {
     /******** Exchange odds brodacasting  *****/
     function onBroadCast(value) {
-    //  console.log(value);
+      //  console.log(value);
       let allRunners = [];
       if (value?.length) {
         value?.map((item) => {
-        //  console.log(item);
+          //  console.log(item);
           // match marketId with socket response
           if (item.MarketId === selectedMarket.market_id) {
-           // console.log(item);
+            // console.log(item);
             setSelectedRunner(item);
             let selections = [];
             item?.Runners?.map((item, index) => {
@@ -440,7 +438,7 @@ export const ExchangeOdds = ({
                             expoData?.exchangeExpoData?.oldExpoData &&
                             expoData?.exchangeExpoData?.oldExpoData[
                               item.SelectionId
-                            ] 
+                            ]
                               ? "d-inline-flex"
                               : "d-none"
                           }`}
@@ -499,7 +497,7 @@ export const ExchangeOdds = ({
                         }
                         className={`${
                           styles.backBetBox
-                        } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
+                        } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center position-relative overflow-hidden ${
                           item?.ExchangePrices?.AvailableToBack[0].price !=
                             prevCountRef.current[index]?.Back &&
                           appData.appData.highlightOdds
@@ -510,6 +508,10 @@ export const ExchangeOdds = ({
                             prevCountRef.current[index]?.BackSize &&
                           appData.appData.highlightOdds
                             ? styles.animateSparkBack
+                            : ""
+                        } ${
+                          item?.ExchangePrices?.AvailableToBack[0].price > 20
+                            ? styles.betDisabled
                             : ""
                         }`}
                       >
@@ -526,7 +528,7 @@ export const ExchangeOdds = ({
                         }
                         className={`${
                           styles.LayBetBox
-                        } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
+                        } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center position-relative overflow-hidden ${
                           item?.ExchangePrices?.AvailableToLay[0].price !=
                             prevCountRef.current[index]?.Lay &&
                           appData.appData.highlightOdds
@@ -537,6 +539,10 @@ export const ExchangeOdds = ({
                             prevCountRef.current[index]?.LaySize &&
                           appData.appData.highlightOdds
                             ? styles.animateSparkLay
+                            : ""
+                        } ${
+                          item?.ExchangePrices?.AvailableToLay[0].price > 20
+                            ? styles.betDisabled
                             : ""
                         }`}
                       >
