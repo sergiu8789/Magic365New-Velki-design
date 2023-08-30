@@ -23,9 +23,9 @@ export const InPlayGames = () => {
   const [slideUpPage, setSlideUpPage] = useState(false);
   const [MarketPosLeft, setMarketPosLeft] = useState("");
   const [MarketLineWidth, setMarketLineWidth] = useState("");
-  const tabRef = useRef(null);
-  const [scoreTabList,setScoreTabList] = useState(["Live","Scoreboard"]);
-  const [selectedScoreTab,setSelectedScoreTab] = useState("Live");
+  const tabRef = useRef([]);
+  const [scoreTabList, setScoreTabList] = useState(["Live", "Scoreboard"]);
+  const [selectedScoreTab, setSelectedScoreTab] = useState("Live");
 
   const closeBetPopup = () => {
     appData.setAppData({
@@ -42,8 +42,8 @@ export const InPlayGames = () => {
     });
   };
 
-  const selectScoreTab = (event,name) => {
-    setSelectedScoreTab(name)
+  const selectScoreTab = (event, name) => {
+    setSelectedScoreTab(name);
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
     let TabPos = event.currentTarget.getBoundingClientRect().left;
     TabPos = TabPos - pageOffset - 5;
@@ -65,7 +65,6 @@ export const InPlayGames = () => {
   useEffect(() => {
     setSlideUpPage(appData.appData.appBetSlipOpen);
   }, [appData.appData.appBetSlipOpen]);
-  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,11 +89,10 @@ export const InPlayGames = () => {
       element.removeEventListener("scroll", handleScroll);
     };
   }, [streamOutscroll]);
-  
+
   useEffect(() => {
-    console.log(selectedScoreTab)
-    if (tabRef && tabRef.current) {
-      tabRef.current.click();
+    if (tabRef && tabRef.current[0]) {
+      tabRef.current[0].click();
     }
   }, [scoreTabList]);
 
@@ -109,35 +107,49 @@ export const InPlayGames = () => {
         <div
           className={`${styles.allPlayDetail} position-relative d-inline-block`}
         >
-          {streamUrl && scorecardUrl &&
-          <div className={styles.scoreBoard+ " col-12 d-flex justify-content-center"}>
-            {scoreTabList?.map((item,index) => {
-              return(
-                <div key={index} onClick={(e) => selectScoreTab(e,item)} ref={index === 0 ? tabRef : null}
-                   className={`${styles.matchTitleHighlight} col-6 d-inline-flex align-items-center justify-content-center flex-shrink-0`}
-                >
-                  <label className={styles.scoreboardTitle}>
-                    {item}
-                  </label>
-                </div>
-              )
-            })}
-               <div
-               className={`${styles.scoreActiveLine} d-inline-block position-absolute`}
-                style={{ width: MarketLineWidth + "px", transform: "translateX(" + MarketPosLeft + "px)",}}
-            ></div>
-          </div> }
-          { selectedScoreTab === 'Live' && streamUrl && 
-          <MatchLiveCard
-            liveWindow={liveWindow}
-            streamUrl={streamUrl}
-            streamOut={streamOut}
-            setStreamOut={setStreamOut}
-            setStreamOutScroll={setStreamOutScroll}
-          /> }
-           { ((selectedScoreTab === 'Scoreboard' && scorecardUrl) || !streamUrl) &&  
-           <MatchScoreCard scoreUrl={scorecardUrl} />
-          }
+          {streamUrl && scorecardUrl && (
+            <div
+              className={
+                styles.scoreBoard +
+                " col-12 position-relative d-flex justify-content-center"
+              }
+            >
+              {scoreTabList?.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={`${styles.matchTitleHighlight} col-6 d-inline-flex align-items-center justify-content-center flex-shrink-0`}
+                  >
+                    <label
+                      onClick={(e) => selectScoreTab(e, item)}
+                      ref={(element) => (tabRef.current[index] = element)}
+                      className={styles.scoreboardTitle}
+                    >
+                      {item}
+                    </label>
+                  </div>
+                );
+              })}
+              <div
+                className={`${styles.scoreActiveLine} d-inline-block position-absolute`}
+                style={{
+                  width: MarketLineWidth + "px",
+                  transform: "translateX(" + MarketPosLeft + "px)",
+                }}
+              ></div>
+            </div>
+          )}
+          {selectedScoreTab === "Live" && streamUrl && (
+            <MatchLiveCard
+              liveWindow={liveWindow}
+              streamUrl={streamUrl}
+              streamOut={streamOut}
+              setStreamOut={setStreamOut}
+              setStreamOutScroll={setStreamOutScroll}
+            />
+          )}
+          {((selectedScoreTab === "Scoreboard" && scorecardUrl) ||
+            !streamUrl) && <MatchScoreCard scoreUrl={scorecardUrl} />}
           <MatchOdds
             matchId={location?.state?.match_id}
             marketId={location?.state?.market_id}
