@@ -27,7 +27,9 @@ export const Sports = () => {
   const [allMatchId, setMatchedId] = useState([]);
   const [faveMatchList, setFaveMatchList] = useState([]);
   const [faveMatchCount, setFaveMatchCount] = useState(0);
-  const [sortGameList, setsortGameList] = useState("by Competition");
+  const [sortGameList, setsortGameList] = useState(
+    appData.appData.sportTabType
+  );
   const [storeTournament, setStoreTournament] = useState("");
   const [sportSearch, setSportSearch] = useState(false);
   const [favorateGame, setfavorateGame] = useState(false);

@@ -103,7 +103,6 @@ export const HomeGameCard = () => {
     if (!type) {
       type = "";
     }
-    appData.setAppData({ ...appData.appData, sportTabType: "by Competition" });
     navigate("/sports", {
       state: { type: id, category: cat, datetype: type },
     });
