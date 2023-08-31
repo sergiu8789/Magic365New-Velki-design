@@ -21,6 +21,7 @@ function Footer() {
   }, [location?.pathname]);
 
   useEffect(() => {
+    if(auth.auth.loggedIn){
     ApiService.getUserBetMatches()
       .then((res) => {
         if (res?.data?.rows) {
@@ -32,6 +33,7 @@ function Footer() {
       .catch((err) => {
         setBetCount(0);
       });
+    }
   }, []);
 
   const navigatePage = (event, link, type, click) => {

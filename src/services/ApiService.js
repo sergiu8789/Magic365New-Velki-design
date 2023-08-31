@@ -321,4 +321,12 @@ ApiService.setGameFav = function (data) {
     data: data,
   });
 };
+
+ApiService.getSettings= function () {
+  return fetch({
+    url: "/settings",
+    method: "get"
+  });
+};
+
 export default ApiService;

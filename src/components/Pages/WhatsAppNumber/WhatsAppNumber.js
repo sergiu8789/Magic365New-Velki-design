@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import styles from "./WhatsAppNumber.module.css";
 import { MenuHeader } from "../../Layout/MenuHeader/MenuHeader";
+import ApiService from "../../../services/ApiService";
 
 export const WhatsAppNumber = () => {
+  const [number,setNumber] = useState("");
+  const getWhatsAppNumber = () => {
+     ApiService.getSettings().then((res) => {
+       if(res?.data?.rows){
+        res?.data?.rows?.map((item) => {
+          if(item.meta_key === 'whatsApp_number')
+             setNumber(item?.meta_value);
+        })
+       }
+     })
+  }
+
   const openWhatAppLink = () => {
-    window.open("http://wa.me/85515519881");
+    window.open("http://wa.me/"+number);
   };
+
+  useEffect(() => {
+     getWhatsAppNumber();
+  },[]);
+
   return (
     <React.Fragment>
       <MenuHeader title="Upline WhatsApp Number" />
@@ -18,7 +36,7 @@ export const WhatsAppNumber = () => {
           <div className="d-inline-flex align-items-center">
             <span className={`${styles.whatsapp} icon-whatsapp`}></span>
             <span className={`${styles.settingToggleTitle} d-inline-block`}>
-              +85515519881
+              +{number}
             </span>
           </div>
           <div
