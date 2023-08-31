@@ -16,6 +16,7 @@ export const FavourateGames = ({
   faveMatchList,
   setFaveMatchList,
   faveMatchCount,
+  setFaveMatchCount,
 }) => {
   const navigate = useNavigate();
   const appData = useApp();
@@ -48,22 +49,26 @@ export const FavourateGames = ({
     ApiService.setGameFav(favMatchjson)
       .then((res) => {
         setPassChange(true);
+        appData.setAppData({ ...appData.appData, listLoading: true });
+        setFaveMatchList([]);
+        setFaveMatchCount(0);
+        ApiService.tournamentMatchList("all", "", "fav", "", "")
+          .then((res) => {
+            if (res?.data) {
+              setFaveMatchList(res?.data);
+              setFaveMatchCount(res?.data.length);
+              appData.setAppData({ ...appData.appData, listLoading: false });
+            } else {
+              setFaveMatchList([]);
+              setFaveMatchCount(0);
+              appData.setAppData({ ...appData.appData, listLoading: false });
+            }
+          })
+          .catch((error) => {
+            appData.setAppData({ ...appData.appData, listLoading: false });
+          });
       })
-      .catch((err) => {});
-
-    appData.setAppData({ ...appData.appData, listLoading: true });
-    setFaveMatchList([]);
-    ApiService.tournamentMatchList("all", "", "fav", "", "")
-      .then((res) => {
-        if (res?.data) {
-          setFaveMatchList(res?.data);
-          appData.setAppData({ ...appData.appData, listLoading: false });
-        } else {
-          setFaveMatchList([]);
-          appData.setAppData({ ...appData.appData, listLoading: false });
-        }
-      })
-      .catch((error) => {
+      .catch((err) => {
         appData.setAppData({ ...appData.appData, listLoading: false });
       });
 

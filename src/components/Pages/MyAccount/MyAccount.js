@@ -73,6 +73,7 @@ export const MyAccount = () => {
             <span
               className={`${styles.changePassBtn} position-absolute d-inline-flex align-items-center`}
               onClick={showChangePass}
+              role="button"
             >
               <i className="icon-edit"></i>
               <span>Edit</span>

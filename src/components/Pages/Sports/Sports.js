@@ -435,6 +435,7 @@ export const Sports = () => {
           setFaveMatchList={setFaveMatchList}
           faveMatchList={faveMatchList}
           faveMatchCount={faveMatchCount}
+          setFaveMatchCount={setFaveMatchCount}
         />
       )}
     </React.Fragment>

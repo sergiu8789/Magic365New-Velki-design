@@ -16,10 +16,9 @@ export const MenuHeader = ({ title }) => {
         <i
           className={`${styles.gameOpenArrow} position-absolute icon-arrow-down`}
           onClick={goBackPage}
+          role="button"
         ></i>
-        <label className={`${styles.HeaderName} d-inline-flex`}>
-          {title}
-        </label>
+        <label className={`${styles.HeaderName} d-inline-flex`}>{title}</label>
       </div>
     </React.Fragment>
   );
