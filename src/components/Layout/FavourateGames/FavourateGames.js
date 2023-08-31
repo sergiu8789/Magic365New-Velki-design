@@ -9,6 +9,7 @@ import {
 } from "../../../utils/helper";
 import { ToastPopup } from "../ToastPopup/ToastPopup";
 import ApiService from "../../../services/ApiService";
+import { useAuth } from "../../../context/AuthContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
 import { NoData } from "../NoData/NoData";
 
@@ -17,10 +18,12 @@ export const FavourateGames = ({
   setFaveMatchList,
   faveMatchCount,
   setFaveMatchCount,
+  setFaveGame,
+  faveGame,
 }) => {
   const navigate = useNavigate();
   const appData = useApp();
-  const [faveGame, setFaveGame] = useState([]);
+  const auth = useAuth();
   const [passChange, setPassChange] = useState(false);
 
   const openGameDetail = (match) => {
@@ -35,42 +38,46 @@ export const FavourateGames = ({
     });
   };
 
-  const setGameFavrite = (event, date, matchId) => {
-    let newFavArry = [];
-    newFavArry = [...faveGame];
-    if (newFavArry.indexOf(matchId) < 0) {
-      setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+  const setGameFavrite = (event, matchId) => {
+    if (auth.auth.loggedIn) {
+      let newFavArry = [];
+      newFavArry = [...faveGame];
+      if (newFavArry.indexOf(matchId) < 0) {
+        setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+      } else {
+        let betIndex = newFavArry.indexOf(matchId);
+        newFavArry.splice(betIndex, 1);
+        setFaveGame(faveGame.filter((x) => x !== matchId));
+      }
+      let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
+      ApiService.setGameFav(favMatchjson)
+        .then((res) => {
+          setPassChange(true);
+          appData.setAppData({ ...appData.appData, listLoading: true });
+          setFaveMatchList([]);
+          setFaveMatchCount(0);
+          ApiService.tournamentMatchList("all", "", "fav", "", "")
+            .then((res) => {
+              if (res?.data) {
+                setFaveMatchList(res?.data);
+                setFaveMatchCount(res?.data.length);
+                appData.setAppData({ ...appData.appData, listLoading: false });
+              } else {
+                setFaveMatchList([]);
+                setFaveMatchCount(0);
+                appData.setAppData({ ...appData.appData, listLoading: false });
+              }
+            })
+            .catch((error) => {
+              appData.setAppData({ ...appData.appData, listLoading: false });
+            });
+        })
+        .catch((err) => {
+          appData.setAppData({ ...appData.appData, listLoading: false });
+        });
     } else {
-      let betIndex = newFavArry.indexOf(matchId);
-      newFavArry.splice(betIndex, 1);
-      setFaveGame(faveGame.filter((x) => x !== matchId));
+      navigate("/login");
     }
-    let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
-    ApiService.setGameFav(favMatchjson)
-      .then((res) => {
-        setPassChange(true);
-        appData.setAppData({ ...appData.appData, listLoading: true });
-        setFaveMatchList([]);
-        setFaveMatchCount(0);
-        ApiService.tournamentMatchList("all", "", "fav", "", "")
-          .then((res) => {
-            if (res?.data) {
-              setFaveMatchList(res?.data);
-              setFaveMatchCount(res?.data.length);
-              appData.setAppData({ ...appData.appData, listLoading: false });
-            } else {
-              setFaveMatchList([]);
-              setFaveMatchCount(0);
-              appData.setAppData({ ...appData.appData, listLoading: false });
-            }
-          })
-          .catch((error) => {
-            appData.setAppData({ ...appData.appData, listLoading: false });
-          });
-      })
-      .catch((err) => {
-        appData.setAppData({ ...appData.appData, listLoading: false });
-      });
 
     event.stopPropagation();
   };
@@ -101,9 +108,7 @@ export const FavourateGames = ({
                       >
                         <div
                           className={`${styles.gameFavorate} ${styles.bookMarkGame} ${styles.favourateGame} position-relative`}
-                          onClick={(event) =>
-                            setGameFavrite(event, match.date, match.id)
-                          }
+                          onClick={(event) => setGameFavrite(event, match.id)}
                         >
                           <span className="icon-star invisible"></span>
                         </div>

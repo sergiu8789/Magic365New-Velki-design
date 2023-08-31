@@ -13,6 +13,8 @@ export const GameList = ({
   setsortGameList,
   sortGameList,
   playType,
+  setFaveGame,
+  faveGame,
 }) => {
   const [allGameList, setGameList] = useState([]);
 
@@ -58,6 +60,8 @@ export const GameList = ({
           gameType={gameType}
           setsortGameList={setsortGameList}
           playType={playType}
+          setFaveGame={setFaveGame}
+          faveGame={faveGame}
         />
       ) : sortGameList === "by Time" || sortGameList === "by Matched" ? (
         <GameByTime
@@ -69,6 +73,8 @@ export const GameList = ({
           setsortGameList={setsortGameList}
           sortGameList={sortGameList}
           playType={playType}
+          setFaveGame={setFaveGame}
+          faveGame={faveGame}
         />
       ) : (
         <React.Fragment></React.Fragment>

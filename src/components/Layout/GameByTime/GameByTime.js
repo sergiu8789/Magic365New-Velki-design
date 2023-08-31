@@ -10,6 +10,7 @@ import {
   formatTimeHh,
   checkECricket,
 } from "../../../utils/helper";
+import { useAuth } from "../../../context/AuthContextProvider";
 import ApiService from "../../../services/ApiService";
 
 export const GameByTime = ({
@@ -21,11 +22,12 @@ export const GameByTime = ({
   setsortGameList,
   sortGameList,
   playType,
+  setFaveGame,
+  faveGame,
 }) => {
   const navigate = useNavigate();
-  const [faveGame, setFaveGame] = useState([]);
   const [passChange, setPassChange] = useState(false);
-
+  const auth = useAuth();
   const openGameDetail = (match) => {
     navigate("/full-market", {
       state: {
@@ -38,23 +40,26 @@ export const GameByTime = ({
     });
   };
 
-  const setGameFavrite = (event, date, matchId) => {
-    let newFavArry = [];
-    newFavArry = [...faveGame];
-    if (newFavArry.indexOf(matchId) < 0) {
-      setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+  const setGameFavrite = (event, matchId) => {
+    if (auth.auth.loggedIn) {
+      let newFavArry = [];
+      newFavArry = [...faveGame];
+      if (newFavArry.indexOf(matchId) < 0) {
+        setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+      } else {
+        let betIndex = newFavArry.indexOf(matchId);
+        newFavArry.splice(betIndex, 1);
+        setFaveGame(faveGame.filter((x) => x !== matchId));
+      }
+      let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
+      ApiService.setGameFav(favMatchjson)
+        .then((res) => {
+          setPassChange(true);
+        })
+        .catch((err) => {});
     } else {
-      let betIndex = newFavArry.indexOf(matchId);
-      newFavArry.splice(betIndex, 1);
-      setFaveGame(faveGame.filter((x) => x !== matchId));
+      navigate("/login");
     }
-    let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
-    ApiService.setGameFav(favMatchjson)
-      .then((res) => {
-        setPassChange(true);
-      })
-      .catch((err) => {});
-
     event.stopPropagation();
   };
 
@@ -177,11 +182,7 @@ export const GameByTime = ({
                                         : ""
                                     } position-relative`}
                                     onClick={(event) =>
-                                      setGameFavrite(
-                                        event,
-                                        match.date,
-                                        match.id
-                                      )
+                                      setGameFavrite(event, match.id)
                                     }
                                   >
                                     <span className="icon-star invisible"></span>

@@ -10,6 +10,7 @@ import {
   formatTimeHh,
   checkECricket,
 } from "../../../utils/helper";
+import { useAuth } from "../../../context/AuthContextProvider";
 import ApiService from "../../../services/ApiService";
 
 export const GameByCompetition = ({
@@ -19,6 +20,8 @@ export const GameByCompetition = ({
   inPlay,
   gameType,
   setsortGameList,
+  setFaveGame,
+  faveGame,
 }) => {
   const navigate = useNavigate();
   const [closeAllMatchBox, setcloseAllMatchBox] = useState({
@@ -26,9 +29,8 @@ export const GameByCompetition = ({
     Soccer: false,
     Tennis: false,
   });
-  const [faveGame, setFaveGame] = useState([]);
   const [passChange, setPassChange] = useState(false);
-
+  const auth = useAuth();
   const openMatchDetail = (gameType, tournament) => {
     tournamentList[gameType][tournament].open =
       !tournamentList[gameType][tournament].open;
@@ -59,24 +61,28 @@ export const GameByCompetition = ({
   };
 
   const setGameFavrite = (event, matchId) => {
-    event.preventDefault();
-    let newFavArry = [];
-    newFavArry = [...faveGame];
-    if (newFavArry.indexOf(matchId) < 0) {
-      setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+    if (auth.auth.loggedIn) {
+      event.preventDefault();
+      let newFavArry = [];
+      newFavArry = [...faveGame];
+      if (newFavArry.indexOf(matchId) < 0) {
+        setFaveGame((prevMatchId) => [...prevMatchId, matchId]);
+      } else {
+        let betIndex = newFavArry.indexOf(matchId);
+        newFavArry.splice(betIndex, 1);
+        setFaveGame(faveGame.filter((x) => x !== matchId));
+      }
+      let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
+      ApiService.setGameFav(favMatchjson)
+        .then((res) => {
+          if (res.data.betfair_match_id === matchId) {
+            setPassChange(true);
+          }
+        })
+        .catch((err) => {});
     } else {
-      let betIndex = newFavArry.indexOf(matchId);
-      newFavArry.splice(betIndex, 1);
-      setFaveGame(faveGame.filter((x) => x !== matchId));
+      navigate("/login");
     }
-    let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
-    ApiService.setGameFav(favMatchjson)
-      .then((res) => {
-        if (res.data.betfair_match_id === matchId) {
-          setPassChange(true);
-        }
-      })
-      .catch((err) => {});
     event.stopPropagation();
   };
 
