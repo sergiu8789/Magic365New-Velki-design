@@ -11,6 +11,7 @@ import { useApp } from "../../../context/AppContextProvider";
 import { NoData } from "../../Layout/NoData/NoData";
 import { SportsSearch } from "../../Layout/SportsSearch/SportsSearch";
 import { FavourateGames } from "../../Layout/FavourateGames/FavourateGames";
+import { addLocalTimeOffset } from "../../../utils/helper";
 
 export const Sports = () => {
   const location = useLocation();
@@ -272,16 +273,20 @@ export const Sports = () => {
       if (inPlayTab !== "In-Play") timeTab = inPlayTab;
       if (inPlayTab === "Today") {
         startDate = todayDate.setHours(0, 0, 0, 0);
+        startDate = addLocalTimeOffset(startDate);
         startDate = encodeURIComponent(encrypt(startDate));
         endDate = todayDate.setHours(23, 59, 59, 99);
+        endDate = addLocalTimeOffset(endDate);
         endDate = encodeURIComponent(encrypt(endDate));
       }
       if (inPlayTab === "Tomorrow") {
         todayDate = todayDate.setDate(todayDate.getDate() + 1);
         todayDate = new Date(todayDate);
         startDate = todayDate.setHours(0, 0, 0, 0);
+        startDate = addLocalTimeOffset(startDate);
         startDate = encodeURIComponent(encrypt(startDate));
         endDate = todayDate.setHours(23, 59, 59, 99);
+        endDate = addLocalTimeOffset(endDate);
         endDate = encodeURIComponent(encrypt(endDate));
       }
       if (activeTab) activeTab = activeTab.toLowerCase();

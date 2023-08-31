@@ -13,6 +13,7 @@ import {
   formatDate,
   getCasinoMarketName,
   getSportsMarketName,
+  addTimeOffset,
 } from "../../../utils/helper";
 import { NoData } from "../../Layout/NoData/NoData";
 
@@ -181,7 +182,7 @@ export const ProfitLoss = () => {
   };
 
   const fetchGamesPL = () => {
-    ApiService.getGamePL(fromDate, toDate, popularTabActive)
+    ApiService.getGamePL(addTimeOffset(fromDate), addTimeOffset(toDate), popularTabActive)
       .then((res) => {
         if (res.data) {
           let initialValue = 0;

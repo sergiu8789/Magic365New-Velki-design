@@ -14,6 +14,7 @@ import {
   formatDate,
   getCasinoMarketName,
   getSportsMarketName,
+  addTimeOffset,
 } from "../../../utils/helper";
 
 export const BetHistory = () => {
@@ -166,11 +167,11 @@ export const BetHistory = () => {
     } else if (betStatus === "Loss") {
       betStatusVal = 5;
     }
-
+    console.log(fromDate)
     ApiService.getBettingHistory(
       page,
-      fromDate,
-      toDate,
+      addTimeOffset(fromDate),
+      addTimeOffset(toDate),
       betStatusVal,
       popularTabActive
     )

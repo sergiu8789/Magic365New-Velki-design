@@ -5,6 +5,7 @@ import { encrypt } from "../../../utils/crypto";
 import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
 import { useApp } from "../../../context/AppContextProvider";
+import { addLocalTimeOffset } from "../../../utils/helper";
 
 export const HomeGameCard = () => {
   const auth = useAuth();
@@ -31,8 +32,10 @@ export const HomeGameCard = () => {
       setValue("live");
     } else if (tab === "Today") {
       startDate = todayDate.setHours(0, 0, 0, 0);
+      startDate = addLocalTimeOffset(startDate);
       startDate = encodeURIComponent(encrypt(startDate));
       endDate = todayDate.setHours(23, 59, 59, 99);
+      endDate = addLocalTimeOffset(endDate);
       endDate = encodeURIComponent(encrypt(endDate));
       setStartDate(startDate);
       setEndDate(endDate);
@@ -41,8 +44,10 @@ export const HomeGameCard = () => {
       todayDate = todayDate.setDate(todayDate.getDate() + 1);
       todayDate = new Date(todayDate);
       startDate = todayDate.setHours(0, 0, 0, 0);
+      startDate = addLocalTimeOffset(startDate);
       startDate = encodeURIComponent(encrypt(startDate));
       endDate = todayDate.setHours(23, 59, 59, 99);
+      endDate = addLocalTimeOffset(endDate);
       endDate = encodeURIComponent(encrypt(endDate));
       setStartDate(startDate);
       setEndDate(endDate);

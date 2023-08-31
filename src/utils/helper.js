@@ -52,16 +52,16 @@ export const matchDate = (date) => {
   return monthNames[newDate.getMonth()] + " " + newDate.getDate();
 };
 
-export const formatDate = (date) => {
-  var d = new Date(date),
-    month = "" + (d.getMonth() + 1),
-    day = "" + d.getDate(),
-    year = d.getFullYear();
-  if (month.length < 2) month = "0" + month;
-  if (day.length < 2) day = "0" + day;
+// export const formatDate = (date) => {
+//   var d = new Date(date),
+//     month = "" + (d.getMonth() + 1),
+//     day = "" + d.getDate(),
+//     year = d.getFullYear();
+//   if (month.length < 2) month = "0" + month;
+//   if (day.length < 2) day = "0" + day;
 
-  return [year, month, day].join("-");
-};
+//   return [year, month, day].join("-");
+// };
 
 export const formatTime = (date) => {
   const newDate = new Date(date);
@@ -437,3 +437,28 @@ export const formatFancyTime = (date) => {
   var strTime = hours + ":" + minutes + ":" + seconds + " " + ampm;
   return strTime;
 };
+
+export const addLocalTimeOffset = (date) => {
+  if(date)
+  return  date + (new Date(date).getTimezoneOffset() * 60000);
+}
+
+
+export const formatDate = (date) => {
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-")+"T"+d.getHours()+":"+d.getMinutes();
+};
+
+export const addTimeOffset = (date) => {
+  if(date)
+  return  formatDate(new Date(new Date(date).getTime() + (new Date(date).getTimezoneOffset() * 60000)));
+  else 
+   return date;
+}
+
