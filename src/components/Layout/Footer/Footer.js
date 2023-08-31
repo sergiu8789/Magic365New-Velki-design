@@ -21,18 +21,26 @@ function Footer() {
   }, [location?.pathname]);
 
   useEffect(() => {
-    if(auth.auth.loggedIn){
-    ApiService.getUserBetMatches()
-      .then((res) => {
-        if (res?.data?.rows) {
+    if (auth.auth.loggedIn) {
+      ApiService.currentBets(1, "", "")
+        .then((res) => {
           setBetCount(res.data.count);
-        } else {
+        })
+        .catch((err) => {
           setBetCount(0);
-        }
-      })
-      .catch((err) => {
-        setBetCount(0);
-      });
+          if (
+            err?.response?.data?.statusCode === 401 &&
+            err?.response?.data?.message === "Unauthorized"
+          ) {
+            localStorage.removeItem("token");
+            auth.setAuth({
+              ...auth.auth,
+              loggedIn: false,
+              user: {},
+              showSessionExpire: true,
+            });
+          }
+        });
     }
   }, []);
 
