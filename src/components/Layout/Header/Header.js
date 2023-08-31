@@ -21,6 +21,10 @@ function Header() {
     navigate("/");
   };
 
+  const openSignup = () => {
+    window.open("https://magic365agentlist.com/agent-list/2", "_blank");
+  };
+
   const LoaderAnimation = () => {
     return (
       <div
@@ -142,6 +146,7 @@ function Header() {
           >
             <button
               className={`${styles.signupBtn} d-inline-flex justify-content-center align-items-center`}
+              onClick={() => openSignup()}
             >
               <i className="icon-sign-up"></i>
               SignUp

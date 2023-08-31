@@ -7,7 +7,6 @@ import { useAuth } from "../../../context/AuthContextProvider";
 export const MyAccount = () => {
   const navigate = useNavigate();
   const auth = useAuth();
-  console.log(auth);
 
   const showChangePass = () => {
     let LoginRand = Math.floor(Math.random() * 100000) + 1;

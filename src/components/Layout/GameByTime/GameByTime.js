@@ -4,6 +4,7 @@ import styles from "../GameList/GameList.module.css";
 import { encrypt } from "../../../utils/crypto";
 import { NoData } from "../NoData/NoData";
 import { GameListCompetition } from "../GameListCompetition/GameListCompetition";
+import { ToastPopup } from "../ToastPopup/ToastPopup";
 import {
   getDateYearNumFormat,
   formatTimeHh,
@@ -22,12 +23,8 @@ export const GameByTime = ({
   playType,
 }) => {
   const navigate = useNavigate();
-  const [closeAllMatchBox, setcloseAllMatchBox] = useState({
-    Cricket: false,
-    Soccer: false,
-    Tennis: false,
-  });
   const [faveGame, setFaveGame] = useState([]);
+  const [passChange, setPassChange] = useState(false);
 
   const openGameDetail = (match) => {
     navigate("/full-market", {
@@ -54,7 +51,7 @@ export const GameByTime = ({
     let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
     ApiService.setGameFav(favMatchjson)
       .then((res) => {
-        console.log(res);
+        setPassChange(true);
       })
       .catch((err) => {});
 
@@ -70,7 +67,7 @@ export const GameByTime = ({
               key={tourIndex}
               className={`${styles.singleGameContiner} p-0 position-relative col-12 d-inline-block`}
             >
-              {tour != gameType ? (
+              {tour !== gameType ? (
                 <div
                   className={`${styles.allTabTitle} ${styles.GameTabTitle} col-12 d-inline-flex justify-content-between`}
                 >
@@ -175,8 +172,9 @@ export const GameByTime = ({
                                       styles.bookMarkGame
                                     } ${
                                       faveGame.indexOf(match.id) > -1 ||
-                                      (match.is_fav === 1 &&
-                                        styles.favourateGame)
+                                      match.is_fav === 1
+                                        ? styles.favourateGame
+                                        : ""
                                     } position-relative`}
                                     onClick={(event) =>
                                       setGameFavrite(
@@ -273,6 +271,15 @@ export const GameByTime = ({
         })
       ) : (
         <NoData title="No Data" />
+      )}
+      {passChange && (
+        <ToastPopup
+          status={true}
+          betbox={true}
+          title="Marked Favourite"
+          message="Game set to mark as Favourite"
+          setPassChange={setPassChange}
+        />
       )}
     </React.Fragment>
   );

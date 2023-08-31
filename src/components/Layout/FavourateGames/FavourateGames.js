@@ -7,6 +7,7 @@ import {
   formatTimeHh,
   checkECricket,
 } from "../../../utils/helper";
+import { ToastPopup } from "../ToastPopup/ToastPopup";
 import ApiService from "../../../services/ApiService";
 import { useApp } from "../../../context/AppContextProvider";
 import { NoData } from "../NoData/NoData";
@@ -19,6 +20,7 @@ export const FavourateGames = ({
   const navigate = useNavigate();
   const appData = useApp();
   const [faveGame, setFaveGame] = useState([]);
+  const [passChange, setPassChange] = useState(false);
 
   const openGameDetail = (match) => {
     navigate("/full-market", {
@@ -45,7 +47,7 @@ export const FavourateGames = ({
     let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
     ApiService.setGameFav(favMatchjson)
       .then((res) => {
-        console.log(res);
+        setPassChange(true);
       })
       .catch((err) => {});
 
@@ -178,6 +180,15 @@ export const FavourateGames = ({
           </div>
         </div>
       </div>
+      {passChange && (
+        <ToastPopup
+          status={true}
+          betbox={true}
+          title="Marked UnFavourite"
+          message="Game set to mark as UnFavourite"
+          setPassChange={setPassChange}
+        />
+      )}
     </React.Fragment>
   );
 };

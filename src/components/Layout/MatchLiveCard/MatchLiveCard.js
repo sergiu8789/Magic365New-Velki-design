@@ -18,9 +18,7 @@ export const MatchLiveCard = ({
       .then((response) => {
         if (response?.ip) setIPAddress(response.ip);
       })
-      .catch((err) => {
-        console.log(err)
-      });
+      .catch((err) => {});
   }, []);
 
   const closeStremingBox = () => {
@@ -30,7 +28,7 @@ export const MatchLiveCard = ({
 
   return (
     <React.Fragment>
-      {streamUrl &&  (
+      {streamUrl && (
         <div
           className={`${styles.matchStreemTv} col-12 position-relative`}
           ref={liveWindow}

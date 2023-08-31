@@ -66,7 +66,6 @@ export const BetSlip = () => {
   const placeBet = () => {
     //setProgressStatus("placing");
     let betSelection = betData?.betData?.betSelection;
-    console.log(betSelection.market_type)
     appData.setAppData({ ...appData.appData, listLoading: true });
     let timeout = 5000;
     if(betSelection.market_type !== "casino" && betSelection.market_type !== 'bookmaker' && betSelection.market_type !=='fancy' && betSelection.market_type !== 'premium'){

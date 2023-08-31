@@ -39,7 +39,6 @@ export const GameList = ({
 
   useEffect(() => {
     if (sortGameList === "by Time") {
-      console.log(tournamentList);
     }
   }, [sortGameList]);
 
