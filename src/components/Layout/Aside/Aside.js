@@ -72,6 +72,7 @@ function Aside({ openAside, setopenAside }) {
             <span
               className={`${styles.asideClose} d-inline-flex align-items-center justify-content-center`}
               onClick={() => setopenAside(false)}
+              role="button"
             >
               <i className="icon-close"></i>
             </span>
@@ -84,6 +85,7 @@ function Aside({ openAside, setopenAside }) {
                 className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
                 onClick={() => OpenCurrentBet(item.link)}
                 key={index}
+                role="button"
               >
                 <span className={`icon ${item.icon}`}></span>
                 <span className={styles.itemLinkName}>{item.name}</span>
@@ -128,6 +130,7 @@ function Aside({ openAside, setopenAside }) {
             <div
               className={`${styles.linkItemRow} d-inline-flex align-items-center col-12 position-relative`}
               onClick={() => OpenCurrentBet("setting")}
+              role="button"
             >
               <span className="icon icon-setting"></span>
               <span className={styles.itemLinkName}>Setting</span>
@@ -139,6 +142,7 @@ function Aside({ openAside, setopenAside }) {
           <div
             onClick={() => handleLogout()}
             className={`${styles.categoryMenuBox} d-inline-block overflow-hidden col-12`}
+            role="button"
           >
             <div
               className={`${styles.linkItemRow} ${styles.LogoutlinkItemRow} d-inline-flex align-items-center col-12 position-relative`}

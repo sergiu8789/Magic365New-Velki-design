@@ -36,6 +36,7 @@ export const Sports = () => {
   const [favorateGame, setfavorateGame] = useState(false);
   const playRef = useRef([]);
   const tabRef = useRef([]);
+  const [faveGame, setFaveGame] = useState([]);
   const [allMarkList, setAllMarkList] = useState([]);
 
   useEffect(() => {
@@ -418,6 +419,8 @@ export const Sports = () => {
             setsortGameList={setsortGameList}
             sortGameList={sortGameList}
             playType={inPlayTab}
+            setFaveGame={setFaveGame}
+            faveGame={faveGame}
           />
         ) : (
           <NoData title="No Data" />
@@ -435,6 +438,9 @@ export const Sports = () => {
           setFaveMatchList={setFaveMatchList}
           faveMatchList={faveMatchList}
           faveMatchCount={faveMatchCount}
+          setFaveMatchCount={setFaveMatchCount}
+          setFaveGame={setFaveGame}
+          faveGame={faveGame}
         />
       )}
     </React.Fragment>
