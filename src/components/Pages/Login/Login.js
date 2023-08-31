@@ -22,10 +22,10 @@ export const Login = () => {
   const [passChangeTitle, setpassChangeTitle] = useState(false);
   const [passChangeMsg, setpassChangeMsg] = useState(false);
   const [passStatus, setpassStatus] = useState(false);
-  const [captchaVal, setCaptchaVal] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const appData = useApp();
+  const exceptThisSymbols = ["e", "E", "+", "-", "."];
 
   const [form, setForm] = useState({
     username: {
@@ -52,18 +52,6 @@ export const Login = () => {
       navigate(-1);
     }, 250);
   };
-
-  const validationCaptha = (e) => {
-    if ((e.which !== 8 && e.which !== 0 && e.which < 48) || e.which > 57) {
-      e.preventDefault();
-    }
-    if (e.target.value.length > 4) {
-      return false;
-    } else {
-      setCaptchaVal(e.target.value);
-    }
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (e.target.name === "captcha" && e.target.value.length > 4) {
@@ -300,14 +288,12 @@ export const Login = () => {
                     name="captcha"
                     autoComplete="off"
                     type="number"
-                    maxLength={4}
                     placeholder="Validation"
-                    value={captchaVal}
                     className={`col-12 position-relative d-inline-block ${styles.loginFormField}`}
-                    onChange={
-                      ((e) => handleChange(e), (e) => validationCaptha(e))
+                    onChange={(e) => handleChange(e)}
+                    onKeyDown={(e) =>
+                      exceptThisSymbols.includes(e.key) && e.preventDefault()
                     }
-                    onKeyPress={(e) => validationCaptha(e)}
                   />
                   <label
                     htmlFor="verifyCode"

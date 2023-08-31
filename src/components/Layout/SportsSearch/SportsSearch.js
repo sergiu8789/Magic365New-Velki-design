@@ -24,6 +24,64 @@ export const SportsSearch = ({ sportSearch, setSportSearch }) => {
   const getInputVal = (event) => {
     setSearchVal(event.target.value);
     showleagueMatch("SearchList");
+    appData.setAppData({ ...appData.appData, listLoading: true });
+    setnewEvents([]);
+    setnewCompetition([]);
+    setTimeout(function () {
+      ApiService.sportsSearchList(event.target.value)
+        .then((res) => {
+          if (res.data) {
+            setnewEvents([]);
+            setnewEvents(res.data);
+          } else {
+            setnewEvents([]);
+          }
+          appData.setAppData({ ...appData.appData, listLoading: false });
+        })
+        .catch((err) => {
+          setnewEvents([]);
+          appData.setAppData({ ...appData.appData, listLoading: false });
+          if (
+            err?.response?.data?.statusCode === 401 &&
+            err?.response?.data?.message === "Unauthorized"
+          ) {
+            localStorage.removeItem("token");
+            auth.setAuth({
+              ...auth.auth,
+              loggedIn: false,
+              user: {},
+              showSessionExpire: true,
+            });
+          }
+        });
+
+      ApiService.sportsCompetitionList(event.target.value)
+        .then((res) => {
+          if (res.data) {
+            setnewCompetition([]);
+            setnewCompetition(res.data);
+          } else {
+            setnewCompetition([]);
+          }
+          appData.setAppData({ ...appData.appData, listLoading: false });
+        })
+        .catch((err) => {
+          setnewCompetition([]);
+          appData.setAppData({ ...appData.appData, listLoading: false });
+          if (
+            err?.response?.data?.statusCode === 401 &&
+            err?.response?.data?.message === "Unauthorized"
+          ) {
+            localStorage.removeItem("token");
+            auth.setAuth({
+              ...auth.auth,
+              loggedIn: false,
+              user: {},
+              showSessionExpire: true,
+            });
+          }
+        });
+    }, 500);
   };
 
   const submitSearchVal = (event, value) => {
@@ -105,63 +163,6 @@ export const SportsSearch = ({ sportSearch, setSportSearch }) => {
         });
     }
   }, [leagueName]);
-
-  useEffect(() => {
-    appData.setAppData({ ...appData.appData, listLoading: true });
-    setnewEvents([]);
-    setnewCompetition([]);
-    ApiService.sportsSearchList(searchVal)
-      .then((res) => {
-        if (res.data) {
-          setnewEvents(res.data);
-        } else {
-          setnewEvents([]);
-        }
-        appData.setAppData({ ...appData.appData, listLoading: false });
-      })
-      .catch((err) => {
-        setnewEvents([]);
-        appData.setAppData({ ...appData.appData, listLoading: false });
-        if (
-          err?.response?.data?.statusCode === 401 &&
-          err?.response?.data?.message === "Unauthorized"
-        ) {
-          localStorage.removeItem("token");
-          auth.setAuth({
-            ...auth.auth,
-            loggedIn: false,
-            user: {},
-            showSessionExpire: true,
-          });
-        }
-      });
-
-    ApiService.sportsCompetitionList(searchVal)
-      .then((res) => {
-        if (res.data) {
-          setnewCompetition(res.data);
-        } else {
-          setnewCompetition([]);
-        }
-        appData.setAppData({ ...appData.appData, listLoading: false });
-      })
-      .catch((err) => {
-        setnewCompetition([]);
-        appData.setAppData({ ...appData.appData, listLoading: false });
-        if (
-          err?.response?.data?.statusCode === 401 &&
-          err?.response?.data?.message === "Unauthorized"
-        ) {
-          localStorage.removeItem("token");
-          auth.setAuth({
-            ...auth.auth,
-            loggedIn: false,
-            user: {},
-            showSessionExpire: true,
-          });
-        }
-      });
-  }, [searchVal]);
 
   return (
     <React.Fragment>
