@@ -21,16 +21,24 @@ function Footer() {
   }, [location?.pathname]);
 
   useEffect(() => {
-    ApiService.getUserBetMatches()
+    ApiService.currentBets(1, "", "")
       .then((res) => {
-        if (res?.data?.rows) {
-          setBetCount(res.data.count);
-        } else {
-          setBetCount(0);
-        }
+        setBetCount(res.data.count);
       })
       .catch((err) => {
         setBetCount(0);
+        if (
+          err?.response?.data?.statusCode === 401 &&
+          err?.response?.data?.message === "Unauthorized"
+        ) {
+          localStorage.removeItem("token");
+          auth.setAuth({
+            ...auth.auth,
+            loggedIn: false,
+            user: {},
+            showSessionExpire: true,
+          });
+        }
       });
   }, []);
 
