@@ -146,7 +146,6 @@ export const ChangePassword = () => {
       };
       ApiService.changePassword(payload)
         .then((res) => {
-          console.log(res);
           appData.setAppData({ ...appData.appData, listLoading: false });
           if (res.status === 200 || res.status === 201) {
             auth.setAuth({

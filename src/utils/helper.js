@@ -350,7 +350,6 @@ export const firstLetterCapital = (string) => {
 export const getMobileOdds = (odd, size) => {
   let obj = {};
   if (odd && odd?.split(",").length) obj.odd = odd?.split(",")[0];
-  // console.log([...new Set(odd.split(","))].sort((val1,val2) => parseFloat(val1) < parseFloat(val2) ? -1 : (parseFloat(val1) > parseFloat(val2) ? 1 : 0)));
   if (size && size?.split(",").length) obj.size = size?.split(",")[0];
   return obj;
 };

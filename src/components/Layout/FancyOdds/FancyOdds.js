@@ -162,7 +162,6 @@ export const FancyOdds = ({
                 fancyExposure[bet.selection_id].below.pl +
                 parseFloat(bet.amount);
             }
-            //console.log(bet.selection_name,fancyExposure[bet.selection_name])
           }
         } else {
           fancyExposure[bet.selection_id] = {

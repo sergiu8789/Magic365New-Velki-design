@@ -234,8 +234,8 @@ export const CurrentBets = () => {
           </p>
           <p
             className={`${styles.betStatusItem} ${
-              betStatus === "UnMatched" ? "d-none" : "d-flex"
-            } d-flex align-items-center col-12 m-0`}
+              betStatus === "UnMatched" ? "d-none" : "d-none"
+            } align-items-center col-12 m-0`}
             value="3"
             onClick={() => setBetStatusVal("UnMatched")}
           >

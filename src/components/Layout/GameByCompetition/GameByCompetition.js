@@ -4,10 +4,10 @@ import styles from "../GameList/GameList.module.css";
 import { encrypt } from "../../../utils/crypto";
 import { NoData } from "../NoData/NoData";
 import { GameListCompetition } from "../GameListCompetition/GameListCompetition";
+import { ToastPopup } from "../ToastPopup/ToastPopup";
 import {
   getDateYearNumFormat,
   formatTimeHh,
-  compareDate,
   checkECricket,
 } from "../../../utils/helper";
 import ApiService from "../../../services/ApiService";
@@ -27,6 +27,7 @@ export const GameByCompetition = ({
     Tennis: false,
   });
   const [faveGame, setFaveGame] = useState([]);
+  const [passChange, setPassChange] = useState(false);
 
   const openMatchDetail = (gameType, tournament) => {
     tournamentList[gameType][tournament].open =
@@ -57,8 +58,8 @@ export const GameByCompetition = ({
     setcloseAllMatchBox({ ...closeAllMatchBox });
   };
 
-  const setGameFavrite = (event, date, matchId) => {
-    let dateVal = compareDate(date);
+  const setGameFavrite = (event, matchId) => {
+    event.preventDefault();
     let newFavArry = [];
     newFavArry = [...faveGame];
     if (newFavArry.indexOf(matchId) < 0) {
@@ -71,10 +72,11 @@ export const GameByCompetition = ({
     let favMatchjson = { match_id: encodeURIComponent(encrypt(matchId)) };
     ApiService.setGameFav(favMatchjson)
       .then((res) => {
-        console.log(res);
+        if (res.data.betfair_match_id === matchId) {
+          setPassChange(true);
+        }
       })
       .catch((err) => {});
-
     event.stopPropagation();
   };
 
@@ -93,7 +95,7 @@ export const GameByCompetition = ({
                   " col-12 d-inline-flex justify-content-between"
                 }
               >
-                {tour != gameType ? (
+                {tour !== gameType ? (
                   <div
                     className={`${styles.titleGameName} position-relative d-inline-flex`}
                   >
@@ -168,6 +170,7 @@ export const GameByCompetition = ({
                                   key={matchIndex}
                                   className={`${styles.gameHeaderRow} col-12 d-inline-flex align-items-center justify-content-between`}
                                   onClick={() => openGameDetail(match)}
+                                  id={match.id}
                                 >
                                   <div
                                     className={`${styles.gamesTypeName} d-inline-flex align-items-center`}
@@ -177,15 +180,12 @@ export const GameByCompetition = ({
                                         styles.bookMarkGame
                                       } ${
                                         faveGame.indexOf(match.id) > -1 ||
-                                        (match.is_fav === 1 &&
-                                          styles.favourateGame)
+                                        match.is_fav === 1
+                                          ? styles.favourateGame
+                                          : ""
                                       } position-relative`}
                                       onClick={(event) =>
-                                        setGameFavrite(
-                                          event,
-                                          match.date,
-                                          match.id
-                                        )
+                                        setGameFavrite(event, match.id)
                                       }
                                     >
                                       <span className="icon-star invisible"></span>
@@ -289,6 +289,15 @@ export const GameByCompetition = ({
         })
       ) : (
         <NoData title="No Data" />
+      )}
+      {passChange && (
+        <ToastPopup
+          status={true}
+          betbox={true}
+          title="Marked Favourite"
+          message="Game set to mark as Favourite"
+          setPassChange={setPassChange}
+        />
       )}
     </React.Fragment>
   );

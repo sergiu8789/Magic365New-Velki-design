@@ -43,7 +43,6 @@ export const BetPlacePopup = ({ status, show, setShow, title, betDetails }) => {
         
       }
       else{
-        console.log("ss")
         if(betData?.betData?.betSelection?.market_type !== 'fancy' &&  betData?.betData?.betSelection?.market_type !== 'bookmaker' && betData?.betData?.betSelection?.market_type !== 'premium' ){
           expoData.setExchangeExpoData({
             oldExpoData : expoData.exchangeExpoData.oldExpoData,

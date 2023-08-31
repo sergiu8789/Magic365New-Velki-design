@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MyBets } from "../MyBets/MyBets";
 import styles from "./Footer.module.css";
+import ApiService from "../../../services/ApiService";
 import { useAuth } from "../../../context/AuthContextProvider";
 
 function Footer() {
@@ -9,6 +10,7 @@ function Footer() {
   const location = useLocation();
   const [TabPosLeft, setTabPosLeft] = useState("");
   const [openMyBets, setopenMyBets] = useState("");
+  const [BetCount, setBetCount] = useState(0);
   const footerTab = useRef();
   const auth = useAuth();
 
@@ -17,6 +19,20 @@ function Footer() {
       footerTab.current.click();
     }
   }, [location?.pathname]);
+
+  useEffect(() => {
+    ApiService.getUserBetMatches()
+      .then((res) => {
+        if (res?.data?.rows) {
+          setBetCount(res.data.count);
+        } else {
+          setBetCount(0);
+        }
+      })
+      .catch((err) => {
+        setBetCount(0);
+      });
+  }, []);
 
   const navigatePage = (event, link, type, click) => {
     let pageOffset = document.querySelector("#centerMobileMode").offsetLeft;
@@ -88,7 +104,7 @@ function Footer() {
               <div
                 className={`${
                   styles.homeTabBox
-                } d-inline-flex align-items-center justify-content-center flex-column posiution-relative ${
+                } d-inline-flex align-items-center justify-content-center flex-column position-relative ${
                   location.pathname === item.link && styles.activeTabLink
                 }`}
                 ref={location.pathname === item.link ? footerTab : null}
@@ -96,8 +112,17 @@ function Footer() {
                   navigatePage(event, item.link, item.type, item.click)
                 }
               >
-                <i className={`${styles.homeTabIcon} ${item.icon}`}></i>
-                <span className={styles.homeTabName}>{item.name}</span>
+                <div className="d-inline-flex align-items-center justify-content-center flex-column position-relative">
+                  {BetCount > 0 && item.name === "My Bets" && (
+                    <span
+                      className={`${styles.MyBetCount} position-absolute d-inline-flex align-items-center justify-content-center`}
+                    >
+                      {BetCount}
+                    </span>
+                  )}
+                  <i className={`${styles.homeTabIcon} ${item.icon}`}></i>
+                  <span className={styles.homeTabName}>{item.name}</span>
+                </div>
               </div>
             </React.Fragment>
           );
