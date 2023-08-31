@@ -107,7 +107,7 @@ export const InPlayGames = () => {
         ref={playWindow}
       >
         <div
-          className={`${styles.allPlayDetail} position-relative d-inline-block`}
+          className={`${styles.allPlayDetail} position-relative d-inline-flex flex-column`}
         >
           {streamUrl && scorecardUrl && (
             <div

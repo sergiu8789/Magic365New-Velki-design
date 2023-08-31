@@ -88,8 +88,13 @@ export const BetHistory = () => {
     }
     let startDate = moment(dateValue[0].trim()).format("YYYY-MM-DD");
     let endDate = moment(dateValue[1].trim()).format("YYYY-MM-DD");
-    setFromDate(startDate + "T00:00");
-    setToDate(endDate + "T23:59");
+    startDate = startDate + "T00:00";
+    endDate = endDate + "T23:59";
+    if (startDate === fromDate && endDate === toDate) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
+    }
+    setFromDate(startDate);
+    setToDate(endDate);
   };
 
   const showCalenderFilter = () => {
@@ -167,7 +172,7 @@ export const BetHistory = () => {
     } else if (betStatus === "Loss") {
       betStatusVal = 5;
     }
-    console.log(fromDate)
+
     ApiService.getBettingHistory(
       page,
       addTimeOffset(fromDate),
@@ -499,7 +504,8 @@ export const BetHistory = () => {
                 >
                   <label className={styles.balanceInfoTxt}>Odds req.</label>
                   <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                  {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
+                    {item.market_type === "fancy" ? item.size + "/" : ""}
+                    {item.odds}
                   </div>
                 </div>
                 <div
@@ -507,7 +513,8 @@ export const BetHistory = () => {
                 >
                   <label className={styles.balanceInfoTxt}>Avg. Odds</label>
                   <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                  {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
+                    {item.market_type === "fancy" ? item.size + "/" : ""}
+                    {item.odds}
                   </div>
                 </div>
                 <div
@@ -593,7 +600,8 @@ export const BetHistory = () => {
                   >
                     <label className={styles.balanceInfoTxt}>Odds req.</label>
                     <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                    {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
+                      {item.market_type === "fancy" ? item.size + "/" : ""}
+                      {item.odds}
                     </div>
                   </div>
                   <div
@@ -601,7 +609,8 @@ export const BetHistory = () => {
                   >
                     <label className={styles.balanceInfoTxt}>Avg. Odds</label>
                     <div className={`${styles.balanceInfoAmt} d-inline-flex`}>
-                    {item.market_type === 'fancy' ? item.size+"/":""}{item.odds}
+                      {item.market_type === "fancy" ? item.size + "/" : ""}
+                      {item.odds}
                     </div>
                   </div>
                   <div

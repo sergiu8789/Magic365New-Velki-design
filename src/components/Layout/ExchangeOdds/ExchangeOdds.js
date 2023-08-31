@@ -510,7 +510,8 @@ export const ExchangeOdds = ({
                           item?.ExchangePrices?.AvailableToBack[0].price ===
                             "" ||
                           item?.ExchangePrices?.AvailableToBack[0].price ===
-                            null
+                            null ||
+                          item?.ExchangePrices?.AvailableToBack[0].price === 0.0
                             ? styles.betDisabled
                             : ""
                         }`}
@@ -544,7 +545,9 @@ export const ExchangeOdds = ({
                           item?.ExchangePrices?.AvailableToLay[0].price > 20 ||
                           item?.ExchangePrices?.AvailableToLay[0].price ===
                             "" ||
-                          item?.ExchangePrices?.AvailableToLay[0].price === null
+                          item?.ExchangePrices?.AvailableToLay[0].price ===
+                            null ||
+                          item?.ExchangePrices?.AvailableToLay[0].price === 0.0
                             ? styles.betDisabled
                             : ""
                         }`}

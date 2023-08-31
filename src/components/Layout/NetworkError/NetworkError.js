@@ -25,6 +25,7 @@ export const NetworkError = () => {
           <div className="col-12 d-inline-flex justify-content-center">
             <button
               className={`${styles.networkTry} d-inline-flex align-items-center text-uppercase`}
+              onClick={() => window.reload()}
             >
               Try Again
             </button>

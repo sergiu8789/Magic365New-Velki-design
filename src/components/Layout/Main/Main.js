@@ -15,6 +15,8 @@ import { NoInternet } from "../NoInternet/NoInternet";
 import { socket } from "../../../services/socket";
 import { useIdleTimer } from "react-idle-timer";
 import { SessionExpire } from "../SessionExpire/SessionExpire";
+import { NetworkError } from "../NetworkError/NetworkError";
+import { ErrorBoundary } from "react-error-boundary";
 import { ToastPopup } from "../ToastPopup/ToastPopup";
 
 function Main() {
@@ -25,7 +27,7 @@ function Main() {
   const timeout = 5 * 60 * 1000;
   const promptBeforeIdle = 30000;
   const [remaining, setRemaining] = useState(timeout);
-  const [sessionExpiredSucees,setSessionExpiredSuccess] = useState(false);
+  const [sessionExpiredSucees, setSessionExpiredSuccess] = useState(false);
 
   const fetchWalletMoney = () => {
     ApiService.wallet()
@@ -57,35 +59,34 @@ function Main() {
   };
 
   const onIdle = () => {
-    if(auth.auth.loggedIn){
-    auth.setAuth({
-      loggedIn: false,
-      user: {},
-      fetchWallet: false,
-      showSessionExpire: false
-    });
-    setSessionExpiredSuccess(true);
-     localStorage.removeItem("bettoken");
-     navigate("/");
-   }
- };
+    if (auth.auth.loggedIn) {
+      auth.setAuth({
+        loggedIn: false,
+        user: {},
+        fetchWallet: false,
+        showSessionExpire: false,
+      });
+      setSessionExpiredSuccess(true);
+      localStorage.removeItem("bettoken");
+      navigate("/");
+    }
+  };
 
- const onPrompt = () => {
-   if(auth.auth.loggedIn){
-     auth.setAuth({
-       ...auth.auth,
-       showSessionMessage: true,
-     });
-   }
- }
+  const onPrompt = () => {
+    if (auth.auth.loggedIn) {
+      auth.setAuth({
+        ...auth.auth,
+        showSessionMessage: true,
+      });
+    }
+  };
 
- const { getRemainingTime,activate } = useIdleTimer({
-  onIdle,
-  onPrompt,
-  timeout, //5 minute idle timeout
-  promptBeforeIdle
-});
-
+  const { getRemainingTime, activate } = useIdleTimer({
+    onIdle,
+    onPrompt,
+    timeout, //5 minute idle timeout
+    promptBeforeIdle,
+  });
 
   useEffect(() => {
     if (auth.auth.fetchWallet && auth.auth.loggedIn) fetchWalletMoney();
@@ -94,59 +95,68 @@ function Main() {
   useEffect(() => {
     socket.connect();
     const interval = setInterval(() => {
-      setRemaining(Math.ceil(getRemainingTime() / 1000))
-    }, 500)
+      setRemaining(Math.ceil(getRemainingTime() / 1000));
+    }, 500);
     return () => {
-      clearInterval(interval)
-    }
+      clearInterval(interval);
+    };
   }, []);
 
-
   useEffect(() => {
-    if(!auth.auth.showSessionMessage)
-    activate();
-  },[auth.auth.showSessionMessage]);
+    if (!auth.auth.showSessionMessage) activate();
+  }, [auth.auth.showSessionMessage]);
+
+  function fallbackRender({ error, resetErrorBoundary }) {
+    return <NetworkError />;
+  }
 
   return (
     <React.Fragment>
-      <div
-        className={`${
-          location.pathname !== "/signup"
-            ? styles.wholeAppBackground
-            : styles.signupContainer
-        } col-12 position-relative`}
-        id="wholeAppBackground"
+      <ErrorBoundary
+        fallbackRender={fallbackRender}
+        onReset={(details) => {
+          window.reload();
+        }}
       >
         <div
           className={`${
             location.pathname !== "/signup"
-              ? styles.centerMobileMode
-              : styles.signupModeBox
-          } position-relative m-auto`}
-          id="centerMobileMode"
+              ? styles.wholeAppBackground
+              : styles.signupContainer
+          } col-12 position-relative`}
+          id="wholeAppBackground"
         >
-          {location.pathname !== "/signup" && <Header />}
-          <PublicRoutes />
-          {location.pathname === "/sports" ||
-          location.pathname === "/leagues" ? (
-            <Footer />
-          ) : (
-            <></>
-          )}
+          <div
+            className={`${
+              location.pathname !== "/signup"
+                ? styles.centerMobileMode
+                : styles.signupModeBox
+            } position-relative m-auto`}
+            id="centerMobileMode"
+          >
+            {location.pathname !== "/signup" && <Header />}
+            <PublicRoutes />
+            {location.pathname === "/sports" ||
+            location.pathname === "/leagues" ? (
+              <Footer />
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
-      </div>
-      <Loader />
-      {/* <Offline>
+        <Loader />
+        {/* <Offline>
         <NoInternet />
       </Offline> */}
-      <SessionExpire  remaining={remaining}/>
-      <ToastPopup
+        <SessionExpire remaining={remaining} />
+        <ToastPopup
           status={sessionExpiredSucees}
           betbox={sessionExpiredSucees}
           title={"Session Expired!"}
           message={"Your session is expired"}
           setPassChange={(e) => setSessionExpiredSuccess(e)}
         />
+      </ErrorBoundary>
     </React.Fragment>
   );
 }

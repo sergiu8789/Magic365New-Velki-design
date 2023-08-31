@@ -91,8 +91,13 @@ export const ProfitLoss = () => {
     }
     let startDate = moment(dateValue[0].trim()).format("YYYY-MM-DD");
     let endDate = moment(dateValue[1].trim()).format("YYYY-MM-DD");
-    setFromDate(startDate + "T00:00");
-    setToDate(endDate + "T23:59");
+    startDate = startDate + "T00:00";
+    endDate = endDate + "T23:59";
+    if (startDate === fromDate && endDate === toDate) {
+      appData.setAppData({ ...appData.appData, listLoading: false });
+    }
+    setFromDate(startDate);
+    setToDate(endDate);
   };
 
   const setBetStatusVal = (name, val) => {
@@ -182,7 +187,11 @@ export const ProfitLoss = () => {
   };
 
   const fetchGamesPL = () => {
-    ApiService.getGamePL(addTimeOffset(fromDate), addTimeOffset(toDate), popularTabActive)
+    ApiService.getGamePL(
+      addTimeOffset(fromDate),
+      addTimeOffset(toDate),
+      popularTabActive
+    )
       .then((res) => {
         if (res.data) {
           let initialValue = 0;
@@ -632,7 +641,10 @@ export const ProfitLoss = () => {
                             <div
                               className={`${styles.balanceInfoAmt} d-inline-flex`}
                             >
-                              {item.market_type === 'fancy' && row.size ? row.size+"/":""}{row.odds}
+                              {item.market_type === "fancy" && row.size
+                                ? row.size + "/"
+                                : ""}
+                              {row.odds}
                             </div>
                           </div>
                           <div
@@ -745,7 +757,9 @@ export const ProfitLoss = () => {
                           : styles.proftStatusLoss
                       } d-inline-flex col-8`}
                     >
-                      ({item.netTotal ? parseFloat(item.netTotal).toFixed(2) : 0})
+                      (
+                      {item.netTotal ? parseFloat(item.netTotal).toFixed(2) : 0}
+                      )
                     </span>
                   </div>
                 </div>

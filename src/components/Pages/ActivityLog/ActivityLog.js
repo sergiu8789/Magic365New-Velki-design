@@ -25,7 +25,7 @@ export const ActivityLog = () => {
   };
 
   const setBetStatusVal = (val) => {
-    appData.setAppData({ ...appData.appData, listLoading: true });
+    //appData.setAppData({ ...appData.appData, listLoading: true });
     setbetStatus(val);
     setbetStatusDrop(false);
   };
