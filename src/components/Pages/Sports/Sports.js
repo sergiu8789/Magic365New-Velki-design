@@ -349,6 +349,7 @@ export const Sports = () => {
                       favorateGame === false &&
                       styles.inPlayTabActive
                     }`}
+                    role="button"
                     ref={(element) => (playRef.current[index] = element)}
                     onClick={(event) => activeGameTab(event, item.name)}
                     id={`inPlayTab_${item.name}`}
@@ -363,10 +364,12 @@ export const Sports = () => {
                 styles.inPlayTabIcon
               } ${favorateGame && styles.activeStar}`}
               onClick={() => showFavourateGame()}
+              role="button"
             ></span>
             <span
               className={`text-icon-light icon-search ${styles.inPlayTabIcon}`}
               onClick={() => setSportSearch(true)}
+              role="button"
             ></span>
             <div
               className={`${styles.activeLine} position-absolute ${
@@ -391,6 +394,7 @@ export const Sports = () => {
                   }  d-inline-flex justify-content-center align-items-center position-relative ${
                     item.name === tabActive && styles.activeCatTab
                   }`}
+                  role="button"
                   ref={(element) => (tabRef.current[index] = element)}
                   id={`SportsTab_${item.name}`}
                   onClick={(event) =>

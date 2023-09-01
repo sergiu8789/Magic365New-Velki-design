@@ -367,6 +367,7 @@ export const ExchangeOdds = ({
                     setSelectedMarket(item);
                     selectMarketTab(event);
                   }}
+                  role="button"
                   ref={index === 0 ? tabRef : null}
                   className={`${styles.matchTitleHighlight} d-inline-flex align-items-center flex-shrink-0`}
                 >
@@ -491,6 +492,7 @@ export const ExchangeOdds = ({
                         onClick={(event) =>
                           placeBet(item, 1, selectedRunner, event)
                         }
+                        role="button"
                         className={`${
                           styles.backBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center position-relative overflow-hidden ${
@@ -527,6 +529,7 @@ export const ExchangeOdds = ({
                         onClick={(event) =>
                           placeBet(item, 2, selectedRunner, event)
                         }
+                        role="button"
                         className={`${
                           styles.LayBetBox
                         } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center position-relative overflow-hidden ${

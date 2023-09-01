@@ -271,6 +271,7 @@ export const BetHistory = () => {
                   } d-inline-flex align-items-center justify-content-center flex-shrink-0`}
                   ref={index === 0 ? tabRef : null}
                   onClick={(event) => selectPopularTab(event, item)}
+                  role="button"
                 >
                   {item}
                 </div>
@@ -294,6 +295,7 @@ export const BetHistory = () => {
             betStatusDrop === "true" && styles.betStatusOpen
           } col-12 d-inline-flex align-items-center position-relative`}
           onClick={openBetStatusDrop}
+          role="button"
         >
           <span className={styles.betStatusLbl}>Bet Status</span>
           <span className={styles.selectedBetStatus}>{betStatus}</span>
@@ -312,6 +314,7 @@ export const BetHistory = () => {
             } align-items-center col-12 m-0`}
             value="1"
             onClick={() => setBetStatusVal("All")}
+            role="button"
           >
             <span
               className={`${styles.betStatusText} d-flex position-relative`}
@@ -325,6 +328,7 @@ export const BetHistory = () => {
             } d-flex align-items-center col-12 m-0`}
             value="2"
             onClick={() => setBetStatusVal("Matched")}
+            role="button"
           >
             <span
               className={`${styles.betStatusText} d-flex position-relative`}
@@ -338,6 +342,7 @@ export const BetHistory = () => {
             } d-flex align-items-center col-12 m-0`}
             value="3"
             onClick={() => setBetStatusVal("Cancelled")}
+            role="button"
           >
             <span
               className={`${styles.betStatusText} d-flex position-relative`}
@@ -351,6 +356,7 @@ export const BetHistory = () => {
             } d-flex align-items-center col-12 m-0`}
             value="3"
             onClick={() => setBetStatusVal("Won")}
+            role="button"
           >
             <span
               className={`${styles.betStatusText} d-flex position-relative`}
@@ -364,6 +370,7 @@ export const BetHistory = () => {
             } d-flex align-items-center col-12 m-0`}
             value="3"
             onClick={() => setBetStatusVal("Loss")}
+            role="button"
           >
             <span
               className={`${styles.betStatusText} d-flex position-relative`}
@@ -392,12 +399,14 @@ export const BetHistory = () => {
           <span
             className={`${styles.dateDuring} flex-shrink-0 d-inline-flex align-items-center`}
             onClick={showCalenderFilter}
+            role="button"
           >
             ···
           </span>
           <button
             className={`${styles.dateSearchBtn} flex-shrink-0 d-inline-flex align-items-center`}
             onClick={setDateChoose}
+            role="button"
           >
             Submit
           </button>
@@ -408,6 +417,7 @@ export const BetHistory = () => {
           dateStatus === "true" && styles.showCalenderArea
         } col-12 m-auto position-fixed d-inline-flex`}
         onClick={closeCalenderFilter}
+        role="button"
       >
         <div
           className={`${styles.previousDateArea} col-12 position-absolute d-inline-block`}
@@ -419,6 +429,7 @@ export const BetHistory = () => {
           <i
             className={`${styles.closeDateFilter} icon-close position-absolute d-inline-block`}
             onClick={closeCalenderFilter}
+            role="button"
           ></i>
           <div
             className={`${styles.previousDateSelections} col-12 d-inline-flex align-items-center`}
@@ -426,18 +437,21 @@ export const BetHistory = () => {
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
               onClick={() => selectDateFilter("Today")}
+              role="button"
             >
               Today
             </button>
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
               onClick={() => selectDateFilter("Yesterday")}
+              role="button"
             >
               From Yesterday
             </button>
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
               onClick={() => selectDateFilter("All")}
+              role="button"
             >
               All
             </button>
@@ -664,6 +678,7 @@ export const BetHistory = () => {
                 }`}
                 id={`footerRecord_${item.game_id}${index}`}
                 onClick={() => showBetInfo(item.game_id + index)}
+                role="button"
               >
                 <div
                   className={`${styles.recordMoreDrop} position-absolute m-auto d-inline-flex align-items-center justify-content-center`}
@@ -690,6 +705,7 @@ export const BetHistory = () => {
               page === 1 && styles.navigateDisable
             } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
             onClick={() => handlePage("previous")}
+            role="button"
           >
             <i
               className={`${styles.arrow} icon-arrow-left position-absolute d-inline-flex`}
@@ -703,6 +719,7 @@ export const BetHistory = () => {
               totalRecords === page && styles.navigateDisable
             } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
             onClick={() => handlePage("next")}
+            role="button"
           >
             Next
             <i

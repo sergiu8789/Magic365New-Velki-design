@@ -171,6 +171,7 @@ export const CurrentBets = () => {
                   } d-inline-flex align-items-center justify-content-center flex-shrink-0`}
                   ref={index === 0 ? tabRef : null}
                   onClick={(event) => selectPopularTab(event, item)}
+                  role="button"
                 >
                   {item}
                 </div>
@@ -194,6 +195,7 @@ export const CurrentBets = () => {
             betStatusDrop === "true" && styles.betStatusOpen
           } col-12 d-inline-flex align-items-center position-relative`}
           onClick={openBetStatusDrop}
+          role="button"
         >
           <span className={styles.betStatusLbl}>Bet Status</span>
           <span className={styles.selectedBetStatus}>{betStatus}</span>
@@ -212,6 +214,7 @@ export const CurrentBets = () => {
             } align-items-center col-12 m-0`}
             value="1"
             onClick={() => setBetStatusVal("All")}
+            role="button"
           >
             <span
               className={`${styles.betStatusText} d-flex position-relative`}
@@ -225,6 +228,7 @@ export const CurrentBets = () => {
             } d-flex align-items-center col-12 m-0`}
             value="2"
             onClick={() => setBetStatusVal("Matched")}
+            role="button"
           >
             <span
               className={`${styles.betStatusText} d-flex position-relative`}
@@ -480,6 +484,7 @@ export const CurrentBets = () => {
                 className={`${styles.footerRecord} col-12 d-inline-block position-relative`}
                 id={`footerRecord_${item.game_id}${index}`}
                 onClick={() => showBetInfo(item.game_id + index)}
+                role="button"
               >
                 <div
                   className={`${styles.recordMoreDrop} position-absolute m-auto d-inline-flex align-items-center justify-content-center`}
@@ -506,6 +511,7 @@ export const CurrentBets = () => {
               page === 1 && styles.navigateDisable
             } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
             onClick={() => handlePage("previous")}
+            role="button"
           >
             <i
               className={`${styles.arrow} icon-arrow-left position-absolute d-inline-flex`}
@@ -519,6 +525,7 @@ export const CurrentBets = () => {
               BetstotalRecords === page && styles.navigateDisable
             } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
             onClick={() => handlePage("next")}
+            role="button"
           >
             Next
             <i

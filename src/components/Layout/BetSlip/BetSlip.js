@@ -68,17 +68,20 @@ export const BetSlip = () => {
     let betSelection = betData?.betData?.betSelection;
     appData.setAppData({ ...appData.appData, listLoading: true });
     let timeout = 5000;
-    if(betSelection.market_type !== "casino" && betSelection.market_type !== 'bookmaker' && betSelection.market_type !=='fancy' && betSelection.market_type !== 'premium'){
-       timeout = 8000;
+    if (
+      betSelection.market_type !== "casino" &&
+      betSelection.market_type !== "bookmaker" &&
+      betSelection.market_type !== "fancy" &&
+      betSelection.market_type !== "premium"
+    ) {
+      timeout = 8000;
     }
-    if (betSelection.market_type === "casino") 
-      timeout = 0;
-    if(auth.auth.walletBalance!==0 || auth.auth.exposure!= 0){
+    if (betSelection.market_type === "casino") timeout = 0;
+    if (auth.auth.walletBalance !== 0 || auth.auth.exposure != 0) {
       setTimeout(() => {
         setBetPlacing(true);
       }, timeout);
-    }
-    else{
+    } else {
       appData.setAppData({ ...appData.appData, listLoading: false });
       betData.setBetData({
         ...betData.betData,
@@ -127,11 +130,13 @@ export const BetSlip = () => {
 
   const addBetAmount = (amt) => {
     let betSelection = betData?.betData?.betSelection;
-    if (betStakeType === "manual" || betStakeType === "" ) {
+    if (betStakeType === "manual" || betStakeType === "") {
       betSelection.amount = amt;
       betData.setBetData({ ...betData.betData, betSelection: betSelection });
     } else {
-      betSelection.amount = (betSelection.amount ? parseFloat(betSelection.amount) : 0) + parseFloat(amt);
+      betSelection.amount =
+        (betSelection.amount ? parseFloat(betSelection.amount) : 0) +
+        parseFloat(amt);
       if (parseFloat(betSelection.amount) > 500) betSelection.amount = 500;
       betData.setBetData({ ...betData.betData, betSelection: betSelection });
     }
@@ -231,7 +236,7 @@ export const BetSlip = () => {
               setBetSuccess(true);
               setBetTitleMessage("Bet Matched");
             }
-            if (res.status === 202 && res.message === 'Insufficient Balance') {
+            if (res.status === 202 && res.message === "Insufficient Balance") {
               setBetSuccessShow(true);
               setBetSuccess(false);
               setBetTitleMessage("Bet Error");
@@ -255,7 +260,6 @@ export const BetSlip = () => {
             if (err?.response?.data?.statusCode === 400) {
             }
           });
-       
       } else {
         setBetPlacing(false);
         let message = "Odds are Suspended";
@@ -382,24 +386,28 @@ export const BetSlip = () => {
             <span
               className={`${styles.amountBtn} col-3 flex-shrink-1 d-inline-flex align-items-center justify-content-center`}
               onClick={() => addBetAmount("10")}
+              role="button"
             >
               +10
             </span>
             <span
               className={`${styles.amountBtn} col-3 flex-shrink-1 d-inline-flex align-items-center justify-content-center`}
               onClick={() => addBetAmount("50")}
+              role="button"
             >
               +50
             </span>
             <span
               className={`${styles.amountBtn} col-3 flex-shrink-1 d-inline-flex align-items-center justify-content-center`}
               onClick={() => addBetAmount("100")}
+              role="button"
             >
               +100
             </span>
             <span
               className={`${styles.amountBtn} col-3 flex-shrink-1 d-inline-flex align-items-center justify-content-center`}
               onClick={() => addBetAmount("500")}
+              role="button"
             >
               +500
             </span>
@@ -439,7 +447,11 @@ export const BetSlip = () => {
           </div>
           <div className="col-12 d-inline-flex">
             <button
-              disabled={betButton || !auth.auth.loggedIn || betData?.betData?.betSelection?.amount == 0}
+              disabled={
+                betButton ||
+                !auth.auth.loggedIn ||
+                betData?.betData?.betSelection?.amount == 0
+              }
               onClick={placeBet}
               className={`${styles.placeBetBtn} col-12 d-inline-flex justify-content-center align-items-center`}
             >

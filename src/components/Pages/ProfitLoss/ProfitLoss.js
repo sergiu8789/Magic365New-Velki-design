@@ -329,6 +329,7 @@ export const ProfitLoss = () => {
                   } d-inline-flex align-items-center justify-content-center flex-shrink-0`}
                   ref={index === 0 ? tabRef : null}
                   onClick={(event) => selectPopularTab(event, item)}
+                  role="button"
                 >
                   {item}
                 </div>
@@ -367,12 +368,14 @@ export const ProfitLoss = () => {
           <span
             className={`${styles.dateDuring} flex-shrink-0 d-inline-flex align-items-center`}
             onClick={showCalenderFilter}
+            role="button"
           >
             ···
           </span>
           <button
             className={`${styles.dateSearchBtn} flex-shrink-0 d-inline-flex align-items-center`}
             onClick={setDateChoose}
+            role="button"
           >
             Submit
           </button>
@@ -382,6 +385,7 @@ export const ProfitLoss = () => {
             betStatusDrop === "true" && styles.betStatusOpen
           } col-12 d-inline-flex align-items-center position-relative justify-content-between`}
           onClick={openBetStatusDrop}
+          role="button"
         >
           <span className={styles.selectedBetStatus}>{betStatus}</span>
           <div
@@ -413,6 +417,7 @@ export const ProfitLoss = () => {
             } align-items-center col-12 m-0`}
             value={totalPL}
             onClick={() => setBetStatusVal("All", totalPL)}
+            role="button"
           >
             <span
               className={`${styles.betStatusText} d-flex position-relative`}
@@ -427,6 +432,7 @@ export const ProfitLoss = () => {
               } align-items-center col-12 m-0`}
               value={item.pl_amount}
               onClick={() => setBetStatusVal(item.game_name, item.pl_amount)}
+              role="button"
               key={index}
             >
               <span
@@ -457,10 +463,12 @@ export const ProfitLoss = () => {
           dateStatus === "true" && styles.showCalenderArea
         } col-12 m-auto position-fixed d-inline-flex`}
         onClick={closeCalenderFilter}
+        role="button"
       >
         <div
           className={`${styles.previousDateArea} col-12 position-absolute d-inline-block`}
           onClick={(event) => stopPreviousDate(event)}
+          role="button"
         >
           <h2 className={`${styles.dateFilterArea} col-12 m-0 text-center`}>
             During
@@ -475,18 +483,21 @@ export const ProfitLoss = () => {
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
               onClick={() => selectDateFilter("Today")}
+              role="button"
             >
               Today
             </button>
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
               onClick={() => selectDateFilter("Yesterday")}
+              role="button"
             >
               From Yesterday
             </button>
             <button
               className={`${styles.datePickerBtn} d-inline-flex align-items-center justify-content-center`}
               onClick={() => selectDateFilter("All")}
+              role="button"
             >
               All
             </button>
@@ -774,6 +785,7 @@ export const ProfitLoss = () => {
                   onClick={() =>
                     openMatchBets(index, item, item.game_id + index)
                   }
+                  role="button"
                 >
                   <div
                     className={`${styles.recordMoreDrop} position-absolute m-auto d-inline-flex align-items-center justify-content-center`}
@@ -801,6 +813,7 @@ export const ProfitLoss = () => {
               page === 1 && styles.navigateDisable
             } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
             onClick={() => handlePage("previous")}
+            role="button"
           >
             <i
               className={`${styles.arrow} icon-arrow-left position-absolute d-inline-flex`}
@@ -814,6 +827,7 @@ export const ProfitLoss = () => {
               totalRecords === page && styles.navigateDisable
             } col-12 d-inline-flex align-items-center justify-content-center position-relative`}
             onClick={() => handlePage("next")}
+            role="button"
           >
             Next
             <i

@@ -137,6 +137,7 @@ export const GameByTime = ({
                               key={matchIndex}
                               className={`${styles.singleGameCardRow} col-12 d-inline-flex align-items-stretch justify-content-between`}
                               onClick={() => openGameDetail(match)}
+                              role="button"
                             >
                               {sortGameList === "by Time" && (
                                 <>
@@ -184,6 +185,7 @@ export const GameByTime = ({
                                     onClick={(event) =>
                                       setGameFavrite(event, match.id)
                                     }
+                                    role="button"
                                   >
                                     <span className="icon-star invisible"></span>
                                   </div>

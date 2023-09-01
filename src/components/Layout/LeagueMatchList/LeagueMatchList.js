@@ -57,6 +57,7 @@ export const LeagueMatchList = ({
             >
               <div
                 className={`${styles.leagueInitial} d-inline-flex align-items-center justify-content-center`}
+                role="button"
               >
                 {item}
               </div>
@@ -94,6 +95,7 @@ export const LeagueMatchList = ({
                         setleagueName(tournament.trn_slug);
                         setleagueMatch("LeagueMatches");
                       }}
+                      role="button"
                     >
                       <span className={`${styles.leagueMatch} d-inline-flex`}>
                         {tournament.trn_name}

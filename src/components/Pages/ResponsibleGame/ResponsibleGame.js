@@ -15,6 +15,7 @@ export const ResponsibleGame = () => {
         <span
           className={`${styles.closePage} position-absolute end-0 d-inline-flex align-items-center justify-content-center icon-close`}
           onClick={() => navigate(-1)}
+          role="button"
         ></span>
       </div>
       <div

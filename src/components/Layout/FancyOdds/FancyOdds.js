@@ -359,6 +359,7 @@ export const FancyOdds = ({
                   >
                     <div
                       onClick={(event) => placeBet(item, 2, event)}
+                      role="button"
                       className={`${
                         styles.LayBetBox
                       } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
@@ -384,6 +385,7 @@ export const FancyOdds = ({
                     </div>
                     <div
                       onClick={(event) => placeBet(item, 1, event)}
+                      role="button"
                       className={`${
                         styles.backBetBox
                       } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center  ${
@@ -440,6 +442,7 @@ export const FancyOdds = ({
                           expoData?.fancyExpoData?.oldExpoData[item.sid]
                         )
                       }
+                      role="button"
                     >
                       <i className="icon-graph"></i>
                       <span

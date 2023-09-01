@@ -91,6 +91,7 @@ export const LeagueMatchBets = ({ selectedMatch, setleagueMatch }) => {
                 key={index}
                 className={`${styles.singleMatchBets} col-12 d-inline-flex flex-column position-relative`}
                 onClick={() => showMatchBetDetail(item)}
+                role="button"
               >
                 <h4 className={styles.teamName}>
                   {firstLetterCapital(item?.type?.replace("_", " "))}

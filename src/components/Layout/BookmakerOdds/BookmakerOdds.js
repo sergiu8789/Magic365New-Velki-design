@@ -218,6 +218,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
         <i
           className={`${styles.gameOpenArrow} position-absolute icon-arrow-down`}
           onClick={hideBookMarkerOdd}
+          role="button"
         ></i>
       </div>
       <div
@@ -309,6 +310,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                 >
                   <div
                     onClick={(event) => placeBet(item, 1, event)}
+                    role="button"
                     className={`${
                       styles.backBetBox
                     } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
@@ -336,6 +338,7 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                   </div>
                   <div
                     onClick={(event) => placeBet(item, 2, event)}
+                    role="button"
                     className={`${
                       styles.LayBetBox
                     } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${

@@ -226,6 +226,7 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
                   item?.sportsBookSelection
                 )
               }
+              role="button"
             >
               <div className={`d-inline-flex align-items-center`}>
                 <i className="icon-star"></i>
@@ -262,6 +263,7 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
                         ? styles.betDisabled
                         : ""
                     }`}
+                    role="button"
                   >
                     <span
                       className={`${styles.popularExposure} ${styles.oddExposure}`}

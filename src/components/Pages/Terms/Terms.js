@@ -14,7 +14,7 @@ export const Terms = () => {
         </label>
         <span
           className={`${styles.closePage} position-absolute end-0 d-inline-flex align-items-center justify-content-center icon-close`}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(-1)} role="button"
         ></span>
       </div>
       <div

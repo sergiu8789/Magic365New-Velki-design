@@ -23,18 +23,21 @@ export const HomeFooter = () => {
         <span
           className={`block cursor-pointer d-inline-flex align-items-center justify-content-center text-decoration-none mx-1 ${styles.socialIcon} `}
           onClick={() => openSocialLink("telegram")}
+          role="button"
         >
           <span className="icon-telegram"></span>
         </span>
         <span
           className={`block cursor-pointer d-inline-flex align-items-center justify-content-center text-decoration-none mx-1 ${styles.socialIcon} `}
           onClick={() => openSocialLink("whatsapp")}
+          role="button"
         >
           <span className="icon-whatsapp"></span>
         </span>
         <span
           className={`block cursor-pointer d-inline-flex align-items-center justify-content-center text-decoration-none mx-1 ${styles.socialIcon} `}
           onClick={() => openSocialLink("facebook")}
+          role="button"
         >
           <span className="icon-facebook"></span>
         </span>
@@ -45,30 +48,35 @@ export const HomeFooter = () => {
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
           onClick={() => navigate("/privacy")}
+          role="button"
         >
           Privacy Policy
         </span>
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
           onClick={() => navigate("/terms")}
+          role="button"
         >
           Terms and Conditions
         </span>
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
           onClick={() => navigate("/rules")}
+          role="button"
         >
           Rules and Regulations
         </span>
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
           onClick={() => navigate("/kyc")}
+          role="button"
         >
           KYC
         </span>
         <span
           className={`${styles.homeEssentialLink} text-decoration-none d-inline-block`}
           onClick={() => navigate("/gaming")}
+          role="button"
         >
           Responsible Gaming
         </span>

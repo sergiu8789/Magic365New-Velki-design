@@ -167,6 +167,7 @@ export const HomeGameCard = () => {
           <div
             className={`${styles.gameCardMenu} d-inline-flex flex-column align-items-center justify-content-center`}
             onClick={() => gotoSports("1", "All")}
+            role="button"
           >
             <i
               className={`position-relative icon-parlay ${styles.textMenuIcon}`}
@@ -180,6 +181,7 @@ export const HomeGameCard = () => {
           <div
             className={`${styles.singleCardRowBox} col-12 ${styles.allCategoryGame}`}
             onClick={() => gotoSports("0", "All", value)}
+            role="button"
           >
             <div
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
@@ -191,6 +193,7 @@ export const HomeGameCard = () => {
           <div
             className={`${styles.singleCardRowBox} col-12 ${styles.cricketCategoryGame}`}
             onClick={() => gotoSports("0", "Cricket", value)}
+            role="button"
           >
             <div
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
@@ -202,6 +205,7 @@ export const HomeGameCard = () => {
           <div
             className={`${styles.singleCardRowBox} col-12 ${styles.soccerCategoryGame}`}
             onClick={() => gotoSports("0", "Soccer", value)}
+            role="button"
           >
             <div
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}
@@ -213,6 +217,7 @@ export const HomeGameCard = () => {
           <div
             className={`${styles.singleCardRowBox} col-12 ${styles.tennisCategoryGame}`}
             onClick={() => gotoSports("0", "Tennis", value)}
+            role="button"
           >
             <div
               className={`${styles.allGameCardCount} d-inline-flex flex-column align-content-center justify-content-center`}

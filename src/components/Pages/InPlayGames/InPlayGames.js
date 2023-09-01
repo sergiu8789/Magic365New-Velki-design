@@ -129,6 +129,7 @@ export const InPlayGames = () => {
                       onClick={(e) => selectScoreTab(e, item)}
                       ref={(element) => (tabRef.current[index] = element)}
                       className={styles.scoreboardTitle}
+                      role="button"
                     >
                       {item}
                     </label>

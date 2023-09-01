@@ -115,6 +115,7 @@ export const GameByCompetition = ({
                     closeAllMatchBox[tour] && styles.closeAllGames
                   } d-inline-flex align-items-center justify-content-center ms-auto`}
                   onClick={() => closeAllMatch(tour)}
+                  role="button"
                 >
                   <span className="d-inline-flex">ALL</span>
                   <i
@@ -137,6 +138,7 @@ export const GameByCompetition = ({
                           styles.closeGameHeader
                         } col-12 d-inline-flex align-items-center justify-content-between position-relative`}
                         onClick={() => openMatchDetail(tour, item)}
+                        role="button"
                       >
                         <div
                           className={`${styles.gameCountTitle} d-inline-flex align-items-center`}
@@ -176,6 +178,7 @@ export const GameByCompetition = ({
                                   key={matchIndex}
                                   className={`${styles.gameHeaderRow} col-12 d-inline-flex align-items-center justify-content-between`}
                                   onClick={() => openGameDetail(match)}
+                                  role="button"
                                   id={match.id}
                                 >
                                   <div
@@ -193,6 +196,7 @@ export const GameByCompetition = ({
                                       onClick={(event) =>
                                         setGameFavrite(event, match.id)
                                       }
+                                      role="button"
                                     >
                                       <span className="icon-star invisible"></span>
                                     </div>

@@ -70,13 +70,15 @@ function Header() {
           {location.pathname === "/full-market" ? (
             <span
               className={`${styles.headerMenuIcon} d-inline-flex align-items-center`}
-              onClick={() => navigate("/sports")}
+              role="button"
+              onClick={() => navigate(-1)}
             >
               <i className="icon-arrow-left"></i>
             </span>
           ) : auth.auth.loggedIn ? (
             <span
               className={`${styles.headerMenuIcon} d-inline-flex align-items-center`}
+              role="button"
               onClick={() => setopenAside(true)}
             >
               <i className="icon-menu"></i>
@@ -89,6 +91,7 @@ function Header() {
             src={logo}
             alt="Bet365 Live"
             onClick={gotoHome}
+            role="button"
           />
         </div>
         {auth.auth.loggedIn ? (

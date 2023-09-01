@@ -37,6 +37,7 @@ export const LeagueMatchDetail = ({
                 key={index}
                 className={`${styles.singleMatchList} col-12 d-inline-flex flex-column align-items-start position-relative`}
                 onClick={() => showMatchBets(match)}
+                role="button"
               >
                 {match?.date && (
                   <span

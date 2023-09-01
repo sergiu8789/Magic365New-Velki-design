@@ -8,7 +8,7 @@ export const GameListCompetition = ({ setsortGameList }) => {
   const [sortCompetition, setSortCompetition] = useState(
     appData.appData.sportTabType
   );
-  const competionName = ["by Competition", "by Time","by Matched"];
+  const competionName = ["by Competition", "by Time", "by Matched"];
 
   const openCompetDrop = () => {
     if (competeDrop) {
@@ -54,6 +54,7 @@ export const GameListCompetition = ({ setsortGameList }) => {
                 className={`${styles.gameComptionName} ${
                   sortCompetition === item ? "d-none" : "d-inline-flex"
                 }`}
+                role="button"
                 key={index}
                 onClick={() => selectCompetion(item)}
               >

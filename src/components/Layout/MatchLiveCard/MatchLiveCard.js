@@ -47,6 +47,7 @@ export const MatchLiveCard = ({
             <div
               className={`${styles.closeIframe} position-absolute justify-content-center align-items-center rounded-full`}
               onClick={() => closeStremingBox()}
+              role="button"
             >
               <span className="icon-close"></span>
             </div>

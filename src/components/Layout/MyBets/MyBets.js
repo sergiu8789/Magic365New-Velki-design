@@ -150,7 +150,7 @@ export const MyBets = ({ openMyBets }) => {
             betData.setBetData({
               ...betData.betData,
               userMatchBets: res.data.rows,
-              betsFetch : false
+              betsFetch: false,
             });
           } else {
             setMatchListCount(0);
@@ -194,7 +194,7 @@ export const MyBets = ({ openMyBets }) => {
     if (tabRef && tabRef.current) {
       tabRef.current.click();
     }
-    betData.setBetData({ ...betData.betData, betsFetch : true });
+    betData.setBetData({ ...betData.betData, betsFetch: true });
     appData.setAppData({ ...appData.appData, listLoading: true });
   }, [openMyBets]);
 
@@ -219,6 +219,7 @@ export const MyBets = ({ openMyBets }) => {
               <div
                 className={`${styles.betDetailBack} icon-arrow-left position-absolute align-items-center justify-content-center`}
                 onClick={betDetailList}
+                role="button"
               ></div>
               <div
                 className={`${styles.myBetTitle} d-inline-flex align-items-center`}
@@ -229,6 +230,7 @@ export const MyBets = ({ openMyBets }) => {
               <span
                 className={`${styles.myBetLayerClose} icon-close position-absolute d-flex justify-content-center align-items-center`}
                 onClick={hideBetLayer}
+                role="button"
               ></span>
             </div>
             <div
@@ -240,6 +242,7 @@ export const MyBets = ({ openMyBets }) => {
                     ref={tabRef}
                     className={`${styles.myBetTab} position-relative d-inline-flex align-items-center`}
                     onClick={(event) => activeBetTab(event, "Exchange")}
+                    role="button"
                   >
                     Exchange{" "}
                     <span className={`${styles.myBetCount}`}>
@@ -249,6 +252,7 @@ export const MyBets = ({ openMyBets }) => {
                   <div
                     className={`${styles.myBetTab} position-relative d-inline-flex align-items-center`}
                     onClick={(event) => activeBetTab(event, "Parlay")}
+                    role="button"
                   >
                     Parlay <span className={`${styles.myBetCount}`}>0</span>
                   </div>
@@ -296,6 +300,7 @@ export const MyBets = ({ openMyBets }) => {
               {matchList.map((item, index) => (
                 <div
                   className={`${styles.singleBetRow} col-12 d-flex align-items-center position-relative`}
+                  role="button"
                   onClick={() => {
                     showBetDetail(
                       item,

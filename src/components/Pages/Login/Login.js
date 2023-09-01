@@ -192,6 +192,7 @@ export const Login = () => {
           <div
             className={`position-absolute d-inline-flex align-items-center justify-content-center icon-arrow-left ${styles.loginBackIcon}`}
             onClick={() => gotoHome()}
+            role="button"
           ></div>
           <div className={`${styles.loginImgBox} position-relative col-12`}>
             <img
@@ -270,6 +271,7 @@ export const Login = () => {
                         : "icon-visibility-on"
                     } position-absolute`}
                     onClick={showPasswordText}
+                    role="button"
                   ></span>
                   <span className={styles.focusBorder}></span>
                 </div>

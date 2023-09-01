@@ -96,6 +96,7 @@ export const Leagues = () => {
                     }  d-inline-flex justify-content-center align-items-center position-relative ${
                       item.name === tabActive && styles.activeCatTab
                     }`}
+                    role="button"
                     id={`SportsTab_${item.name}`}
                     onClick={(event) => activeSportsTab(event, item.name)}
                   >

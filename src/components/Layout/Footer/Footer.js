@@ -117,6 +117,7 @@ function Footer() {
                 } d-inline-flex align-items-center justify-content-center flex-column position-relative ${
                   location.pathname === item.link && styles.activeTabLink
                 }`}
+                role="button"
                 ref={location.pathname === item.link ? footerTab : null}
                 onClick={(event) =>
                   navigatePage(event, item.link, item.type, item.click)
