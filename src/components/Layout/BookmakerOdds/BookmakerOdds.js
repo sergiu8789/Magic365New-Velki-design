@@ -26,36 +26,33 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
   };
 
   const placeBet = (item, type, event) => {
-    if(auth.auth.loggedIn){
-    const betSelection = {
-      amount: "",
-      type: type,
-      size: type === 1 ? item?.bs1 : item?.ls1,
-      odds: type === 1 ? item?.b1 : item?.l1,
-      selection: item.nat,
-      runner_name: item.nat,
-      selection_id: item.sid,
-      market_id: item.mid,
-      match_id: matchId,
-      market_name: "",
-      status: item.s,
-      market_type: "bookmaker",
-    };
-    betData.setBetData({
-      ...betData.betData,
-      betSlipStatus: true,
-      betSelection: betSelection,
-    });
-    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 70;
-    setTimeout(function () {
-      let cuurentScroll = playWindow.current.scrollTop;
-      cuurentScroll = cuurentElem + cuurentScroll;
-      playWindow.current.scrollTop = cuurentScroll;
-    }, 500);
-   }
-   else
-     navigate('/login');
-   
+    if (auth.auth.loggedIn) {
+      const betSelection = {
+        amount: "",
+        type: type,
+        size: type === 1 ? item?.bs1 : item?.ls1,
+        odds: type === 1 ? item?.b1 : item?.l1,
+        selection: item.nat,
+        runner_name: item.nat,
+        selection_id: item.sid,
+        market_id: item.mid,
+        match_id: matchId,
+        market_name: "",
+        status: item.s,
+        market_type: "bookmaker",
+      };
+      betData.setBetData({
+        ...betData.betData,
+        betSlipStatus: true,
+        betSelection: betSelection,
+      });
+      let cuurentElem = event.currentTarget.getBoundingClientRect().top - 70;
+      setTimeout(function () {
+        let cuurentScroll = playWindow.current.scrollTop;
+        cuurentScroll = cuurentElem + cuurentScroll;
+        playWindow.current.scrollTop = cuurentScroll;
+      }, 500);
+    } else navigate("/login");
   };
 
   useEffect(() => {
@@ -115,13 +112,14 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
         allSelections?.map((selection) => {
           if (item?.selection_id === selection) {
             if (item.type === 1)
-              exposure[selection] = (exposure[selection] ? exposure[selection]: 0) +
-                 (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
+              exposure[selection] =
+                (exposure[selection] ? exposure[selection] : 0) +
+                (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
                   parseFloat(item.amount));
             else
               exposure[selection] =
-              (exposure[selection] ? exposure[selection]: 0) -
-                 (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
+                (exposure[selection] ? exposure[selection] : 0) -
+                (parseFloat(item.amount) * (parseFloat(item.odds) / 100 + 1) -
                   parseFloat(item.amount));
           } else {
             if (item.type === 1)
@@ -130,7 +128,8 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                 parseFloat(item.amount);
             else
               exposure[selection] =
-              (exposure[selection] ? exposure[selection]: 0) + parseFloat(item.amount);
+                (exposure[selection] ? exposure[selection] : 0) +
+                parseFloat(item.amount);
           }
         });
       });
@@ -279,7 +278,8 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                     {expoData?.bookmakerExpoData?.showUpdate &&
                       item?.sid &&
                       expoData?.bookmakerExpoData?.updatedExpo &&
-                      expoData?.bookmakerExpoData?.updatedExpo[item?.sid] !==undefined && (
+                      expoData?.bookmakerExpoData?.updatedExpo[item?.sid] !==
+                        undefined && (
                         <span
                           className={`${styles.runningExposure} ${
                             expoData?.bookmakerExpoData?.updatedExpo[
@@ -314,14 +314,20 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                     } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
                       prevCountRef.current &&
                       item?.ExchangePrices?.AvailableToBack[0].price !=
-                        prevCountRef.current[index]?.Back && appData.appData.highlightOdds
+                        prevCountRef.current[index]?.Back &&
+                      appData.appData.highlightOdds
                         ? styles.animateSparkBack
                         : ""
                     } ${
                       prevCountRef.current &&
                       item?.ExchangePrices?.AvailableToBack[0].size !=
-                        prevCountRef.current[index]?.BackSize && appData.appData.highlightOdds
+                        prevCountRef.current[index]?.BackSize &&
+                      appData.appData.highlightOdds
                         ? styles.animateSparkBack
+                        : ""
+                    } ${
+                      item.b1 === "" || item.b1 === null || item.b1 === 0.0
+                        ? styles.betDisabled
                         : ""
                     }`}
                   >
@@ -335,14 +341,20 @@ export const BookmakerOdds = ({ oddsList, matchId, betList, playWindow }) => {
                     } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
                       prevCountRef.current &&
                       item?.ExchangePrices?.AvailableToBack[0].price !=
-                        prevCountRef.current[index]?.Lay && appData.appData.highlightOdds
+                        prevCountRef.current[index]?.Lay &&
+                      appData.appData.highlightOdds
                         ? styles.animateSparkLay
                         : ""
                     } ${
                       prevCountRef.current &&
                       item?.ExchangePrices?.AvailableToBack[0].size !=
-                        prevCountRef.current[index]?.LaySize && appData.appData.highlightOdds
+                        prevCountRef.current[index]?.LaySize &&
+                      appData.appData.highlightOdds
                         ? styles.animateSparkLay
+                        : ""
+                    } ${
+                      item.l1 === "" || item.l1 === null || item.l1 === 0.0
+                        ? styles.betDisabled
                         : ""
                     }`}
                   >

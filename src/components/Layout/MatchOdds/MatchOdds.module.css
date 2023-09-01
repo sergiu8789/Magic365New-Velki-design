@@ -384,14 +384,14 @@
     border-radius: 0px 0px 13px 13px;
 }
 
-.backBetBox.betDisabled, .LayBetBox.betDisabled {
+.backBetBox.betDisabled, .LayBetBox.betDisabled, .popularOddsStake.betDisabled {
     animation: unset;
     -webkit-animation: unset;
     background: #EEE;
     pointer-events: none;
 }
 
-.backBetBox.betDisabled::after, .LayBetBox.betDisabled::after {
+.backBetBox.betDisabled::after, .LayBetBox.betDisabled::after, .popularOddsStake.betDisabled::after {
     content: "";
     position: absolute;
     top: 0;

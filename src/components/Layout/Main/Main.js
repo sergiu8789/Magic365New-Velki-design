@@ -115,7 +115,7 @@ function Main() {
       <ErrorBoundary
         fallbackRender={fallbackRender}
         onReset={(details) => {
-          window.reload();
+          window.location.reload();
         }}
       >
         <div

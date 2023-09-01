@@ -103,3 +103,7 @@
     font-size: 15px;
     padding: 5px 20px;
 }
+
+#webpack-dev-server-client-overlay {
+    display: none;
+}

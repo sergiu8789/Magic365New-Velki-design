@@ -1,8 +1,13 @@
 import React from "react";
 import styles from "./NetworkError.module.css";
+import { useNavigate } from "react-router-dom";
 import linkalt from "../../../assets/images/linkalt.png";
 
 export const NetworkError = () => {
+  const location = useNavigate();
+  const reloadUrl = () => {
+    window.location.reload();
+  };
   return (
     <React.Fragment>
       <div
@@ -25,7 +30,7 @@ export const NetworkError = () => {
           <div className="col-12 d-inline-flex justify-content-center">
             <button
               className={`${styles.networkTry} d-inline-flex align-items-center text-uppercase`}
-              onClick={() => window.reload()}
+              onClick={() => reloadUrl()}
             >
               Try Again
             </button>

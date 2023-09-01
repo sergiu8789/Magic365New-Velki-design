@@ -111,6 +111,23 @@
     color: #FFF;
 }
 
+.backBetBox.betDisabled, .LayBetBox.betDisabled, .popularOddsStake.betDisabled {
+    animation: unset;
+    -webkit-animation: unset;
+    background: #EEE;
+    pointer-events: none;
+}
+
+.backBetBox.betDisabled::after, .LayBetBox.betDisabled::after, .popularOddsStake.betDisabled::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(51, 51, 51, 0.20) url(../../../assets/images/bg-disabled.png);
+    width: 100%;
+    height: 100%;
+}
+
 .lastUpdate {
     font-size: 13px;
     color: #000;

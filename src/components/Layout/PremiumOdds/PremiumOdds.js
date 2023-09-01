@@ -255,6 +255,12 @@ export const PremiumOdds = ({ oddsList, betList, playWindow }) => {
                       appData.appData.highlightOdds
                         ? styles.animateSparkBack
                         : ""
+                    } ${
+                      selection.odds === "" ||
+                      selection.odds === null ||
+                      selection.odds === 0.0
+                        ? styles.betDisabled
+                        : ""
                     }`}
                   >
                     <span

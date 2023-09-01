@@ -24,8 +24,8 @@ export const InPlayGames = () => {
   const [MarketPosLeft, setMarketPosLeft] = useState("");
   const [MarketLineWidth, setMarketLineWidth] = useState("");
   const tabRef = useRef([]);
-  const [scoreTabList, setScoreTabList] = useState(["Live", "Scoreboard"]);
   const [selectedScoreTab, setSelectedScoreTab] = useState("Live");
+  const scoreTabList = ["Live", "Scoreboard"];
 
   const closeBetPopup = () => {
     appData.setAppData({
@@ -93,10 +93,13 @@ export const InPlayGames = () => {
   }, [streamOutscroll]);
 
   useEffect(() => {
-    if (tabRef && tabRef.current[0]) {
-      tabRef.current[0].click();
-    }
-  }, [scoreTabList]);
+    var scoreInt = setInterval(function () {
+      if (tabRef && tabRef.current[0]) {
+        clearInterval(scoreInt);
+        tabRef.current[0].click();
+      }
+    }, 500);
+  }, []);
 
   return (
     <React.Fragment>

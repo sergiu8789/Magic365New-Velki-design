@@ -167,7 +167,7 @@ export const GameByTime = ({
                                 </>
                               )}
                               <div
-                                className={`${styles.gameHeaderRow} ps-3 col-12 flex-shrink-1 d-inline-flex align-items-center justify-content-between`}
+                                className={`${styles.gameHeaderRow} ps-2 col-12 flex-shrink-1 d-inline-flex align-items-center justify-content-between`}
                               >
                                 <div
                                   className={`${styles.gamesTypeName} d-inline-flex align-items-center`}

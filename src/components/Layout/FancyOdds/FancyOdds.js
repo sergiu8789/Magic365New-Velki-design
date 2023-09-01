@@ -41,35 +41,33 @@ export const FancyOdds = ({
   };
 
   const placeBet = (item, type, event) => {
-    if(auth.auth.loggedIn){
-    const betSelection = {
-      amount: "",
-      type: type,
-      size: type === 1 ? item?.b1 : item?.l1,
-      odds: type === 1 ? item?.bs1 : item?.ls1,
-      selection: item.nat,
-      runner_name: item.nat,
-      selection_id: item.sid,
-      market_id: item.mid,
-      match_id: matchId,
-      market_name: "",
-      status: item.gstatus,
-      market_type: "fancy",
-    };
-    betData.setBetData({
-      ...betData.betData,
-      betSlipStatus: true,
-      betSelection: betSelection,
-    });
-    let cuurentElem = event.currentTarget.getBoundingClientRect().top - 70;
-    setTimeout(function () {
-      let cuurentScroll = playWindow.current.scrollTop;
-      cuurentScroll = cuurentElem + cuurentScroll;
-      playWindow.current.scrollTop = cuurentScroll;
-    }, 500);
-   }
-   else
-     navigate('/login');
+    if (auth.auth.loggedIn) {
+      const betSelection = {
+        amount: "",
+        type: type,
+        size: type === 1 ? item?.b1 : item?.l1,
+        odds: type === 1 ? item?.bs1 : item?.ls1,
+        selection: item.nat,
+        runner_name: item.nat,
+        selection_id: item.sid,
+        market_id: item.mid,
+        match_id: matchId,
+        market_name: "",
+        status: item.gstatus,
+        market_type: "fancy",
+      };
+      betData.setBetData({
+        ...betData.betData,
+        betSlipStatus: true,
+        betSelection: betSelection,
+      });
+      let cuurentElem = event.currentTarget.getBoundingClientRect().top - 70;
+      setTimeout(function () {
+        let cuurentScroll = playWindow.current.scrollTop;
+        cuurentScroll = cuurentElem + cuurentScroll;
+        playWindow.current.scrollTop = cuurentScroll;
+      }, 500);
+    } else navigate("/login");
   };
 
   useEffect(() => {
@@ -314,8 +312,8 @@ export const FancyOdds = ({
                     </label>
                     <div className="col-12 d-inline-flex align-items-center">
                       {item.sid &&
-                      expoData?.fancyExpoData?.oldExpoData &&
-                      expoData?.fancyExpoData?.oldExpoData[item.sid] &&
+                        expoData?.fancyExpoData?.oldExpoData &&
+                        expoData?.fancyExpoData?.oldExpoData[item.sid] &&
                         expoData?.fancyExpoData?.oldExpoData[item.sid]
                           ?.stake && (
                           <span
@@ -364,12 +362,18 @@ export const FancyOdds = ({
                       className={`${
                         styles.LayBetBox
                       } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center ${
-                        item.l1 != prevCountRef.current[index]?.Lay && appData.appData.highlightOdds
+                        item.l1 != prevCountRef.current[index]?.Lay &&
+                        appData.appData.highlightOdds
                           ? styles.animateSparkLay
                           : ""
                       } ${
-                        item.ls1 != prevCountRef.current[index]?.LaySize && appData.appData.highlightOdds
+                        item.ls1 != prevCountRef.current[index]?.LaySize &&
+                        appData.appData.highlightOdds
                           ? styles.animateSparkLay
+                          : ""
+                      } ${
+                        item.ls1 === "" || item.ls1 === null || item.ls1 === 0.0
+                          ? styles.betDisabled
                           : ""
                       }`}
                     >
@@ -383,12 +387,18 @@ export const FancyOdds = ({
                       className={`${
                         styles.backBetBox
                       } col-6 flex-shrink-1 d-inline-flex flex-column align-items-center justify-content-center  ${
-                        item.b1 != prevCountRef.current[index]?.Back && appData.appData.highlightOdds
+                        item.b1 != prevCountRef.current[index]?.Back &&
+                        appData.appData.highlightOdds
                           ? styles.animateSparkBack
                           : ""
                       } ${
-                        item.bs1 != prevCountRef.current[index]?.BackSize && appData.appData.highlightOdds
+                        item.bs1 != prevCountRef.current[index]?.BackSize &&
+                        appData.appData.highlightOdds
                           ? styles.animateSparkBack
+                          : ""
+                      } ${
+                        item.bs1 === "" || item.bs1 === null || item.bs1 === 0.0
+                          ? styles.betDisabled
                           : ""
                       }`}
                     >
